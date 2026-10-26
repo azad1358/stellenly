@@ -623,3 +623,63 @@ body { -webkit-font-smoothing: antialiased; }
 .res-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .res-foot .res-go { margin-top: 0; }
 .sec-banner img { object-position: right center; }
+
+/* =====================================================================
+   Hero band (search) — calm, editorial: solid navy, white search card
+   ===================================================================== */
+.btn.primary { background: var(--accent); box-shadow: none; }
+.btn.primary:hover { filter: none; background: color-mix(in srgb, var(--accent) 86%, #000); }
+.hero-band { position: relative; overflow: hidden; color: #fff;
+  background: radial-gradient(900px 420px at 88% -20%, rgba(91, 99, 241, .28), transparent 65%), #0c1630; }
+.hero-skyline { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 170px; color: #fff; opacity: .05; pointer-events: none; }
+.hero-band .hero { position: relative; z-index: 1; padding: 64px 16px 36px; }
+.hero-band h1 { margin: 0 0 14px; max-width: 780px; font-size: clamp(2rem, 4.4vw, 3.3rem); font-weight: 700; line-height: 1.08;
+  letter-spacing: -0.028em; color: #fff; }
+.hero-band .hero-sub { max-width: 600px; margin: 0 0 30px; color: #b8c2da; font-size: clamp(1.02rem, 1.5vw, 1.2rem); line-height: 1.55; }
+.hero-band .search { max-width: 980px; margin: 0; border: 0; border-radius: 14px; padding: 8px; background: #fff;
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, .6); color: #101828; }
+.hero-band .search input, .hero-band .search select { color: #101828; }
+.hero-band .search input::placeholder { color: #6b7385; }
+.hero-band .search .search-icon { color: #6b7385; }
+.hero-band .search-field + .search-field { border-color: #e3e6ee; }
+.hero-band .search-field:focus-within { background: #f3f5fa; }
+.hero-band .search .btn.primary { padding: 0 28px; border-radius: 10px; font-weight: 600; }
+.hero-band .quick { margin-top: 16px; gap: 8px; }
+.hero-band .chip { background: transparent; color: #dfe5f3; border: 1px solid rgba(255, 255, 255, .22); font-size: 0.88rem; padding: 6px 12px; }
+.hero-band .chip:hover { border-color: rgba(255, 255, 255, .5); }
+.hero-band .chip:has(input:checked) { background: #fff; color: #0c1630; border-color: #fff; }
+.hero-band .chip input { accent-color: #4f46e5; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 14px 44px; margin: 34px 0 0; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .12); }
+.hero-stats div { display: flex; flex-direction: column-reverse; gap: 2px; }
+.hero-stats dt { font-size: 0.78rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: #8f9bb8; }
+.hero-stats dd { margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; color: #fff; font-variant-numeric: tabular-nums; }
+.hero-stats:empty { display: none; }
+.hero-band .demo-note { max-width: 980px; }
+
+/* Companies hiring now */
+.hiring-strip { background: var(--surface); border-bottom: 1px solid var(--border); }
+.hiring-row { display: flex; align-items: center; gap: 24px; min-height: 76px; padding-top: 10px; padding-bottom: 10px; }
+.hiring-label { flex: none; font-size: 0.78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.hiring-logos { display: flex; align-items: center; gap: 22px; flex: 1; overflow: hidden; flex-wrap: wrap; }
+.hiring-logos a { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); text-decoration: none; font-weight: 600;
+  font-size: 0.9rem; filter: grayscale(1); opacity: .8; transition: filter .15s, opacity .15s, color .15s; }
+.hiring-logos a:hover { filter: none; opacity: 1; color: var(--text); }
+.hiring-logos img { width: 26px; height: 26px; border-radius: 6px; object-fit: contain; background: #fff; }
+.hiring-all { flex: none; font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+main.wrap > .layout { margin-top: 28px; }
+
+@media (max-width: 860px) {
+  .hero-band .hero { padding: 40px 16px 28px; }
+  .hero-band .search { padding: 6px; }
+  .hero-stats { gap: 12px 28px; }
+  .hero-stats dd { font-size: 1.3rem; }
+  .hiring-row { flex-wrap: wrap; gap: 10px 16px; }
+  .hiring-logos { order: 3; flex-basis: 100%; gap: 14px; }
+  .hiring-logos span { display: none; }
+}
+.hero-band h1 { max-width: 940px; }
+.hero-skyline { opacity: .035; height: 130px; }
+.hero-band .search .btn.primary { background: #4f46e5; color: #fff; }
+.hero-band .search .btn.primary:hover { background: #4338ca; }
+.hiring-logos { flex-wrap: nowrap; }
+@media (max-width: 860px) { .hero-band .search .btn.primary { padding: 13px 16px; } }

@@ -141,7 +141,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost" href="{up}companies.html">Companies</a>
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
-    <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">☕ Support</a>
+    <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a>
   </nav>
 </div></header>
 <main class="wrap {main_class}">
@@ -266,7 +266,7 @@ def build_resources(resources: dict, posts: list[dict]) -> None:
         hue, icon = looks.get(c["id"], (sec["hue"], sec["icon"]))
         guides = [p for p in posts if section_of(p)["id"] == sec["id"]][:3]
         related = ("<p class='res-guides'><b>Guides on this topic:</b> "
-                   + " · ".join(f'<a href="{e(p["href"])}">{e(p["title"])}</a>' for p in guides) + "</p>") if guides else ""
+                   + " · ".join(f'<a href="blog/{e(p["href"])}">{e(p["title"])}</a>' for p in guides) + "</p>") if guides else ""
         parts.append(f"""<section class="res-section" id="{c['id']}">
   <header class="res-head" style="--h:{hue}">
     <span class="res-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"

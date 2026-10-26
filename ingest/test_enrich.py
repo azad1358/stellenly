@@ -92,7 +92,7 @@ def test_city_and_dedupe():
 
 
 def test_html_to_text():
-    assert html_to_text("<p>Hello&nbsp;<b>world</b></p><ul><li>A</li></ul>") == "Hello world\nA"
+    assert html_to_text("<p>Hello&nbsp;<b>world</b></p><ul><li>A</li></ul>") == "Hello world\n• A"
 
 
 def test_enrich_end_to_end():
@@ -183,3 +183,16 @@ def test_seniority_word_boundaries():
     assert seniority("Praktikant Marketing (m/w/d)", None) == "intern"
     assert seniority("Werkstudentin Data", None) == "intern"
     assert seniority("Teamleiter Support", None) == "lead"
+
+
+def test_html_to_text_handles_escaped_html():
+    raw = "&lt;p&gt;&lt;strong&gt;About Tensordyne&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data &amp;amp; AI&lt;/p&gt;"
+    out = html_to_text(raw)
+    assert "<" not in out and "&" not in out.replace("Data & AI", "")
+    assert "About Tensordyne" in out and "Data & AI" in out
+    assert html_to_text("<div><p>L&amp;D budget</p><h2 data-x='1'>Team</h2></div>") == "L&D budget\nTeam"
+
+
+def test_html_to_text_keeps_bullets():
+    out = html_to_text("<p>What you will do</p><ul><li>\n<p>Build APIs</p></li><li>Ship &amp; iterate</li></ul>")
+    assert out == "What you will do\n• Build APIs\n• Ship & iterate"
