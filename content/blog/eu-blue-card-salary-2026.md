@@ -3,6 +3,8 @@ title: EU Blue Card Germany 2026: salary thresholds and how to check a job offer
 description: The 2026 Blue Card minimum salaries (€50,700 and €45,934.20), who qualifies for the lower threshold, and how to check whether a job offer is enough.
 date: 2026-10-26
 reviewed: 2026-10-26
+review_months: 12
+section: visa
 tags: visa, blue-card, salary
 ---
 

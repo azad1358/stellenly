@@ -3,6 +3,8 @@ title: Got a job offer in Germany? Your first 30 days, step by step
 description: Address registration (Anmeldung), tax ID, bank account, health insurance and what your employer needs from you, in the order that actually works.
 date: 2026-10-26
 reviewed: 2026-10-26
+review_months: 6
+section: living
 tags: relocation, bureaucracy
 ---
 

@@ -155,6 +155,30 @@ anonymous write is the "I got hired" counter, which stores just a timestamp.
 There are no cookies and no tracking. If you add analytics, use a cookieless one
 (Plausible, Umami, GoatCounter).
 
+## Guides (blog)
+
+Guides are Markdown files in `content/blog/`. Each file needs front matter:
+
+```yaml
+---
+title: …
+description: …            # shown under the title and on cards
+date: 2026-10-27          # published
+reviewed: 2026-10-27      # last fact check against official sources
+review_months: 12         # how often to re-check (6 for practical guides, 12 for yearly rules)
+section: visa             # visa | job-search | salary | living (see content/sections.json)
+---
+```
+
+- Every guide gets a generated cover illustration in its section's colour, a
+  table of contents, official sources for its section, and related guides.
+- Guides that use live shortcodes (`{{jobs:…}}`, `{{stat:…}}`) show
+  "Updated <today>, <time>" because their data refreshes daily. Others show
+  their "Fact-checked" date.
+- **Actions → Guide review reminder** opens an issue on the 1st of each month
+  listing guides whose check is due. Re-check them, then update `reviewed:`.
+- To add a section, add it to `content/sections.json` (title, intro, colour, icon).
+
 ## Things to update by hand
 
 - `web/config.js`: `RAISED_THIS_MONTH_EUR` (monthly) and `BLUE_CARD` (each January)
