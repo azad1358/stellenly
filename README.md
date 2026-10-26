@@ -88,7 +88,9 @@ Rules that keep production data safe:
   ```
   The board name is in the company's careers URL
   (`boards.greenhouse.io/<board>`, `jobs.lever.co/<board>`, `jobs.ashbyhq.com/<board>`).
-  Only German locations are imported.
+  For `jobs.eu.lever.co/<board>`, add `"region": "eu"`.
+  Only German locations are imported. What counts as German is defined in
+  `ingest/cities_de.json` (cities, their other spellings, and the states).
 - **More APIs:** write a generator in `ingest/sources.py` that yields the common
   shape, and add it to `collect()` in `ingest/ingest.py`. Candidates are the
   Bundesagentur für Arbeit Jobsuche API and Adzuna (free key).

@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from enrich import (  # noqa: E402
-    enrich, german_level, html_to_text, is_agency, job_id, normalize_city, parse_salary,
+    enrich, german_level, html_to_text, in_germany, is_agency, job_id, normalize_city, parse_salary,
     relocation, remote_type, seniority, visa_sponsorship, years_experience,
 )
 
@@ -127,3 +127,22 @@ def test_enrich_skips_german_posting():
                             "eine abgeschlossene Ausbildung und arbeiten gerne mit Kunden.</p>",
     }
     assert enrich(raw) is None
+
+
+# --- Location ---------------------------------------------------------------
+def test_in_germany():
+    for loc in ["Berlin", "München, Bayern", "Muenchen", "Walldorf, Baden-Württemberg",
+                "Remote (Germany)", "Hamburg, DE", "London or Berlin", "Frankfurt am Main",
+                "Herzogenaurach", "Düsseldorf; Paris", "Nordrhein-Westfalen"]:
+        assert in_germany(loc), loc
+    for loc in ["London", "Hanover, NH", "Berlin, CT, USA", "Remote", "Paris, France",
+                "San Francisco, CA", "Essential Services", None, ""]:
+        assert not in_germany(loc), loc
+
+
+def test_normalize_city_variants():
+    assert normalize_city("Köln") == "Cologne"
+    assert normalize_city("Nuernberg, Germany") == "Nuremberg"
+    assert normalize_city("Halle (Saale)") == "Halle"
+    assert normalize_city("Bavaria, Germany") is None
+    assert normalize_city("Garching bei München") == "Garching"

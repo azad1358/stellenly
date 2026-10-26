@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import hashlib
 import html
+import json
 import re
 import unicodedata
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Text cleanup
@@ -284,20 +286,44 @@ def is_agency(company: str, text: str) -> bool:
 # ---------------------------------------------------------------------------
 # Location
 # ---------------------------------------------------------------------------
-_CITY_ALIASES = {
-    "munchen": "Munich", "muenchen": "Munich", "munich": "Munich",
-    "koln": "Cologne", "koeln": "Cologne", "cologne": "Cologne",
-    "nurnberg": "Nuremberg", "nuernberg": "Nuremberg", "nuremberg": "Nuremberg",
-    "frankfurt": "Frankfurt", "frankfurt am main": "Frankfurt", "frankfurt main": "Frankfurt",
-    "dusseldorf": "Düsseldorf", "duesseldorf": "Düsseldorf",
-    "hannover": "Hanover", "hanover": "Hanover",
-    "berlin": "Berlin", "hamburg": "Hamburg", "stuttgart": "Stuttgart", "leipzig": "Leipzig",
-    "dresden": "Dresden", "bremen": "Bremen", "bonn": "Bonn", "karlsruhe": "Karlsruhe",
-    "mannheim": "Mannheim", "heidelberg": "Heidelberg", "potsdam": "Potsdam", "aachen": "Aachen",
-    "dortmund": "Dortmund", "essen": "Essen", "mainz": "Mainz", "freiburg": "Freiburg",
-    "freiburg im breisgau": "Freiburg", "augsburg": "Augsburg", "munster": "Münster",
-    "remote": "Remote",
-}
+# Cities and regions live in cities_de.json; keys below are _norm()-ed spellings.
+_PLACES = json.loads((Path(__file__).parent / "cities_de.json").read_text(encoding="utf-8"))
+_UMLAUTS = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss"})
+
+
+def _spellings(name: str) -> set[str]:
+    return {_norm(name), _norm(name.translate(_UMLAUTS))}
+
+
+_CITY_ALIASES = {"remote": "Remote"}
+for _city, _aliases in _PLACES["cities"].items():
+    for _name in [_city, *_aliases]:
+        for _key in _spellings(_name):
+            _CITY_ALIASES[_key] = _city
+_REGIONS = {k for r in _PLACES["regions"] for k in _spellings(r)} | {"de"}
+
+_DE_PLACE = re.compile(
+    r"\b(?:" + "|".join(re.escape(k) for k in sorted(set(_CITY_ALIASES) - {"remote"} | _REGIONS - {"de"},
+                                                     key=len, reverse=True)) + r")\b"
+)
+_DE_COUNTRY = re.compile(r"\b(?:germany|deutschland|allemagne|alemania|germania)\b")
+_DE_CODE = re.compile(r"(?<![A-Za-z])DEU?(?![A-Za-z])")  # "Berlin, DE" (case-sensitive)
+# Same-named towns abroad: Hanover NH, Berlin CT, Hamburg NY, Potsdam NY, Dresden ON ...
+_ABROAD = re.compile(
+    r"\b(?:USA|U\.S\.A?\.?|United States|Canada|Ontario)\b|,\s*(?:A[KLRZ]|C[AOT]|FL|GA|HI|I[ADLN]|K[SY]|LA|"
+    r"M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY]|ON|QC|BC)\b"
+)
+
+
+def in_germany(location: str | None) -> bool:
+    """True if any part of a location string ("Berlin or London", "Munich; NYC") is in Germany."""
+    for part in re.split(r"[;|]| / | or | & ", location or ""):
+        norm = _norm(part)
+        if _DE_COUNTRY.search(norm):
+            return True
+        if (_DE_PLACE.search(norm) or _DE_CODE.search(part)) and not _ABROAD.search(part):
+            return True
+    return False
 
 
 def normalize_city(location: str | None) -> str | None:
@@ -305,7 +331,7 @@ def normalize_city(location: str | None) -> str | None:
         return None
     first = re.split(r"[,/|;(]", location)[0].strip()
     key = _norm(first)
-    if not key or key in ("germany", "deutschland", "de"):
+    if not key or key in _REGIONS:
         return None
     return _CITY_ALIASES.get(key, first[:60])
 

@@ -18,6 +18,8 @@ from typing import Iterator
 
 import requests
 
+from enrich import in_germany
+
 UA = {"User-Agent": "stellenly/1.0 (+https://github.com/azad1358/stellenly)"}
 TIMEOUT = 30
 
@@ -75,18 +77,6 @@ def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
 # List the company board names in companies.json. Many Berlin startups post
 # in English here, so this is the highest-quality source you can add.
 # ---------------------------------------------------------------------------
-_DE_LOC = re.compile(
-    r"germany|deutschland|berlin|munich|münchen|hamburg|frankfurt|cologne|köln|stuttgart|"
-    r"düsseldorf|dusseldorf|leipzig|dresden|hanover|hannover|nuremberg|nürnberg|bonn|karlsruhe|"
-    r"potsdam|mannheim|heidelberg|aachen|bremen|essen|dortmund|freiburg|augsburg|mainz",
-    re.I,
-)
-
-
-def _in_germany(location: str | None) -> bool:
-    return bool(location and _DE_LOC.search(location))
-
-
 def greenhouse(board: str, company: str) -> Iterator[dict]:
     r = requests.get(
         f"https://boards-api.greenhouse.io/v1/boards/{board}/jobs",
@@ -95,7 +85,7 @@ def greenhouse(board: str, company: str) -> Iterator[dict]:
     r.raise_for_status()
     for j in r.json().get("jobs", []):
         loc = (j.get("location") or {}).get("name")
-        if not _in_germany(loc):
+        if not in_germany(loc):
             continue
         yield {
             "source": f"greenhouse:{board}",
@@ -112,16 +102,17 @@ def greenhouse(board: str, company: str) -> Iterator[dict]:
         }
 
 
-def lever(board: str, company: str) -> Iterator[dict]:
+def lever(board: str, company: str, region: str | None = None) -> Iterator[dict]:
+    host = "api.eu.lever.co" if region == "eu" else "api.lever.co"  # jobs.eu.lever.co boards
     r = requests.get(
-        f"https://api.lever.co/v0/postings/{board}", params={"mode": "json"},
+        f"https://{host}/v0/postings/{board}", params={"mode": "json"},
         headers=UA, timeout=TIMEOUT,
     )
     r.raise_for_status()
     for j in r.json():
         cats = j.get("categories") or {}
         loc = cats.get("location") or ", ".join(cats.get("allLocations") or [])
-        if not _in_germany(loc):
+        if not in_germany(loc):
             continue
         lists = "".join(
             f"<h3>{l.get('text', '')}</h3><ul>{l.get('content', '')}</ul>" for l in j.get("lists") or []
@@ -151,7 +142,7 @@ def ashby(board: str, company: str) -> Iterator[dict]:
         locs = [j.get("location") or ""] + [
             (s.get("location") or "") for s in j.get("secondaryLocations") or []
         ]
-        loc = next((l for l in locs if _in_germany(l)), None)
+        loc = next((l for l in locs if in_germany(l)), None)
         if not loc:
             continue
         comp = (j.get("compensation") or {}).get("compensationTierSummary") or ""
@@ -174,15 +165,17 @@ ATS = {"greenhouse": greenhouse, "lever": lever, "ashby": ashby}
 
 
 def company_boards(config_path: Path) -> Iterator[dict]:
-    """companies.json: [{"ats": "greenhouse", "board": "acme", "company": "Acme GmbH"}, ...]"""
+    """companies.json: [{"ats": "greenhouse", "board": "acme", "company": "Acme GmbH"}, ...]
+    Lever boards hosted on jobs.eu.lever.co also need "region": "eu"."""
     if not config_path.exists():
         return
-    for entry in json.loads(config_path.read_text()):
+    for entry in json.loads(config_path.read_text(encoding="utf-8")):
         fn = ATS.get(entry.get("ats", "").lower())
         if not fn:
             continue
         try:
-            yield from fn(entry["board"], entry.get("company") or entry["board"])
+            extra = {"region": entry["region"]} if entry.get("region") else {}
+            yield from fn(entry["board"], entry.get("company") or entry["board"], **extra)
         except Exception as e:  # one broken board must not stop the run
             print(f"  ! {entry.get('ats')}:{entry.get('board')} failed: {e}")
         time.sleep(0.5)
