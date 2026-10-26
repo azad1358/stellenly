@@ -57,7 +57,8 @@ def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
             yield {
                 "source": "arbeitnow",
                 "source_id": j.get("slug"),
-                "url": j.get("url"),
+                # <job page>/apply redirects to the employer's own application page
+                "url": j["url"].rstrip("/") + "/apply" if j.get("url") else None,
                 "title": j.get("title"),
                 "company": j.get("company_name"),
                 "location": j.get("location"),
