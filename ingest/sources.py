@@ -18,8 +18,21 @@ from typing import Iterator
 
 import requests
 
-UA = {"User-Agent": "jobs-in-germany-english/1.0 (+https://github.com/your-name/your-repo)"}
+UA = {"User-Agent": "stellenly/1.0 (+https://github.com/azad1358/stellenly)"}
 TIMEOUT = 30
+
+
+def _get(url: str, retries: int = 4, **kwargs) -> requests.Response:
+    """GET that waits and retries when rate-limited (429) or on a 5xx."""
+    for attempt in range(retries + 1):
+        r = requests.get(url, headers=UA, timeout=TIMEOUT, **kwargs)
+        if r.status_code != 429 and r.status_code < 500 or attempt == retries:
+            r.raise_for_status()
+            return r
+        retry_after = r.headers.get("Retry-After", "")
+        wait = int(retry_after) if retry_after.isdigit() else 15 * 2 ** attempt
+        print(f"  {r.status_code} from {url}, retrying in {min(wait, 120)}s")
+        time.sleep(min(wait, 120))
 
 
 def _iso_from_unix(ts: float | int | None) -> str | None:
@@ -33,13 +46,11 @@ def _iso_from_unix(ts: float | int | None) -> str | None:
 # ---------------------------------------------------------------------------
 # Arbeitnow — free public API, no key. Docs: https://www.arbeitnow.com/api/job-board-api
 # ---------------------------------------------------------------------------
-def arbeitnow(max_pages: int = 40, pause: float = 1.0) -> Iterator[dict]:
+def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
     url = "https://www.arbeitnow.com/api/job-board-api"
     page = 0
     while url and page < max_pages:
-        r = requests.get(url, headers=UA, timeout=TIMEOUT)
-        r.raise_for_status()
-        payload = r.json()
+        payload = _get(url).json()
         for j in payload.get("data", []):
             yield {
                 "source": "arbeitnow",
