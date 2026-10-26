@@ -5,7 +5,7 @@
 // Leave SUPABASE_URL empty to run the site with built-in demo data.
 // =====================================================================
 window.SITE_CONFIG = {
-  SITE_NAME: "English Jobs Germany",
+  SITE_NAME: "Stellenly",
   OWNER_NOTE: "Built by Azad in Berlin — an international who went through this job search too. No accounts, no tracking, no CV uploads.",
 
   SUPABASE_URL: "https://udkkssqsrakxotevmkqq.supabase.co",          

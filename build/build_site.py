@@ -125,14 +125,14 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <meta property="og:description" content="{e(description)}">
 <meta property="og:type" content="website">
 <link rel="alternate" type="application/rss+xml" title="Guides" href="{up}blog/feed.xml">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇩🇪</text></svg>">
+<link rel="icon" href="{up}logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{up}style.css">
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
 {extra_head}
 </head>
 <body>
 <header class="site-header"><div class="wrap header-row">
-  <a class="brand" href="{up}index.html">{e(SITE['site_name'])}</a>
+  <a class="brand" href="{up}index.html"><img class="brand-logo" src="{up}logo.svg" alt="" width="32" height="32"><span>{e(SITE['site_name'])}</span></a>
   <nav class="header-actions">
     <a class="btn ghost" href="{up}index.html">Search jobs</a>
     <a class="btn ghost" href="{up}companies.html">Companies</a>
@@ -435,7 +435,7 @@ def load_companies(jobs: list[dict]) -> list[dict]:
         hq_de = bool(m and in_germany(m["hq"]))
         out.append({"name": name, "slug": slug, "meta": m, "jobs": js, "cities": Counter(place(j) for j in js),
                     "hq_city": normalize_city(m["hq"]) if hq_de else None, "hq_de": hq_de,
-                    "page": bool(m) or len(js) >= 3})
+                    "page": bool(m) or len(js) >= 3, "names": list(g["names"])})
     return sorted(out, key=lambda c: (c["meta"] is None, -len(c["jobs"]), c["name"].lower()))
 
 
@@ -456,8 +456,48 @@ def jobs_word(n: int) -> str:
     return f"{n} open job{'s' if n != 1 else ''}" if n else "No open jobs right now"
 
 
+def fetch_logo(slug: str, website: str | None) -> str | None:
+    """Company logo, downloaded once and served from our own site (no third party sees visitors)."""
+    path = WEB / "logos" / f"{slug}.png"
+    if path.exists():
+        return f"logos/{slug}.png"
+    host = re.sub(r"^https?://(www\.)?", "", website or "").split("/")[0]
+    if not host:
+        return None
+    try:
+        r = requests.get("https://www.google.com/s2/favicons", params={"domain": host, "sz": 128}, timeout=15)
+        png = r.content
+        # Unknown sites get a 404 with a 16×16 generic globe; real logos come back at the requested size.
+        if r.status_code != 200 or not png.startswith(b"\x89PNG") or int.from_bytes(png[16:20], "big") < 32:
+            return None
+        path.parent.mkdir(exist_ok=True)
+        path.write_bytes(r.content)
+        return f"logos/{slug}.png"
+    except requests.RequestException:
+        return None
+
+
+def write_company_index(cos: list[dict]) -> None:
+    """web/companies-index.json: what the job popup shows about a company (keyed like co_key() in app.js)."""
+    index = {}
+    for c in cos:
+        m = c["meta"] or {}
+        if not (m or c["page"]):
+            continue
+        entry = {"n": c["name"], "u": f"companies/{c['slug']}.html" if c["page"] else None}
+        if m:
+            entry.update({"l": fetch_logo(c["slug"], m.get("website")), "i": m.get("industry"), "f": m.get("founded"),
+                          "z": m.get("size"), "h": m.get("hq"), "st": int(bool(m.get("startup"))),
+                          "d": m.get("description"), "w": m.get("website")})
+        for name in {c["name"], *c["names"], *(m.get("aliases") or [])}:
+            index[co_key(name)] = {k: v for k, v in entry.items() if v is not None}
+    (WEB / "companies-index.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")),
+                                              encoding="utf-8")
+
+
 def build_companies(jobs: list[dict]) -> list[str]:
     cos = load_companies(jobs)
+    write_company_index(cos)
     out = WEB / "companies"
     out.mkdir(exist_ok=True)
     for old in out.glob("*.html"):

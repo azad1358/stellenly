@@ -28,9 +28,13 @@ from pathlib import Path
 import numpy as np
 import requests
 
+sys.path.insert(0, str(Path(__file__).parent))
+from skills import canonical_skill, extract_skills  # noqa: E402
+
 CACHE = Path(__file__).parent / ".cache"
 MODEL = "BAAI/bge-small-en-v1.5"
 EMBED_VERSION = 2     # bump when the text that gets embedded changes (rebuilds the cache)
+SKILLS_VERSION = 2    # bump when skills.py changes (re-extracts skills for all jobs)
 TITLE_WEIGHT = 0.6    # job = 0.6 * title + 0.4 * description, so the role matters more than boilerplate
 PEERS = 30            # similar jobs used for German / visa / experience stats
 SALARY_PEERS = 15     # similar jobs *with a salary* used for salary stats
@@ -140,24 +144,97 @@ def scam_signals(text: str) -> list[str]:
 
 
 def embed_missing(jobs: list[dict], vecs: dict, meta: dict) -> int:
-    missing = [j["id"] for j in jobs if j["id"] not in vecs]
-    if not missing:
+    """Embed new jobs, and (re)extract text features — scam signals, skills — where they are missing or outdated."""
+    missing = {j["id"] for j in jobs if j["id"] not in vecs}
+    todo = [j["id"] for j in jobs if j["id"] in missing or meta.get(j["id"], {}).get("sv") != SKILLS_VERSION]
+    if not todo:
         return 0
-    from fastembed import TextEmbedding  # imported lazily: heavy
-
-    model = TextEmbedding(MODEL, cache_dir=str(CACHE / "models"))
+    model = None
+    if missing:
+        from fastembed import TextEmbedding  # imported lazily: heavy
+        model = TextEmbedding(MODEL, cache_dir=str(CACHE / "models"))
     by_id = {j["id"]: j for j in jobs}
-    for i in range(0, len(missing), 256):
-        chunk = missing[i:i + 256]
+    for i in range(0, len(todo), 256):
+        chunk = todo[i:i + 256]
         texts = fetch_texts(chunk)
-        titles = list(model.embed([by_id[x]["title"] for x in chunk], batch_size=64))
-        bodies = list(model.embed([texts.get(x, "")[:1500] or by_id[x]["title"] for x in chunk], batch_size=64))
-        for x, t, b in zip(chunk, titles, bodies):
-            v = TITLE_WEIGHT * t / np.linalg.norm(t) + (1 - TITLE_WEIGHT) * b / np.linalg.norm(b)
-            vecs[x] = (v / np.linalg.norm(v)).astype(np.float16)
-            meta.setdefault(x, {})["scam"] = scam_signals(texts.get(x, ""))
-        print(f"  embedded {min(i + 256, len(missing))}/{len(missing)}")
+        new = [x for x in chunk if x in missing]
+        if new:
+            titles = list(model.embed([by_id[x]["title"] for x in new], batch_size=64))
+            bodies = list(model.embed([texts.get(x, "")[:1500] or by_id[x]["title"] for x in new], batch_size=64))
+            for x, t, b in zip(new, titles, bodies):
+                v = TITLE_WEIGHT * t / np.linalg.norm(t) + (1 - TITLE_WEIGHT) * b / np.linalg.norm(b)
+                vecs[x] = (v / np.linalg.norm(v)).astype(np.float16)
+        for x in chunk:
+            m = meta.setdefault(x, {})
+            m["scam"] = scam_signals(texts.get(x, ""))
+            m["skills"] = extract_skills(by_id[x]["title"], texts.get(x, ""), company=by_id[x]["company"])
+            m["sv"] = SKILLS_VERSION
+        print(f"  processed {min(i + 256, len(todo))}/{len(todo)} ({len(new)} embedded)")
     return len(missing)
+
+
+# ---------------------------------------------------------------- optional LLM job analysis
+def _llm(prompt: str) -> dict | None:
+    """One JSON answer from an OpenAI-compatible chat API. None if unavailable or rate-limited."""
+    key = os.environ.get("LLM_API_KEY")
+    if not key:
+        return None
+    r = requests.post(os.environ.get("LLM_API_URL", "https://api.groq.com/openai/v1/chat/completions"), timeout=90,
+                      headers={"Authorization": f"Bearer {key}"},
+                      json={"model": os.environ.get("LLM_MODEL", "llama-3.1-8b-instant"), "temperature": 0,
+                            "response_format": {"type": "json_object"}, "messages": [{"role": "user", "content": prompt}]})
+    if r.status_code == 429:
+        raise RuntimeError("rate limit")
+    r.raise_for_status()
+    return json.loads(r.json()["choices"][0]["message"]["content"])
+
+
+ANALYSIS_PROMPT = """You help international job seekers in Germany. Read this job posting and answer ONLY with JSON:
+{{"summary": "2 sentences: what the job is and who it suits",
+  "tasks": ["3-5 short main responsibilities"],
+  "skills": [{{"name": "skill or tool, short (e.g. Python, SQL, Stakeholder management)", "importance": 1-5, "required": true|false}}],
+  "red_flags": ["anything a candidate should double-check, e.g. unclear pay, very broad role; empty if none"]}}
+List at most 10 skills, most important first. importance 5 = central to the job, 1 = minor. required=false for nice-to-haves.
+
+Title: {title}
+Company: {company}
+Posting:
+{text}"""
+
+
+def llm_analyze(jobs: list[dict], meta: dict) -> int:
+    """Summary, tasks and ranked skills per job, read by an LLM. Cached: each job is analysed once."""
+    if not os.environ.get("LLM_API_KEY"):
+        return 0
+    todo = [j for j in jobs if "ai" not in meta.get(j["id"], {})][:int(os.environ.get("LLM_MAX_JOBS", 150))]
+    texts = fetch_texts([j["id"] for j in todo]) if todo else {}
+    done = 0
+    for j in todo:
+        try:
+            ans = _llm(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=texts.get(j["id"], "")[:6000]))
+        except RuntimeError:
+            print("  LLM rate limit reached; the rest waits for the next run")
+            break
+        except Exception as e:
+            print(f"  ! LLM analysis failed for {j['id']}: {e}")
+            continue
+        if not ans:
+            break
+        skills = []
+        for s in ans.get("skills") or []:
+            name = str(s.get("name") or "").strip()[:40]
+            if name:
+                imp = min(5, max(1, int(s.get("importance") or 3)))
+                skills.append({"n": canonical_skill(name), "w": round(imp / 5, 2), "r": int(bool(s.get("required", True)))})
+        meta.setdefault(j["id"], {})["ai"] = {
+            "summary": str(ans.get("summary") or "")[:400],
+            "tasks": [str(t)[:140] for t in (ans.get("tasks") or [])][:5],
+            "flags": [str(t)[:160] for t in (ans.get("red_flags") or [])][:3],
+            "skills": sorted(skills, key=lambda s: -s["w"])[:10],
+        }
+        done += 1
+        time.sleep(2.1)  # free tiers allow ~30 requests per minute
+    return done
 
 
 # ---------------------------------------------------------------- peers + hints
@@ -192,6 +269,11 @@ def compute(jobs: list[dict], vecs: dict, meta: dict) -> dict[str, dict]:
     no_german = np.array([j["german_level"] in ("not_required", "nice_to_have") for j in jobs])
     visa = np.array([bool(j["visa_sponsorship"]) for j in jobs])
     years = np.array([j["years_experience"] if j["years_experience"] is not None else np.nan for j in jobs], float)
+
+    # Skills per job: the LLM's reading when available, otherwise the rule-based extraction.
+    job_skills = [(meta.get(j["id"], {}).get("ai") or {}).get("skills") or meta.get(j["id"], {}).get("skills") or []
+                  for j in jobs]
+    skill_sets = [{s["n"] for s in sk} for sk in job_skills]
 
     # Same role posted in many cities (talent pools, agencies).
     spread = collections.defaultdict(set)
@@ -232,8 +314,22 @@ def compute(jobs: list[dict], vecs: dict, meta: dict) -> dict[str, dict]:
 
             hints = make_hints(j, peers, sal[i], meta.get(j["id"], {}),
                                len(spread[(j["company"].lower(), norm_title(j["title"]))]))
-            out[j["id"]] = {"peers": peers, "hints": hints,
-                            "similar": [jobs[k]["id"] for k in top[:8]]}
+            entry = {"peers": peers, "hints": hints, "similar": [jobs[k]["id"] for k in top[:8]]}
+
+            # Skills, with how often similar jobs ask for the same skill ("p"), and skills
+            # that similar jobs commonly ask for but this posting doesn't mention.
+            if job_skills[i]:
+                share = (lambda name: round(sum(name in skill_sets[k] for k in top) / len(top), 2)) if len(top) >= 5 \
+                    else (lambda name: None)
+                entry["skills"] = [{**s, "p": share(s["n"])} for s in job_skills[i]]
+            if len(top) >= 5:
+                counts = collections.Counter(name for k in top for name in skill_sets[k])
+                entry["peer_skills"] = [{"n": name, "p": round(c / len(top), 2)} for name, c in counts.most_common(12)
+                                        if name not in skill_sets[i] and c / len(top) >= 0.3][:5]
+            ai = meta.get(j["id"], {}).get("ai")
+            if ai:
+                entry["ai"] = {k: ai[k] for k in ("summary", "tasks", "flags") if ai.get(k)}
+            out[j["id"]] = entry
     return out
 
 
@@ -353,10 +449,13 @@ def main() -> None:
     vecs, meta = load_cache()
     new = embed_missing(jobs, vecs, meta)
     jobs = [j for j in jobs if j["id"] in vecs]
+    analysed = llm_analyze(jobs, meta)
     insights = compute(jobs, vecs, meta)
     if llm_check(jobs, insights, meta):
         insights = compute(jobs, vecs, meta)  # fold the LLM notes into the hints
     save_cache(vecs, meta, {j["id"] for j in jobs})
+    if analysed:
+        print(f"LLM analysed {analysed} jobs")
 
     counts = collections.Counter(h["k"] for v in insights.values() for h in v["hints"])
     with_salary_stats = sum("salary" in v["peers"] for v in insights.values())
