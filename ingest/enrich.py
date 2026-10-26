@@ -210,9 +210,9 @@ def years_experience(text: str) -> int | None:
 
 def seniority(title: str, years: int | None) -> str:
     t = (title or "").lower()
-    if re.search(r"\b(intern|internship|praktik|werkstudent|working student|trainee|ausbildung|thesis)", t):
+    if re.search(r"\b(intern|internship|praktik\w*|werkstudent\w*|working student|trainee|ausbildung|thesis)\b", t):
         return "intern"
-    if re.search(r"\b(head of|principal|staff|lead|director|vp|chief|teamleit)", t):
+    if re.search(r"\b(head of|principal|staff|lead|director|vp|chief|teamleit\w*)\b", t):
         return "lead"
     if re.search(r"\b(senior|sr\.?)\b", t):
         return "senior"

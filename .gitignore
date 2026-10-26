@@ -11,3 +11,6 @@ wheels/
 # Supabase CLI local state
 supabase/.temp/
 supabase/.branches/
+
+# Insights job cache (embeddings, model files)
+ingest/.cache/

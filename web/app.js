@@ -220,7 +220,64 @@
     (j.job_types || []).slice(0, 2).forEach((t) => out.push(`<span class="badge">${glossaryHtml(t)}</span>`));
     const titleTerm = Object.keys(GLOSSARY).find((g) => j.title.toLowerCase().includes(g) && g !== "m/w/d");
     if (titleTerm) out.push(`<span class="badge"><abbr title="${esc(GLOSSARY[titleTerm])}">What is "${esc(titleTerm)}"?</abbr></span>`);
+    // Hints from the daily insights job: warnings and positives on the card, the rest in the details.
+    hints(j).filter((h) => h.l !== "info").forEach((h) =>
+      out.push(`<span class="badge ${h.l === "warn" ? "warn" : "ok"} hint" title="${esc(h.t)}">${esc(h.s)}</span>`));
     return out.join("");
+  }
+
+  // ---------------------------------------------------------------- insights (similar jobs, hints)
+  const hints = (j) => (j.insights && j.insights.hints) || [];
+  const pct = (x) => `${Math.round(x * 100)}%`;
+
+  function salaryBar(j, s) {
+    const v = j.salary_min ? (j.salary_min + (j.salary_max || j.salary_min)) / 2 : null;
+    const lo = Math.min(s.p25, v ?? s.p25) * 0.85, hi = Math.max(s.p75, v ?? s.p75) * 1.1;
+    const x = (n) => `${((n - lo) / (hi - lo)) * 100}%`;
+    return `<div class="salbar" role="img" aria-label="Typical salary ${k(s.p25)} to ${k(s.p75)}${v ? `, this job ${k(v)}` : ""}">
+        <div class="salbar-track">
+          <span class="salbar-band" style="left:${x(s.p25)};width:calc(${x(s.p75)} - ${x(s.p25)})"></span>
+          <span class="salbar-median" style="left:${x(s.p50)}"></span>
+          ${v ? `<span class="salbar-job" style="left:${x(v)}"></span>` : ""}
+        </div>
+        <div class="salbar-legend"><span>${k(s.p25)}</span><span>median ${k(s.p50)}</span><span>${k(s.p75)}</span></div>
+        <p class="small muted">Middle 50% of ${s.n} similar jobs that list a salary${v ? ` · <b>this job: ${salaryText(j)}</b>` : " · this job doesn't list one"}.</p>
+      </div>`;
+  }
+
+  function insightsHtml(j) {
+    const ins = j.insights;
+    if (!ins || !ins.peers) return "";
+    const p = ins.peers, list = hints(j);
+    const stats = [];
+    if (p.n) {
+      stats.push(`<li><b>${pct(p.german_req)}</b> require German</li>`);
+      stats.push(`<li><b>${pct(p.visa)}</b> mention visa sponsorship</li>`);
+      if (p.years != null) stats.push(`<li>usually <b>${p.years}+ years</b> of experience</li>`);
+    }
+    const icon = { warn: "⚠️", good: "✅", info: "ℹ️" };
+    return `<section class="insight">
+        <h4>${p.n ? `Compared with ${p.n} similar jobs at other companies` : "Job check"}</h4>
+        ${list.length ? `<ul class="hint-list">${list.map((h) => `<li class="${h.l}"><span aria-hidden="true">${icon[h.l]}</span> ${esc(h.t)}</li>`).join("")}</ul>` : ""}
+        ${p.salary ? salaryBar(j, p.salary) : `<p class="small muted">Not enough similar jobs list a salary to compare pay.</p>`}
+        ${stats.length ? `<p class="small">Among similar jobs:</p><ul class="peer-stats">${stats.join("")}</ul>` : ""}
+        ${ins.similar && ins.similar.length && !DEMO ? `<div class="similar" data-ids="${esc(ins.similar.join(","))}"><p class="small muted">Loading similar jobs…</p></div>` : ""}
+        <p class="tiny muted">Automatic check based on the job text and ${p.n || "no"} similar postings. It can be wrong — always read the original.</p>
+      </section>`;
+  }
+
+  async function loadSimilar(box) {
+    const el = $(".similar", box);
+    if (!el || el.dataset.loaded) return;
+    el.dataset.loaded = "1";
+    try {
+      const items = await rpc("jobs_by_ids", { p_ids: el.dataset.ids.split(",") });
+      el.innerHTML = items.length ? `<p class="small"><b>Similar jobs</b></p><ul class="similar-list">${items.map((s) => `
+          <li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>
+          <span class="muted">· ${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></li>`).join("")}</ul>` : "";
+    } catch (e) {
+      el.innerHTML = "";
+    }
   }
 
   function factsHtml(j) {
@@ -261,6 +318,7 @@
     const kununu = `https://www.google.com/search?q=${encodeURIComponent(`${j.company} kununu`)}`;
     return `
       ${factsHtml(j)}
+      ${insightsHtml(j)}
       ${j.snippet ? `<p class="snippet">${esc(j.snippet)}${j.snippet.length >= 600 ? "…" : ""}</p>` : ""}
       <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
       <div class="detail-actions">
@@ -369,6 +427,7 @@
       const box = $(".job-details", li);
       const open = box.hidden;
       if (open && !box.innerHTML) box.innerHTML = detailsHtml(j);
+      if (open) loadSimilar(box);
       box.hidden = !open;
       btn.setAttribute("aria-expanded", String(open));
       if (open) { markSeen(j.id); li.classList.add("seen"); }

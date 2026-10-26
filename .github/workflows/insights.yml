@@ -1,0 +1,43 @@
+name: Job insights
+
+# Embeds new jobs, finds similar jobs, compares salary / German / visa /
+# experience with them and writes hints to jobs.insights (ingest/insights.py).
+# Embeddings and the model are kept in the Actions cache, so only new jobs
+# are embedded on each run.
+on:
+  schedule:
+    - cron: "47 4 * * *"     # daily 04:47 UTC, after the night's ingest
+  workflow_run:
+    workflows: ["Migrate database"]
+    types: [completed]
+  workflow_dispatch: {}
+
+concurrency:
+  group: insights
+  cancel-in-progress: false
+
+jobs:
+  insights:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ingest/requirements-insights.txt
+      - run: pip install -r ingest/requirements-insights.txt
+      - uses: actions/cache@v4
+        with:
+          path: ingest/.cache
+          key: insights-${{ github.run_id }}
+          restore-keys: insights-
+      - name: Compute and store insights
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}       # optional (e.g. a free Groq key)
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+        run: python ingest/insights.py

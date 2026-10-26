@@ -173,3 +173,13 @@ def test_abroad_and_generic_locations():
         assert generic_location(loc), loc
     for loc in ["Geeste", "Eutin", "Paris, remote", "Berlin"]:
         assert not generic_location(loc), loc
+
+
+def test_seniority_word_boundaries():
+    assert seniority("Senior Google Ads Specialist | International Ecommerce", None) == "senior"
+    assert seniority("Lead Financial Services International", None) == "lead"
+    assert seniority("Account Manager, Staffing Solutions", 3) == "mid"
+    assert seniority("Marketing Intern", None) == "intern"
+    assert seniority("Praktikant Marketing (m/w/d)", None) == "intern"
+    assert seniority("Werkstudentin Data", None) == "intern"
+    assert seniority("Teamleiter Support", None) == "lead"
