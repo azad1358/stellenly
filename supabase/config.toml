@@ -1,0 +1,6 @@
+# Supabase CLI config. Only used for migrations (`supabase db push`)
+# and local development (`supabase start`); defaults cover the rest.
+project_id = "jobsite"
+
+[db]
+major_version = 17

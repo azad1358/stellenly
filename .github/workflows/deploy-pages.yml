@@ -1,0 +1,40 @@
+name: Deploy website
+
+# Publishes web/ to GitHub Pages. Runs on pushes that touch web/, and after
+# "Build site pages" finishes (its bot commit can't trigger workflows itself).
+on:
+  push:
+    branches: [main]
+    paths: ["web/**"]
+  workflow_run:
+    workflows: ["Build site pages"]
+    types: [completed]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main                 # pick up the build bot's latest commit
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4

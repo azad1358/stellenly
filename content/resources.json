@@ -1,0 +1,72 @@
+{
+  "_how_to_use": "Each item links to `url`. When you are accepted into a partner program, paste your tracking link into `affiliate_url`: the page then uses it, adds a 'Partner link' label and rel=sponsored. `program` is a private note for you and is never shown on the site.",
+  "categories": [
+    {
+      "id": "visa",
+      "title": "Visa, Blue Card & recognition",
+      "intro": "Official sources first. Rules change every year, so always check here before you sign.",
+      "items": [
+        { "name": "Make it in Germany", "url": "https://www.make-it-in-germany.com/en/", "desc": "The federal government's portal for skilled workers: visa types, Blue Card, Quick-Check.", "affiliate_url": "", "program": "official, no program" },
+        { "name": "Federal Foreign Office — Visa", "url": "https://www.auswaertiges-amt.de/en/visa-service", "desc": "Visa requirements and how to apply at a German embassy or consulate.", "affiliate_url": "", "program": "official" },
+        { "name": "Anerkennung in Deutschland", "url": "https://www.anerkennung-in-deutschland.de/", "desc": "Find out whether and how your foreign degree or vocational qualification is recognised.", "affiliate_url": "", "program": "official" },
+        { "name": "anabin", "url": "https://anabin.kmk.org/", "desc": "Database to check whether your university and degree are recognised (often needed for the Blue Card).", "affiliate_url": "", "program": "official" }
+      ]
+    },
+    {
+      "id": "banking",
+      "title": "Bank account & money transfer",
+      "intro": "You need a German (or SEPA) account for your salary. Online banks can be opened from abroad in minutes.",
+      "items": [
+        { "name": "Wise", "url": "https://wise.com/", "desc": "Multi-currency account and cheap transfers home. Gives you an EUR IBAN quickly.", "affiliate_url": "", "program": "Wise affiliate program via Partnerize — CPA from £10 per new personal customer, 1-year cookie. Apply at wise.com affiliates." },
+        { "name": "N26", "url": "https://n26.com/en-de", "desc": "German online bank with an English app. Account opening by video ident.", "affiliate_url": "", "program": "N26 affiliate via impact.com — email affiliate@n26.com for a personal offer." }
+      ]
+    },
+    {
+      "id": "insurance",
+      "title": "Health insurance & other insurance",
+      "intro": "Health insurance is mandatory in Germany. Most employees join a public insurer; high earners and freelancers can choose private.",
+      "items": [
+        { "name": "Feather", "url": "https://feather-insurance.com/", "desc": "English-language insurance for expats: public & private health, liability, household and more.", "affiliate_url": "", "program": "Feather affiliate program (own dashboard, tiered commission per active policy). Apply at feather-insurance.com/become-a-partner." },
+        { "name": "Fintiba", "url": "https://www.fintiba.com/", "desc": "Blocked account + health insurance bundles, mainly for students and visa applicants.", "affiliate_url": "", "program": "Partner programme aimed at universities/agencies — ask whether websites qualify." },
+        { "name": "Expatrio", "url": "https://www.expatrio.com/", "desc": "Blocked account and health insurance packages for visa applicants.", "affiliate_url": "", "program": "Ambassador program is for (former) customers: €10 blocked account, €20–50 health insurance per referral." }
+      ]
+    },
+    {
+      "id": "german",
+      "title": "Learn German",
+      "intro": "Even for English-speaking jobs, B1 German makes daily life (and the next job search) much easier.",
+      "items": [
+        { "name": "DW Learn German", "url": "https://learngerman.dw.com/en/overview", "desc": "Free courses from A1 to C1 by Deutsche Welle, with placement test.", "affiliate_url": "", "program": "free, no program" },
+        { "name": "Goethe-Institut", "url": "https://www.goethe.de/en/spr/kup.html", "desc": "Courses and the officially recognised Goethe certificates (A1–C2).", "affiliate_url": "", "program": "none" },
+        { "name": "Lingoda", "url": "https://www.lingoda.com/en/", "desc": "Live online German classes with native teachers, flexible schedule.", "affiliate_url": "", "program": "Affiliate via Everflow — footer marked 'Closed' at last check; email affiliate@lingoda.com." }
+      ]
+    },
+    {
+      "id": "salary",
+      "title": "Salary & tax",
+      "intro": "German salaries are quoted gross per year. Check what lands in your account before you negotiate.",
+      "items": [
+        { "name": "BMF tax calculator", "url": "https://www.bmf-steuerrechner.de/", "desc": "The Federal Ministry of Finance's official wage-tax calculator.", "affiliate_url": "", "program": "official" },
+        { "name": "Entgeltatlas (Federal Employment Agency)", "url": "https://web.arbeitsagentur.de/entgeltatlas/", "desc": "Official median salaries by job, region, age and gender. Great for negotiation.", "affiliate_url": "", "program": "official" }
+      ]
+    },
+    {
+      "id": "housing",
+      "title": "Housing",
+      "intro": "Finding a flat is often harder than finding the job. Start with a furnished place, then search locally.",
+      "items": [
+        { "name": "Wunderflats", "url": "https://wunderflats.com/en", "desc": "Furnished flats for 1+ months, bookable from abroad. Ask the landlord for the Wohnungsgeberbestätigung (needed for Anmeldung).", "affiliate_url": "", "program": "Wunderflats creator program (hub.wunderflats.com) — check terms." },
+        { "name": "WG-Gesucht", "url": "https://www.wg-gesucht.de/en/", "desc": "The biggest site for shared flats and rooms. Mostly German, but usable in English.", "affiliate_url": "", "program": "none" }
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "More official job sources",
+      "intro": "Public job databases worth checking alongside this site.",
+      "items": [
+        { "name": "Bundesagentur für Arbeit — Jobsuche", "url": "https://www.arbeitsagentur.de/jobsuche/", "desc": "Germany's largest job database, run by the Federal Employment Agency.", "affiliate_url": "", "program": "official" },
+        { "name": "EURES", "url": "https://eures.europa.eu/", "desc": "The EU's job mobility portal, with jobs across Europe.", "affiliate_url": "", "program": "official" }
+      ]
+    }
+  ]
+}

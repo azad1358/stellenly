@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Jobs in Germany — German level, salary &amp; visa info up front</title>
+  <meta name="description" content="Search English-speaking jobs in Germany. See instantly whether German is required, the salary, Blue Card eligibility, visa sponsorship and remote options. No account needed.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇩🇪</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply saved theme before paint (no flash).
+    try { var t = localStorage.getItem("ejg.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+<a class="skip" href="#results">Skip to results</a>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./" id="brand">English Jobs Germany</a>
+    <nav class="header-actions">
+      <a class="btn ghost" href="resources.html">Resources</a>
+      <a class="btn ghost" href="blog/">Guides</a>
+      <button type="button" class="btn ghost" data-open="hired-dialog">🎉 I got hired</button>
+      <button type="button" class="btn ghost" data-open="glossary-dialog" title="German job terms explained">Glossary</button>
+      <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
+      <button type="button" class="btn support" data-open="support-dialog">☕ Support</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 id="tagline">Jobs in Germany you can do in English</h1>
+    <p class="stats" id="stats" aria-live="polite">&nbsp;</p>
+
+    <form id="search-form" class="search" role="search" autocomplete="off">
+      <label class="visually-hidden" for="q">Search jobs</label>
+      <input id="q" name="q" type="search" placeholder="Job title, skill or company — e.g. python, product manager, Zalando" >
+      <select id="city" name="city" aria-label="City"><option value="">All cities</option></select>
+      <button class="btn primary" type="submit">Search</button>
+    </form>
+
+    <div class="quick" role="group" aria-label="Quick filters">
+      <label class="chip"><input type="checkbox" id="f-nogerman"> 🇬🇧 No German needed</label>
+      <label class="chip"><input type="checkbox" id="f-salary"> 💶 Shows salary</label>
+      <label class="chip"><input type="checkbox" id="f-visa"> 🛂 Visa sponsorship</label>
+      <label class="chip"><input type="checkbox" id="f-remote"> 🏠 Remote</label>
+      <label class="chip"><input type="checkbox" id="f-direct"> 🏢 Direct employers only</label>
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside class="filters" aria-label="Filters">
+      <details id="more-filters" open>
+        <summary>More filters</summary>
+
+        <fieldset>
+          <legend>German requirement</legend>
+          <label><input type="checkbox" name="german" value="not_required"> Not required</label>
+          <label><input type="checkbox" name="german" value="nice_to_have"> Nice to have</label>
+          <label><input type="checkbox" name="german" value="not_mentioned"> Not mentioned</label>
+          <label><input type="checkbox" name="german" value="required"> Required</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Work setup</legend>
+          <label><input type="checkbox" name="remote" value="remote_de"> Remote (Germany)</label>
+          <label><input type="checkbox" name="remote" value="remote_eu"> Remote (EU)</label>
+          <label><input type="checkbox" name="remote" value="hybrid"> Hybrid</label>
+          <label><input type="checkbox" name="remote" value="onsite"> On-site</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Level</legend>
+          <label><input type="checkbox" name="seniority" value="intern"> Intern / working student</label>
+          <label><input type="checkbox" name="seniority" value="junior"> Junior</label>
+          <label><input type="checkbox" name="seniority" value="mid"> Mid</label>
+          <label><input type="checkbox" name="seniority" value="senior"> Senior</label>
+          <label><input type="checkbox" name="seniority" value="lead"> Lead / head of</label>
+        </fieldset>
+
+        <label class="field">Experience asked for
+          <select id="years">
+            <option value="">Any</option>
+            <option value="2">Up to 2 years</option>
+            <option value="5">Up to 5 years</option>
+          </select>
+        </label>
+
+        <label class="field">EU Blue Card salary
+          <select id="bluecard">
+            <option value="">Any</option>
+            <option value="standard">Meets standard threshold</option>
+            <option value="reduced">Meets reduced threshold (IT/STEM, graduates)</option>
+          </select>
+        </label>
+
+        <label class="field">Posted
+          <select id="days">
+            <option value="">Any time</option>
+            <option value="1">Last 24 hours</option>
+            <option value="3">Last 3 days</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+          </select>
+        </label>
+
+        <label class="field check"><input type="checkbox" id="f-reloc"> Relocation support</label>
+
+        <div class="filter-actions">
+          <button type="button" class="btn ghost small" id="reset-filters">Reset filters</button>
+          <button type="button" class="btn ghost small" data-open="prefs-dialog">My hidden companies &amp; words</button>
+        </div>
+      </details>
+
+      <div class="popular">
+        <h2>Popular tags</h2>
+        <div id="tag-cloud" class="tag-cloud"></div>
+      </div>
+
+      <div id="sponsor-slot"></div>
+
+      <div class="side-note">
+        <a id="rss-link" href="#" rel="nofollow">📡 RSS feed for this search</a>
+        <p class="muted">Get new matches in any RSS reader — no email, no account.</p>
+      </div>
+    </aside>
+
+    <section class="results-col">
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab" data-tab="all" aria-selected="true">All jobs</button>
+        <button role="tab" class="tab" data-tab="saved" aria-selected="false">Saved <span id="saved-count"></span></button>
+        <button role="tab" class="tab" data-tab="applied" aria-selected="false">Applied <span id="applied-count"></span></button>
+      </div>
+
+      <div class="toolbar">
+        <p id="result-count" class="muted" aria-live="polite"></p>
+        <div class="toolbar-right">
+          <span id="active-tags"></span>
+          <label class="sort">Sort
+            <select id="sort">
+              <option value="newest">Newest</option>
+              <option value="relevance">Relevance</option>
+              <option value="salary">Highest salary</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div id="nudge" class="nudge" hidden></div>
+
+      <ol id="results" class="results"></ol>
+      <div class="more"><button type="button" class="btn" id="load-more" hidden>Load more jobs</button></div>
+      <div id="applied-tools" class="applied-tools" hidden>
+        <button type="button" class="btn small" id="export-csv">⬇ Export my applications (CSV)</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="transparency" aria-labelledby="t-h">
+    <h2 id="t-h">This site is free, ad-light and has no tracking</h2>
+    <p id="owner-note" class="muted"></p>
+    <div class="cost-box" id="cost-box"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span>Jobs come from public job APIs and company career pages. Always apply on the original site.</span>
+    <nav>
+      <a href="impressum.html">Impressum</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="#" data-open="support-dialog">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ============================ Dialogs ============================ -->
+<dialog id="support-dialog" class="dialog">
+  <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
+  <h2>☕ Keep this site free</h2>
+  <p>No ads, no tracking, no accounts. If it helped you, a coffee keeps it running and growing.</p>
+  <div id="support-costs"></div>
+  <p class="actions">
+    <a class="btn support big" target="_blank" rel="noopener" data-kofi>Support on Ko-fi</a>
+  </p>
+  <p class="muted small">Payments are handled by Ko-fi. This site never sees your card or account. <a data-supporters target="_blank" rel="noopener">Thank-you wall →</a></p>
+</dialog>
+
+<dialog id="hired-dialog" class="dialog">
+  <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
+  <div id="hired-ask">
+    <h2>🎉 Did you find a job?</h2>
+    <p>Tell us anonymously, it only adds +1 to the "people hired" counter. Nothing else is stored.</p>
+    <p class="actions"><button type="button" class="btn primary big" id="hired-yes">Yes, I got hired!</button></p>
+  </div>
+  <div id="hired-thanks" hidden>
+    <h2>🎉 Congratulations!</h2>
+    <p>That's huge, and we're really happy for you. Good luck with the new role.</p>
+    <p>If this site helped on the way, a coffee helps the next person find their job too.</p>
+    <p class="actions">
+      <a class="btn support big" target="_blank" rel="noopener" data-kofi>☕ Buy a coffee</a>
+      <button type="button" class="btn" id="share-site">Share with a friend</button>
+    </p>
+  </div>
+</dialog>
+
+<dialog id="prefs-dialog" class="dialog">
+  <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
+  <h2>My hidden companies &amp; words</h2>
+  <p class="muted small">Saved only in this browser.</p>
+  <h3>Hidden companies</h3>
+  <ul id="hidden-companies" class="pill-list"></ul>
+  <h3>Hide jobs whose title contains</h3>
+  <label class="visually-hidden" for="exclude-words">Words to hide, comma separated</label>
+  <textarea id="exclude-words" rows="2" placeholder="e.g. werkstudent, SAP, sales"></textarea>
+  <p class="actions">
+    <button type="button" class="btn primary" id="save-prefs">Save</button>
+    <button type="button" class="btn ghost danger" id="clear-data">Delete all my local data</button>
+  </p>
+</dialog>
+
+<dialog id="glossary-dialog" class="dialog">
+  <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
+  <h2>German job terms, explained</h2>
+  <dl id="glossary-list" class="glossary"></dl>
+</dialog>
+
+<script src="config.js"></script>
+<script src="demo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
