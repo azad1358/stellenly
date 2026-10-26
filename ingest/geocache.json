@@ -229,6 +229,11 @@
 "lat": 51.8996,
 "lon": -2.0712
 },
+"*|chiasso": {
+"cc": "ch",
+"lat": 45.8355,
+"lon": 9.029
+},
 "*|covent garden - hybrid": null,
 "*|dale, indiana": {
 "cc": "us",
@@ -754,6 +759,7 @@
 "lat": 50.3714,
 "lon": -4.1424
 },
+"*|portfolio location": null,
 "*|puchheim": {
 "cc": "de",
 "lat": 48.1705,
