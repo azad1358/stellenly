@@ -315,6 +315,35 @@ _ABROAD = re.compile(
 )
 
 
+_FOREIGN = re.compile(
+    r"\b(?:uk|u k|united kingdom|great britain|england|scotland|wales|northern ireland|ireland|france|netherlands|"
+    r"the netherlands|holland|belgium|luxembourg|switzerland|austria|spain|portugal|italy|poland|czechia|"
+    r"czech republic|slovakia|hungary|romania|bulgaria|greece|croatia|serbia|slovenia|sweden|denmark|norway|"
+    r"finland|estonia|latvia|lithuania|ukraine|turkey|israel|cyprus|malta|usa|united states|canada|mexico|brazil|"
+    r"india|singapore|australia|new zealand|japan|china|uae|dubai|"
+    r"london|manchester|birmingham|edinburgh|glasgow|bristol|belfast|leeds|oxford|dublin|cork|paris|lyon|lille|"
+    r"marseille|bordeaux|toulouse|nantes|amsterdam|rotterdam|the hague|den haag|utrecht|eindhoven|brussels|"
+    r"antwerp|zurich|geneva|geneve|lausanne|basel|bern|zug|vienna|wien|graz|linz|salzburg|madrid|barcelona|"
+    r"valencia|lisbon|porto|milan|rome|warsaw|krakow|wroclaw|prague|brno|budapest|bucharest|stockholm|"
+    r"gothenburg|copenhagen|oslo|helsinki|tallinn|riga|vilnius|athens|new york|san francisco)\b"
+)
+_GENERIC_WORDS = {
+    "remote", "hybrid", "office", "headquarter", "headquarters", "hq", "home", "homebased", "based", "emea", "europe",
+    "european", "union", "eu", "anywhere", "worldwide", "global", "job", "jobs", "time", "zone", "timezone", "cet",
+    "within", "or", "and", "in", "the", "flexible", "day", "days", "week", "a", "per", "first",
+}
+
+
+def abroad(location: str | None) -> bool:
+    """Names a place outside Germany (and no German one): "Paris - full remote", "Remote, UK"."""
+    return bool(_FOREIGN.search(_norm(location))) and not in_germany(location)
+
+
+def generic_location(location: str | None) -> bool:
+    """Only words like "Remote", "EMEA", "Hybrid", "Remote - Europe timezone": no actual place."""
+    return all(w in _GENERIC_WORDS or w.isdigit() for w in _norm(location).split())
+
+
 def in_germany(location: str | None) -> bool:
     """True if any part of a location string ("Berlin or London", "Munich; NYC") is in Germany."""
     for part in re.split(r"[;|]| / | or | & ", location or ""):
@@ -326,14 +355,28 @@ def in_germany(location: str | None) -> bool:
     return False
 
 
+_DE_CITY = re.compile(
+    r"\b(?:" + "|".join(re.escape(k) for k in sorted(set(_CITY_ALIASES) - {"remote"}, key=len, reverse=True)) + r")\b"
+)
+_LOC_NOISE = re.compile(r"\b(office|hq|headquarters?|hybrid|campus|building|onsite|on-site)\b", re.I)
+
+
 def normalize_city(location: str | None) -> str | None:
+    """First German city named in the location ("Munich - London" → Munich,
+    "Berlin Office" → Berlin); otherwise the first part, cleaned up."""
     if not location:
         return None
-    first = re.split(r"[,/|;(]", location)[0].strip()
-    key = _norm(first)
-    if not key or key in _REGIONS:
-        return None
-    return _CITY_ALIASES.get(key, first[:60])
+    norm = _norm(location)
+    if m := _DE_CITY.search(norm):
+        return _CITY_ALIASES[m.group(0)]
+    if re.search(r"\bremote\b", norm):
+        return "Remote"
+    for part in re.split(r"[,/|;(]| - | or | & ", location):  # a small town: "Geeste", "Parsdorf, Bavaria"
+        part = _LOC_NOISE.sub(" ", part).strip(" -)")
+        key = _norm(part)
+        if key and key not in _REGIONS and not _DE_COUNTRY.search(key) and not _FOREIGN.search(key):
+            return " ".join(part.split())[:60]
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -419,6 +462,8 @@ def enrich(raw: dict) -> dict | None:
     company = (raw.get("company") or "").strip()
     url = (raw.get("url") or "").strip()
     if not title or not company or not url:
+        return None
+    if re.search(r"\bTEST\b", title):  # ATS test postings ("TEST - Forward Deployed Engineer")
         return None
 
     text = html_to_text(raw.get("description_html"))

@@ -96,6 +96,39 @@ Rules that keep production data safe:
   Bundesagentur für Arbeit Jobsuche API and Adzuna (free key).
   Do **not** scrape LinkedIn or other sites whose terms forbid it.
 
+## Companies directory and map
+
+`web/companies.html` (built daily) lists every direct employer with open jobs,
+grouped by German city, plus an opt-in map with hover cards. Each company with
+facts or 3+ jobs also gets its own page in `web/companies/`, which helps with
+"<company> jobs in English" searches.
+
+- Company facts (description, founding year, size, HQ, startup tag) live in
+  `content/companies.json`. Add or correct entries there; companies without an
+  entry still appear, just without facts.
+- City coordinates come from `ingest/geocache.json`, which the ingester fills
+  via OpenStreetMap Nominatim (at most one lookup per second, every answer
+  cached) and commits after each run. The same lookups drop Arbeitnow jobs
+  outside Germany.
+- The map loads OpenStreetMap tiles only after the visitor clicks "Show map"
+  (see the privacy page). OSM's free tile servers are for moderate traffic
+  ([tile usage policy](https://operations.osmfoundation.org/policies/tiles/)).
+  If the site gets big, switch to a hosted tile provider in `web/companies.js`.
+
+## SEO checklist
+
+The build writes `web/sitemap.xml` and `web/robots.txt` every day (guides,
+reports, city and tag pages, company pages). To get indexed:
+
+1. Open [Google Search Console](https://search.google.com/search-console), add
+   the *Domain* property `stellenly.com` and verify it with the TXT record
+   it gives you in GoDaddy DNS.
+2. Under **Sitemaps**, submit `https://www.stellenly.com/sitemap.xml`.
+3. Do the same in [Bing Webmaster Tools](https://www.bing.com/webmasters)
+   (you can import from Search Console).
+4. Keep publishing guides in `content/blog/`. Links from other sites (Reddit,
+   expat forums, Medium posts) matter most for ranking.
+
 ## How the enrichment works (`ingest/enrich.py`)
 
 | Field | Rule |

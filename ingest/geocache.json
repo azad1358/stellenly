@@ -1,0 +1,1328 @@
+{
+"*|9th arrondissement of paris, 75009, paris": {
+"cc": "fr",
+"lat": 48.8765,
+"lon": 2.3252
+},
+"*|addlestone, richmond upon thames, united kingdom": null,
+"*|allschwil": {
+"cc": "ch",
+"lat": 47.5511,
+"lon": 7.5366
+},
+"*|almelo, overijssel, nederland": {
+"cc": "nl",
+"lat": 52.3564,
+"lon": 6.6636
+},
+"*|amsterdam": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam (hq), north holland": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam (remote)": null,
+"*|amsterdam hq": {
+"cc": "nl",
+"lat": 52.3374,
+"lon": 4.8754
+},
+"*|amsterdam office": {
+"cc": "us",
+"lat": 40.6471,
+"lon": -73.9425
+},
+"*|amsterdam, hollande septentrionale, pays-bas": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam, netherlands": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam, nl": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam, noord-holland, netherlands": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|amsterdam, north holland, netherlands": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|anywhere in france": null,
+"*|apeldoorn": {
+"cc": "nl",
+"lat": 52.1796,
+"lon": 5.9301
+},
+"*|arnhem": {
+"cc": "nl",
+"lat": 51.9843,
+"lon": 5.9109
+},
+"*|baar": {
+"cc": "ch",
+"lat": 47.1952,
+"lon": 8.5254
+},
+"*|basel, basel-stadt, switzerland": {
+"cc": "ch",
+"lat": 47.5581,
+"lon": 7.5878
+},
+"*|bath": {
+"cc": "gb",
+"lat": 51.3814,
+"lon": -2.3597
+},
+"*|belfast": {
+"cc": "gb",
+"lat": 54.5964,
+"lon": -5.9302
+},
+"*|belfast, northern ireland": {
+"cc": "gb",
+"lat": 54.5964,
+"lon": -5.9302
+},
+"*|belfast, northern ireland, remote": null,
+"*|berliini, berliini, saksa": {
+"cc": "de",
+"lat": 52.5146,
+"lon": 13.2398
+},
+"*|bern, berne, switzerland": {
+"cc": "ch",
+"lat": 46.9485,
+"lon": 7.4522
+},
+"*|bern, switzerland": {
+"cc": "ch",
+"lat": 46.9485,
+"lon": 7.4522
+},
+"*|bessé-sur-braye, pays de la loire": {
+"cc": "fr",
+"lat": 47.8347,
+"lon": 0.7526
+},
+"*|bicester village": {
+"cc": "gb",
+"lat": 51.8924,
+"lon": -1.1494
+},
+"*|birmingham": {
+"cc": "gb",
+"lat": 52.4949,
+"lon": -1.8518
+},
+"*|bordeaux": {
+"cc": "fr",
+"lat": 44.8412,
+"lon": -0.58
+},
+"*|bordeaux, france": {
+"cc": "fr",
+"lat": 44.8412,
+"lon": -0.58
+},
+"*|bordeaux; paris": {
+"cc": "fr",
+"lat": 44.7599,
+"lon": -0.4192
+},
+"*|boulogne-billancourt": {
+"cc": "fr",
+"lat": 48.8357,
+"lon": 2.2402
+},
+"*|breda": {
+"cc": "nl",
+"lat": 51.5888,
+"lon": 4.776
+},
+"*|brighton": {
+"cc": "gb",
+"lat": 50.8215,
+"lon": -0.1401
+},
+"*|bristol": {
+"cc": "gb",
+"lat": 51.443,
+"lon": -2.5817
+},
+"*|bristol - the crescent": {
+"cc": "gb",
+"lat": 51.4894,
+"lon": -2.6474
+},
+"*|bristol; cambridge": {
+"cc": "gb",
+"lat": 51.4438,
+"lon": -2.5801
+},
+"*|bristol; edinburgh; london": null,
+"*|bristol; london": {
+"cc": "ca",
+"lat": 44.0666,
+"lon": -79.472
+},
+"*|broughton": {
+"cc": "gb",
+"lat": 53.5656,
+"lon": -0.5539
+},
+"*|brunssum, netherlands": {
+"cc": "nl",
+"lat": 50.9438,
+"lon": 5.9748
+},
+"*|cadarache, provence-alpes-côte-d’azur, france": {
+"cc": "fr",
+"lat": 43.7089,
+"lon": 5.7399
+},
+"*|cambridge": {
+"cc": "gb",
+"lat": 52.1976,
+"lon": 0.1392
+},
+"*|cambridge - clifton road (hop)": {
+"cc": "gb",
+"lat": 52.1918,
+"lon": 0.138
+},
+"*|cambridge, ma": {
+"cc": "us",
+"lat": 42.3656,
+"lon": -71.104
+},
+"*|cambridge, uk": {
+"cc": "gb",
+"lat": 52.1976,
+"lon": 0.1392
+},
+"*|cardiff": {
+"cc": "gb",
+"lat": 51.4817,
+"lon": -3.1792
+},
+"*|cardiff hq": {
+"cc": "gb",
+"lat": 51.5175,
+"lon": -3.2451
+},
+"*|cheltenham, gloucestershire, england": {
+"cc": "gb",
+"lat": 51.8996,
+"lon": -2.0712
+},
+"*|covent garden - hybrid": null,
+"*|dale, indiana": {
+"cc": "us",
+"lat": 38.1689,
+"lon": -86.99
+},
+"*|danehill": {
+"cc": "gb",
+"lat": 51.0382,
+"lon": 0.0197
+},
+"*|delft": {
+"cc": "nl",
+"lat": 51.9995,
+"lon": 4.3627
+},
+"*|delfzijl": {
+"cc": "nl",
+"lat": 53.3326,
+"lon": 6.9135
+},
+"*|den haag, zuid-holland, nederland": {
+"cc": "nl",
+"lat": 52.0749,
+"lon": 4.2697
+},
+"*|edinburgh": {
+"cc": "gb",
+"lat": 55.9533,
+"lon": -3.1884
+},
+"*|eindhoven, netherlands": {
+"cc": "nl",
+"lat": 51.4486,
+"lon": 5.4501
+},
+"*|eindhoven, noord-brabant, netherlands": {
+"cc": "nl",
+"lat": 51.4393,
+"lon": 5.4786
+},
+"*|emea": {
+"cc": "id",
+"lat": -2.3918,
+"lon": 121.523
+},
+"*|england, united kingdom": {
+"cc": "gb",
+"lat": 52.531,
+"lon": -1.2649
+},
+"*|enschede": {
+"cc": "nl",
+"lat": 52.2234,
+"lon": 6.8706
+},
+"*|enschede, overijssel, netherlands": {
+"cc": "nl",
+"lat": 52.221,
+"lon": 6.8941
+},
+"*|europe": {
+"cc": null,
+"lat": 51.0,
+"lon": 10.0
+},
+"*|farringdon, greater london, united kingdom": {
+"cc": "gb",
+"lat": 51.52,
+"lon": -0.1046
+},
+"*|fr - paris": {
+"cc": "fr",
+"lat": 48.8589,
+"lon": 2.32
+},
+"*|france": {
+"cc": "fr",
+"lat": 46.6034,
+"lon": 1.8883
+},
+"*|france - remote": null,
+"*|france remote": null,
+"*|gb - london": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|geldermalsen": {
+"cc": "nl",
+"lat": 51.8826,
+"lon": 5.2715
+},
+"*|geneva": {
+"cc": "ch",
+"lat": 46.2018,
+"lon": 6.1466
+},
+"*|geneva, switzerland": {
+"cc": "ch",
+"lat": 46.2018,
+"lon": 6.1466
+},
+"*|glasgow": {
+"cc": "gb",
+"lat": 55.8612,
+"lon": -4.2502
+},
+"*|glasgow, scotland, united kingdom": {
+"cc": "gb",
+"lat": 55.8612,
+"lon": -4.2502
+},
+"*|grenoble, auvergne-rhône-alpes, france": {
+"cc": "fr",
+"lat": 45.1876,
+"lon": 5.7358
+},
+"*|groningen": {
+"cc": "nl",
+"lat": 53.2191,
+"lon": 6.568
+},
+"*|gèneve-pays de gex": {
+"cc": "fr",
+"lat": 46.3309,
+"lon": 6.0585
+},
+"*|haarlem": {
+"cc": "nl",
+"lat": 52.3885,
+"lon": 4.6388
+},
+"*|halifax": {
+"cc": "ca",
+"lat": 44.6486,
+"lon": -63.5859
+},
+"*|hatfield": {
+"cc": "gb",
+"lat": 51.7635,
+"lon": -0.2259
+},
+"*|headquarters": {
+"cc": "us",
+"lat": 43.7047,
+"lon": -110.7354
+},
+"*|heerenveen": {
+"cc": "nl",
+"lat": 52.9985,
+"lon": 5.9231
+},
+"*|heesch, netherlands": {
+"cc": "nl",
+"lat": 51.7352,
+"lon": 5.5266
+},
+"*|home office (united kingdom)": {
+"cc": "gb",
+"lat": 51.496,
+"lon": -0.1298
+},
+"*|homeoffice": {
+"cc": "ch",
+"lat": 47.4137,
+"lon": 8.5605
+},
+"*|hove office": {
+"cc": "au",
+"lat": -35.0084,
+"lon": 138.5219
+},
+"*|hybrid": {
+"cc": "fr",
+"lat": 47.1188,
+"lon": 1.0982
+},
+"*|hybrid (london)": {
+"cc": "gb",
+"lat": 51.5274,
+"lon": -0.4815
+},
+"*|hybrid paris": {
+"cc": "fi",
+"lat": 60.2343,
+"lon": 22.9344
+},
+"*|ireland, switzerland": {
+"cc": "ie",
+"lat": 53.3206,
+"lon": -6.2178
+},
+"*|ireland, united kingdom": {
+"cc": "gb",
+"lat": 52.06,
+"lon": -0.3475
+},
+"*|keynsham, bristol, england": {
+"cc": "gb",
+"lat": 51.4138,
+"lon": -2.4975
+},
+"*|lausanne": {
+"cc": "ch",
+"lat": 46.5218,
+"lon": 6.6327
+},
+"*|lausanne / hybrid / remote": null,
+"*|lausanne, switzerland": {
+"cc": "ch",
+"lat": 46.5218,
+"lon": 6.6327
+},
+"*|lausanne, vaud, switzerland": {
+"cc": "ch",
+"lat": 46.5218,
+"lon": 6.6327
+},
+"*|leamington spa, england": {
+"cc": "gb",
+"lat": 52.2913,
+"lon": -1.5364
+},
+"*|leeds": {
+"cc": "gb",
+"lat": 53.7974,
+"lon": -1.5438
+},
+"*|leeds, uk": {
+"cc": "gb",
+"lat": 53.7974,
+"lon": -1.5438
+},
+"*|leicester": {
+"cc": "gb",
+"lat": 52.6362,
+"lon": -1.1332
+},
+"*|lille, upline, nord": null,
+"*|lille, upline, nord; paris, paris": null,
+"*|lincoln / lincolnshire": {
+"cc": "gb",
+"lat": 53.2294,
+"lon": -0.5405
+},
+"*|london": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london (gb)": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london (shoreditch)": {
+"cc": "gb",
+"lat": 51.5267,
+"lon": -0.0799
+},
+"*|london - hybrid": {
+"cc": "gb",
+"lat": 51.509,
+"lon": -0.2506
+},
+"*|london - jj mack": {
+"cc": "gb",
+"lat": 51.5188,
+"lon": -0.1049
+},
+"*|london office": {
+"cc": "gb",
+"lat": 51.544,
+"lon": -0.3062
+},
+"*|london office - 2/3 days a week": null,
+"*|london or remote within the uk": null,
+"*|london, england": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london, england, united kingdom": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london, greater london": {
+"cc": "gb",
+"lat": 51.5156,
+"lon": -0.092
+},
+"*|london, greater london, england, united kingdom": {
+"cc": "gb",
+"lat": 51.5156,
+"lon": -0.092
+},
+"*|london, greater london, united kingdom": {
+"cc": "gb",
+"lat": 51.5156,
+"lon": -0.092
+},
+"*|london, london": {
+"cc": "gb",
+"lat": 51.5156,
+"lon": -0.092
+},
+"*|london, london, united kingdom": {
+"cc": "gb",
+"lat": 51.5156,
+"lon": -0.092
+},
+"*|london, mayfair": {
+"cc": "gb",
+"lat": 51.5111,
+"lon": -0.1471
+},
+"*|london, uk": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london, uk (hybrid)": null,
+"*|london, united kingdom": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|london; manchester": {
+"cc": "gb",
+"lat": 53.4774,
+"lon": -2.2308
+},
+"*|london; reading": {
+"cc": "gb",
+"lat": 51.5338,
+"lon": -0.2261
+},
+"*|lucerne": {
+"cc": "ch",
+"lat": 47.0521,
+"lon": 8.3058
+},
+"*|lyon": {
+"cc": "fr",
+"lat": 45.7578,
+"lon": 4.832
+},
+"*|lyon, france": {
+"cc": "fr",
+"lat": 45.7578,
+"lon": 4.832
+},
+"*|manchester": {
+"cc": "gb",
+"lat": 53.4425,
+"lon": -2.2325
+},
+"*|manchester, england, united kingdom": {
+"cc": "gb",
+"lat": 53.4425,
+"lon": -2.2325
+},
+"*|manchester; newcastle": {
+"cc": "gb",
+"lat": 53.4719,
+"lon": -2.246
+},
+"*|manufacturing & testing facility": null,
+"*|massy, france": {
+"cc": "fr",
+"lat": 49.6902,
+"lon": 1.3995
+},
+"*|michendorf": {
+"cc": "de",
+"lat": 52.2871,
+"lon": 13.0658
+},
+"*|middelharnis": {
+"cc": "nl",
+"lat": 51.7576,
+"lon": 4.1656
+},
+"*|milton keynes office": {
+"cc": "gb",
+"lat": 52.0422,
+"lon": -0.7575
+},
+"*|moorgate london": {
+"cc": "gb",
+"lat": 51.5183,
+"lon": -0.0891
+},
+"*|naarden, noord-holland, netherlands": {
+"cc": "nl",
+"lat": 52.2958,
+"lon": 5.1634
+},
+"*|nantes; paris": {
+"cc": "fr",
+"lat": 48.8651,
+"lon": 2.3196
+},
+"*|netherlands": {
+"cc": "nl",
+"lat": 52.2435,
+"lon": 5.6343
+},
+"*|netherlands - employee": {
+"cc": "nl",
+"lat": 52.3414,
+"lon": 4.83
+},
+"*|netherlands - remote": {
+"cc": "nl",
+"lat": 12.1127,
+"lon": -68.8866
+},
+"*|new zealand": {
+"cc": "nz",
+"lat": -41.5001,
+"lon": 172.8344
+},
+"*|nieuw-vennep": {
+"cc": "nl",
+"lat": 52.2646,
+"lon": 4.634
+},
+"*|nl - amsterdam": {
+"cc": "nl",
+"lat": 52.3731,
+"lon": 4.8925
+},
+"*|norwich, united kingdom": {
+"cc": "gb",
+"lat": 52.6286,
+"lon": 1.2924
+},
+"*|nous hq": {
+"cc": "co",
+"lat": 7.883,
+"lon": -72.4974
+},
+"*|nyon": {
+"cc": "ch",
+"lat": 46.3821,
+"lon": 6.2403
+},
+"*|oosterhout": {
+"cc": "nl",
+"lat": 51.6322,
+"lon": 4.863
+},
+"*|orly": {
+"cc": "fr",
+"lat": 48.7432,
+"lon": 2.4024
+},
+"*|oxford": {
+"cc": "gb",
+"lat": 51.752,
+"lon": -1.2578
+},
+"*|oxford, united kingdom": {
+"cc": "gb",
+"lat": 51.752,
+"lon": -1.2578
+},
+"*|paris": {
+"cc": "fr",
+"lat": 48.8589,
+"lon": 2.32
+},
+"*|paris - full remote": null,
+"*|paris - la défense": {
+"cc": "fr",
+"lat": 48.8643,
+"lon": 2.3049
+},
+"*|paris airport": {
+"cc": "fr",
+"lat": 48.7301,
+"lon": 2.3678
+},
+"*|paris office": {
+"cc": "fr",
+"lat": 48.8742,
+"lon": 2.3225
+},
+"*|paris or remote": null,
+"*|paris, france": {
+"cc": "fr",
+"lat": 48.8535,
+"lon": 2.3484
+},
+"*|paris, france; bordeaux, france; lyon, france; marseille, france; biarritz, france; nantes, france; annecy, france": null,
+"*|paris, france; bordeaux, france; lyon, france; marseille, france; biarritz, france; nantes, france; annecy, france; madrid, spain; barcelona, spain": null,
+"*|paris, france; marseille, france; bordeaux, france; biarritz, france; brussels, belgium": null,
+"*|paris, paris": {
+"cc": "fr",
+"lat": 48.8589,
+"lon": 2.32
+},
+"*|paris, paris, france": {
+"cc": "fr",
+"lat": 48.8589,
+"lon": 2.32
+},
+"*|paris, remote": {
+"cc": "us",
+"lat": 30.0526,
+"lon": -89.9373
+},
+"*|paris, île-de-france, france": {
+"cc": "fr",
+"lat": 48.8535,
+"lon": 2.3484
+},
+"*|plymouth": {
+"cc": "gb",
+"lat": 50.3714,
+"lon": -4.1424
+},
+"*|puchheim": {
+"cc": "de",
+"lat": 48.1705,
+"lon": 11.3526
+},
+"*|regensdorf": {
+"cc": "ch",
+"lat": 47.4318,
+"lon": 8.468
+},
+"*|remote": {
+"cc": "us",
+"lat": 43.0059,
+"lon": -123.8926
+},
+"*|remote - europe timezone": null,
+"*|remote - france": null,
+"*|remote - uk": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|remote eu": null,
+"*|remote job": null,
+"*|remote uk": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|remote united kingdom": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|remote, france": null,
+"*|remote, uk": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|remote: uk": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|rennes, ille-et-vilaine": {
+"cc": "fr",
+"lat": 48.1113,
+"lon": -1.68
+},
+"*|rijswijk, zuid-holland, netherlands": {
+"cc": "nl",
+"lat": 52.0446,
+"lon": 4.3188
+},
+"*|rotterdam": {
+"cc": "nl",
+"lat": 51.9244,
+"lon": 4.4778
+},
+"*|rotterdam, south holland, netherlands": {
+"cc": "nl",
+"lat": 51.9244,
+"lon": 4.4778
+},
+"*|rotterdam, zuid-holland, netherlands": {
+"cc": "nl",
+"lat": 51.9244,
+"lon": 4.4778
+},
+"*|runa london": null,
+"*|saclay, france": {
+"cc": "fr",
+"lat": 48.7305,
+"lon": 2.1726
+},
+"*|saint-denis": {
+"cc": "fr",
+"lat": 48.9384,
+"lon": 2.3628
+},
+"*|satigny, switzerland": {
+"cc": "ch",
+"lat": 46.2158,
+"lon": 6.0331
+},
+"*|schiphol-rijk": {
+"cc": "nl",
+"lat": 52.2784,
+"lon": 4.7525
+},
+"*|schlieren": {
+"cc": "ch",
+"lat": 47.3965,
+"lon": 8.4445
+},
+"*|sheffield": {
+"cc": "gb",
+"lat": 53.3807,
+"lon": -1.4702
+},
+"*|sion": {
+"cc": "ch",
+"lat": 46.2312,
+"lon": 7.3589
+},
+"*|slough (gb)": {
+"cc": "gb",
+"lat": 51.5111,
+"lon": -0.5941
+},
+"*|soest, utrecht, nederland": {
+"cc": "nl",
+"lat": 52.1746,
+"lon": 5.291
+},
+"*|soho farmhouse - chipping norton": null,
+"*|spiez": {
+"cc": "ch",
+"lat": 46.6919,
+"lon": 7.6775
+},
+"*|stallikon": {
+"cc": "ch",
+"lat": 47.3269,
+"lon": 8.4901
+},
+"*|stoke-on-trent": {
+"cc": "gb",
+"lat": 53.0162,
+"lon": -2.1813
+},
+"*|strasbourg": {
+"cc": "fr",
+"lat": 48.5846,
+"lon": 7.7507
+},
+"*|strasbourg, france": {
+"cc": "fr",
+"lat": 48.5846,
+"lon": 7.7507
+},
+"*|strasbourg, grand-est, france": {
+"cc": "fr",
+"lat": 48.5846,
+"lon": 7.7507
+},
+"*|stratford, east london": {
+"cc": "za",
+"lat": -32.9819,
+"lon": 27.8884
+},
+"*|switzerland": {
+"cc": "ch",
+"lat": 46.7986,
+"lon": 8.232
+},
+"*|sydney, australia": {
+"cc": "au",
+"lat": -33.8698,
+"lon": 151.2083
+},
+"*|the hague - hybrid": null,
+"*|the hague, zuid-holland, netherlands": {
+"cc": "nl",
+"lat": 52.08,
+"lon": 4.3113
+},
+"*|toulouse": {
+"cc": "fr",
+"lat": 43.6045,
+"lon": 1.4442
+},
+"*|uddingston": {
+"cc": "gb",
+"lat": 55.819,
+"lon": -4.0822
+},
+"*|uk": {
+"cc": "gb",
+"lat": 54.7024,
+"lon": -3.2766
+},
+"*|uk (reading)": {
+"cc": "gb",
+"lat": 51.4564,
+"lon": -0.9701
+},
+"*|uk - birmingham": {
+"cc": "gb",
+"lat": 52.4949,
+"lon": -1.8518
+},
+"*|uk - london": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|uk - london office": {
+"cc": "gb",
+"lat": 51.4108,
+"lon": -0.3047
+},
+"*|uk - manchester": {
+"cc": "gb",
+"lat": 53.4795,
+"lon": -2.2451
+},
+"*|uk - remote": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|uk london": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|uk london, united kingdom": {
+"cc": "gb",
+"lat": 51.503,
+"lon": -0.0015
+},
+"*|uk: london (7 devonshire square)": {
+"cc": "gb",
+"lat": 51.3969,
+"lon": 0.0245
+},
+"*|united kingdom": {
+"cc": "gb",
+"lat": 54.7024,
+"lon": -3.2766
+},
+"*|united kingdom (remote)": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|united kingdom - london": {
+"cc": "gb",
+"lat": 51.5074,
+"lon": -0.1278
+},
+"*|united kingdom - london office": {
+"cc": "gb",
+"lat": 51.544,
+"lon": -0.3062
+},
+"*|united kingdom - remote": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525
+},
+"*|united kingdom / europe": {
+"cc": "gb",
+"lat": 51.5022,
+"lon": -0.1779
+},
+"*|utrecht": {
+"cc": "nl",
+"lat": 52.0907,
+"lon": 5.1216
+},
+"*|utrecht , utrecht, netherlands": {
+"cc": "nl",
+"lat": 52.0907,
+"lon": 5.1216
+},
+"*|utrecht area, utrecht, netherlands": null,
+"*|utrecht, utrecht, netherlands": {
+"cc": "nl",
+"lat": 52.0907,
+"lon": 5.1216
+},
+"*|villejuif": {
+"cc": "fr",
+"lat": 48.7921,
+"lon": 2.3633
+},
+"*|villeneuve-d'ascq, nord": {
+"cc": "fr",
+"lat": 50.6193,
+"lon": 3.1314
+},
+"*|weert": {
+"cc": "nl",
+"lat": 51.2356,
+"lon": 5.7051
+},
+"*|windeck": {
+"cc": "de",
+"lat": 50.7977,
+"lon": 7.5746
+},
+"*|winnersh": {
+"cc": "gb",
+"lat": 51.4309,
+"lon": -0.8779
+},
+"*|winterthur": {
+"cc": "ch",
+"lat": 47.4992,
+"lon": 8.7291
+},
+"*|woerden, utrecht, nederland": {
+"cc": "nl",
+"lat": 52.0859,
+"lon": 4.8833
+},
+"*|zaltbommel, gelderland, netherlands": {
+"cc": "nl",
+"lat": 51.7822,
+"lon": 5.1898
+},
+"*|zoetermeer, zuid-holland, netherlands": {
+"cc": "nl",
+"lat": 52.0623,
+"lon": 4.4878
+},
+"*|zug": {
+"cc": "ch",
+"lat": 47.1486,
+"lon": 8.5539
+},
+"*|zug, zug, switzerland": {
+"cc": "ch",
+"lat": 47.168,
+"lon": 8.5174
+},
+"*|zurich": {
+"cc": "ch",
+"lat": 47.3744,
+"lon": 8.541
+},
+"*|zurich hq": {
+"cc": "ch",
+"lat": 47.3804,
+"lon": 8.5361
+},
+"*|zurich office": {
+"cc": "ch",
+"lat": 47.3682,
+"lon": 8.5401
+},
+"*|zurich, switzerland": {
+"cc": "ch",
+"lat": 47.3744,
+"lon": 8.541
+},
+"*|zurich, zürich, switzerland": {
+"cc": "ch",
+"lat": 47.3744,
+"lon": 8.541
+},
+"*|zürich": {
+"cc": "ch",
+"lat": 47.3744,
+"lon": 8.541
+},
+"*|épalinges, switzerland": {
+"cc": "ch",
+"lat": 46.5473,
+"lon": 6.6726
+},
+"de|aachen": {
+"cc": "de",
+"lat": 50.7764,
+"lon": 6.0839
+},
+"de|alzenau": {
+"cc": "de",
+"lat": 50.0859,
+"lon": 9.0814
+},
+"de|austria": {
+"cc": "de",
+"lat": 52.4887,
+"lon": 13.3968
+},
+"de|bad salzungen": {
+"cc": "de",
+"lat": 50.8123,
+"lon": 10.2321
+},
+"de|baden-baden": {
+"cc": "de",
+"lat": 48.7575,
+"lon": 8.2437
+},
+"de|barleben": {
+"cc": "de",
+"lat": 52.2007,
+"lon": 11.6204
+},
+"de|baruth": {
+"cc": "de",
+"lat": 51.2255,
+"lon": 14.5903
+},
+"de|berliini": {
+"cc": "de",
+"lat": 52.5174,
+"lon": 13.3951
+},
+"de|berlin": {
+"cc": "de",
+"lat": 52.5174,
+"lon": 13.3951
+},
+"de|bochum": {
+"cc": "de",
+"lat": 51.4818,
+"lon": 7.2197
+},
+"de|bonn": {
+"cc": "de",
+"lat": 50.7353,
+"lon": 7.1025
+},
+"de|braunschweig": {
+"cc": "de",
+"lat": 52.2647,
+"lon": 10.5236
+},
+"de|böblingen": {
+"cc": "de",
+"lat": 48.685,
+"lon": 9.0113
+},
+"de|chemnitz": {
+"cc": "de",
+"lat": 50.8324,
+"lon": 12.9189
+},
+"de|cologne": {
+"cc": "de",
+"lat": 50.9384,
+"lon": 6.96
+},
+"de|dresden": {
+"cc": "de",
+"lat": 51.0493,
+"lon": 13.7381
+},
+"de|düsseldorf": {
+"cc": "de",
+"lat": 51.2254,
+"lon": 6.7763
+},
+"de|frankfurt": {
+"cc": "de",
+"lat": 50.1106,
+"lon": 8.6821
+},
+"de|garching": {
+"cc": "de",
+"lat": 48.2514,
+"lon": 11.651
+},
+"de|gilching": {
+"cc": "de",
+"lat": 48.114,
+"lon": 11.2922
+},
+"de|hamburg": {
+"cc": "de",
+"lat": 53.5502,
+"lon": 10.0013
+},
+"de|heidelberg": {
+"cc": "de",
+"lat": 49.4094,
+"lon": 8.6947
+},
+"de|homebased": null,
+"de|karlsruhe": {
+"cc": "de",
+"lat": 49.0069,
+"lon": 8.4034
+},
+"de|kassel": {
+"cc": "de",
+"lat": 51.3158,
+"lon": 9.4978
+},
+"de|koblenz": {
+"cc": "de",
+"lat": 50.3533,
+"lon": 7.5944
+},
+"de|leonberg": {
+"cc": "de",
+"lat": 48.8013,
+"lon": 9.015
+},
+"de|ludwigsburg": {
+"cc": "de",
+"lat": 48.8954,
+"lon": 9.1895
+},
+"de|mapbox germany": null,
+"de|michendorf": {
+"cc": "de",
+"lat": 52.2871,
+"lon": 13.0658
+},
+"de|munich": {
+"cc": "de",
+"lat": 48.1371,
+"lon": 11.5754
+},
+"de|münster": {
+"cc": "de",
+"lat": 51.9625,
+"lon": 7.6252
+},
+"de|osnabrück": {
+"cc": "de",
+"lat": 52.272,
+"lon": 8.0476
+},
+"de|ottobrunn": {
+"cc": "de",
+"lat": 48.0648,
+"lon": 11.6648
+},
+"de|parsdorf": {
+"cc": "de",
+"lat": 48.1419,
+"lon": 11.7874
+},
+"de|potsdam": {
+"cc": "de",
+"lat": 52.4009,
+"lon": 13.0591
+},
+"de|puchheim": {
+"cc": "de",
+"lat": 48.1705,
+"lon": 11.3526
+},
+"de|stuttgart": {
+"cc": "de",
+"lat": 48.7784,
+"lon": 9.18
+},
+"de|verden": {
+"cc": "de",
+"lat": 52.976,
+"lon": 9.1808
+},
+"de|walldorf": {
+"cc": "de",
+"lat": 49.3033,
+"lon": 8.6432
+},
+"de|wetzlar": {
+"cc": "de",
+"lat": 50.5706,
+"lon": 8.5312
+},
+"de|wiesbaden": {
+"cc": "de",
+"lat": 50.082,
+"lon": 8.2417
+},
+"de|windeck": {
+"cc": "de",
+"lat": 50.7977,
+"lon": 7.5746
+}
+}

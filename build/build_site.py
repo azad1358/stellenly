@@ -19,9 +19,13 @@ import argparse
 import datetime as dt
 import html
 import json
+import math
 import os
 import re
 import statistics
+import sys
+import unicodedata
+import zlib
 from collections import Counter
 from pathlib import Path
 
@@ -29,6 +33,9 @@ import markdown
 import requests
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "ingest"))
+import geo  # noqa: E402  (cached city coordinates for the companies map)
+from enrich import in_germany, normalize_city  # noqa: E402
 WEB = ROOT / "web"
 CONTENT = ROOT / "content"
 SITE = json.loads((Path(__file__).parent / "site.json").read_text())
@@ -128,6 +135,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
   <a class="brand" href="{up}index.html">{e(SITE['site_name'])}</a>
   <nav class="header-actions">
     <a class="btn ghost" href="{up}index.html">Search jobs</a>
+    <a class="btn ghost" href="{up}companies.html">Companies</a>
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
     <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">☕ Support</a>
@@ -350,6 +358,8 @@ def build_report(jobs: list[dict], stats: dict) -> dict:
 def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     out = WEB / "jobs"
     out.mkdir(exist_ok=True)
+    for old in out.glob("*.html"):  # cities/tags that no longer qualify must not linger
+        old.unlink()
     paths, links = [], []
     items = [("city", c, f"English-speaking jobs in {c}") for c, n in stats["cities"] if n >= 5]
     items += [("tag", t, f"English-speaking {t.replace('-', ' ')} jobs in Germany") for t, n in stats["tags"] if n >= 5]
@@ -374,6 +384,204 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     (out / "index.html").write_text(page("Browse English-speaking jobs in Germany", "By city and by field.",
                                          f"<h1>Browse jobs</h1><ul class=\"link-list\">{''.join(links)}</ul>", "jobs/index.html", 1))
     return paths + ["jobs/index.html"]
+
+
+# ---------------------------------------------------------------- companies directory + map
+_LEGAL = {"gmbh", "ag", "se", "kg", "kgaa", "co", "inc", "ltd", "llc", "plc", "bv", "nv", "sa", "sas", "oy",
+          "ab", "ug", "haftungsbeschrankt", "mbh", "group", "holding", "the"}
+NO_CITY, REMOTE = "Elsewhere in Germany", "Remote in Germany"
+
+
+def co_key(name: str) -> str:
+    s = unicodedata.normalize("NFKD", name or "").encode("ascii", "ignore").decode().lower()
+    return "".join(t for t in re.split(r"[^a-z0-9]+", s) if t and t not in _LEGAL)
+
+
+def place(j: dict) -> str | None:
+    """German city for the directory, or None for a job outside Germany (rows stored before the country check)."""
+    if "_place" not in j:
+        raw = j.get("city")
+        c = normalize_city(raw)
+        j["_place"] = (REMOTE if c == "Remote"
+                       else (NO_CITY if not raw or in_germany(raw) else None) if not c
+                       else c if in_germany(c) or geo.cached_country(c) == "de" or geo.city_coords(c) else None)
+    return j["_place"]
+
+
+def load_companies(jobs: list[dict]) -> list[dict]:
+    """Curated companies (content/companies.json) + every direct employer with 2+ open jobs."""
+    meta = json.loads((CONTENT / "companies.json").read_text(encoding="utf-8"))["companies"]
+    by_key = {co_key(n): m for m in meta for n in [m["name"], *m.get("aliases", [])]}
+    groups: dict[str, dict] = {co_key(m["name"]): {"meta": m, "names": Counter(), "jobs": []} for m in meta}
+    for j in jobs:
+        if j.get("is_agency") or place(j) is None:
+            continue
+        m = by_key.get(co_key(j["company"]))
+        g = groups.setdefault(co_key(m["name"]) if m else co_key(j["company"]),
+                              {"meta": m, "names": Counter(), "jobs": []})
+        g["names"][j["company"]] += 1
+        g["jobs"].append(j)
+
+    out, slugs = [], set()
+    for g in groups.values():
+        m, js = g["meta"], sorted(g["jobs"], key=lambda j: j.get("posted_at") or "", reverse=True)
+        if not m and len(js) < 2:
+            continue
+        name = m["name"] if m else g["names"].most_common(1)[0][0]
+        slug = slugify(name) or "company"
+        while slug in slugs:
+            slug += "-2"
+        slugs.add(slug)
+        hq_de = bool(m and in_germany(m["hq"]))
+        out.append({"name": name, "slug": slug, "meta": m, "jobs": js, "cities": Counter(place(j) for j in js),
+                    "hq_city": normalize_city(m["hq"]) if hq_de else None, "hq_de": hq_de,
+                    "page": bool(m) or len(js) >= 3})
+    return sorted(out, key=lambda c: (c["meta"] is None, -len(c["jobs"]), c["name"].lower()))
+
+
+def co_badges(c: dict) -> str:
+    m = c["meta"] or {}
+    b = '<span class="badge new">Startup</span>' if m.get("startup") else ""
+    b += '<span class="badge info">German HQ</span>' if c["hq_de"] else ""
+    return b + (f'<span class="badge">{e(m["industry"])}</span>' if m.get("industry") else "")
+
+
+def co_facts(c: dict) -> str:
+    m = c["meta"] or {}
+    rows = [("Founded", m.get("founded")), ("Employees", m.get("size")), ("HQ", m.get("hq"))]
+    return "".join(f"<div><dt>{k}</dt><dd>{e(str(v))}</dd></div>" for k, v in rows if v)
+
+
+def jobs_word(n: int) -> str:
+    return f"{n} open job{'s' if n != 1 else ''}" if n else "No open jobs right now"
+
+
+def build_companies(jobs: list[dict]) -> list[str]:
+    cos = load_companies(jobs)
+    out = WEB / "companies"
+    out.mkdir(exist_ok=True)
+    for old in out.glob("*.html"):
+        old.unlink()
+
+    # --- one page per company (good for "<company> jobs in English" searches)
+    for c in (c for c in cos if c["page"]):
+        m = c["meta"] or {}
+        where = ", ".join(f"{k} ({n})" for k, n in c["cities"].most_common(6))
+        ld = {"@context": "https://schema.org", "@type": "Organization", "name": c["name"],
+              **({"url": m["website"]} if m.get("website") else {}),
+              **({"foundingDate": str(m["founded"])} if m.get("founded") else {}),
+              **({"description": m["description"]} if m.get("description") else {})}
+        links = (f'<a class="btn" href="{e(m["website"])}" target="_blank" rel="noopener">Company website ↗</a>'
+                 if m.get("website") else "")
+        body = f"""<p class="crumbs"><a href="../companies.html">Companies</a> › {e(c['name'])}</p>
+<h1>{e(c['name'])}</h1>
+<div class="badges">{co_badges(c)}</div>
+{f'<p class="lead">{e(m["description"])}</p>' if m.get("description") else ""}
+<dl class="facts">{co_facts(c)}<div><dt>Open jobs</dt><dd>{len(c['jobs'])}</dd></div></dl>
+<p class="co-links">{links}<a class="btn primary" href="../index.html?q={e(requests.utils.quote(c['name']))}">Filter these jobs by German level &amp; salary →</a></p>
+<h2>{jobs_word(len(c['jobs']))} in English{f" · {e(where)}" if where else ""}</h2>
+{job_list_html(c['jobs'][:60], '../')}
+<p class="muted small">Updated daily from the company's own job board and public job APIs. Company facts are approximate.</p>"""
+        desc = (m.get("description") or f"English-speaking jobs at {c['name']} in Germany.")
+        (out / f"{c['slug']}.html").write_text(page(
+            f"{c['name']} jobs in Germany (English)", f"{jobs_word(len(c['jobs']))} at {c['name']}. {desc}"[:300],
+            body, f"companies/{c['slug']}.html", 1,
+            extra_head=f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>'),
+            encoding="utf-8")
+
+    # --- directory, grouped by city
+    by_city: dict[str, list[tuple[dict, int]]] = {}
+    for c in cos:
+        cities = dict(c["cities"])
+        if c["hq_city"] and c["hq_city"] not in cities:
+            cities[c["hq_city"]] = 0
+        if not cities:
+            continue
+        for city, n in cities.items():
+            by_city.setdefault(city, []).append((c, n))
+    order = sorted(by_city, key=lambda k: (k in (REMOTE, NO_CITY), -len(by_city[k]), k))
+
+    def card(c: dict, city: str, n: int) -> str:
+        m = c["meta"]
+        href = f"companies/{c['slug']}.html" if c["page"] else f"index.html?q={e(requests.utils.quote(c['name']))}"
+        search = e(f"{c['name']} {(m or {}).get('industry', '')} {city}".lower())
+        if not m:
+            return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>'
+                    f' <span class="muted">{jobs_word(n)}</span></li>')
+        roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow">{e(j["title"])}</a></li>'
+                        for j in [j for j in c["jobs"] if place(j) == city][:3])
+        hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
+        return f"""<li class="co-card" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
+  <div class="co-head"><h3><a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
+  <div class="badges">{co_badges(c)}</div>
+  <p class="co-desc">{e(m['description'])}</p>
+  <dl class="co-facts">{co_facts(c)}</dl>
+  {f'<ul class="co-roles">{roles}</ul>' if roles else ""}
+</li>"""
+
+    sections = []
+    for city in order:
+        items = sorted(by_city[city], key=lambda t: (t[0]["meta"] is None, -t[1], t[0]["name"].lower()))
+        cards = "".join(card(c, city, n) for c, n in items if c["meta"])
+        minis = "".join(card(c, city, n) for c, n in items if not c["meta"])
+        total = sum(n for _, n in items)
+        sections.append(f"""<section class="co-city" id="city-{slugify(city)}" data-city="{e(city)}">
+  <h2>{e(city)} <span class="muted">· {len(items)} compan{'ies' if len(items) != 1 else 'y'} · {total} job{'s' if total != 1 else ''}</span></h2>
+  {f'<ul class="co-grid">{cards}</ul>' if cards else ""}
+  {f'<details class="co-more"{" open" if not cards else ""}><summary>More employers hiring in {e(city)} ({minis.count("<li")})</summary><ul class="co-minis">{minis}</ul></details>' if minis else ""}
+</section>""")
+    chips = "".join(f'<a class="tag" href="#city-{slugify(c)}" data-city="{e(c)}">{e(c)} <span class="n">{len(by_city[c])}</span></a>'
+                    for c in order[:16])
+
+    # --- map markers: one per company and city, jittered around the city centre
+    markers = []
+    for city in order:
+        center = geo.city_coords(city) if city not in (REMOTE, NO_CITY) else None
+        if not center:
+            continue
+        for c, n in by_city[city]:
+            m = c["meta"] or {}
+            h = zlib.crc32(f"{c['name']}|{city}".encode())
+            ang, rad = math.radians(h % 360), 0.004 + (h >> 9) % 100 / 100 * 0.018
+            markers.append({"n": c["name"], "c": city, "y": round(center[0] + rad * 0.62 * math.sin(ang), 5),
+                            "x": round(center[1] + rad * math.cos(ang), 5), "k": n,
+                            "u": f"companies/{c['slug']}.html" if c["page"] else None, "s": int(bool(m.get("startup"))),
+                            "i": m.get("industry"), "f": m.get("founded"), "z": m.get("size"),
+                            "r": [[j["title"][:90], j["url"]] for j in c["jobs"] if place(j) == city][:5]})
+    (WEB / "companies-map.json").write_text(json.dumps(markers, ensure_ascii=False, separators=(",", ":")),
+                                            encoding="utf-8")
+
+    n_jobs = sum(len(c["jobs"]) for c in cos)
+    n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
+    body = f"""<h1>Companies hiring in English across Germany</h1>
+<p class="lead">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.
+Hover a pin on the map to see who is hiring and for what.</p>
+<div class="co-toolbar">
+  <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
+  <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
+</div>
+<div class="tag-cloud co-chips">{chips}</div>
+<div id="co-map" class="co-map" aria-label="Map of companies">
+  <div class="map-consent">
+    <p class="map-consent-title">Interactive company map</p>
+    <p class="muted">See where each company is hiring. Hover a pin for its open positions.</p>
+    <button type="button" class="btn primary" id="map-load">Show map</button>
+    <p class="muted small">The map loads tiles from OpenStreetMap, which receives your IP address.
+      <label><input type="checkbox" id="map-remember" checked> Remember my choice</label> · <a href="privacy.html#map">Privacy</a></p>
+  </div>
+</div>
+<p id="co-empty" class="empty" hidden>No company matches your filter.</p>
+{"".join(sections)}
+<p class="muted small">Company facts (founding year, size, HQ) are approximate. <b>Startup</b> = independent, venture-backed,
+founded 2009 or later, fewer than 5,000 people. Missing a company? It appears here automatically once it has open jobs on our sources.</p>"""
+    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Companies hiring in English across Germany",
+          "url": f"{SITE_URL}/companies.html"}
+    (WEB / "companies.html").write_text(page(
+        "Companies hiring in English in Germany", f"{len(cos):,} employers in {n_cities} German cities with English-speaking "
+        "jobs — startups and global companies, with size, founding year and open positions on a map.", body,
+        "companies.html", 0, extra_head=f'<script type="application/ld+json">{json.dumps(ld)}</script>'
+                                         '<script src="companies.js" defer></script>'), encoding="utf-8")
+    return ["companies.html"] + [f"companies/{c['slug']}.html" for c in cos if c["page"]]
 
 
 def build_blog_index(posts: list[dict], report: dict) -> None:
@@ -421,9 +629,12 @@ def main() -> None:
     report = build_report(jobs, stats)
     build_blog_index(posts, report)
     landing = build_landing_pages(jobs, stats)
+    companies = build_companies(jobs)
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
-    build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports + landing)
+    build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
+                  + landing + companies)
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
+          f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")
 
 

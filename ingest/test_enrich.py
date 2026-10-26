@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from enrich import (  # noqa: E402
-    enrich, german_level, html_to_text, in_germany, is_agency, job_id, normalize_city, parse_salary,
+    abroad, enrich, generic_location, german_level, html_to_text, in_germany, is_agency, job_id, normalize_city, parse_salary,
     relocation, remote_type, seniority, visa_sponsorship, years_experience,
 )
 
@@ -146,3 +146,30 @@ def test_normalize_city_variants():
     assert normalize_city("Halle (Saale)") == "Halle"
     assert normalize_city("Bavaria, Germany") is None
     assert normalize_city("Garching bei München") == "Garching"
+
+
+def test_normalize_city_picks_german_part():
+    assert normalize_city("Munich - London") == "Munich"
+    assert normalize_city("London or Berlin") == "Berlin"
+    assert normalize_city("Berlin Office") == "Berlin"
+    assert normalize_city("DE-Berlin-Trion Building") == "Berlin"
+    assert normalize_city("Hinterm Hauptbahnhof 3-5, 76137 Karlsruhe") == "Karlsruhe"
+    assert normalize_city("Parsdorf, Bavaria, Germany") == "Parsdorf"
+    assert normalize_city("Geeste") == "Geeste"
+    assert normalize_city("Remote Germany") == "Remote"
+    assert normalize_city("Neu-Ulm") == "Neu-Ulm"
+    assert normalize_city("Dublin or Germany") is None
+    assert normalize_city("Mapbox Germany") is None
+    assert normalize_city("London, UK") is None
+
+
+def test_abroad_and_generic_locations():
+    for loc in ["Paris - full remote", "London or remote within the UK", "France remote", "Remote, UK",
+                "Bristol; Edinburgh; London", "Lausanne / hybrid / remote", "Utrecht area, Utrecht, Netherlands"]:
+        assert abroad(loc), loc
+    for loc in ["Berlin", "London or Berlin", "Geeste", "Remote - Europe timezone"]:
+        assert not abroad(loc), loc
+    for loc in ["Remote", "Remote job", "EMEA", "Remote - Europe timezone", "Hybrid", "Home Office", "Remote EU", ""]:
+        assert generic_location(loc), loc
+    for loc in ["Geeste", "Eutin", "Paris, remote", "Berlin"]:
+        assert not generic_location(loc), loc

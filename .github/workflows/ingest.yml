@@ -5,6 +5,9 @@ on:
     - cron: "17 */6 * * *"   # every 6 hours (UTC)
   workflow_dispatch: {}       # "Run workflow" button for manual runs
 
+permissions:
+  contents: write            # commit the geocoding cache
+
 concurrency:
   group: ingest
   cancel-in-progress: false
@@ -27,3 +30,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python ingest/ingest.py
+      - name: Commit geocoding cache
+        if: always()
+        run: |
+          git config user.name "site-bot"
+          git config user.email "site-bot@users.noreply.github.com"
+          git add ingest/geocache.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Update geocoding cache"
+          git pull --rebase && git push
