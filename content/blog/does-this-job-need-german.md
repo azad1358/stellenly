@@ -3,6 +3,8 @@ title: Does this job really need German? How to read a German job ad
 description: "English-speaking" doesn't always mean no German. The exact phrases that tell you whether German is required, nice to have, or truly not needed.
 date: 2026-10-26
 reviewed: 2026-10-26
+review_months: 6
+section: job-search
 tags: german, job-search
 ---
 

@@ -1,0 +1,15 @@
+{
+  "_comment": "Guide sections. Each post sets `section:` in its front matter. `hue` colours the section's cover art, `icon` picks its illustration (passport, briefcase, euro, home, chart), `resources` lists resource categories from resources.json shown as official sources.",
+  "sections": [
+    {"id": "visa", "title": "Visa & Blue Card", "hue": 248, "icon": "passport", "resources": ["visa"],
+     "intro": "Work permits, the EU Blue Card, salary thresholds and getting your degree recognised — the rules that decide whether you can take a job."},
+    {"id": "job-search", "title": "Job search & applications", "hue": 205, "icon": "briefcase", "resources": ["jobs", "german"],
+     "intro": "Reading German job ads, writing a CV that works here, and how much German you really need."},
+    {"id": "salary", "title": "Salary, tax & contracts", "hue": 152, "icon": "euro", "resources": ["salary"],
+     "intro": "Gross vs net, what a German contract should say, probation and notice periods — so you can compare offers properly."},
+    {"id": "living", "title": "Moving & living in Germany", "hue": 18, "icon": "home", "resources": ["housing", "banking", "insurance"],
+     "intro": "Registering your address, bank account, health insurance and housing: the first weeks after you say yes."},
+    {"id": "reports", "title": "Job market reports", "hue": 285, "icon": "chart", "resources": [],
+     "intro": "Weekly numbers from every English-speaking job on this site: how many, where, salaries and how much German is asked for. Updated every day."}
+  ]
+}

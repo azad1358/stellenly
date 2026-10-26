@@ -24,11 +24,19 @@ def html_to_text(raw: str | None, max_len: int = 20000) -> str:
     """Strip HTML, keep line breaks between blocks, collapse whitespace."""
     if not raw:
         return ""
-    text = _BLOCK_RE.sub("\n", raw)
+    # Some sources send escaped HTML ("&lt;p&gt;Hello&lt;/p&gt;"): decode it first, or the tags survive.
+    for _ in range(2):
+        if re.search(r"&lt;\s*/?\s*[a-zA-Z]", raw):
+            raw = html.unescape(raw)
+    text = re.sub(r"<li[^>]*>", "\n• ", raw, flags=re.I)  # keep list items as bullets
+    text = _BLOCK_RE.sub("\n", text)
     text = _TAG_RE.sub(" ", text)
     text = html.unescape(text)
+    text = _TAG_RE.sub(" ", text)  # tags that only appeared after decoding entities
+    text = text.replace("\xa0", " ")
     text = _WS_RE.sub(" ", text)
     text = re.sub(r"\s*\n\s*", "\n", text)
+    text = re.sub(r"^•\n", "• ", text, flags=re.M)  # "<li><p>…" put the text on the next line
     text = re.sub(r"\n{3,}", "\n\n", text).strip()
     return text[:max_len]
 

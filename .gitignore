@@ -14,3 +14,7 @@ supabase/.branches/
 
 # Insights job cache (embeddings, model files)
 ingest/.cache/
+
+# Local preview only
+web/dev-insights.json
+web/_*.html

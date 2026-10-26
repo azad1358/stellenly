@@ -139,6 +139,7 @@
     const p = new URLSearchParams(location.search);
     const f = {};
     for (const [k, v] of p) {
+      if (k === "job") continue; // the open job popup, not a filter
       if (LIST_KEYS.includes(k)) f[k] = v.split(",").filter(Boolean);
       else if (BOOL_KEYS.includes(k)) f[k] = v === "1";
       else f[k] = v;
@@ -172,12 +173,12 @@
 
   // ---------------------------------------------------------------- rendering helpers
   const GERMAN_BADGE = {
-    not_required: ["ok", "🇬🇧 No German needed"],
+    not_required: ["ok", "No German needed"],
     nice_to_have: ["info", "German: nice to have"],
     not_mentioned: ["", "German: not mentioned"],
     required: ["bad", "German required"],
   };
-  const REMOTE_LABEL = { remote_de: "🏠 Remote (DE)", remote_eu: "🏠 Remote (EU)", hybrid: "Hybrid", onsite: "On-site", unknown: "" };
+  const REMOTE_LABEL = { remote_de: "Remote (DE)", remote_eu: "Remote (EU)", hybrid: "Hybrid", onsite: "On-site", unknown: "" };
   const SENIORITY_LABEL = { intern: "Intern / student", junior: "Junior", mid: "Mid-level", senior: "Senior", lead: "Lead", unspecified: "Not specified" };
 
   const k = (n) => (n >= 1000 ? `€${Math.round(n / 1000)}k` : `€${n}`);
@@ -208,13 +209,11 @@
     if (isNew(j)) out.push(`<span class="badge new">NEW</span>`);
     const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
     out.push(`<span class="badge ${gc}">${gl}</span>`);
-    const sal = salaryText(j);
-    if (sal) out.push(`<span class="badge ok">💶 ${sal}</span>`);
     const bc = blueCard(j);
     if (bc) out.push(`<span class="badge ${bc[0]}" title="${esc(bc[2])}">${bc[1]}</span>`);
     if (REMOTE_LABEL[j.remote_type]) out.push(`<span class="badge">${REMOTE_LABEL[j.remote_type]}</span>`);
-    if (j.visa_sponsorship) out.push(`<span class="badge ok">🛂 Visa sponsorship</span>`);
-    if (j.relocation) out.push(`<span class="badge ok">📦 Relocation</span>`);
+    if (j.visa_sponsorship) out.push(`<span class="badge ok">Visa sponsorship</span>`);
+    if (j.relocation) out.push(`<span class="badge ok">Relocation support</span>`);
     if (j.is_agency) out.push(`<span class="badge warn" title="Posted by a recruiting agency, not the employer">Recruiting agency</span>`);
     if (j.repost_count > 0) out.push(`<span class="badge warn" title="This job disappeared and came back — it may be hard to fill or an evergreen posting">Reposted ×${j.repost_count}</span>`);
     (j.job_types || []).slice(0, 2).forEach((t) => out.push(`<span class="badge">${glossaryHtml(t)}</span>`));
@@ -222,12 +221,13 @@
     if (titleTerm) out.push(`<span class="badge"><abbr title="${esc(GLOSSARY[titleTerm])}">What is "${esc(titleTerm)}"?</abbr></span>`);
     // Hints from the daily insights job: warnings and positives on the card, the rest in the details.
     hints(j).filter((h) => h.l !== "info").forEach((h) =>
-      out.push(`<span class="badge ${h.l === "warn" ? "warn" : "ok"} hint" title="${esc(h.t)}">${esc(h.s)}</span>`));
+      out.push(`<span class="badge ${h.l === "warn" ? "warn" : "ok"} hint" title="${esc(h.t)}">${esc(plain(h.s))}</span>`));
     return out.join("");
   }
 
   // ---------------------------------------------------------------- insights (similar jobs, hints)
   const hints = (j) => (j.insights && j.insights.hints) || [];
+  const plain = (s) => String(s || "").replace(/^[^\p{L}\p{N}]+\s*/u, ""); // "⚠ Check salary" → "Check salary"
   const pct = (x) => `${Math.round(x * 100)}%`;
 
   function salaryBar(j, s) {
@@ -272,9 +272,9 @@
     el.dataset.loaded = "1";
     try {
       const items = await rpc("jobs_by_ids", { p_ids: el.dataset.ids.split(",") });
-      el.innerHTML = items.length ? `<p class="small"><b>Similar jobs</b></p><ul class="similar-list">${items.map((s) => `
-          <li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>
-          <span class="muted">· ${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></li>`).join("")}</ul>` : "";
+      el.innerHTML = items.length ? `<p class="small"><b>Similar jobs at other companies</b></p><ul class="similar-list">${items.map((s) => `
+          <li>${logoHtml(s.company, "logo-xs")}<div><a href="${esc(jobUrl(s.id))}" data-similar="${esc(s.id)}">${esc(s.title)}</a>
+          <span class="muted">${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></div></li>`).join("")}</ul>` : "";
     } catch (e) {
       el.innerHTML = "";
     }
@@ -294,72 +294,289 @@
     return `<dl class="facts">${facts.map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join("")}</dl>`;
   }
 
+  // ---------------------------------------------------------------- companies & logos
+  // Same key as co_key() in build/build_site.py, so "Trade Republic Bank GmbH" finds "Trade Republic".
+  const LEGAL = new Set(["gmbh", "ag", "se", "kg", "kgaa", "co", "inc", "ltd", "llc", "plc", "bv", "nv", "sa", "sas",
+    "oy", "ab", "ug", "haftungsbeschrankt", "mbh", "group", "holding", "the"]);
+  const coKey = (name) => (name || "").normalize("NFKD").replace(/[^\x00-\x7f]/g, "").toLowerCase()
+    .split(/[^a-z0-9]+/).filter((t) => t && !LEGAL.has(t)).join("");
+  let companies = {};
+  const companyInfo = (name) => companies[coKey(name)] || null;
+
+  function logoHtml(name, cls = "") {
+    const c = companyInfo(name);
+    if (c && c.l) return `<img class="logo ${cls}" src="${esc(c.l)}" alt="" loading="lazy" data-name="${esc(name)}">`;
+    const words = (name || "?").replace(/\(.*?\)/g, "").trim().split(/\s+/);
+    const initials = (words[0][0] + (words[1] ? words[1][0] : words[0][1] || "")).toUpperCase();
+    let h = 0;
+    for (const ch of name || "") h = (h * 31 + ch.charCodeAt(0)) % 360;
+    return `<span class="logo mono ${cls}" style="--h:${h}" aria-hidden="true">${esc(initials)}</span>`;
+  }
+
+  const jobUrl = (id) => { const p = new URLSearchParams(location.search); p.set("job", id); return `?${p}`; };
+  const skillsOf = (j) => (j.insights && j.insights.skills) || [];
+
   function jobHtml(j) {
     const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
+    const sal = salaryText(j);
+    const skills = skillsOf(j).slice(0, 4).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
     return `
     <li class="job${seen.has(j.id) ? " seen" : ""}" data-id="${esc(j.id)}">
-      <div class="job-top">
-        <div>
-          <h3 class="job-title"><button type="button" data-act="toggle" aria-expanded="false">${esc(j.title)}</button></h3>
-          <div class="job-meta"><span class="company">${esc(j.company)}</span> · ${esc(j.city || j.location || "Germany")} · ${j.posted_at ? ago(j.posted_at) : ""}</div>
-        </div>
+      ${logoHtml(j.company, "job-logo")}
+      <div class="job-main">
+        <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
+        <div class="job-meta"><span class="company">${esc(j.company)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}</div>
+        <div class="badges">${badges(j)}</div>
+        ${skills ? `<div class="skills-row">${skills}</div>` : ""}
+      </div>
+      <div class="job-side">
+        ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : `<div class="job-salary none">Salary not listed</div>`}
         <div class="job-actions">
           <button type="button" class="btn ghost" data-act="save" aria-pressed="${isSaved}" title="Save for later">${isSaved ? "★ Saved" : "☆ Save"}</button>
           <button type="button" class="btn ghost" data-act="applied" aria-pressed="${isApplied}" title="Mark as applied">${isApplied ? "✓ Applied" : "Applied?"}</button>
-          <button type="button" class="btn ghost" data-act="hide" title="Hide all jobs from this company">🚫</button>
+          <button type="button" class="btn ghost" data-act="hide" title="Hide all jobs from this company" aria-label="Hide this company">🚫</button>
         </div>
       </div>
-      <div class="badges">${badges(j)}</div>
-      <div class="job-details" hidden></div>
     </li>`;
   }
 
-  function detailsHtml(j) {
+  // ---------------------------------------------------------------- job popup (?job=<id>)
+  const DETAIL_COLS = "id,url,title,company,location,city,remote_type,description,tags,job_types,german_level," +
+    "visa_sponsorship,relocation,salary_min,salary_max,years_experience,seniority,is_agency,posted_at,first_seen_at," +
+    "repost_count,insights";
+
+  async function restGet(path) {
+    const res = await fetch(`${C.SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${path}`,
+      { headers: { apikey: C.SUPABASE_ANON_KEY, Authorization: `Bearer ${C.SUPABASE_ANON_KEY}` } });
+    if (!res.ok) throw new Error(`${path}: ${res.status}`);
+    return res.json();
+  }
+
+  // Job text arrives as plain text with line breaks: turn bullets into lists and short "Heading:" lines into headings.
+  function descHtml(text) {
+    if (/<\/?[a-z][^>]*>|&[a-z]+;|&#\d+;/i.test(text || "")) {
+      // Leftover HTML from a source: keep line structure, drop the markup.
+      const box = document.createElement("textarea");
+      box.innerHTML = (text || "").replace(/<\/(p|div|li|h\d|tr)>|<br\s*\/?>/gi, "\n").replace(/<li[^>]*>/gi, "\n• ").replace(/<[^>]+>/g, " ");
+      text = box.value.replace(/[ \t ]+/g, " ");
+    }
+    text = (text || "").replace(/^[ \t]*[•·▪][ \t]*\n\s*/gm, "• "); // "<li><p>…" leaves the bullet on its own line
+    const out = [];
+    let list = [];
+    const flush = () => { if (list.length) out.push(`<ul>${list.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`); list = []; };
+    for (const raw of (text || "").split(/\n+/)) {
+      const line = raw.trim();
+      if (!line) continue;
+      const bullet = line.match(/^(?:[•*·▪–-]|\d{1,2}[.)])\s+(.*)$/);
+      if (bullet) { list.push(bullet[1]); continue; }
+      flush();
+      if (line.length <= 70 && (/:$/.test(line) || !/[.!?]$/.test(line)) && line.split(" ").length <= 9) {
+        out.push(`<h4>${esc(line.replace(/:$/, ""))}</h4>`);
+      } else out.push(`<p>${esc(line)}</p>`);
+    }
+    flush();
+    return out.join("");
+  }
+
+  function skillsHtml(j) {
+    const skills = skillsOf(j);
+    const missing = (j.insights && j.insights.peer_skills) || [];
+    if (!skills.length && !missing.length) return "";
+    const rows = skills.map((s) => `
+      <li>
+        <span class="sk-name">${esc(s.n)}${s.r ? "" : ' <span class="sk-nice">nice to have</span>'}</span>
+        <span class="sk-bar" role="img" aria-label="Importance ${Math.round(s.w * 100)} of 100"><span style="width:${Math.max(8, s.w * 100)}%"></span></span>
+        <span class="sk-peer">${s.p == null ? "" : `in ${pct(s.p)} of similar jobs`}</span>
+      </li>`).join("");
+    return `<section class="jd-card">
+        <h3>Skills this job asks for</h3>
+        <p class="small muted">Ranked by importance in the posting — the title and the requirements count most, “nice to have” least.</p>
+        ${rows ? `<ul class="sk-list">${rows}</ul>` : ""}
+        ${missing.length ? `<p class="small"><b>Often asked in similar jobs:</b> ${missing.map((m) => `<span class="skill ghost">${esc(m.n)} <small>${pct(m.p)}</small></span>`).join(" ")}</p>` : ""}
+      </section>`;
+  }
+
+  function aiHtml(j) {
+    const ai = j.insights && j.insights.ai;
+    if (!ai) return "";
+    return `<section class="jd-card jd-ai">
+        <h3><span class="ai-dot" aria-hidden="true">✦</span> AI summary</h3>
+        ${ai.summary ? `<p>${esc(ai.summary)}</p>` : ""}
+        ${ai.tasks && ai.tasks.length ? `<p class="small"><b>What you'd do</b></p><ul>${ai.tasks.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+        ${ai.flags && ai.flags.length ? `<p class="small"><b>Worth double-checking</b></p><ul class="flags">${ai.flags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+        <p class="tiny muted">Generated automatically from the posting. Always read the original.</p>
+      </section>`;
+  }
+
+  function companyHtml(j) {
+    const c = companyInfo(j.company);
     const kununu = `https://www.google.com/search?q=${encodeURIComponent(`${j.company} kununu`)}`;
+    const facts = c ? [["Founded", c.f], ["Employees", c.z], ["HQ", c.h], ["Industry", c.i]].filter(([, v]) => v) : [];
+    return `<section class="jd-card">
+        <h3>About ${esc(j.company)}</h3>
+        <div class="jd-co-head">${logoHtml(j.company, "logo-sm")}<div><b>${esc(c ? c.n : j.company)}</b>
+          ${c && c.st ? ' <span class="badge new">Startup</span>' : ""}</div></div>
+        ${c && c.d ? `<p>${esc(c.d)}</p>` : `<p class="muted small">No company profile yet.</p>`}
+        ${facts.length ? `<dl class="co-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>` : ""}
+        <p class="jd-links">
+          ${c && c.u ? `<a href="${esc(c.u)}">All jobs at ${esc(c.n)} →</a>` : ""}
+          ${c && c.w ? `<a href="${esc(c.w)}" target="_blank" rel="noopener">Website ↗</a>` : ""}
+          <a href="${kununu}" target="_blank" rel="noopener noreferrer nofollow">Employee reviews ↗</a>
+        </p>
+      </section>`;
+  }
+
+  function jobDialogHtml(j, loading) {
+    const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
+    const sal = salaryText(j);
+    const meta = [j.city || j.location || "Germany", REMOTE_LABEL[j.remote_type], j.posted_at && `Posted ${ago(j.posted_at)}`]
+      .filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
     return `
-      ${factsHtml(j)}
-      ${insightsHtml(j)}
-      ${j.snippet ? `<p class="snippet">${esc(j.snippet)}${j.snippet.length >= 600 ? "…" : ""}</p>` : ""}
-      <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
-      <div class="detail-actions">
-        <a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-act="apply">Apply on original site ↗</a>
-        <a class="btn" href="${kununu}" target="_blank" rel="noopener noreferrer nofollow">Company reviews ↗</a>
+      <header class="jd-head">
+        ${logoHtml(j.company, "logo-lg")}
+        <div class="jd-titles">
+          <p class="jd-company">${esc(j.company)}</p>
+          <h2 id="jd-title">${esc(j.title)}</h2>
+          <p class="jd-meta">${meta}${sal ? `<span class="jd-salary">${sal} / year</span>` : ""}</p>
+        </div>
+        <button type="button" class="jd-close" data-jd="close" aria-label="Close">✕</button>
+      </header>
+      <div class="jd-actions">
+        <a class="btn primary big" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Apply on original site ↗</a>
+        <button type="button" class="btn" data-jd="save" aria-pressed="${isSaved}">${isSaved ? "★ Saved" : "☆ Save"}</button>
+        <button type="button" class="btn" data-jd="applied" aria-pressed="${isApplied}">${isApplied ? "✓ Applied" : "Mark applied"}</button>
+        <button type="button" class="btn ghost" data-jd="copy" title="Copy a link to this job">🔗 Copy link</button>
+      </div>
+      <div class="jd-body">
+        <div class="jd-main">
+          <div class="badges">${badges(j)}</div>
+          ${aiHtml(j)}
+          <section class="jd-card jd-desc">
+            <h3>Job description</h3>
+            ${loading ? `<p class="muted">Loading the full description…</p>` : (j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`)}
+            <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
+          </section>
+        </div>
+        <aside class="jd-side">
+          <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
+          ${skillsHtml(j)}
+          ${insightsHtml(j)}
+          ${companyHtml(j)}
+        </aside>
       </div>`;
   }
+
+  let openId = null;
+  async function openJob(idOrJob, { push = true } = {}) {
+    const id = typeof idOrJob === "string" ? idOrJob : idOrJob.id;
+    let j = typeof idOrJob === "string" ? current.get(id) : idOrJob;
+    const dlg = $("#job-dialog"), box = $("#jd");
+    openId = id;
+    if (push) history.pushState({ job: id }, "", jobUrl(id));
+    box.innerHTML = j ? jobDialogHtml(j, !DEMO) : `<p class="muted jd-wait">Loading job…</p>`;
+    if (!dlg.open) dlg.showModal();
+    box.scrollTop = 0;
+    markSeen(id);
+    $$(`.job[data-id="${CSS.escape(id)}"]`).forEach((li) => li.classList.add("seen"));
+    if (DEMO) return;
+    try {
+      const [full] = await restGet(`jobs?id=eq.${encodeURIComponent(id)}&select=${DETAIL_COLS}`);
+      if (openId !== id) return; // another job was opened meanwhile
+      if (!full) { box.innerHTML = `<p class="jd-wait">This job is no longer online. <button class="btn" data-jd="close">Close</button></p>`; return; }
+      j = withDevInsights({ ...(j || {}), ...full });
+      current.set(id, j);
+      box.innerHTML = jobDialogHtml(j, false);
+      document.title = `${j.title} at ${j.company} — ${C.SITE_NAME}`;
+      loadSimilar(box);
+    } catch (e) {
+      console.error(e);
+      if (j) box.innerHTML = jobDialogHtml(j, false);
+    }
+  }
+
+  function closeJob({ pop = false } = {}) {
+    const dlg = $("#job-dialog");
+    openId = null;
+    if (dlg.open) dlg.close();
+    document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
+    if (!pop) {
+      const p = new URLSearchParams(location.search); p.delete("job");
+      history.pushState(null, "", p.toString() ? `?${p}` : location.pathname);
+    }
+  }
+
+  function onDialogClick(e) {
+    const tagBtn = e.target.closest("[data-tag]");
+    if (tagBtn) { closeJob(); toggleTag(tagBtn.dataset.tag); return; }
+    const sim = e.target.closest("[data-similar]");
+    if (sim) { e.preventDefault(); openJob(sim.dataset.similar); return; }
+    const btn = e.target.closest("[data-jd]");
+    if (!btn) return;
+    const j = current.get(openId);
+    const act = btn.dataset.jd;
+    if (act === "close") closeJob();
+    else if (act === "copy") {
+      navigator.clipboard?.writeText(location.href).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
+    } else if (j && (act === "save" || act === "applied")) {
+      toggleList(act, j);
+      btn.setAttribute("aria-pressed", String(act === "save" ? !!saved[j.id] : !!applied[j.id]));
+      btn.textContent = act === "save" ? (saved[j.id] ? "★ Saved" : "☆ Save") : (applied[j.id] ? "✓ Applied" : "Mark applied");
+      $$(`.job[data-id="${CSS.escape(j.id)}"] [data-act="${act}"]`).forEach((b) => {
+        b.setAttribute("aria-pressed", btn.getAttribute("aria-pressed"));
+        b.textContent = act === "save" ? (saved[j.id] ? "★ Saved" : "☆ Save") : (applied[j.id] ? "✓ Applied" : "Applied?");
+      });
+    }
+  }
+
+  // Local preview only: config.js may point DEV_INSIGHTS_URL at an insights JSON produced by `insights.py --dry-run`.
+  let devInsights = null;
+  const withDevInsights = (j) => (devInsights && devInsights[j.id] ? { ...j, insights: devInsights[j.id] } : j);
 
   // ---------------------------------------------------------------- state & search
   let tab = "all";
   let offset = 0;
   let total = 0;
   let current = new Map();   // id -> job (jobs currently on screen)
+  const shown = new Set();   // ids already in the result list (de-duplicates overlapping pages)
   let reqId = 0;
 
   async function search({ append = false } = {}) {
     if (tab !== "all") return;
     const f = readFilters();
     const qs = filtersToQuery(f).toString();
-    history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+    const withJob = new URLSearchParams(qs);
+    if (openId) withJob.set("job", openId); // keep the open job in the URL
+    history.replaceState(history.state, "", withJob.toString() ? `?${withJob}` : location.pathname);
     updateRss(qs);
     renderActiveTags();
     if (!append) offset = 0;
     const my = ++reqId;
-    $("#result-count").textContent = "Searching…";
+    const more = $("#load-more");
+    if (append) { more.disabled = true; more.textContent = "Loading…"; }
+    else $("#result-count").textContent = "Searching…";
     try {
       const data = await rpc("search_jobs", rpcParams(f, offset));
       if (my !== reqId) return; // a newer search started
       total = data.total;
-      if (!append) { current.clear(); $("#results").innerHTML = ""; }
-      data.items.forEach((j) => current.set(j.id, j));
-      $("#results").insertAdjacentHTML("beforeend", data.items.map(jobHtml).join(""));
+      if (!append) { current.clear(); shown.clear(); $("#results").innerHTML = ""; }
+      // Pages can overlap when many jobs share a posting time: never show a job twice.
+      const items = data.items.map(withDevInsights).filter((j) => !shown.has(j.id));
+      items.forEach((j) => { shown.add(j.id); if (!(current.get(j.id) || {}).description) current.set(j.id, j); });
+      $("#results").insertAdjacentHTML("beforeend", items.map(jobHtml).join(""));
       if (!append && !data.items.length) {
         $("#results").innerHTML = `<li class="empty">No jobs match these filters. Try removing a filter or a tag.</li>`;
       }
       offset += data.items.length;
       $("#result-count").textContent = `${total.toLocaleString("en")} job${total === 1 ? "" : "s"} found`;
-      $("#load-more").hidden = offset >= total;
+      more.hidden = offset >= total || !data.items.length;
+      more.textContent = `Load more jobs (${Math.max(0, total - offset).toLocaleString("en")} left)`;
     } catch (e) {
       console.error(e);
-      if (my === reqId) $("#result-count").textContent = "Couldn't load jobs right now. Please try again in a minute.";
+      if (my !== reqId) return;
+      if (append) more.textContent = "Couldn't load more — tap to try again";
+      else $("#result-count").textContent = "Couldn't load jobs right now. Please try again in a minute.";
+    } finally {
+      more.disabled = false;
     }
   }
 
@@ -411,11 +628,25 @@
   }
 
   // ---------------------------------------------------------------- job actions
-  function snapshot(j) { return { ...j }; }
+  function snapshot(j) { const { description, ...rest } = j; return rest; } // keep localStorage small
+
+  function toggleList(kind, j) {
+    const map = kind === "save" ? saved : applied;
+    if (map[j.id]) delete map[j.id]; else map[j.id] = { job: snapshot(j), at: new Date().toISOString() };
+    store.set(kind === "save" ? "saved" : "applied", map);
+    if (kind === "applied") { markSeen(j.id); maybeNudge(); }
+    updateCounts();
+    if (tab === (kind === "save" ? "saved" : "applied")) renderLocal(tab);
+  }
 
   function onJobClick(e) {
     const tagBtn = e.target.closest("[data-tag]");
     if (tagBtn) { toggleTag(tagBtn.dataset.tag); return; }
+    const card = e.target.closest(".job");
+    if (card && !e.target.closest("[data-act], a, button") && current.get(card.dataset.id)) {
+      openJob(current.get(card.dataset.id)); // the whole card is clickable
+      return;
+    }
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const li = btn.closest(".job");
@@ -423,32 +654,19 @@
     if (!j) return;
     const act = btn.dataset.act;
 
-    if (act === "toggle") {
-      const box = $(".job-details", li);
-      const open = box.hidden;
-      if (open && !box.innerHTML) box.innerHTML = detailsHtml(j);
-      if (open) loadSimilar(box);
-      box.hidden = !open;
-      btn.setAttribute("aria-expanded", String(open));
-      if (open) { markSeen(j.id); li.classList.add("seen"); }
-    } else if (act === "apply") {
-      markSeen(j.id); li.classList.add("seen");
+    if (act === "open") {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // let "open in new tab" work
+      e.preventDefault();
+      openJob(j);
     } else if (act === "save") {
-      if (saved[j.id]) delete saved[j.id]; else saved[j.id] = { job: snapshot(j), at: new Date().toISOString() };
-      store.set("saved", saved);
+      toggleList("save", j);
       btn.setAttribute("aria-pressed", String(!!saved[j.id]));
       btn.textContent = saved[j.id] ? "★ Saved" : "☆ Save";
-      updateCounts();
-      if (tab === "saved") renderLocal("saved");
     } else if (act === "applied") {
-      if (applied[j.id]) delete applied[j.id]; else applied[j.id] = { job: snapshot(j), at: new Date().toISOString() };
-      store.set("applied", applied);
+      toggleList("applied", j);
       btn.setAttribute("aria-pressed", String(!!applied[j.id]));
       btn.textContent = applied[j.id] ? "✓ Applied" : "Applied?";
-      markSeen(j.id); li.classList.add("seen");
-      updateCounts();
-      maybeNudge();
-      if (tab === "applied") renderLocal("applied");
+      li.classList.add("seen");
     } else if (act === "hide") {
       if (!hiddenCompanies.includes(j.company)) hiddenCompanies.push(j.company);
       store.set("hiddenCompanies", hiddenCompanies);
@@ -480,12 +698,34 @@
       <p>€${raised} of €${goal} this month — covers costs plus better job matching (AI tagging, more sources).</p></div>` : ""}`;
   }
 
+  let siteStats = null;
   async function loadStats() {
-    try {
-      const s = await rpc("site_stats");
-      $("#stats").innerHTML = `<b>${s.active.toLocaleString("en")}</b> English-friendly jobs · <b>${s.added_today.toLocaleString("en")}</b> added today`
-        + (s.hired ? ` · <b>${s.hired.toLocaleString("en")}</b> people hired 🎉` : "");
-    } catch { $("#stats").textContent = ""; }
+    try { siteStats = await rpc("site_stats"); } catch { siteStats = null; }
+    renderStats();
+  }
+
+  function renderStats() {
+    const s = siteStats;
+    if (!s) { $("#stats").innerHTML = ""; return; }
+    const n = (x) => x.toLocaleString("en");
+    const employers = new Set(Object.values(companies).map((c) => c.n)).size;
+    const items = [["Open roles", n(s.active)]];
+    if (employers) items.push(["Companies hiring", n(employers)]);
+    // Right after a full re-import every job counts as "new"; only show the figure when it is meaningful.
+    if (s.added_today && s.added_today < s.active * 0.4) items.push(["New in 24 hours", n(s.added_today)]);
+    if (s.hired) items.push(["People hired", n(s.hired)]);
+    items.push(["Refreshed", "every 6 h"]);
+    $("#stats").innerHTML = items.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  }
+
+  // Logos of well-known employers that currently have a profile (and a logo) on the site.
+  const FEATURED = ["Celonis", "N26", "DeepL", "Trade Republic", "HelloFresh", "GetYourGuide", "SumUp", "Helsing",
+    "Databricks", "Enpal", "Contentful", "Raisin", "Babbel", "Doctolib", "Flix", "Spotify"];
+  function renderHiring() {
+    const picks = FEATURED.map((name) => companyInfo(name)).filter((c) => c && c.l && c.u).slice(0, 6);
+    $("#hiring-logos").innerHTML = picks.map((c) =>
+      `<a href="${esc(c.u)}" title="${esc(c.n)}"><img src="${esc(c.l)}" alt="${esc(c.n)}" loading="lazy"><span>${esc(c.n)}</span></a>`).join("");
+    $(".hiring-strip").hidden = !picks.length;
   }
 
   async function loadFacets() {
@@ -522,7 +762,7 @@
 
   // ---------------------------------------------------------------- init
   function init() {
-    document.title = `${C.SITE_NAME} — German level, salary & visa info up front`;
+    document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
     $("#brand").textContent = C.SITE_NAME;
     $("#owner-note").textContent = C.OWNER_NOTE || "";
     if (C.SPONSOR) $("#sponsor-slot").innerHTML =
@@ -606,9 +846,37 @@
       if (e.key === "/" && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $("#q").focus(); }
     });
 
+    // A logo that fails to load becomes coloured initials instead of a broken-image icon.
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || !img.classList.contains("logo")) return;
+      const tmp = document.createElement("div");
+      companies[coKey(img.dataset.name)] = { ...(companies[coKey(img.dataset.name)] || {}), l: null };
+      tmp.innerHTML = logoHtml(img.dataset.name || "?", [...img.classList].filter((c) => c !== "logo").join(" "));
+      img.replaceWith(tmp.firstElementChild);
+    }, true);
+
+    // job popup: its own URL (?job=<id>), back button closes it
+    $("#job-dialog").addEventListener("click", onDialogClick);
+    $("#job-dialog").addEventListener("close", () => { if (openId) closeJob(); });
+    window.addEventListener("popstate", () => {
+      const id = new URLSearchParams(location.search).get("job");
+      if (id) openJob(id, { push: false }); else if (openId) closeJob({ pop: true });
+    });
+    const startJob = new URLSearchParams(location.search).get("job");
+
     loadStats();
     loadFacets();
-    search();
+    const ready = Promise.all([
+      fetch("companies-index.json").then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
+      C.DEV_INSIGHTS_URL ? fetch(C.DEV_INSIGHTS_URL).then((r) => r.json()).then((d) => { devInsights = d; }).catch(() => {}) : null,
+    ]);
+    ready.then(() => {
+      renderStats();
+      renderHiring();
+      search();
+      if (startJob) openJob(startJob, { push: false });
+    });
   }
 
   document.addEventListener("DOMContentLoaded", init);

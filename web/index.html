@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>English Jobs in Germany — German level, salary &amp; visa info up front</title>
+  <title>Stellenly — English-speaking jobs in Germany</title>
   <meta name="description" content="Search English-speaking jobs in Germany. See instantly whether German is required, the salary, Blue Card eligibility, visa sponsorship and remote options. No account needed.">
   <link rel="canonical" href="https://www.stellenly.com/">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="English Jobs Germany">
+  <meta property="og:site_name" content="Stellenly">
   <meta property="og:url" content="https://www.stellenly.com/">
   <meta property="og:title" content="English Jobs in Germany — German level, salary &amp; visa info up front">
   <meta property="og:description" content="Search English-speaking jobs in Germany. See instantly whether German is required, the salary, Blue Card eligibility and visa sponsorship.">
@@ -17,13 +17,13 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@graph": [
     {"@type": "WebSite", "@id": "https://www.stellenly.com/#website", "url": "https://www.stellenly.com/",
-     "name": "English Jobs Germany", "inLanguage": "en",
+     "name": "Stellenly", "inLanguage": "en",
      "potentialAction": {"@type": "SearchAction", "target": "https://www.stellenly.com/?q={search_term_string}",
                          "query-input": "required name=search_term_string"}},
     {"@type": "Organization", "@id": "https://www.stellenly.com/#org", "name": "Stellenly", "url": "https://www.stellenly.com/"}
   ]}
   </script>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇩🇪</text></svg>">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <script>
     // Apply saved theme before paint (no flash).
@@ -35,39 +35,73 @@
 
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="./" id="brand">English Jobs Germany</a>
+    <a class="brand" href="./" aria-label="Stellenly home"><img class="brand-logo" src="logo.svg" alt="" width="32" height="32"><span id="brand">Stellenly</span></a>
     <nav class="header-actions">
       <a class="btn ghost" href="companies.html">Companies</a>
       <a class="btn ghost" href="resources.html">Resources</a>
       <a class="btn ghost" href="blog/">Guides</a>
-      <button type="button" class="btn ghost" data-open="hired-dialog">🎉 I got hired</button>
+      <button type="button" class="btn ghost" data-open="hired-dialog">I got hired</button>
       <button type="button" class="btn ghost" data-open="glossary-dialog" title="German job terms explained">Glossary</button>
       <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
-      <button type="button" class="btn support" data-open="support-dialog">☕ Support</button>
+      <button type="button" class="btn support" data-open="support-dialog">Support us</button>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
-  <section class="hero">
-    <h1 id="tagline">Jobs in Germany you can do in English</h1>
-    <p class="stats" id="stats" aria-live="polite">&nbsp;</p>
+<section class="hero-band">
+  <svg class="hero-skyline" viewBox="0 0 1440 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g fill="currentColor">
+      <rect x="0" y="120" width="70" height="50"/><rect x="70" y="100" width="46" height="70"/><rect x="116" y="128" width="60" height="42"/>
+      <rect x="176" y="112" width="38" height="58"/>
+      <rect x="236" y="104" width="148" height="12"/><rect x="242" y="98" width="136" height="8"/><rect x="300" y="84" width="22" height="14"/>
+      <rect x="244" y="116" width="9" height="54"/><rect x="267" y="116" width="9" height="54"/><rect x="290" y="116" width="9" height="54"/>
+      <rect x="322" y="116" width="9" height="54"/><rect x="345" y="116" width="9" height="54"/><rect x="368" y="116" width="9" height="54"/>
+      <rect x="236" y="160" width="148" height="10"/>
+      <rect x="406" y="118" width="54" height="52"/><rect x="460" y="92" width="34" height="78"/><rect x="494" y="126" width="72" height="44"/>
+      <rect x="566" y="106" width="44" height="64"/><path d="M630 170V120l40-22 40 22v50z"/><rect x="730" y="130" width="80" height="40"/>
+      <rect x="810" y="96" width="30" height="74"/><rect x="840" y="116" width="66" height="54"/><rect x="906" y="134" width="70" height="36"/>
+      <rect x="1074" y="58" width="10" height="112"/><circle cx="1079" cy="58" r="15"/><rect x="1077" y="6" width="4" height="40"/>
+      <rect x="1068" y="80" width="22" height="5" rx="2"/>
+      <rect x="976" y="122" width="48" height="48"/><rect x="1024" y="108" width="36" height="62"/><rect x="1100" y="114" width="56" height="56"/>
+      <rect x="1156" y="128" width="64" height="42"/><rect x="1220" y="100" width="40" height="70"/><rect x="1260" y="120" width="74" height="50"/>
+      <rect x="1334" y="108" width="40" height="62"/><rect x="1374" y="126" width="66" height="44"/>
+    </g>
+  </svg>
+  <div class="wrap hero">
+    <h1 id="tagline">English-speaking jobs in Germany</h1>
+    <p class="hero-sub">Every listing tells you up front whether German is required, what it pays and whether the employer sponsors visas.</p>
 
     <form id="search-form" class="search" role="search" autocomplete="off">
       <label class="visually-hidden" for="q">Search jobs</label>
-      <input id="q" name="q" type="search" placeholder="Job title, skill or company — e.g. python, product manager, Zalando" >
-      <select id="city" name="city" aria-label="City"><option value="">All cities</option></select>
-      <button class="btn primary" type="submit">Search</button>
+      <span class="search-field">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" name="q" type="search" placeholder="Job title, skill or company — e.g. python, product manager" >
+      </span>
+      <span class="search-field city-field">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <select id="city" name="city" aria-label="City"><option value="">All cities</option></select>
+      </span>
+      <button class="btn primary" type="submit">Search jobs</button>
     </form>
 
     <div class="quick" role="group" aria-label="Quick filters">
-      <label class="chip"><input type="checkbox" id="f-nogerman"> 🇬🇧 No German needed</label>
-      <label class="chip"><input type="checkbox" id="f-salary"> 💶 Shows salary</label>
-      <label class="chip"><input type="checkbox" id="f-visa"> 🛂 Visa sponsorship</label>
-      <label class="chip"><input type="checkbox" id="f-remote"> 🏠 Remote</label>
-      <label class="chip"><input type="checkbox" id="f-direct"> 🏢 Direct employers only</label>
+      <label class="chip"><input type="checkbox" id="f-nogerman"> No German needed</label>
+      <label class="chip"><input type="checkbox" id="f-salary"> Salary listed</label>
+      <label class="chip"><input type="checkbox" id="f-visa"> Visa sponsorship</label>
+      <label class="chip"><input type="checkbox" id="f-remote"> Remote</label>
+      <label class="chip"><input type="checkbox" id="f-direct"> Direct employers only</label>
     </div>
-  </section>
+
+    <dl class="hero-stats" id="stats" aria-live="polite"></dl>
+  </div>
+</section>
+
+<section class="hiring-strip" aria-label="Companies hiring now">
+  <div class="wrap hiring-row"><span class="hiring-label">Companies hiring now</span><div class="hiring-logos" id="hiring-logos"></div>
+    <a class="hiring-all" href="companies.html">All companies →</a></div>
+</section>
+
+<main class="wrap">
 
   <div class="layout">
     <aside class="filters" aria-label="Filters">
@@ -196,6 +230,10 @@
 </footer>
 
 <!-- ============================ Dialogs ============================ -->
+<dialog id="job-dialog" class="job-dialog" aria-labelledby="jd-title">
+  <div id="jd" class="jd"></div>
+</dialog>
+
 <dialog id="support-dialog" class="dialog">
   <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
   <h2>☕ Keep this site free</h2>

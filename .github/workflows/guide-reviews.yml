@@ -1,0 +1,40 @@
+name: Guide review reminder
+
+# Once a month, opens an issue listing guides whose fact check is due
+# (see `reviewed:` and `review_months:` in content/blog/*.md).
+on:
+  schedule:
+    - cron: "0 7 1 * *"      # 1st of every month, 07:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r build/requirements.txt
+      - name: Find guides due for review
+        id: due
+        run: |
+          python build/check_reviews.py --soon 14 > due.md
+          echo "count=$(grep -c . due.md || true)" >> "$GITHUB_OUTPUT"
+      - name: Open a reminder issue
+        if: steps.due.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "These guides are due for their regular fact check. Re-check each one against its official sources,"
+            echo "update anything that changed (thresholds, fees, laws) and set \`reviewed:\` to today's date."
+            echo
+            cat due.md
+          } > body.md
+          gh issue create --title "Guide review due — $(date +%B\ %Y)" --body-file body.md

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Stellenly">
+  <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+  <rect width="32" height="32" rx="9" fill="url(#sg)"/>
+  <path d="M21.2 10.6h-7.4a3.45 3.45 0 0 0 0 6.9h4.4a3.45 3.45 0 0 1 0 6.9h-7.4" fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24.6" cy="7.6" r="2.7" fill="#ff8a65"/>
+</svg>
