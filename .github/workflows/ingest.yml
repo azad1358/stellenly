@@ -30,12 +30,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python ingest/ingest.py
-      - name: Commit geocoding cache
+      - name: Commit geocoding cache and discovered boards
         if: always()
         run: |
           git config user.name "site-bot"
           git config user.email "site-bot@users.noreply.github.com"
           git add ingest/geocache.json
+          [ -f ingest/ats_boards.json ] && git add ingest/ats_boards.json
           git diff --cached --quiet && exit 0
-          git commit -m "Update geocoding cache"
+          git commit -m "Update geocoding cache and discovered boards"
           git pull --rebase && git push
