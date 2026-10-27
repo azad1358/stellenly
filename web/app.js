@@ -419,6 +419,45 @@
     return `<span class="logo mono ${cls}" style="--h:${h}" aria-hidden="true">${esc(initials)}</span>`;
   }
 
+  // ---------------------------------------------------------------- Stellenly Hiring Score (computed by the build)
+  const SCORE_WEIGHTS = { salary: 20, language: 25, visa: 15, activity: 15, freshness: 10, reposts: 15 };
+  const grade = (p) => (p >= 85 ? "Excellent" : p >= 70 ? "Very good" : p >= 55 ? "Good" : p >= 40 ? "Fair" : "Limited");
+  const starsHtml = (points, cls = "") => `<span class="stars ${cls}" role="img" aria-label="${(points / 20).toFixed(1)} out of 5 stars">
+      <span class="stars-fill" style="width:${Math.round(points / 10) * 10}%">★★★★★</span>★★★★★</span>`;
+  const scoreOf = (company) => (companyInfo(company) || {}).sc || null;
+
+  function scoreChip(j) {
+    const sc = scoreOf(j.company);
+    return sc ? `<span class="score-chip inline" title="Stellenly Hiring Score ${sc.t}/100 — based on this company's job postings">★ ${(sc.t / 20).toFixed(1)}</span>` : "";
+  }
+
+  function scoreCardHtml(j) {
+    const sc = scoreOf(j.company);
+    if (!sc) return "";
+    const rows = sc.f.map(([, label, p, text]) => `<li><div class="sc-row"><span>${esc(label)}</span>${starsHtml(p, "sm")}<b>${p}</b></div>
+        <p>${esc(text)}</p></li>`).join("");
+    const weights = sc.f.map(([key, label]) => `<li><b>${esc(label)}</b> — ${SCORE_WEIGHTS[key]}%</li>`).join("");
+    return `<section class="score-card">
+        <div class="sc-top">
+          <div><p class="sc-kicker">Stellenly Hiring Score</p>
+            <div class="sc-total"><b>${(sc.t / 20).toFixed(1)}</b>${starsHtml(sc.t)}</div>
+            <p class="sc-grade">${grade(sc.t)} · ${sc.t}/100 points · based on ${sc.n} open jobs</p></div>
+          <button type="button" class="sc-help" popovertarget="jd-score-help">ⓘ How we calculate this</button>
+        </div>
+        <ul class="sc-list">${rows}</ul>
+        <div popover id="jd-score-help" class="sc-pop">
+          <h4>How the Hiring Score works</h4>
+          <p>It rates how ${esc(j.company)} hires — based only on its current job postings on Stellenly, <b>not on employee
+          reviews</b>. Each factor gives 0–100 points; the total is their weighted average (100 points = 5 stars):</p>
+          <ul>${weights}</ul>
+          <p class="muted small">Salary: full points when 60%+ of jobs show a salary · English: "German not needed" counts
+          fully, "not mentioned" 60% · Visa: full points at 50%+ · Activity: full points at 5+ new jobs in 30 days ·
+          Freshness: full points when jobs are under 2 weeks old · Stable: fewer reposts score higher. Needs at least 3
+          open jobs; updated daily.</p>
+        </div>
+      </section>`;
+  }
+
   // "23 views · 5 applied" — anonymous all-time counts from record_job_event (no visitor data).
   function clicksBadge(j) {
     const views = j.views || 0, applies = j.apply_clicks || 0;
@@ -443,7 +482,7 @@
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
-        <div class="job-meta"><span class="company">${esc(j.company)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}</div>
+        <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}</div>
         <div class="badges">${badges(j)}</div>
         ${skills ? `<div class="skills-row">${skills}</div>` : ""}
       </div>
@@ -582,6 +621,7 @@
         </div>
         <aside class="jd-side">
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
+          ${scoreCardHtml(j)}
           ${j.insights || loading ? "" : `<section class="jd-card pending-card"><h3>Analysis coming soon</h3>
             <p class="small muted">This job is new. Skills, salary benchmark and similar jobs are added automatically
             within a few hours.</p></section>`}
