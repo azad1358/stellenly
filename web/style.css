@@ -855,3 +855,15 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .wiki .post-body table { display: block; overflow-x: auto; }
   .wiki .post-body code { overflow-wrap: anywhere; }
 }
+
+/* Header: keep the nav on one line next to the logo on laptop screens */
+@media (max-width: 1360px) {
+  .updated-pill .next { display: none; }
+  .header-actions .btn.ghost:not(.icon) { padding-inline: 9px; }
+}
+@media (max-width: 1180px) and (min-width: 641px) {
+  .header-actions { gap: 2px; }
+  .header-actions .btn.ghost:not(.icon) { padding: 6px 7px; font-size: 0.86rem; }
+  .header-actions .btn.support { padding: 7px 11px; font-size: 0.88rem; }
+  .updated-pill { font-size: 0.76rem; padding: 4px 9px; }
+}
