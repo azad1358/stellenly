@@ -113,6 +113,19 @@ def compute_stats(jobs: list[dict]) -> dict:
 
 
 # ---------------------------------------------------------------- html helpers
+# Telegram channel card, fixed in the bottom-right corner (same markup in web/index.html).
+TG_FLOAT = """<div class="tg-float" id="tg-float">
+  <a class="tg-float-card" href="{url}" target="_blank" rel="noopener" data-goatcounter-click="telegram-float" aria-label="Join the Stellenly Jobs channel on Telegram">
+    <svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M5.4 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1l-6.9 4.4-3-.9c-.6-.2-.6-.6.2-.9z"/></svg>
+    <span class="tg-float-text"><b>Join us on Telegram</b><small>New English-speaking jobs every day</small></span>
+  </a>
+  <button type="button" class="tg-float-close" aria-label="Hide the Telegram card">×</button>
+</div>
+<script>(function(){{var w=document.getElementById("tg-float");try{{if(localStorage.getItem("ejg.tgHidden"))w.hidden=true;}}catch(e){{}}
+w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden=true;try{{localStorage.setItem("ejg.tgHidden","1");}}catch(e){{}}}});}})();</script>
+""".format(url=html.escape(SITE["telegram_url"]))
+
+
 def page(title: str, description: str, body: str, path: str, depth: int, extra_head: str = "",
          affiliate_note: bool = False, main_class: str = "content-page") -> str:
     up = "../" * depth
@@ -158,6 +171,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
   <span>Updated {TODAY.isoformat()} · Jobs from public job APIs and company career pages.</span>
   <nav><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
 </div></footer>
+{TG_FLOAT}
 </body>
 </html>
 """

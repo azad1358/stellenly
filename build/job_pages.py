@@ -22,7 +22,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from build_site import GERMAN_LABEL, NOW, SITE, SITE_URL, WEB, co_key, e, euro, page, parse_ts  # noqa: E402
+from build_site import GERMAN_LABEL, NOW, SITE_URL, WEB, co_key, e, euro, page, parse_ts  # noqa: E402
 
 OUT = WEB / "job"
 VALID_DAYS = 45  # same as expire_jobs(): a job is retired 45 days after it was posted
@@ -162,8 +162,6 @@ def job_html(j: dict, co: dict, by_id: dict) -> str:
      <a class="btn" href="../index.html?q={e(requests.utils.quote(j['company']))}">More jobs at {e(j['company'])}</a></p>
   {f'<ul class="job-hints">{hints}</ul>' if hints else ""}
   <div class="article job-desc">{desc}</div>
-  <aside class="cta tg-cta"><b>📣 New English-speaking jobs every day</b>
-    <a class="btn" href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener" data-goatcounter-click="telegram-job">Join on Telegram</a></aside>
   <p class="muted small">We show this posting as published by the employer. Always check the details on the original posting
   before you apply. <a href="../how-it-works.html">How we read job postings</a>.</p>
   {f'<section class="jd-card similar"><h2>Similar jobs</h2><ul class="link-list">{sim_html}</ul></section>' if sim_html else ""}
