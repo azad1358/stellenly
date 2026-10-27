@@ -910,3 +910,4 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .header-actions::-webkit-scrollbar { display: none; }
   .header-actions > * { flex: none; white-space: nowrap; }
 }
+.wiki-stats .live-dot { display: inline-block; margin-left: 6px; vertical-align: middle; }
