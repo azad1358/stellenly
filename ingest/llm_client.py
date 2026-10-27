@@ -122,12 +122,16 @@ def _fallback_model(exclude: set[str] | None = None) -> str | None:
         m = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash(-lite)?", name)
         return (0 if m.group(2) else 1, *(int(x) for x in m.group(1).split("."))) if m else ()
     names = available_models()
-    print("  available models:", ", ".join(n for n in names if "gemini" in n or "llama" in n)[:600])
+    global _listed
+    if not _listed:  # log the full list once per run
+        print("  available models:", ", ".join(n for n in names if "gemini" in n or "llama" in n))
+        _listed = True
     flash = sorted((n for n in names if rank(n) and n not in exclude), key=rank)
     return flash[-1] if flash else None
 
 
-_overloaded: set[str] = set()  # models that stayed overloaded through all retries in this run
+_overloaded: set[str] = set()  # models that stayed overloaded, ran out of quota or don't exist (this run)
+_listed = False
 _logged_busy = False
 
 
@@ -180,12 +184,15 @@ def chat_json(prompt: str) -> dict:
         if r.status_code == 400 and _json_mode and "response_format" in r.text:
             _json_mode = False  # the prompt asks for JSON anyway; parse_json copes with extra text
             continue
-        if r.status_code in (400, 404) and "model" in r.text.lower() and not _model_override:
-            print(f"  ! model '{_model()}' not usable ({r.status_code}): {r.text[:200]}")
-            _model_override = _fallback_model()
-            if not _model_override:
+        if r.status_code == 404 or (r.status_code == 400 and "model" in r.text.lower()):
+            # Unknown model, or one the OpenAI-compatible endpoint doesn't serve: skip it and try the next.
+            print(f"  ! model '{_model()}' not usable ({r.status_code}): {r.text[:160]}")
+            _overloaded.add(_model())
+            fallback = _fallback_model(exclude=_overloaded)
+            if not fallback:
                 raise LLMConfigError("no usable model; set LLM_MODEL to one of the models listed above")
-            print(f"  -> using '{_model_override}' instead (set LLM_MODEL to choose another)")
+            print(f"  -> using '{fallback}' instead (set LLM_MODEL to choose another)")
+            _model_override = fallback
             continue
         if r.status_code >= 400:
             raise LLMConfigError(f"LLM request failed ({r.status_code}): {r.text[:300]}")

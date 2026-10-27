@@ -43,7 +43,8 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}       # optional (e.g. a free Groq or Gemini key)
           LLM_API_URL: ${{ vars.LLM_API_URL }}          # optional, OpenAI-compatible endpoint (default: Groq)
-          LLM_MODEL: ${{ vars.LLM_MODEL }}              # optional (default: llama-3.1-8b-instant)
+          LLM_MODEL: ${{ vars.LLM_MODEL }}              # e.g. gemini-2.5-flash
+          LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL }}  # used when LLM_MODEL is overloaded or out of quota
           HF_HUB_DISABLE_PROGRESS_BARS: "1"
         run: python ingest/insights.py
       - name: Commit checked LLM facts
