@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works — Stellenly</title>
+<meta name="description" content="How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: every rule we use to filter out noise.">
+<link rel="canonical" href="https://www.stellenly.com/how-it-works.html">
+<meta property="og:title" content="How it works">
+<meta property="og:description" content="How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: every rule we use to filter out noise.">
+<meta property="og:type" content="website">
+<link rel="alternate" type="application/rss+xml" title="Guides" href="blog/feed.xml">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script data-goatcounter="https://stellenly.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>try{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+
+</head>
+<body>
+<header class="site-header"><div class="wrap header-row">
+  <a class="brand" href="index.html"><img class="brand-logo" src="logo.svg" alt="" width="32" height="32"><span>Stellenly</span></a>
+  <nav class="header-actions">
+    <a class="btn ghost" href="index.html">Search jobs</a>
+    <a class="btn ghost" href="companies.html">Companies</a>
+    <a class="btn ghost" href="resources.html">Resources</a>
+    <a class="btn ghost" href="blog/index.html">Guides</a>
+    <a class="btn ghost" href="how-it-works.html">How it works</a>
+    <a class="btn support" href="https://ko-fi.com/your-name" target="_blank" rel="noopener">Support us</a>
+  </nav>
+</div></header>
+<main class="wrap post-page wiki-page">
+<div class="post-layout wiki">
+<article class="post">
+<nav class="crumbs"><a href="index.html">Stellenly</a> › How it works</nav>
+<h1>How Stellenly works</h1>
+<p class="post-lead">How every job on this site is found, cleaned, read, double-checked by AI and scored, with all the rules
+we use to filter out noise. Figures on this page are live as of 27 Oct 2026.</p>
+
+<div class="wiki-stats">
+  <div><b>1,956</b><span>open jobs</span></div>
+  <div><b>255</b><span>company job boards read directly</span></div>
+  <div><b>84%</b><span>straight from the employer</span></div>
+  <div><b>322</b><span>postings checked by AI</span></div>
+  <div><b>162</b><span>companies with a Hiring Score</span></div>
+</div>
+
+<div class="article post-body">
+
+<h2 id="overview">1. Overview</h2>
+<p>Stellenly is a set of small, automated jobs that run on GitHub Actions. They need no server and keep no user accounts.
+Jobs are stored in a Postgres database (Supabase). The website itself is plain static HTML that is rebuilt every day.</p>
+<ol class="flow">
+  <li><b>Collect</b><span>Read public job APIs and employers' own job boards</span></li>
+  <li><b>Filter</b><span>Keep only English postings located in Germany (or remote)</span></li>
+  <li><b>Clean &amp; read</b><span>Strip HTML and boilerplate; detect the German level, salary, visa support and seniority</span></li>
+  <li><b>Store</b><span>Merge duplicates, count reposts, hide jobs that disappeared</span></li>
+  <li><b>Validate with AI</b><span>An LLM re-reads each posting; its answer counts only with a matching quote</span></li>
+  <li><b>Compare</b><span>Find similar jobs with embeddings and turn the differences into hints</span></li>
+  <li><b>Score &amp; publish</b><span>Calculate Hiring Scores, build pages, sitemap and feeds, deploy</span></li>
+</ol>
+<table>
+<thead><tr><th>Workflow</th><th>When</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Ingest jobs</td><td>every 6 hours</td><td>Runs the tests, then collects, filters, cleans and stores jobs and hides jobs that are gone</td></tr>
+<tr><td>Job insights</td><td>after every ingest + daily</td><td>Embeddings, similar jobs, skills, hints, AI analysis and fact checks</td></tr>
+<tr><td>Check dead links</td><td>daily</td><td>Re-opens up to 800 of the least recently checked postings and hides closed ones</td></tr>
+<tr><td>Build site pages</td><td>daily</td><td>Company pages, Hiring Scores, guides, city/field pages, sitemap, RSS</td></tr>
+<tr><td>Deploy website</td><td>after each build</td><td>Publishes the static site on GitHub Pages (HTTPS, www.stellenly.com)</td></tr>
+<tr><td>Migrate database</td><td>on change</td><td>Applies versioned SQL migrations to the database</td></tr>
+<tr><td>Guide review reminder</td><td>monthly</td><td>Flags guides whose fact-check date is due</td></tr>
+</tbody></table>
+
+<h2 id="sources">2. Where jobs come from</h2>
+<p>We only use <b>public</b> job feeds: no logins, no scraping behind bot protection. There are two kinds of source:</p>
+<ul>
+<li><b>Arbeitnow</b>: a public job API covering Germany and Europe (up to 40 pages per run).</li>
+<li><b>Employers' own job boards</b>, through the public APIs of their applicant-tracking systems: Greenhouse, Lever, Ashby,
+Personio, Recruitee, Workable and SmartRecruiters. This is the same data the company shows on its own careers page.</li>
+</ul>
+<h3>Automatic board discovery</h3>
+<p>Every Arbeitnow job has an "apply" link that redirects to the employer's tracking system. Once per company we follow
+that redirect, recognise the system and board name from the address (for example <code>jobs.ashbyhq.com/&lt;company&gt;</code>
+or <code>&lt;company&gt;.jobs.personio.de</code>), check that the board's public API answers, and save it in
+<code>ats_boards.json</code>. From then on that company is read directly. Companies without a recognised board are tried
+again after 30 days. Today <b>255</b> boards are read directly.</p>
+<p>If the same job appears on both Arbeitnow and the employer's board, <b>the employer's copy wins</b>: its Apply button goes
+straight to the company.</p>
+<table class="data"><thead><tr><th>Source</th><th>Open jobs</th></tr></thead><tbody><tr><td>Ashby</td><td>678</td></tr><tr><td>Greenhouse</td><td>434</td></tr><tr><td>Arbeitnow</td><td>319</td></tr><tr><td>Lever</td><td>214</td></tr><tr><td>Recruitee</td><td>131</td></tr><tr><td>SmartRecruiters</td><td>102</td></tr><tr><td>Workable</td><td>51</td></tr><tr><td>Personio</td><td>27</td></tr></tbody></table>
+<h3>Being a polite client</h3>
+<ul>
+<li>Requests carry a clear User-Agent that links to the project.</li>
+<li>Rate limits (HTTP 429) and server errors are retried with growing waits, following <code>Retry-After</code>.</li>
+<li>There are pauses between pages, and very large SmartRecruiters boards are capped at 150 English jobs.</li>
+<li>If a whole source returns zero jobs, the run still saves everything else, then fails loudly so we get an email.</li>
+</ul>
+
+<h2 id="filter">3. Germany &amp; English only</h2>
+<h3>Language</h3>
+<p>The title and first 3,000 characters go through a language detector (with a stop-word count as backup). Anything not
+detected as English is dropped, so German-language postings never appear.</p>
+<h3>Location</h3>
+<p>The location text is checked in this order:</p>
+<ol>
+<li><b>German place</b>: matches a list of German cities and federal states (with and without umlauts, e.g.
+<i>München / Muenchen / Munich</i>), "Germany/Deutschland", or a "DE" country code → keep.</li>
+<li><b>Clearly abroad</b>: a known foreign city or country → drop.</li>
+<li><b>Generic</b> ("Remote", "EMEA", "Europe") → keep only if the job is marked remote.</li>
+<li><b>Anything else</b> is looked up once with OpenStreetMap's Nominatim geocoder and cached
+(328 places cached). If it's in Germany, keep; if it can't be placed, keep only remote roles.</li>
+</ol>
+<p>The city filter on the search page only lists German cities, so foreign locations never show up in the dropdown.</p>
+<h3>Other things we drop</h3>
+<ul><li>Postings without a title, company or link.</li><li>ATS test postings ("TEST – …").</li></ul>
+
+<h2 id="cleaning">4. Cleaning the text</h2>
+<ul>
+<li><b>HTML to text</b>: tags are removed; paragraphs, line breaks and list items become clean lines and bullets; HTML entities
+(<code>&amp;amp;</code>, <code>&amp;nbsp;</code>…) are decoded; whitespace is collapsed; text is capped at 20,000 characters.</li>
+<li><b>Boilerplate removal</b>: aggregator footers such as "Find more English Speaking Jobs in Berlin on Arbeitnow" are removed.</li>
+<li><b>Normalised names</b> for matching: accents folded, gender suffixes like <i>(m/w/d)</i> removed, punctuation ignored.</li>
+<li><b>City names</b> are normalised ("Berlin Office", "Munich HQ", "Hybrid – Hamburg" → Berlin, Munich, Hamburg).</li>
+</ul>
+
+<h2 id="rules">5. Reading each posting</h2>
+<p>Every posting is read by transparent rules first. AI only corrects these rules when it can prove it (see section 7).</p>
+<h3>German requirement, our main signal</h3>
+<p>The text is checked <b>sentence by sentence</b>, so "Fluent English required, German is a plus" counts as
+<i>nice to have</i>, not <i>required</i>. Each sentence that mentions German is classified:</p>
+<table><thead><tr><th>Result</th><th>Example phrases</th></tr></thead><tbody>
+<tr><td><span class="badge ok">No German needed</span></td><td>"no German required", "you don't need to speak German", "English only"</td></tr>
+<tr><td><span class="badge info">Nice to have</span></td><td>"German is a plus", "basic German", "A2/B1", "willingness to learn German"</td></tr>
+<tr><td><span class="badge bad">Required</span></td><td>"fluent/business-fluent German", "German C1", "fluent English and German", "Deutschkenntnisse"</td></tr>
+<tr><td><span class="badge">Not mentioned</span></td><td>the posting says nothing about German</td></tr>
+</tbody></table>
+<p>False alarms are excluded: "strong German <i>market</i>", "German <i>office</i>", "German <i>GAAP</i>" or "German <i>customers</i>"
+are about Germany, not about the language. If sentences disagree, the strictest one wins (required &gt; nice to have &gt; not required).</p>
+
+<h3>Salary: only when the posting says it's pay</h3>
+<p>Showing a wrong salary is worse than showing none. So there are <b>no estimates</b>: a salary appears only if the posting states one.</p>
+<ul>
+<li>An amount counts only if pay words are near it (salary, Gehalt, compensation, gross, per year, OTE…) and a currency is present.</li>
+<li>Amounts next to <b>funding, revenue, valuation, investors, budgets, perks, vouchers, training or equipment</b> are ignored,
+unless the sentence clearly calls them salary. So "we raised €385 million" never becomes a €385k salary.</li>
+<li>Millions/billions ("€280M", "2 Mio") are never salaries. Hourly pay is ignored.</li>
+<li>Monthly pay is converted to yearly (×12). "60–80k" applies the k to both ends.</li>
+<li><b>Plausibility</b>: €15k–€300k per year, the top of a range at most 3× the bottom. A range beats a single figure.</li>
+<li>Internships or student jobs above €60k are treated as parsing errors and shown as "no salary".</li>
+</ul>
+<p>Right now <b>8%</b> of jobs show a salary.</p>
+
+<h3>Visa, relocation, seniority and more</h3>
+<table><thead><tr><th>Field</th><th>Rule</th></tr></thead><tbody>
+<tr><td>Visa sponsorship</td><td>"visa sponsorship", "visa support", "Blue Card", "work permit support"… but not when the text says
+"no / cannot sponsor", "must already have a work permit" or "EU citizenship required"</td></tr>
+<tr><td>Relocation</td><td>"relocation package / support / budget", "we cover your relocation", "Umzugskosten"</td></tr>
+<tr><td>Seniority</td><td>From the title (Intern/Werkstudent, Junior, Senior, Lead/Head/Principal/Director). Otherwise from the years of experience asked:
+≤2 junior, ≤4 mid, more senior</td></tr>
+<tr><td>Experience</td><td>The smallest "N+ years of experience" figure in the text (1–20)</td></tr>
+<tr><td>Work setup</td><td>Hybrid ("3 days a week in the office"), Remote Germany, Remote EU ("anywhere in Europe") or on-site</td></tr>
+<tr><td>Recruiting agency</td><td>Company names like "Recruitment", "Staffing", "Personalvermittlung", known agencies, or
+"on behalf of our client". Marked with a badge; the "Direct employers only" filter hides them
+(10 right now)</td></tr>
+<tr><td>Blue Card badge</td><td>The stated salary meets the current EU Blue Card minimum (standard, or the reduced minimum for shortage jobs and recent graduates). This is about salary eligibility, not sponsorship</td></tr>
+<tr><td>Tags</td><td>Field and tech keywords (Python, Product, Marketing…) plus the flags above, max 25 per job</td></tr>
+</tbody></table>
+
+<h2 id="freshness">6. Duplicates &amp; dead jobs</h2>
+<ul>
+<li><b>One job, one entry</b>: each job's ID is a fingerprint of <i>title + company + city</i> after normalisation, so the same job
+from two sources, or posted twice, is merged.</li>
+<li><b>Reposts</b>: if a job that was gone comes back, its repost counter goes up. Frequent reposting lowers the Hiring Score.</li>
+<li><b>Gone from the source</b>: after a complete read of a source, jobs that weren't seen any more are hidden (never deleted).
+<b>Safety brake</b>: if more than 60% of a source's jobs would disappear at once, nothing is hidden; a broken API must not
+empty the site.</li>
+<li><b>Dead links</b>: every day, postings that return 404/410, redirect to a generic careers or home page, or say "position has been
+filled" / "no longer available" are hidden.</li>
+<li><b>Age limit</b>: jobs posted more than 45 days ago are retired.</li>
+</ul>
+
+<h2 id="ai">7. AI validation</h2>
+<p>Rules are fast and explainable, but they miss things. So a large language model (Google Gemini Flash, through an
+OpenAI-compatible API) re-reads postings. <b>The AI never gets the last word without proof.</b></p>
+<h3>What the AI is asked</h3>
+<p>For each posting it returns JSON: a 2-sentence summary, the main tasks, up to 10 ranked skills, red flags, and the German
+requirement, salary, visa and relocation, <b>each with the exact sentence it is based on</b>.</p>
+<h3>How its answers are checked</h3>
+<ul>
+<li><b>Quote check</b>: an answer is kept only if its quote really appears in the posting (ignoring case and punctuation). Invented
+text is rejected automatically.</li>
+<li><b>German "not mentioned"</b> is only accepted if the words German/Deutsch truly don't appear.</li>
+<li><b>Salary</b> needs a quote with a number and must pass the same plausibility limits as the rules (stricter for internships).
+If the AI says the posting states <i>no</i> salary, we never show one.</li>
+<li><b>Visa / relocation "offered"</b> needs a quote. "Not offered" is accepted, because rules can trip over things like "Visa card".</li>
+<li>Checked facts are stored in <code>llm_facts.json</code> with a fingerprint of the posting text. If the employer edits the posting,
+it is checked again.</li>
+</ul>
+<h3>Salary second opinion</h3>
+<p>When a salary looks wrong compared with similar jobs (section 8), the AI is shown the salary sentences and asked whether our
+reading is right, monthly or yearly, and whether it includes bonus or equity. Its note appears next to the warning.</p>
+<h3>Running on a free tier</h3>
+<ul>
+<li>Up to 150 postings per run. Postings where the rules are least sure (German not mentioned, no salary) go first.</li>
+<li>Calls are paced. Rate limits and overloads are retried with exponential backoff and jitter. A used-up daily quota stops cleanly,
+and an unavailable model falls back to another Flash model.</li>
+<li>Answers wrapped in extra text or code fences are still parsed.</li>
+</ul>
+<p>322 postings have AI-checked facts so far.</p>
+
+<h2 id="peers">8. Similar jobs &amp; hints</h2>
+<p>Each job is turned into a vector with a small open embedding model (<code>bge-small-en-v1.5</code>), weighted 60% title and 40%
+description so the role matters more than company boilerplate. Vectors are cached between runs.</p>
+<ul>
+<li><b>Peers</b>: the up to 30 most similar jobs at <i>other</i> companies with a cosine similarity of at least 0.75.</li>
+<li><b>Salary peers</b>: up to 15 similar jobs that list a salary (similarity ≥ 0.72), at the same seniority level when possible.
+With fewer than 8 we say there isn't enough data. Otherwise we show the 25th/50th/75th percentile.</li>
+<li><b>Skills</b>: matched against a curated list of 140 skills. Skills under "Requirements" weigh more than under
+"Nice to have" or "Benefits". We also show how often similar jobs ask for each skill, and which common skills this posting
+<i>doesn't</i> mention.</li>
+</ul>
+<h3>Hints shown on jobs</h3>
+<table><thead><tr><th>Hint</th><th>When</th></tr></thead><tbody>
+<tr><td>💶 Top 25% pay / Below-average pay</td><td>Salary above the 75th or below the 25th percentile of similar jobs</td></tr>
+<tr><td>⚠ Unusually high / low pay</td><td>Over 1.8× or under 0.55× the median of similar jobs</td></tr>
+<tr><td>⚠ Check salary</td><td>Student job above €70k or junior job above €120k</td></tr>
+<tr><td>Very wide range</td><td>Top of the range more than 2.5× the bottom</td></tr>
+<tr><td>⚠ Experience vs level</td><td>Intern/junior role asking for 5+ years</td></tr>
+<tr><td>Asks more experience</td><td>4+ years more than similar jobs usually ask</td></tr>
+<tr><td>🇬🇧 Rare: no German</td><td>No German needed while at least half of similar jobs require it</td></tr>
+<tr><td>🛂 Rare: visa support</td><td>Visa support while under 10% of similar jobs offer it</td></tr>
+<tr><td>Posted in N cities</td><td>Same role listed in 5+ cities, often a talent pool or agency</td></tr>
+<tr><td>⚠ Be careful</td><td>Scam signals: apply via WhatsApp/Telegram, a free email address, application fees, crypto/forex
+trading, high pay with "no experience needed". A negation ("we will never ask for a fee") cancels the warning.</td></tr>
+</tbody></table>
+
+<h2 id="score">9. Stellenly Hiring Score</h2>
+<p>A 0–100 rating (100 points = 5 stars) of <b>how a company hires</b>, calculated only from its current postings on Stellenly.
+It is <b>not</b> based on employee reviews and says nothing about what it's like to work there. A company needs at least 3 open
+jobs to get a score. Scores are recalculated with every daily build.</p>
+<table><thead><tr><th>Factor</th><th>Weight</th><th>Full points when…</th></tr></thead><tbody>
+<tr><td>English-friendly</td><td>25%</td><td>all jobs say German isn't needed or is only a plus. "Not mentioned" counts 60%</td></tr>
+<tr><td>Salary transparency</td><td>20%</td><td>60% or more of the jobs show a salary</td></tr>
+<tr><td>Visa &amp; relocation</td><td>15%</td><td>50% or more mention visa sponsorship or relocation help</td></tr>
+<tr><td>Hiring activity</td><td>15%</td><td>5 or more new jobs in the last 30 days</td></tr>
+<tr><td>Stable postings</td><td>15%</td><td>no reposted jobs (0 points once half are reposts)</td></tr>
+<tr><td>Fresh postings</td><td>10%</td><td>the median job is under 2 weeks old (0 points at 90 days)</td></tr>
+</tbody></table>
+<p>Each factor scales linearly between 0 and its full-points level. The total is the weighted average. Grades: Excellent ≥ 85,
+Very good ≥ 70, Good ≥ 55, Fair ≥ 40, otherwise Limited.</p>
+
+<h2 id="views">10. Views &amp; popularity</h2>
+<ul>
+<li>When someone opens a job's details or clicks Apply, the database adds 1 to that job's counter for the day. Nothing about the
+visitor is stored: no IP address, no cookie, no ID.</li>
+<li>Each browser counts a job at most once per day (remembered locally in the browser), so refreshing doesn't inflate numbers.</li>
+<li>Jobs show "N views · N applied". <b>Most popular</b> sorting uses the last 14 days, where an Apply click counts 3× an open.</li>
+<li>Page visits are counted with GoatCounter, a privacy-friendly, cookieless analytics service.</li>
+</ul>
+
+<h2 id="files">11. Pages &amp; site files</h2>
+<p>The daily build turns the database into static files:</p>
+<table><thead><tr><th>File</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>sitemap.xml</code> · <code>robots.txt</code></td><td>List every page for search engines, with today's date</td></tr>
+<tr><td><code>blog/feed.xml</code></td><td>RSS feed of guides; a separate feed serves new jobs</td></tr>
+<tr><td><code>companies/*.html</code></td><td>One page per company with schema.org Organization data, Hiring Score and open jobs</td></tr>
+<tr><td><code>jobs/*.html</code></td><td>Landing pages per city and field, only where there are at least 5 jobs</td></tr>
+<tr><td><code>companies-index.json</code></td><td>Company facts and Hiring Scores used by the search page</td></tr>
+<tr><td><code>companies-map.json</code></td><td>Map markers: companies per city with coordinates</td></tr>
+<tr><td><code>german-cities.json</code></td><td>The allowed German cities for the city filter</td></tr>
+<tr><td><code>logos/*.png</code></td><td>Company logos, downloaded once (only if a real logo of 32px+ exists) and served from our own site,
+so no third party sees our visitors</td></tr>
+</tbody></table>
+<p>Data files kept in the code repository, updated by the workflows:</p>
+<table><thead><tr><th>File</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>ats_boards.json</code></td><td>Discovered employer job boards</td></tr>
+<tr><td><code>companies.json</code></td><td>Hand-picked company boards and company facts</td></tr>
+<tr><td><code>cities_de.json</code></td><td>German cities and states used by the location rules</td></tr>
+<tr><td><code>geocache.json</code></td><td>Cached geocoder results, so each place is looked up only once</td></tr>
+<tr><td><code>llm_facts.json</code></td><td>AI facts that passed the quote check</td></tr>
+</tbody></table>
+<p>The database schema is versioned as SQL migrations. Visitors can only <i>read</i> active jobs and call the search and counter
+functions; writing requires a secret key that only the workflows have.</p>
+
+<h2 id="privacy">12. Privacy</h2>
+<p>No accounts, no cookies and no tracking pixels. Saved and applied jobs stay in your own browser. See the
+<a href="privacy.html">privacy page</a>.</p>
+
+<h2 id="limits">13. Known limits</h2>
+<ul>
+<li>Rules and AI can still misread a posting. <b>Always check the original posting</b> before applying.</li>
+<li>"German not mentioned" doesn't guarantee that you won't need German in the interviews or on the job.</li>
+<li>The Hiring Score only reflects postings. A company with few open jobs, or that lists salaries elsewhere, may score lower than it deserves.</li>
+<li>Salaries are what the employer states. We never estimate them.</li>
+</ul>
+</div>
+</article>
+<nav class='post-toc wiki-toc' aria-label='Contents'><p>Contents</p><ol><li><a href="#overview">1. Overview</a></li><li><a href="#sources">2. Where jobs come from</a></li><li><a href="#filter">3. Germany &amp; English only</a></li><li><a href="#cleaning">4. Cleaning the text</a></li><li><a href="#rules">5. Reading each posting</a></li><li><a href="#freshness">6. Duplicates &amp; dead jobs</a></li><li><a href="#ai">7. AI validation</a></li><li><a href="#peers">8. Similar jobs &amp; hints</a></li><li><a href="#score">9. Hiring Score</a></li><li><a href="#views">10. Views &amp; popularity</a></li><li><a href="#files">11. Pages &amp; site files</a></li><li><a href="#privacy">12. Privacy</a></li><li><a href="#limits">13. Known limits</a></li></ol></nav>
+</div>
+
+</main>
+<footer class="site-footer"><div class="wrap footer-row">
+  <span>Updated 2026-10-27 · Jobs from public job APIs and company career pages.</span>
+  <nav><a href="impressum.html">Impressum</a><a href="privacy.html">Privacy</a><a href="resources.html">Resources</a></nav>
+</div></footer>
+</body>
+</html>
