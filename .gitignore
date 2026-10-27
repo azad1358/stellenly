@@ -18,3 +18,10 @@ ingest/.cache/
 # Local preview only
 web/dev-insights.json
 web/_*.html
+
+# Telegram bot state (kept in the Actions cache)
+build/.telegram_state.json
+# Job pages + IndexNow key are generated at deploy time (build/job_pages.py)
+web/job/
+web/job-sitemap.xml
+web/b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31.txt
