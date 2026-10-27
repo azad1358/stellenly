@@ -582,6 +582,9 @@
         </div>
         <aside class="jd-side">
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
+          ${j.insights || loading ? "" : `<section class="jd-card pending-card"><h3>Analysis coming soon</h3>
+            <p class="small muted">This job is new. Skills, salary benchmark and similar jobs are added automatically
+            within a few hours.</p></section>`}
           ${salaryCardHtml(j)}
           ${compareCardHtml(j)}
           ${skillsHtml(j)}
