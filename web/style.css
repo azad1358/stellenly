@@ -933,3 +933,7 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 .job-desc { border-top: 1px solid var(--border); padding-top: 8px; }
 .job-desc h3 { margin: 20px 0 6px; font-size: 1.02rem; }
 .job-page .similar { margin-top: 26px; }
+.hero-tg { margin: 14px 0 0; }
+.hero-tg a { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.35); }
+.hero-tg a:hover { border-bottom-color: #fff; }
+.tg-cta { margin: 22px 0 12px; }

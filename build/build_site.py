@@ -156,7 +156,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 </main>
 <footer class="site-footer"><div class="wrap footer-row">
   <span>Updated {TODAY.isoformat()} · Jobs from public job APIs and company career pages.</span>
-  <nav><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
+  <nav><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
 </div></footer>
 </body>
 </html>
