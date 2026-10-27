@@ -5,11 +5,13 @@ name: Job insights
 # Embeddings and the model are kept in the Actions cache, so only new jobs
 # are embedded on each run.
 on:
-  schedule:
-    - cron: "47 4 * * *"     # daily 04:47 UTC, after the night's ingest
+  # Right after every import, so new jobs get skills, comparisons and similar jobs within minutes.
+  # (The LLM part stops by itself once the free daily quota is used up.)
   workflow_run:
-    workflows: ["Migrate database"]
+    workflows: ["Ingest jobs", "Migrate database"]
     types: [completed]
+  schedule:
+    - cron: "47 4 * * *"     # daily safety net
   workflow_dispatch: {}
 
 permissions:
@@ -21,7 +23,8 @@ concurrency:
 
 jobs:
   insights:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    # Also after an import that ended with a source alert: the other sources' jobs were still saved.
+    if: github.event_name != 'workflow_run' || contains(fromJSON('["success", "failure"]'), github.event.workflow_run.conclusion)
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:

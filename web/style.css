@@ -787,3 +787,5 @@ main.wrap > .layout { margin-top: 28px; }
 .clicks-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.76rem; font-weight: 600; color: var(--muted);
   background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .clicks-badge svg { width: 13px; height: 13px; }
+.pending-card { border-style: dashed; }
+.pending-card p { margin: 0; }
