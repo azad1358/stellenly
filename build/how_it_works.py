@@ -53,6 +53,32 @@ def numbers(jobs: list[dict], index: dict) -> dict:
     }
 
 
+# Live job counts straight from the database (the anon key can only read active jobs);
+# the numbers from the build stay on the page if this fails.
+LIVE_JS = """(async () => {
+  const c = window.SITE_CONFIG || {};
+  if (!c.SUPABASE_URL) return;
+  const count = async (q) => {
+    const r = await fetch(`${c.SUPABASE_URL}/rest/v1/jobs?select=id&is_active=eq.true${q}`,
+      { headers: { apikey: c.SUPABASE_ANON_KEY, Authorization: `Bearer ${c.SUPABASE_ANON_KEY}`,
+                   Prefer: "count=exact", Range: "0-0" } });
+    const n = Number((r.headers.get("content-range") || "").split("/")[1]);
+    if (!r.ok || !Number.isFinite(n)) throw new Error("count failed");
+    return n;
+  };
+  try {
+    const [all, direct, salary, agency] = await Promise.all(
+      ["", "&source=neq.arbeitnow", "&salary_min=not.is.null", "&is_agency=is.true"].map(count));
+    if (!all) return;
+    const set = (k, v) => document.querySelectorAll(`[data-live="${k}"]`).forEach((el) => { el.textContent = v; });
+    set("jobs", all.toLocaleString("en"));
+    set("direct_pct", `${Math.round(100 * direct / all)}%`);
+    set("salary_pct", `${Math.round(100 * salary / all)}%`);
+    set("agency", agency.toLocaleString("en"));
+  } catch (err) { /* keep the figures from the last build */ }
+})();"""
+
+
 def _toc(sections: list[tuple[str, str]]) -> str:
     return ("<nav class='post-toc wiki-toc' aria-label='Contents'><p>Contents</p><ol>"
             + "".join(f'<li><a href="#{i}">{e(t)}</a></li>' for i, t in sections) + "</ol></nav>")
@@ -72,12 +98,12 @@ def body(num: dict, weights: dict, today: str) -> str:
 <nav class="crumbs"><a href="index.html">Stellenly</a> › How it works</nav>
 <h1>How Stellenly works</h1>
 <p class="post-lead">How every job on this site is found, cleaned, read, double-checked by AI and scored, with all the rules
-we use to filter out noise. Figures on this page are live as of {e(today)}.</p>
+we use to filter out noise. Job counts are live; the other figures are updated with every daily build (last: {e(today)}).</p>
 
 <div class="wiki-stats">
-  <div><b>{num['jobs']:,}</b><span>open jobs</span></div>
+  <div><b data-live="jobs">{num['jobs']:,}</b><span>open jobs <i class="live-dot" title="Live"></i></span></div>
   <div><b>{num['boards']:,}</b><span>company job boards read directly</span></div>
-  <div><b>{num['direct_pct']}%</b><span>straight from the employer</span></div>
+  <div><b data-live="direct_pct">{num['direct_pct']}%</b><span>straight from the employer</span></div>
   <div><b>{num['facts']:,}</b><span>postings checked by AI</span></div>
   <div><b>{num['scored']:,}</b><span>companies with a Hiring Score</span></div>
 </div>
@@ -184,7 +210,7 @@ unless the sentence clearly calls them salary. So "we raised €385 million" nev
 <li><b>Plausibility</b>: €15k–€300k per year, the top of a range at most 3× the bottom. A range beats a single figure.</li>
 <li>Internships or student jobs above €60k are treated as parsing errors and shown as "no salary".</li>
 </ul>
-<p>Right now <b>{num['salary_pct']}%</b> of jobs show a salary.</p>
+<p>Right now <b data-live="salary_pct">{num['salary_pct']}%</b> of jobs show a salary.</p>
 
 <h3>Visa, relocation, seniority and more</h3>
 <table><thead><tr><th>Field</th><th>Rule</th></tr></thead><tbody>
@@ -197,7 +223,7 @@ unless the sentence clearly calls them salary. So "we raised €385 million" nev
 <tr><td>Work setup</td><td>Hybrid ("3 days a week in the office"), Remote Germany, Remote EU ("anywhere in Europe") or on-site</td></tr>
 <tr><td>Recruiting agency</td><td>Company names like "Recruitment", "Staffing", "Personalvermittlung", known agencies, or
 "on behalf of our client". Marked with a badge; the "Direct employers only" filter hides them
-({num['agency']:,} right now)</td></tr>
+(<span data-live="agency">{num['agency']:,}</span> right now)</td></tr>
 <tr><td>Blue Card badge</td><td>The stated salary meets the current EU Blue Card minimum (standard, or the reduced minimum for shortage jobs and recent graduates). This is about salary eligibility, not sponsorship</td></tr>
 <tr><td>Tags</td><td>Field and tech keywords (Python, Product, Marketing…) plus the flags above, max 25 per job</td></tr>
 </tbody></table>
@@ -301,4 +327,6 @@ visitor is stored: no IP address, no cookie, no ID.</li>
 </div>
 </article>
 {_toc(sections)}
-</div>"""
+</div>
+<script src="config.js"></script>
+<script>{LIVE_JS}</script>"""
