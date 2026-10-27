@@ -58,7 +58,7 @@ def load_jobs(jobs_file: str | None) -> list[dict]:
     url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/jobs"
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     cols = ("id,url,title,company,city,remote_type,german_level,visa_sponsorship,relocation,"
-            "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at")
+            "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at,repost_count")
     out, start, step = [], 0, 1000
     while True:
         r = requests.get(url, params={"select": cols, "is_active": "eq.true", "order": "posted_at.desc"},
@@ -586,7 +586,7 @@ def load_companies(jobs: list[dict]) -> list[dict]:
         hq_de = bool(m and in_germany(m["hq"]))
         out.append({"name": name, "slug": slug, "meta": m, "jobs": js, "cities": Counter(place(j) for j in js),
                     "hq_city": normalize_city(m["hq"]) if hq_de else None, "hq_de": hq_de,
-                    "page": bool(m) or len(js) >= 3, "names": list(g["names"])})
+                    "page": bool(m) or len(js) >= 3, "names": list(g["names"]), "score": hiring_score(js)})
     return sorted(out, key=lambda c: (c["meta"] is None, -len(c["jobs"]), c["name"].lower()))
 
 
@@ -605,6 +605,79 @@ def co_facts(c: dict) -> str:
 
 def jobs_word(n: int) -> str:
     return f"{n} open job{'s' if n != 1 else ''}" if n else "No open jobs right now"
+
+
+# ---------------------------------------------------------------- Stellenly Hiring Score
+# Based only on a company's job postings on Stellenly — not on employee reviews. Each factor gives
+# 0–100 points; the total is the weighted average (shown as 0–5 stars). Keep in sync with app.js.
+SCORE_WEIGHTS = {"salary": 20, "language": 25, "visa": 15, "activity": 15, "freshness": 10, "reposts": 15}
+SCORE_MIN_JOBS = 3
+
+
+def hiring_score(js: list[dict]) -> dict | None:
+    n = len(js)
+    if n < SCORE_MIN_JOBS:
+        return None
+    share = lambda pred: sum(1 for j in js if pred(j)) / n  # noqa: E731
+    sal = share(lambda j: j.get("salary_min"))
+    no_german = share(lambda j: j["german_level"] in ("not_required", "nice_to_have"))
+    unmentioned = share(lambda j: j["german_level"] == "not_mentioned")
+    visa = share(lambda j: j.get("visa_sponsorship") or j.get("relocation"))
+    new30 = sum(1 for j in js if parse_ts(j.get("first_seen_at")) >= NOW - dt.timedelta(days=30))
+    ages = sorted(max(0, (NOW - parse_ts(j.get("posted_at"))).days) for j in js)
+    median_age = ages[n // 2]
+    reposted = share(lambda j: (j.get("repost_count") or 0) > 0)
+    clamp = lambda x: max(0, min(100, round(x)))  # noqa: E731
+    factors = [
+        ("salary", "Salary transparency", clamp(sal / 0.6 * 100), f"{round(sal * 100)}% of jobs show a salary"),
+        ("language", "English-friendly", clamp((no_german + 0.6 * unmentioned) * 100),
+         f"{round(no_german * 100)}% say German isn't needed, {round(unmentioned * 100)}% don't mention it"),
+        ("visa", "Visa & relocation", clamp(visa / 0.5 * 100), f"{round(visa * 100)}% mention visa sponsorship or relocation"),
+        ("activity", "Hiring activity", clamp(new30 / 5 * 100), f"{new30} new job{'s' if new30 != 1 else ''} in the last 30 days"),
+        ("freshness", "Fresh postings", clamp((90 - median_age) / 76 * 100), f"open jobs are {median_age} days old (median)"),
+        ("reposts", "Stable postings", clamp((1 - min(1, reposted / 0.5)) * 100), f"{round(reposted * 100)}% of jobs were reposted"),
+    ]
+    total = round(sum(p * SCORE_WEIGHTS[k] for k, _, p, _ in factors) / sum(SCORE_WEIGHTS.values()))
+    return {"t": total, "n": n, "f": [list(f) for f in factors]}
+
+
+def score_grade(points: int) -> str:
+    return ("Excellent" if points >= 85 else "Very good" if points >= 70 else "Good" if points >= 55
+            else "Fair" if points >= 40 else "Limited")
+
+
+def stars_html(points: int, cls: str = "") -> str:
+    """Five stars filled to points/100 (half-star precision), as text so it stays crisp."""
+    pct = round(points / 10) * 10
+    return (f'<span class="stars {cls}" role="img" aria-label="{points / 20:.1f} out of 5 stars">'
+            f'<span class="stars-fill" style="width:{pct}%">★★★★★</span>★★★★★</span>')
+
+
+def score_card_html(sc: dict | None, company: str, sid: str) -> str:
+    if not sc:
+        return ""
+    rows = "".join(f"""<li><div class="sc-row"><span>{e(label)}</span>{stars_html(p, 'sm')}<b>{p}</b></div>
+      <p>{e(text)}</p></li>""" for _, label, p, text in sc["f"])
+    weights = "".join(f"<li><b>{e(label)}</b> — {SCORE_WEIGHTS[k]}%</li>" for k, label, _, _ in sc["f"])
+    return f"""<section class="score-card">
+  <div class="sc-top">
+    <div><p class="sc-kicker">Stellenly Hiring Score</p>
+      <div class="sc-total"><b>{sc['t'] / 20:.1f}</b>{stars_html(sc['t'])}</div>
+      <p class="sc-grade">{score_grade(sc['t'])} · {sc['t']}/100 points · based on {sc['n']} open jobs</p></div>
+    <button type="button" class="sc-help" popovertarget="{sid}">ⓘ How we calculate this</button>
+  </div>
+  <ul class="sc-list">{rows}</ul>
+  <div popover id="{sid}" class="sc-pop">
+    <h4>How the Hiring Score works</h4>
+    <p>It rates how {e(company)} hires — based only on its current job postings on Stellenly, <b>not on employee
+    reviews</b>. Each factor gives 0–100 points; the total is their weighted average (100 points = 5 stars):</p>
+    <ul>{weights}</ul>
+    <p class="muted small">Salary: full points when 60%+ of jobs show a salary · English: German not needed counts fully,
+    "not mentioned" 60% · Visa: full points at 50%+ · Activity: full points at 5+ new jobs in 30 days · Freshness: full
+    points when jobs are under 2 weeks old · Stable: fewer reposts score higher. Needs at least {SCORE_MIN_JOBS} open jobs;
+    updated daily.</p>
+  </div>
+</section>"""
 
 
 def fetch_logo(slug: str, website: str | None) -> str | None:
@@ -635,7 +708,7 @@ def write_company_index(cos: list[dict]) -> None:
         m = c["meta"] or {}
         if not (m or c["page"]):
             continue
-        entry = {"n": c["name"], "u": f"companies/{c['slug']}.html" if c["page"] else None}
+        entry = {"n": c["name"], "u": f"companies/{c['slug']}.html" if c["page"] else None, "sc": c.get("score")}
         if m:
             entry.update({"l": fetch_logo(c["slug"], m.get("website")), "i": m.get("industry"), "f": m.get("founded"),
                           "z": m.get("size"), "h": m.get("hq"), "st": int(bool(m.get("startup"))),
@@ -669,6 +742,7 @@ def build_companies(jobs: list[dict]) -> list[str]:
 <div class="badges">{co_badges(c)}</div>
 {f'<p class="lead">{e(m["description"])}</p>' if m.get("description") else ""}
 <dl class="facts">{co_facts(c)}<div><dt>Open jobs</dt><dd>{len(c['jobs'])}</dd></div></dl>
+{score_card_html(c.get('score'), c['name'], 'score-help')}
 <p class="co-links">{links}<a class="btn primary" href="../index.html?q={e(requests.utils.quote(c['name']))}">Filter these jobs by German level &amp; salary →</a></p>
 <h2>{jobs_word(len(c['jobs']))} in English{f" · {e(where)}" if where else ""}</h2>
 {job_list_html(c['jobs'][:60], '../')}
@@ -704,6 +778,7 @@ def build_companies(jobs: list[dict]) -> list[str]:
         hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
         return f"""<li class="co-card" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
   <div class="co-head"><h3><a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
+  {f'<p class="score-chip" title="Stellenly Hiring Score: {c["score"]["t"]}/100">★ {c["score"]["t"] / 20:.1f} <span>Hiring Score</span></p>' if c.get("score") else ""}
   <div class="badges">{co_badges(c)}</div>
   <p class="co-desc">{e(m['description'])}</p>
   <dl class="co-facts">{co_facts(c)}</dl>
