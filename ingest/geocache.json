@@ -1069,6 +1069,11 @@
 "lat": 52.0859,
 "lon": 4.8833
 },
+"*|york": {
+"cc": "gb",
+"lat": 53.9657,
+"lon": -1.0743
+},
 "*|zaltbommel, gelderland, netherlands": {
 "cc": "nl",
 "lat": 51.7822,
