@@ -918,3 +918,18 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .header-end { justify-self: start; }
 }
 @media (max-width: 1500px) { .updated-pill .next { display: none; } }
+
+/* ---------------------------------------------------------------- job pages (build/job_pages.py) */
+.job-page-head { display: flex; gap: 14px; align-items: flex-start; margin-top: 6px; }
+.job-page-head h1 { margin: 0 0 4px; }
+.job-page-head .job-meta { margin: 0; color: var(--muted); }
+.logo-md { width: 48px; height: 48px; border-radius: 12px; border: 1px solid var(--border); background: #fff; object-fit: contain; flex: none; }
+.job-page .badges { margin: 14px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.job-page-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.job-hints { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 6px; }
+.job-hints .hint { padding: 8px 12px; border-radius: 10px; background: var(--info-bg); font-size: .9rem; }
+.job-hints .hint.warn { background: var(--warn-bg); }
+.job-hints .hint.good { background: var(--ok-bg); }
+.job-desc { border-top: 1px solid var(--border); padding-top: 8px; }
+.job-desc h3 { margin: 20px 0 6px; font-size: 1.02rem; }
+.job-page .similar { margin-top: 26px; }

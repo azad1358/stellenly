@@ -688,7 +688,9 @@
     if (act === "apply") countJobEvent(openId, "apply");
     if (act === "close") closeJob();
     else if (act === "copy") {
-      navigator.clipboard?.writeText(location.href).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
+      // The job's own page (built at deploy time) shares better: it has a proper title and preview.
+      const link = j && !DEMO ? new URL(`job/${j.id}.html`, location.href).href : location.href;
+      navigator.clipboard?.writeText(link).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
     } else if (j && (act === "save" || act === "applied")) {
       toggleList(act, j);
       btn.setAttribute("aria-pressed", String(act === "save" ? !!saved[j.id] : !!applied[j.id]));

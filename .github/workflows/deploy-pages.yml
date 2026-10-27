@@ -1,13 +1,15 @@
 name: Deploy website
 
-# Publishes web/ to GitHub Pages. Runs on pushes that touch web/, and after
-# "Build site pages" finishes (its bot commit can't trigger workflows itself).
+# Publishes web/ to GitHub Pages. Runs on pushes that touch web/, after "Build site pages"
+# finishes (its bot commit can't trigger workflows itself) and after every ingest.
+# Also generates one page per job (build/job_pages.py, not committed), pings IndexNow
+# and posts new jobs to the Telegram channel.
 on:
   push:
     branches: [main]
     paths: ["web/**"]
   workflow_run:
-    workflows: ["Build site pages"]
+    workflows: ["Build site pages", "Ingest jobs"]
     types: [completed]
   workflow_dispatch: {}
 
@@ -22,9 +24,16 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    # An ingest that alerts about one dead source has still saved all other jobs.
+    if: >-
+      github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' ||
+      github.event.workflow_run.name == 'Ingest jobs'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SITE_URL: ${{ vars.SITE_URL }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -32,9 +41,34 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main                 # pick up the build bot's latest commit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r build/requirements.txt
+      - name: Job pages (schema.org JobPosting for Google's job search)
+        run: python build/job_pages.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Tell search engines about new job pages (IndexNow)
+        continue-on-error: true
+        run: python build/job_pages.py --indexnow
+      - uses: actions/cache/restore@v4
+        with:
+          path: build/.telegram_state.json
+          key: telegram-state-${{ github.run_id }}
+          restore-keys: telegram-state-
+      - name: Post new jobs to Telegram
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+        run: python build/telegram_post.py
+      - uses: actions/cache/save@v4
+        if: always() && hashFiles('build/.telegram_state.json') != ''
+        with:
+          path: build/.telegram_state.json
+          key: telegram-state-${{ github.run_id }}

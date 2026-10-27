@@ -952,7 +952,8 @@ def build_sitemap(paths: list[str]) -> None:
                    for p in sorted(set(paths)))
     (WEB / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n'
                                      f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
-    (WEB / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
+    (WEB / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n"
+                                    f"Sitemap: {SITE_URL}/job-sitemap.xml\n")  # job pages: build/job_pages.py
 
 
 def main() -> None:
