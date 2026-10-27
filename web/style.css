@@ -727,3 +727,7 @@ main.wrap > .layout { margin-top: 28px; }
 .jd-card.similar h3 { margin-bottom: 4px; }
 .jd-card.similar .similar-list { margin: 0; }
 .jd-card.similar .similar-list li:first-child { border-top: 0; }
+.cmp-top { align-items: center; }
+.cmp-top > span:first-child { font-weight: 600; }
+.cmp-peer { margin: 0; font-size: 0.84rem; color: var(--muted); }
+.cmp-peer b { color: var(--text); font-variant-numeric: tabular-nums; }

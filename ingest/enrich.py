@@ -9,8 +9,12 @@ import hashlib
 import html
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+import llm_facts  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Text cleanup
@@ -106,7 +110,15 @@ _GERMAN_NICE = [
     r"\bwillingness to learn german",
 ]
 _GERMAN_REQUIRED = [
-    r"\b(fluent|fluency|business[- ]fluent|native|very good|excellent|strong|proficient|proficiency|good command|full professional)\b[^.\n]{0,25}\bgerman",
+    r"\b(fluent|fluency|business[- ]fluent|native|very good|excellent|strong|proficient|proficiency|good command|full professional)\b[^.\n]{0,25}\bgerman"
+    r"(?![- ](office|offices|company|companies|startup|start-up|market|markets|customers?|clients?|team|headquarters|hq|subsidiary|"
+    r"entity|entities|law|gaap|standards?|tax|engineering|automotive|mittelstand|speaking market|based)\b)",
+    # "Fluent written and verbal English and German": the language pair makes a wider gap safe
+    r"\b(fluent|fluency|native|very good|excellent|strong|proficien\w*|good command|written and (spoken|verbal)|spoken and written)\b"
+    r"[^.\n]{0,70}\b(english and german|german and english)\b",
+    r"\b(english and german|german and english)\b[^.\n]{0,25}\b(c1|c2|b2|native|fluent|fluency|business|professional|level)\b",
+    r"^\s*(languages?\s*:?\s*)?(fluent )?(english and german|german and english)( language)?( skills)?\s*\.?\s*$",
+    r"\bgood (command|knowledge) of (the )?german\b|\bgood german\b",
     r"\bgerman\b[^.\n]{0,25}\b(fluent|fluency|native|mother tongue|c1|c2|b2)\b",
     r"\bgerman (language )?(skills |knowledge )?(is |are )?(required|mandatory|a must|essential|necessary|needed)",
     r"\b(must|need to|required to) (speak|be fluent in|have) [^.\n]{0,15}german",
@@ -551,5 +563,7 @@ def enrich(raw: dict) -> dict | None:
     # A figure no student job pays is a parsing mistake, not a salary: don't show it at all.
     if row["seniority"] == "intern" and (row["salary_min"] or 0) > 60000:
         row["salary_min"] = row["salary_max"] = None
+    # Facts an LLM read from this exact posting and that were checked against a quote (see llm_facts.py).
+    row = llm_facts.apply(row, text)
     row["tags"] = make_tags(title, text, raw.get("tags"), row)
     return row

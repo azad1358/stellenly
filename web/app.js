@@ -290,22 +290,24 @@
     const p = j.insights && j.insights.peers;
     if (!p || !p.n) return "";
     const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
+    // Each row: what THIS job says first, then how common it is among similar jobs.
     const rows = [
-      { label: "Require German", share: p.german_req, mine: gl.replace(/^German:\s*/, ""), tone: gc === "ok" ? "good" : gc === "bad" ? "warn" : "" },
-      { label: "Mention visa sponsorship", share: p.visa, mine: j.visa_sponsorship ? "Offers visa sponsorship" : "Not mentioned",
-        tone: j.visa_sponsorship ? "good" : "" },
+      { label: "German", mine: gl.replace(/^German:\s*/, "").replace(/^./, (c) => c.toUpperCase()),
+        tone: gc === "ok" ? "good" : gc === "bad" ? "warn" : "", share: p.german_req, peer: "of similar jobs require German" },
+      { label: "Visa sponsorship", mine: j.visa_sponsorship ? "Offered" : "Not mentioned", tone: j.visa_sponsorship ? "good" : "",
+        share: p.visa, peer: "of similar jobs mention it" },
     ];
-    const meter = (r) => `<li>
-        <div class="cmp-top"><span>${r.label}</span><b>${pct(r.share)}</b></div>
+    const row = (r) => `<li>
+        <div class="cmp-top"><span>${r.label}</span><span class="pill ${r.tone}">This job: ${esc(r.mine)}</span></div>
         <div class="cmp-meter"><span style="width:${Math.max(2, r.share * 100)}%"></span></div>
-        <p class="cmp-mine">This job: <span class="pill ${r.tone}">${esc(r.mine)}</span></p></li>`;
+        <p class="cmp-peer"><b>${pct(r.share)}</b> ${r.peer}</p></li>`;
     const years = p.years != null ? `<li>
-        <div class="cmp-top"><span>Experience asked</span><b>${Math.round(p.years)}+ yrs</b></div>
-        <p class="cmp-mine">This job: <span class="pill ${j.years_experience && j.years_experience >= p.years + 4 ? "warn" : ""}">${j.years_experience ? `${j.years_experience}+ years` : "Not specified"}</span></p></li>` : "";
+        <div class="cmp-top"><span>Experience</span><span class="pill ${j.years_experience && j.years_experience >= p.years + 4 ? "warn" : ""}">This job: ${j.years_experience ? `${j.years_experience}+ years` : "Not specified"}</span></div>
+        <p class="cmp-peer">Similar jobs usually ask for <b>${Math.round(p.years)}+ years</b></p></li>` : "";
     return `<section class="jd-card cmp-card">
-        <h3>How it compares</h3>
-        <p class="card-sub">Share of ${p.n} similar jobs at other companies</p>
-        <ul class="cmp-list">${rows.map(meter).join("")}${years}</ul>
+        <h3>How this job compares</h3>
+        <p class="card-sub">With ${p.n} similar jobs at other companies</p>
+        <ul class="cmp-list">${rows.map(row).join("")}${years}</ul>
         <p class="tiny muted">Automatic comparison of the job texts. It can be wrong — always read the original.</p>
       </section>`;
   }
