@@ -50,10 +50,20 @@ def test_retries_busy_server_then_succeeds(monkeypatch):
     assert llm_client.chat_json("hi") == {"a": 1}
 
 
-def test_daily_quota_stops_the_run(monkeypatch):
+def test_daily_quota_stops_the_run_when_no_other_model(monkeypatch):
     queue(monkeypatch, [Resp(429, text='{"error": {"quotaId": "GenerateRequestsPerDayPerProjectPerModel"}}')])
     with pytest.raises(llm_client.LLMQuotaExhausted):
         llm_client.chat_json("hi")
+
+
+def test_daily_quota_moves_to_another_model(monkeypatch):
+    calls = []
+    quota = Resp(429, text='{"error": {"quotaId": "GenerateRequestsPerDayPerProjectPerModel"}}')
+    queue(monkeypatch, [quota, ok('{"ok": 1}')], calls)
+    monkeypatch.setattr(llm_client.requests, "get", lambda url, **kw: Resp(200, {"data": [
+        {"id": "models/gemini-test-flash"}, {"id": "models/gemini-2.5-flash"}, {"id": "models/gemini-2.5-flash-lite"}]}))
+    assert llm_client.chat_json("hi") == {"ok": 1}
+    assert calls[-1]["model"] == "gemini-2.5-flash"
 
 
 def test_gives_up_after_retries(monkeypatch):

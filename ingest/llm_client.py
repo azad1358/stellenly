@@ -117,12 +117,13 @@ def _fallback_model(exclude: set[str] | None = None) -> str | None:
     if os.environ.get("LLM_FALLBACK_MODEL") and os.environ["LLM_FALLBACK_MODEL"] not in exclude:
         return os.environ["LLM_FALLBACK_MODEL"]
 
-    def version(name: str) -> tuple:
-        m = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash", name)
-        return tuple(int(x) for x in m.group(1).split(".")) if m else ()
+    def rank(name: str) -> tuple:
+        # Newest first; plain Flash before Flash-Lite (Lite usually has a bigger free daily quota).
+        m = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash(-lite)?", name)
+        return (0 if m.group(2) else 1, *(int(x) for x in m.group(1).split("."))) if m else ()
     names = available_models()
     print("  available models:", ", ".join(n for n in names if "gemini" in n or "llama" in n)[:600])
-    flash = sorted((n for n in names if version(n) and n not in exclude), key=version)
+    flash = sorted((n for n in names if rank(n) and n not in exclude), key=rank)
     return flash[-1] if flash else None
 
 
@@ -154,7 +155,15 @@ def chat_json(prompt: str) -> dict:
 
         if r.status_code in RETRY_STATUS:
             if _daily_quota_gone(r):
-                raise LLMQuotaExhausted("daily quota used up")
+                # Each model has its own daily quota: move on to another one if there is any left.
+                print(f"  '{_model()}' daily quota used up: {(r.text or '')[:240]}")
+                _overloaded.add(_model())
+                fallback = _fallback_model(exclude=_overloaded)
+                if not fallback:
+                    raise LLMQuotaExhausted("daily quota used up for every available model")
+                print(f"  -> switching to '{fallback}' for this run")
+                _model_override = fallback
+                continue
             if not _logged_busy:
                 print(f"  LLM said ({r.status_code}): {(r.text or '')[:240]}")
                 _logged_busy = True
