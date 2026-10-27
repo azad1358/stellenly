@@ -78,6 +78,18 @@ def verify(ans: dict, text: str, seniority: str) -> dict:
     return facts
 
 
+def merge_into_current(ours_path: str) -> int:
+    """Merge facts from another copy of llm_facts.json into the current one (that copy wins per job).
+    Used when two runs saved the file at the same time. Returns how many jobs came from the other copy."""
+    global _facts
+    ours = json.loads(Path(ours_path).read_text(encoding="utf-8"))
+    current = json.loads(FACTS_PATH.read_text(encoding="utf-8")) if FACTS_PATH.exists() else {}
+    current.update(ours)
+    _facts = current
+    save(current)
+    return len(ours)
+
+
 def apply(row: dict, text: str) -> dict:
     """Overwrite rule-based fields with checked LLM facts for this job, if the posting hasn't changed."""
     f = load().get(row["id"])
@@ -92,3 +104,9 @@ def apply(row: dict, text: str) -> dict:
     if "reloc" in f:
         row["relocation"] = f["reloc"]
     return row
+
+
+if __name__ == "__main__":  # python ingest/llm_facts.py --merge other.json
+    import sys
+    if len(sys.argv) == 3 and sys.argv[1] == "--merge":
+        print(f"merged {merge_into_current(sys.argv[2])} jobs into {FACTS_PATH.name}")

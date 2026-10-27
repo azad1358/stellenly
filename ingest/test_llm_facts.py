@@ -36,6 +36,16 @@ def test_no_salary_means_none_and_not_mentioned_needs_no_german_word():
     assert g["german"] == "not_mentioned"
 
 
+def test_merge_keeps_both_runs(monkeypatch, tmp_path):
+    current, ours = tmp_path / "llm_facts.json", tmp_path / "ours.json"
+    current.write_text('{"a": {"h": "1", "german": "required"}, "b": {"h": "2"}}', encoding="utf-8")
+    ours.write_text('{"b": {"h": "2", "german": "not_required"}, "c": {"h": "3"}}', encoding="utf-8")
+    monkeypatch.setattr(llm_facts, "FACTS_PATH", current)
+    assert llm_facts.merge_into_current(str(ours)) == 2
+    merged = llm_facts.json.loads(current.read_text(encoding="utf-8"))
+    assert set(merged) == {"a", "b", "c"} and merged["b"]["german"] == "not_required"
+
+
 def test_apply_only_when_posting_unchanged(monkeypatch):
     facts = {"job1": {"h": llm_facts.text_hash(POSTING), "german": "required", "salary": None}}
     monkeypatch.setattr(llm_facts, "_facts", facts)
