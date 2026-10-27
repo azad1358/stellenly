@@ -111,23 +111,32 @@ def available_models() -> list[str]:
         return []
 
 
-def _fallback_model() -> str | None:
-    """Newest plain 'gemini-X.Y-flash' model this key can use."""
+def _fallback_model(exclude: set[str] | None = None) -> str | None:
+    """LLM_FALLBACK_MODEL if set, else the newest plain 'gemini-X.Y-flash' model this key can use (not in exclude)."""
+    exclude = exclude or set()
+    if os.environ.get("LLM_FALLBACK_MODEL") and os.environ["LLM_FALLBACK_MODEL"] not in exclude:
+        return os.environ["LLM_FALLBACK_MODEL"]
+
     def version(name: str) -> tuple:
         m = re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-flash", name)
         return tuple(int(x) for x in m.group(1).split(".")) if m else ()
     names = available_models()
     print("  available models:", ", ".join(n for n in names if "gemini" in n or "llama" in n)[:600])
-    flash = sorted((n for n in names if version(n)), key=version)
+    flash = sorted((n for n in names if version(n) and n not in exclude), key=version)
     return flash[-1] if flash else None
+
+
+_overloaded: set[str] = set()  # models that stayed overloaded through all retries in this run
+_logged_busy = False
 
 
 def chat_json(prompt: str) -> dict:
     """Send one prompt, return the JSON answer. Raises LLMUnavailable / LLMConfigError when it should stop."""
-    global _model_override, _json_mode
+    global _model_override, _json_mode, _logged_busy
     if not _key():
         raise LLMConfigError("LLM_API_KEY is not set")
     retries = int(os.environ.get("LLM_RETRIES") or 6)
+    busy = False
     for attempt in range(retries + 1):
         _pace()
         stats["calls"] += 1
@@ -146,6 +155,10 @@ def chat_json(prompt: str) -> dict:
         if r.status_code in RETRY_STATUS:
             if _daily_quota_gone(r):
                 raise LLMQuotaExhausted("daily quota used up")
+            if not _logged_busy:
+                print(f"  LLM said ({r.status_code}): {(r.text or '')[:240]}")
+                _logged_busy = True
+            busy = True
             if attempt == retries:
                 break
             wait = _backoff(attempt, r)
@@ -176,5 +189,14 @@ def chat_json(prompt: str) -> dict:
                 break
             print(f"  LLM answer was not valid JSON, retry {attempt + 1}/{retries}")
             stats["retries"] += 1
+            busy = False
+    # Still overloaded after every retry: this model is too busy on the free tier right now — try another one.
+    if busy and _model() not in _overloaded:
+        _overloaded.add(_model())
+        fallback = _fallback_model(exclude=_overloaded)
+        if fallback:
+            print(f"  '{_model()}' stays overloaded; switching to '{fallback}' for this run")
+            _model_override = fallback
+            return chat_json(prompt)
     stats["failed"] += 1
     raise LLMUnavailable("still failing after retries")
