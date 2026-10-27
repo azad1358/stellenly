@@ -31,6 +31,8 @@ def fast(monkeypatch):
     monkeypatch.setattr(llm_client.time, "sleep", lambda s: None)
     monkeypatch.setattr(llm_client, "_model_override", None)
     monkeypatch.setattr(llm_client, "_json_mode", True)
+    monkeypatch.setattr(llm_client, "_overloaded", set())
+    monkeypatch.setattr(llm_client.requests, "get", lambda url, **kw: Resp(200, {"data": []}))  # no real network
 
 
 def queue(monkeypatch, responses, calls=None):
@@ -87,6 +89,17 @@ def test_rejected_json_mode_is_dropped(monkeypatch):
     queue(monkeypatch, [Resp(400, text="Invalid value for response_format"), ok('{"ok": 1}')], calls)
     assert llm_client.chat_json("hi") == {"ok": 1}
     assert "response_format" not in calls[-1]
+
+
+def test_overloaded_model_switches_to_fallback(monkeypatch):
+    monkeypatch.setenv("LLM_RETRIES", "1")
+    monkeypatch.setattr(llm_client, "_overloaded", set())
+    calls = []
+    queue(monkeypatch, [Resp(503, text="model is overloaded"), Resp(503, text="model is overloaded"), ok('{"ok": 1}')], calls)
+    monkeypatch.setattr(llm_client.requests, "get", lambda url, **kw: Resp(200, {"data": [
+        {"id": "models/gemini-test-flash"}, {"id": "models/gemini-2.5-flash"}]}))
+    assert llm_client.chat_json("hi") == {"ok": 1}
+    assert [c["model"] for c in calls] == ["gemini-test-flash", "gemini-test-flash", "gemini-2.5-flash"]
 
 
 def test_bad_key_is_a_config_error(monkeypatch):
