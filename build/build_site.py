@@ -147,8 +147,8 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
     <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
-    <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a>
   </nav>
+  <div class="header-end"><a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
 <main class="wrap {main_class}">
 {body}

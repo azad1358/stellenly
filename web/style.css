@@ -883,15 +883,30 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .header-actions .btn.ghost:not(.icon) { padding: 6px 6px; font-size: 0.82rem; }
   .brand span { font-size: 1rem; }
 }
-@media (max-width: 780px) {
+@media (max-width: 880px) {
   .header-actions [data-open="hired-dialog"], .header-actions [data-open="glossary-dialog"] { display: none; }
-}
-/* Support is never scrolled out of view: it stays pinned at the right end of the tab row */
-@media (min-width: 641px) {
-  .header-actions .btn.support { position: sticky; right: 0; box-shadow: -14px 0 12px -4px var(--surface); }
 }
 @media (max-width: 1240px) and (min-width: 641px) {
   .updated-pill { display: none !important; }
 }
 /* Full-width header: logo at the far left of the page, tabs on the right */
 .site-header .wrap { max-width: none; padding: 0 24px; }
+
+/* Header layout: logo left · timer + tabs centred on the page · theme + Support right */
+.header-end { display: flex; align-items: center; gap: 4px; }
+@media (min-width: 641px) {
+  .header-row { display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(max-content, 1fr); }
+  .brand { justify-self: start; }
+  .header-actions { justify-self: center; max-width: 100%; }
+  .header-end { justify-self: end; }
+}
+@media (max-width: 640px) {
+  .header-row { flex-wrap: wrap; }
+  .header-end { order: 2; margin-left: auto; }
+  .header-actions { order: 3; width: 100%; }
+}
+@media (max-width: 640px) {
+  .header-actions { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 6px; }
+  .header-actions::-webkit-scrollbar { display: none; }
+  .header-actions > * { flex: none; white-space: nowrap; }
+}
