@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import datetime as dt
 import json
 import os
 import sys
@@ -131,6 +132,7 @@ def main() -> None:
     ap.add_argument("--max-pages", type=int, default=int(os.environ.get("MAX_PAGES", 40)))
     args = ap.parse_args()
 
+    run_start = dt.datetime.now(dt.timezone.utc) - dt.timedelta(minutes=5)
     rows, foreign, per_source = collect(args.max_pages)
     print(f"{len(rows)} English jobs ready, {len(foreign)} outside Germany")
     # A source that returns nothing at all is broken (API down, format changed): fail the run so GitHub emails us.
@@ -148,6 +150,20 @@ def main() -> None:
         rpc("mark_checked", {"alive_ids": [], "dead_ids": foreign[i:i + 1000]})
     expired = rpc("expire_jobs", {"max_age_days": 45}).text
     print(f"Upserted {written} rows, expired {expired} old jobs")
+
+    # Hide jobs that are gone from their source — only for sources read completely in this run.
+    # Arbeitnow and the company boards are checked separately, each with the safety limit.
+    share = float(os.environ.get("DEACTIVATE_MAX_SHARE") or 0.6)
+    groups = [["arbeitnow"] if "arbeitnow" in sources.COMPLETE else [],
+              sorted(s for s in sources.COMPLETE if s != "arbeitnow")]
+    for group in (g for g in groups if g):
+        n = int(rpc("deactivate_unseen", {"p_sources": group, "p_before": run_start.isoformat(),
+                                          "p_max_share": share}).text or 0)
+        label = "Arbeitnow" if group == ["arbeitnow"] else f"{len(group)} company boards"
+        if n < 0:
+            print(f"! {label}: too many jobs would disappear at once (> {share:.0%}); nothing hidden — check the source")
+        else:
+            print(f"{label}: hid {n} jobs that are no longer listed")
     if dead:
         sys.exit(f"ALERT: no jobs at all from {', '.join(dead)} — check the source (the other sources were saved)")
 

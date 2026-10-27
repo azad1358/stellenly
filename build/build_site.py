@@ -741,6 +741,9 @@ def build_companies(jobs: list[dict]) -> list[str]:
                             "r": [[j["title"][:90], j["url"]] for j in c["jobs"] if place(j) == city][:5]})
     (WEB / "companies-map.json").write_text(json.dumps(markers, ensure_ascii=False, separators=(",", ":")),
                                             encoding="utf-8")
+    # City dropdown on the search page: only the city values of jobs that really are in Germany.
+    german_cities = sorted({j["city"] for j in jobs if j.get("city") and place(j) not in (None, REMOTE, NO_CITY)})
+    (WEB / "german-cities.json").write_text(json.dumps(german_cities, ensure_ascii=False), encoding="utf-8")
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])

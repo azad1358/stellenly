@@ -3,7 +3,11 @@ name: Ingest jobs
 on:
   schedule:
     - cron: "17 */6 * * *"   # every 6 hours (UTC)
-  workflow_dispatch: {}       # "Run workflow" button for manual runs
+  workflow_dispatch:          # "Run workflow" button for manual runs
+    inputs:
+      deactivate_max_share:
+        description: "Max share of a source's jobs that may be hidden as 'no longer listed' in one run (0.6 = 60%)"
+        default: "0.6"
 
 permissions:
   contents: write            # commit the geocoding cache
@@ -15,7 +19,7 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,6 +33,7 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DEACTIVATE_MAX_SHARE: ${{ inputs.deactivate_max_share || '0.6' }}
         run: python ingest/ingest.py
       - name: Commit geocoding cache and discovered boards
         if: always()
