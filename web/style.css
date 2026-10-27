@@ -683,3 +683,47 @@ main.wrap > .layout { margin-top: 28px; }
 .hero-band .search .btn.primary:hover { background: #4338ca; }
 .hiring-logos { flex-wrap: nowrap; }
 @media (max-width: 860px) { .hero-band .search .btn.primary { padding: 13px 16px; } }
+
+/* Job popup: check, salary benchmark, comparison and similar-jobs cards */
+.card-sub { margin: -4px 0 14px; font-size: 0.82rem; color: var(--muted); }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  background: var(--neutral-bg); color: var(--text); }
+.pill.good { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+
+.check-card { border-left: 3px solid var(--accent); }
+.check-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.check-list li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: 0.93rem; line-height: 1.5; }
+.check-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px;
+  margin-top: 1px; background: var(--info-bg); color: var(--info); }
+.check-list li.warn .check-tag { background: var(--warn-bg); color: var(--warn); }
+.check-list li.good .check-tag { background: var(--ok-bg); color: var(--ok); }
+
+.sal-figures { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.sal-figures div { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.sal-figures span { font-size: 0.72rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.sal-figures b { font-size: 1.25rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.sal-chart { position: relative; padding: 22px 0 18px; }
+.sal-track { position: relative; height: 10px; border-radius: 999px; background: var(--neutral-bg); }
+.sal-band { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.sal-median { position: absolute; top: -5px; bottom: -5px; width: 3px; border-radius: 2px; background: var(--accent); transform: translateX(-1.5px); }
+.sal-job { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--support);
+  border: 3px solid var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,.3); transform: translate(-50%, -50%); }
+.sal-job em { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-style: normal;
+  font-size: 0.72rem; font-weight: 700; color: var(--support); }
+.sal-axis { position: relative; height: 16px; margin-top: 6px; font-size: 0.76rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sal-axis span { position: absolute; transform: translateX(-50%); }
+.sal-verdict { margin: 4px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); font-size: 0.9rem; line-height: 1.45; }
+.sal-verdict.good { background: var(--ok-bg); }
+.sal-verdict.warn { background: var(--warn-bg); }
+
+.cmp-list { list-style: none; margin: 0 0 6px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.cmp-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 0.9rem; }
+.cmp-top b { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.cmp-meter { height: 6px; border-radius: 999px; background: var(--neutral-bg); margin: 6px 0; overflow: hidden; }
+.cmp-meter span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+.cmp-mine { margin: 0; font-size: 0.82rem; color: var(--muted); }
+
+.jd-card.similar h3 { margin-bottom: 4px; }
+.jd-card.similar .similar-list { margin: 0; }
+.jd-card.similar .similar-list li:first-child { border-top: 0; }

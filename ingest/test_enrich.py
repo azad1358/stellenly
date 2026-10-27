@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from enrich import (  # noqa: E402
-    abroad, enrich, generic_location, german_level, html_to_text, in_germany, is_agency, job_id, normalize_city, parse_salary,
+    abroad, enrich, generic_location, german_level, html_to_text, strip_boilerplate, in_germany, is_agency, job_id, normalize_city, parse_salary,
     relocation, remote_type, seniority, visa_sponsorship, years_experience,
 )
 
@@ -196,3 +196,12 @@ def test_html_to_text_handles_escaped_html():
 def test_html_to_text_keeps_bullets():
     out = html_to_text("<p>What you will do</p><ul><li>\n<p>Build APIs</p></li><li>Ship &amp; iterate</li></ul>")
     assert out == "What you will do\n• Build APIs\n• Ship & iterate"
+
+
+def test_strip_board_boilerplate():
+    text = ("We build rockets.\nApply now.\nFind more English Speaking Jobs in Germany on Arbeitnow\n"
+            "Find Jobs in United Kingdom on Arbeitnow")
+    assert strip_boilerplate(text) == "We build rockets.\nApply now."
+    assert strip_boilerplate("Questions? Contact the recruitment department: Jobs in Netherlands on Arbeitnow") == \
+        "Questions? Contact the recruitment department:"
+    assert strip_boilerplate("We work with Jobs in Germany data.") == "We work with Jobs in Germany data."

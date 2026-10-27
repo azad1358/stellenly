@@ -41,6 +41,17 @@ def html_to_text(raw: str | None, max_len: int = 20000) -> str:
     return text[:max_len]
 
 
+# Promotional lines job boards append to every posting ("Find more English Speaking Jobs in Germany on Arbeitnow").
+_BOILERPLATE = re.compile(r"(?:Find\s+(?:more\s+)?)?(?:English\s+Speaking\s+)?Jobs\s+in\s+[A-Z][\w .'-]{1,40}?\s+on\s+Arbeitnow\.?", re.I)
+
+
+def strip_boilerplate(text: str) -> str:
+    text = _BOILERPLATE.sub("", text or "")
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return re.sub(r"(?m)^[ \t]*[:,–-]?[ \t]*$\n?", "", text).strip()
+
+
 def _norm(s: str | None) -> str:
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
     s = re.sub(r"\(\s*[mwfdx]\s*/\s*[mwfdx]\s*/\s*[mwfdx]\s*\)", " ", s, flags=re.I)  # (m/w/d)
@@ -474,7 +485,7 @@ def enrich(raw: dict) -> dict | None:
     if re.search(r"\bTEST\b", title):  # ATS test postings ("TEST - Forward Deployed Engineer")
         return None
 
-    text = html_to_text(raw.get("description_html"))
+    text = strip_boilerplate(html_to_text(raw.get("description_html")))
     if detect_language(f"{title}\n{text}") != "en":
         return None
 

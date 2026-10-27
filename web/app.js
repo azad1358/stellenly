@@ -239,40 +239,82 @@
   const plain = (s) => String(s || "").replace(/^[^\p{L}\p{N}]+\s*/u, ""); // "⚠ Check salary" → "Check salary"
   const pct = (x) => `${Math.round(x * 100)}%`;
 
-  function salaryBar(j, s) {
-    const v = j.salary_min ? (j.salary_min + (j.salary_max || j.salary_min)) / 2 : null;
-    const lo = Math.min(s.p25, v ?? s.p25) * 0.85, hi = Math.max(s.p75, v ?? s.p75) * 1.1;
-    const x = (n) => `${((n - lo) / (hi - lo)) * 100}%`;
-    return `<div class="salbar" role="img" aria-label="Typical salary ${k(s.p25)} to ${k(s.p75)}${v ? `, this job ${k(v)}` : ""}">
-        <div class="salbar-track">
-          <span class="salbar-band" style="left:${x(s.p25)};width:calc(${x(s.p75)} - ${x(s.p25)})"></span>
-          <span class="salbar-median" style="left:${x(s.p50)}"></span>
-          ${v ? `<span class="salbar-job" style="left:${x(v)}"></span>` : ""}
-        </div>
-        <div class="salbar-legend"><span>${k(s.p25)}</span><span>median ${k(s.p50)}</span><span>${k(s.p75)}</span></div>
-        <p class="small muted">Middle 50% of ${s.n} similar jobs that list a salary${v ? ` · <b>this job: ${salaryText(j)}</b>` : " · this job doesn't list one"}.</p>
-      </div>`;
+  const midSalary = (j) => (j.salary_min ? (j.salary_min + (j.salary_max || j.salary_min)) / 2 : null);
+
+  // Warnings and positives from the daily check, shown above the description.
+  function jobCheckHtml(j) {
+    const list = hints(j);
+    if (!list.length) return "";
+    const label = { warn: "Check", good: "Plus", info: "Note" };
+    return `<section class="jd-card check-card">
+        <h3>Job check</h3>
+        <ul class="check-list">${list.map((h) => `<li class="${h.l}"><span class="check-tag">${label[h.l]}</span><span>${esc(h.t)}</span></li>`).join("")}</ul>
+      </section>`;
   }
 
-  function insightsHtml(j) {
-    const ins = j.insights;
-    if (!ins || !ins.peers) return "";
-    const p = ins.peers, list = hints(j);
-    const stats = [];
-    if (p.n) {
-      stats.push(`<li><b>${pct(p.german_req)}</b> require German</li>`);
-      stats.push(`<li><b>${pct(p.visa)}</b> mention visa sponsorship</li>`);
-      if (p.years != null) stats.push(`<li>usually <b>${p.years}+ years</b> of experience</li>`);
+  function salaryCardHtml(j) {
+    const p = j.insights && j.insights.peers;
+    if (!p) return "";
+    const s = p.salary, v = midSalary(j);
+    if (!s) {
+      return `<section class="jd-card sal-card"><h3>Salary benchmark</h3>
+          <p class="muted small">Not enough similar jobs list a salary yet to compare pay.</p></section>`;
     }
-    const icon = { warn: "⚠️", good: "✅", info: "ℹ️" };
-    return `<section class="insight">
-        <h4>${p.n ? `Compared with ${p.n} similar jobs at other companies` : "Job check"}</h4>
-        ${list.length ? `<ul class="hint-list">${list.map((h) => `<li class="${h.l}"><span aria-hidden="true">${icon[h.l]}</span> ${esc(h.t)}</li>`).join("")}</ul>` : ""}
-        ${p.salary ? salaryBar(j, p.salary) : `<p class="small muted">Not enough similar jobs list a salary to compare pay.</p>`}
-        ${stats.length ? `<p class="small">Among similar jobs:</p><ul class="peer-stats">${stats.join("")}</ul>` : ""}
-        ${ins.similar && ins.similar.length && !DEMO ? `<div class="similar" data-ids="${esc(ins.similar.join(","))}"><p class="small muted">Loading similar jobs…</p></div>` : ""}
-        <p class="tiny muted">Automatic check based on the job text and ${p.n || "no"} similar postings. It can be wrong — always read the original.</p>
+    const lo = Math.min(s.p25, v ?? s.p25) * 0.8, hi = Math.max(s.p75, v ?? s.p75) * 1.15;
+    const x = (n) => `${Math.max(0, Math.min(100, ((n - lo) / (hi - lo)) * 100)).toFixed(1)}%`;
+    let verdict = `This job doesn't list a salary. Similar roles typically pay <b>${k(s.p25)}–${k(s.p75).slice(1)}</b>.`, tone = "";
+    if (v) {
+      const diff = Math.round(((v - s.p50) / s.p50) * 100);
+      const flagged = hints(j).some((h) => /^salary_(error|high|low)$/.test(h.k));
+      tone = flagged ? "warn" : v >= s.p75 ? "good" : "";
+      verdict = `This job pays <b>${salaryText(j)}</b> — ${diff === 0 ? "right at the median" : `${Math.abs(diff)}% ${diff > 0 ? "above" : "below"} the median`}.`;
+    }
+    return `<section class="jd-card sal-card">
+        <h3>Salary benchmark</h3>
+        <p class="card-sub">${s.n} similar jobs at other companies that list a salary</p>
+        <div class="sal-figures">
+          <div><span>Median</span><b>${k(s.p50)}</b></div>
+          <div><span>Typical range</span><b>${k(s.p25)}–${k(s.p75).slice(1)}</b></div>
+        </div>
+        <div class="sal-chart" role="img" aria-label="Typical salary ${k(s.p25)} to ${k(s.p75)}, median ${k(s.p50)}${v ? `, this job ${k(v)}` : ""}">
+          <div class="sal-track"><span class="sal-band" style="left:${x(s.p25)};right:calc(100% - ${x(s.p75)})"></span>
+            <span class="sal-median" style="left:${x(s.p50)}"></span>
+            ${v ? `<span class="sal-job" style="left:${x(v)}"><em>This job</em></span>` : ""}</div>
+          <div class="sal-axis"><span style="left:${x(s.p25)}">${k(s.p25)}</span><span style="left:${x(s.p75)}">${k(s.p75)}</span></div>
+        </div>
+        <p class="sal-verdict ${tone}">${verdict}</p>
       </section>`;
+  }
+
+  function compareCardHtml(j) {
+    const p = j.insights && j.insights.peers;
+    if (!p || !p.n) return "";
+    const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
+    const rows = [
+      { label: "Require German", share: p.german_req, mine: gl.replace(/^German:\s*/, ""), tone: gc === "ok" ? "good" : gc === "bad" ? "warn" : "" },
+      { label: "Mention visa sponsorship", share: p.visa, mine: j.visa_sponsorship ? "Offers visa sponsorship" : "Not mentioned",
+        tone: j.visa_sponsorship ? "good" : "" },
+    ];
+    const meter = (r) => `<li>
+        <div class="cmp-top"><span>${r.label}</span><b>${pct(r.share)}</b></div>
+        <div class="cmp-meter"><span style="width:${Math.max(2, r.share * 100)}%"></span></div>
+        <p class="cmp-mine">This job: <span class="pill ${r.tone}">${esc(r.mine)}</span></p></li>`;
+    const years = p.years != null ? `<li>
+        <div class="cmp-top"><span>Experience asked</span><b>${Math.round(p.years)}+ yrs</b></div>
+        <p class="cmp-mine">This job: <span class="pill ${j.years_experience && j.years_experience >= p.years + 4 ? "warn" : ""}">${j.years_experience ? `${j.years_experience}+ years` : "Not specified"}</span></p></li>` : "";
+    return `<section class="jd-card cmp-card">
+        <h3>How it compares</h3>
+        <p class="card-sub">Share of ${p.n} similar jobs at other companies</p>
+        <ul class="cmp-list">${rows.map(meter).join("")}${years}</ul>
+        <p class="tiny muted">Automatic comparison of the job texts. It can be wrong — always read the original.</p>
+      </section>`;
+  }
+
+  function similarCardHtml(j) {
+    const ids = j.insights && j.insights.similar;
+    if (!ids || !ids.length || DEMO) return "";
+    return `<section class="jd-card similar" data-ids="${esc(ids.join(","))}">
+        <h3>Similar jobs at other companies</h3><p class="small muted">Loading…</p></section>`;
   }
 
   async function loadSimilar(box) {
@@ -281,11 +323,12 @@
     el.dataset.loaded = "1";
     try {
       const items = await rpc("jobs_by_ids", { p_ids: el.dataset.ids.split(",") });
-      el.innerHTML = items.length ? `<p class="small"><b>Similar jobs at other companies</b></p><ul class="similar-list">${items.map((s) => `
+      if (!items.length) { el.remove(); return; }
+      el.innerHTML = `<h3>Similar jobs at other companies</h3><ul class="similar-list">${items.map((s) => `
           <li>${logoHtml(s.company, "logo-xs")}<div><a href="${esc(jobUrl(s.id))}" data-similar="${esc(s.id)}">${esc(s.title)}</a>
-          <span class="muted">${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></div></li>`).join("")}</ul>` : "";
+          <span class="muted">${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></div></li>`).join("")}</ul>`;
     } catch (e) {
-      el.innerHTML = "";
+      el.remove();
     }
   }
 
@@ -370,6 +413,9 @@
       text = box.value.replace(/[ \t ]+/g, " ");
     }
     text = (text || "").replace(/^[ \t]*[•·▪][ \t]*\n\s*/gm, "• "); // "<li><p>…" leaves the bullet on its own line
+    // Job-board promo lines ("Find more English Speaking Jobs in Germany on Arbeitnow").
+    text = text.replace(/(?:Find\s+(?:more\s+)?)?(?:English\s+Speaking\s+)?Jobs\s+in\s+[A-Z][\w .'-]{1,40}?\s+on\s+Arbeitnow\.?/gi, "")
+      .replace(/^[ \t]*[:,–-]?[ \t]*$\n?/gm, "");
     const out = [];
     let list = [];
     const flush = () => { if (list.length) out.push(`<ul>${list.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`); list = []; };
@@ -460,6 +506,7 @@
         <div class="jd-main">
           <div class="badges">${badges(j)}</div>
           ${aiHtml(j)}
+          ${jobCheckHtml(j)}
           <section class="jd-card jd-desc">
             <h3>Job description</h3>
             ${loading ? `<p class="muted">Loading the full description…</p>` : (j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`)}
@@ -468,9 +515,11 @@
         </div>
         <aside class="jd-side">
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
+          ${salaryCardHtml(j)}
+          ${compareCardHtml(j)}
           ${skillsHtml(j)}
-          ${insightsHtml(j)}
           ${companyHtml(j)}
+          ${similarCardHtml(j)}
         </aside>
       </div>`;
   }
