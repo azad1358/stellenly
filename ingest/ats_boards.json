@@ -125,6 +125,11 @@
    "board": "blacksemiconductor",
    "company": "Black Semiconductor GmbH"
   },
+  "bowatt": {
+   "ats": "ashby",
+   "board": "bowatt",
+   "company": "Bowatt"
+  },
   "brunswickgroup": {
    "ats": "greenhouse",
    "board": "brunswickgroup",
@@ -149,6 +154,11 @@
    "ats": "ashby",
    "board": "cinder",
    "company": "Cinder"
+  },
+  "codesphere": {
+   "ats": "ashby",
+   "board": "codesphere",
+   "company": "Codesphere"
   },
   "comena": {
    "ats": "ashby",
@@ -358,6 +368,11 @@
    "ats": "lever",
    "board": "jobgether",
    "company": "Jobgether"
+  },
+  "justdice": {
+   "ats": "ashby",
+   "board": "justdice",
+   "company": "Justdice"
   },
   "justwatch": {
    "ats": "lever",
@@ -796,6 +811,11 @@
    "board": "vaeridion",
    "company": "væridion"
   },
+  "watershed": {
+   "ats": "ashby",
+   "board": "Watershed",
+   "company": "Watershed"
+  },
   "workmotion": {
    "ats": "workable",
    "board": "workmotion",
@@ -855,9 +875,11 @@
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "fertohealthgmbh": "2026-10-27",
+  "fivetran": "2026-10-27",
   "flix": "2026-10-27",
   "florafoodgroup": "2026-10-27",
   "foodlabs": "2026-10-27",
+  "freenow": "2026-10-27",
   "generalmind": "2026-10-27",
   "gfic": "2026-10-27",
   "gitlab": "2026-10-27",
@@ -879,6 +901,7 @@
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
   "magazinogmbh": "2026-10-27",
+  "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",

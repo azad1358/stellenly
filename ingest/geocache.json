@@ -224,6 +224,11 @@
 "lat": 51.5175,
 "lon": -3.2451
 },
+"*|cheltenham": {
+"cc": "gb",
+"lat": 51.8996,
+"lon": -2.0712
+},
 "*|cheltenham, gloucestershire, england": {
 "cc": "gb",
 "lat": 51.8996,
