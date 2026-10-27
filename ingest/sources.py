@@ -22,6 +22,10 @@ from enrich import in_germany
 
 UA = {"User-Agent": "stellenly/1.0 (+https://github.com/azad1358/stellenly)"}
 TIMEOUT = 30
+# Sources read completely in this run (e.g. "arbeitnow", "ashby:n8n"). Only for these may the ingester hide
+# stored jobs it didn't see again — a source that failed or was cut short never hides anything.
+COMPLETE: set[str] = set()
+INCOMPLETE: set[str] = set()
 
 
 def _get(url: str, retries: int = 4, **kwargs) -> requests.Response:
@@ -71,6 +75,8 @@ def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
         url = (payload.get("links") or {}).get("next")
         page += 1
         time.sleep(pause)  # be polite
+    if not url:
+        COMPLETE.add("arbeitnow")  # every page was read: jobs we didn't see are gone from Arbeitnow
 
 
 # ---------------------------------------------------------------------------
@@ -245,7 +251,10 @@ def smartrecruiters(board: str, company: str, region: str | None = None, max_job
         offset += 100
         if offset >= (page.get("totalFound") or 0):
             break
-    english = [p for p in listed if ((p.get("language") or {}).get("code") or "en").startswith("en")][:max_jobs]
+    english = [p for p in listed if ((p.get("language") or {}).get("code") or "en").startswith("en")]
+    if len(english) > max_jobs or offset >= 600:
+        INCOMPLETE.add(f"smartrecruiters:{board}")  # capped: unseen jobs may still be online
+    english = english[:max_jobs]
     for p in english:
         d = _get(p["ref"]).json()
         sections = (d.get("jobAd") or {}).get("sections") or {}
@@ -285,9 +294,12 @@ def company_boards(config_path: Path, discovered: list[dict] | None = None) -> I
         fn = ATS.get(entry.get("ats", "").lower())
         if not fn:
             continue
+        name = f"{entry['ats'].lower()}:{entry['board']}"
         try:
             extra = {"region": entry["region"]} if entry.get("region") else {}
             yield from fn(entry["board"], entry.get("company") or entry["board"], **extra)
+            if name not in INCOMPLETE:
+                COMPLETE.add(name)
         except Exception as e:  # one broken board must not stop the run
-            print(f"  ! {entry.get('ats')}:{entry.get('board')} failed: {e}")
+            print(f"  ! {name} failed: {e}")
         time.sleep(0.5)

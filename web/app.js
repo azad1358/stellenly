@@ -891,9 +891,14 @@
 
   async function loadFacets() {
     try {
-      const f = await rpc("facets", { p_limit: 30 });
+      const [f, german] = await Promise.all([
+        rpc("facets", { p_limit: 60 }),
+        fetch("german-cities.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      ]);
       const sel = $("#city").value;
-      f.cities.forEach((c) => ensureCityOption(c.city));
+      // Only German cities in the dropdown (german-cities.json is written by the daily build).
+      const ok = german ? new Set(german) : null;
+      f.cities.filter((c) => !ok || ok.has(c.city)).slice(0, 30).forEach((c) => ensureCityOption(c.city));
       $("#city").value = sel;
       $("#tag-cloud").innerHTML = f.tags.map((t) =>
         `<button type="button" class="tag" data-tag="${esc(t.tag)}" aria-pressed="${tags.includes(t.tag)}">#${esc(t.tag)}<span class="n">${t.count}</span></button>`).join("");
