@@ -32,6 +32,7 @@ Deno.serve(async (req) => {
     p_max_years: p.get("years") ? Number(p.get("years")) : null,
     p_days: p.get("days") ? Number(p.get("days")) : null,
     p_sort: "newest",
+    p_scope: p.get("desc") === "1" ? "all" : "title",  // same as the site: keywords match titles, companies, tags
     p_limit: 50,
     p_offset: 0,
   };

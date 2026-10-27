@@ -955,3 +955,5 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 }
 @media print { .tg-float { display: none; } }
 .match-note { font-size: .75rem; padding: 1px 7px; border-radius: 999px; background: var(--neutral-bg); color: var(--muted); }
+.link-btn { font: inherit; font-size: inherit; color: var(--accent); background: none; border: 0; padding: 0 0 0 4px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.link-btn:hover { color: var(--text); }

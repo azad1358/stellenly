@@ -139,6 +139,7 @@
   const sameSet = (a, b) => a.length === b.length && b.every((x) => a.includes(x));
 
   let tags = [];
+  let descFor = null; // the keyword the visitor also wants matched in job descriptions
 
   function readFilters() {
     return {
@@ -156,6 +157,8 @@
       bluecard: $("#bluecard").value,
       days: $("#days").value,
       sort: $("#sort").value,
+      // Keyword in descriptions too? Only after the visitor asked for it, and only for that keyword.
+      desc: descFor !== null && descFor === $("#q").value.trim(),
     };
   }
 
@@ -175,6 +178,7 @@
     $("#bluecard").value = f.bluecard || "";
     $("#days").value = f.days || "";
     $("#sort").value = f.sort || "newest";
+    descFor = f.desc ? (f.q || "") : null;
     syncQuickChips();
   }
 
@@ -185,7 +189,7 @@
 
   // URL <-> filters (so searches can be bookmarked and shared)
   const LIST_KEYS = ["tags", "german", "remote", "seniority"];
-  const BOOL_KEYS = ["salary", "visa", "reloc", "direct"];
+  const BOOL_KEYS = ["salary", "visa", "reloc", "direct", "desc"];
   function filtersToQuery(f) {
     const p = new URLSearchParams();
     for (const [k, v] of Object.entries(f)) {
@@ -228,6 +232,7 @@
       p_sort: f.sort,
       p_limit: PAGE,
       p_offset: offset,
+      p_scope: f.desc ? "all" : "title",
     };
   }
 
@@ -742,14 +747,20 @@
       const items = data.items.map(withDevInsights);
       items.forEach((j) => current.set(j.id, j));
       $("#results").innerHTML = items.length ? items.map(jobHtml).join("")
-        : `<li class="empty">No jobs match these filters. Try removing a filter or a tag.</li>`;
+        : `<li class="empty">No jobs match these filters. Try another keyword, or remove a filter or a tag.</li>`;
       const from = total ? offset + 1 : 0, to = Math.min(offset + items.length, total);
-      // Title/company/tag matches come first (search_jobs); say so when some jobs only mention the word.
-      const strong = data.strong_total ?? total, q = (f.q || "").trim(), n = (x) => x.toLocaleString("en");
-      $("#result-count").textContent = !total ? "No jobs found"
-        : q && !strong ? `No job titles match “${q}”. ${n(total)} job${total === 1 ? "" : "s"} only mention it in the description:`
-        : `${n(from)}–${n(to)} of ${n(total)} job${total === 1 ? "" : "s"}`
-          + (q && strong < total ? ` · ${n(strong)} match “${q}” in the title, the rest mention it in the description` : "");
+      // A keyword matches titles, companies and skill tags; jobs that only mention it in the description
+      // are offered separately ("pilot" must not list every job with "pilot projects" in its text).
+      const q = (f.q || "").trim(), n = (x) => x.toLocaleString("en");
+      const more = q && !f.desc ? (data.all_total ?? total) - total : 0;
+      const plural = (x) => `job${x === 1 ? "" : "s"}`;
+      const moreBtn = more > 0 ? ` <button type="button" class="link-btn" data-scope="all">Show ${n(more)} more ${plural(more)} that mention “${esc(q)}” in the description</button>` : "";
+      $("#result-count").innerHTML = (!total
+          ? (q ? `No jobs have “${esc(q)}” in the title or skills.` : "No jobs found")
+          : `${n(from)}–${n(to)} of ${n(total)} ${plural(total)}${q && !f.desc ? ` with “${esc(q)}” in the title or skills` : ""}`)
+        + moreBtn
+        + (f.desc && q ? ` <button type="button" class="link-btn" data-scope="title">Only jobs with “${esc(q)}” in the title or skills</button>` : "");
+      if (!total && more) $("#results").innerHTML = "";
       renderPager(pages);
       if (scroll) $(".results-col").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {
@@ -1008,6 +1019,13 @@
     $("#f-nogerman").addEventListener("change", (e) => { setChecked("german", e.target.checked ? NO_GERMAN : []); search(); });
     $("#f-remote").addEventListener("change", (e) => { setChecked("remote", e.target.checked ? REMOTE : []); search(); });
     $("#reset-filters").addEventListener("click", () => { writeFilters({}); search(); });
+    $("#result-count").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-scope]");
+      if (!b) return;
+      descFor = b.dataset.scope === "all" ? $("#q").value.trim() : null;
+      if (descFor) track("search/descriptions", "Search");
+      search();
+    });
     $("#pager").addEventListener("click", (e) => {
       const b = e.target.closest("[data-page]");
       if (!b || b.disabled) return;
