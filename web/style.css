@@ -911,3 +911,10 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .header-actions > * { flex: none; white-space: nowrap; }
 }
 .wiki-stats .live-dot { display: inline-block; margin-left: 6px; vertical-align: middle; }
+/* Centre group = timer + tabs + day/night + Support; only the logo stays on the left */
+@media (min-width: 641px) {
+  .header-row { grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) auto minmax(0, 1fr); column-gap: 4px; }
+  .header-actions { justify-self: end; }
+  .header-end { justify-self: start; }
+}
+@media (max-width: 1500px) { .updated-pill .next { display: none; } }
