@@ -1,0 +1,27 @@
+{
+  "name": "Stellenly – English-speaking jobs in Germany",
+  "short_name": "Stellenly",
+  "description": "English-speaking jobs in Germany with German level, salary and visa sponsorship shown up front.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a2463",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

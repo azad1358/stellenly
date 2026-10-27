@@ -144,8 +144,16 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:type" content="website">
+<meta property="og:image" content="{SITE_URL}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title="Guides" href="{up}blog/feed.xml">
 <link rel="icon" href="{up}logo.svg" type="image/svg+xml">
+<link rel="icon" href="{up}favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="{up}apple-touch-icon.png">
+<link rel="manifest" href="{up}manifest.webmanifest">
+<meta name="theme-color" content="#0a2463">
 <link rel="stylesheet" href="{up}style.css">
 {ANALYTICS}
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
