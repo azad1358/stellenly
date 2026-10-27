@@ -867,3 +867,22 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .header-actions .btn.support { padding: 7px 11px; font-size: 0.88rem; }
   .updated-pill { font-size: 0.76rem; padding: 4px 9px; }
 }
+
+/* Header: logo on the left, all tabs on the same row (scroll sideways if they can't fit) */
+@media (min-width: 641px) {
+  .header-row { flex-wrap: nowrap; }
+  .brand { flex: none; }
+  .header-actions { flex-wrap: nowrap; align-items: center; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .header-actions::-webkit-scrollbar { display: none; }
+  .header-actions > * { flex: none; white-space: nowrap; }
+}
+@media (max-width: 1040px) and (min-width: 641px) {
+  .updated-pill { display: none !important; }
+}
+@media (max-width: 860px) and (min-width: 641px) {
+  .header-actions .btn.ghost:not(.icon) { padding: 6px 6px; font-size: 0.82rem; }
+  .brand span { font-size: 1rem; }
+}
+@media (max-width: 780px) {
+  .header-actions [data-open="hired-dialog"], .header-actions [data-open="glossary-dialog"] { display: none; }
+}
