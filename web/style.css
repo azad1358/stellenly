@@ -615,7 +615,7 @@ body { -webkit-font-smoothing: antialiased; }
 .res-guides { margin: 12px 0 0; font-size: 0.92rem; }
 
 @media (max-width: 960px) {
-  .post-layout { grid-template-columns: 1fr; }
+  .post-layout { grid-template-columns: minmax(0, 1fr); }
   .post-toc { display: none; }
   .post-card.featured { grid-template-columns: 1fr; }
   .post-card.featured .post-card-img { min-height: 0; aspect-ratio: 15 / 7; }
@@ -825,3 +825,33 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 .score-chip.inline { margin: 0 0 0 8px; padding: 1px 7px; border-radius: 999px; background: color-mix(in srgb, #f5a524 16%, transparent); font-size: .75rem; vertical-align: 1px; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .score-chip { color: #f5c26b; } }
 :root[data-theme="dark"] .score-chip { color: #f5c26b; }
+
+/* ---------------------------------------------------------------- How it works (wiki) */
+.wiki-page { padding-top: 28px; }
+.wiki .post-body h2 { scroll-margin-top: 84px; padding-top: 10px; border-top: 1px solid var(--border); }
+.wiki .post-body h3 { margin: 22px 0 6px; font-size: 1.02rem; }
+.wiki .post-body table { margin: 12px 0 18px; }
+.wiki .post-body td { vertical-align: top; }
+.wiki .post-body code { font-size: .86em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 0 4px; }
+.wiki-toc { font-size: .86rem; }
+.wiki-toc ol { gap: 6px; }
+.wiki-toc a { color: var(--muted); text-decoration: none; }
+.wiki-toc a:hover { color: var(--accent); }
+.wiki-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 18px 0 8px; }
+.wiki-stats div { background: linear-gradient(160deg, var(--accent-soft), var(--surface) 70%); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px; }
+.wiki-stats b { display: block; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--accent); }
+.wiki-stats span { font-size: .8rem; color: var(--muted); }
+.flow { list-style: none; counter-reset: flow; padding: 0; margin: 16px 0 22px; display: grid; gap: 8px; }
+.flow li { counter-increment: flow; position: relative; display: grid; grid-template-columns: 9rem 1fr; gap: 12px; align-items: center;
+  max-width: none; padding: 10px 14px 10px 52px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.flow li::before { content: counter(flow); position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 26px; height: 26px;
+  border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+.flow li:not(:last-child)::after { content: ""; position: absolute; left: 26px; bottom: -9px; width: 2px; height: 10px; background: var(--border); }
+.flow span { color: var(--muted); font-size: .92rem; }
+@media (max-width: 600px) { .flow li { grid-template-columns: 1fr; gap: 2px; } }
+@media (max-width: 700px) {
+  .wiki .post-body table { display: block; overflow-x: auto; }
+  .wiki .post-body code { overflow-wrap: anywhere; }
+}

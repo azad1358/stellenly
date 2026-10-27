@@ -37,6 +37,7 @@ sys.path.insert(0, str(ROOT / "ingest"))
 import geo  # noqa: E402  (cached city coordinates for the companies map)
 from enrich import in_germany, normalize_city  # noqa: E402
 from covers import ICONS, cover_svg  # noqa: E402
+import how_it_works  # noqa: E402
 WEB = ROOT / "web"
 CONTENT = ROOT / "content"
 SITE = json.loads((Path(__file__).parent / "site.json").read_text(encoding="utf-8"))
@@ -58,7 +59,7 @@ def load_jobs(jobs_file: str | None) -> list[dict]:
     url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/jobs"
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     cols = ("id,url,title,company,city,remote_type,german_level,visa_sponsorship,relocation,"
-            "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at,repost_count")
+            "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at,repost_count,source")
     out, start, step = [], 0, 1000
     while True:
         r = requests.get(url, params={"select": cols, "is_active": "eq.true", "order": "posted_at.desc"},
@@ -145,6 +146,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost" href="{up}companies.html">Companies</a>
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
+    <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
     <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a>
   </nav>
 </div></header>
@@ -935,6 +937,16 @@ def build_blog_index(posts: list[dict], report: dict) -> None:
 <description>Guides and weekly job-market reports</description>{items}</channel></rss>""")
 
 
+def build_how_it_works(jobs: list[dict]) -> str:
+    index = json.loads((WEB / "companies-index.json").read_text(encoding="utf-8"))
+    body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()))
+    (WEB / "how-it-works.html").write_text(page(
+        "How it works", "How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: "
+        "every rule we use to filter out noise.", body, "how-it-works.html", 0, main_class="post-page wiki-page"),
+        encoding="utf-8")
+    return "how-it-works.html"
+
+
 def build_sitemap(paths: list[str]) -> None:
     urls = "".join(f"<url><loc>{SITE_URL}/{p.replace('index.html', '')}</loc><lastmod>{TODAY.isoformat()}</lastmod></url>"
                    for p in sorted(set(paths)))
@@ -959,9 +971,10 @@ def main() -> None:
     build_resources(resources, posts)
     landing = build_landing_pages(jobs, stats)
     companies = build_companies(jobs)
+    wiki = build_how_it_works(jobs)
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
-                  + sections + landing + companies)
+                  + sections + landing + companies + [wiki])
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
           f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")
