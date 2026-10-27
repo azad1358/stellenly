@@ -1,0 +1,44 @@
+{
+ "boards": {
+  "almedia": {
+   "ats": "ashby",
+   "board": "almedia",
+   "company": "Almedia"
+  },
+  "idealointernetgmbh": {
+   "ats": "recruitee",
+   "board": "idealo",
+   "region": "https://jobs.idealo.com",
+   "company": "idealo internet GmbH"
+  },
+  "limeflight": {
+   "ats": "recruitee",
+   "board": "limeflight",
+   "region": "https://career.limeflight.com",
+   "company": "LimeFlight"
+  },
+  "proximafusiongmbh": {
+   "ats": "ashby",
+   "board": "proxima-fusion",
+   "company": "Proxima Fusion GmbH"
+  },
+  "recaredeutschlandgmbh": {
+   "ats": "recruitee",
+   "board": "recaresolutions",
+   "region": "https://careers.recaresolutions.com",
+   "company": "Recare Deutschland GmbH"
+  }
+ },
+ "none": {
+  "elevenlabs": "2026-10-27",
+  "marketcloud": "2026-10-27",
+  "milesmobility": "2026-10-27",
+  "nellysolutions": "2026-10-27",
+  "neuralframes": "2026-10-27",
+  "pertempserp": "2026-10-27",
+  "rapidpioneers": "2026-10-27",
+  "vicoland": "2026-10-27",
+  "vinteden": "2026-10-27",
+  "xtpgmbh": "2026-10-27"
+ }
+}
