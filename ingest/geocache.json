@@ -437,6 +437,11 @@
 "lat": 51.4138,
 "lon": -2.4975
 },
+"*|kissing": {
+"cc": "de",
+"lat": 48.2979,
+"lon": 10.9895
+},
 "*|lausanne": {
 "cc": "ch",
 "lat": 46.5218,
@@ -1149,6 +1154,11 @@
 "lat": 50.0859,
 "lon": 9.0814
 },
+"de|augsburg": {
+"cc": "de",
+"lat": 48.369,
+"lon": 10.898
+},
 "de|austria": {
 "cc": "de",
 "lat": 52.4887,
@@ -1249,6 +1259,11 @@
 "lat": 49.5892,
 "lon": 10.9812
 },
+"de|eschborn": {
+"cc": "de",
+"lat": 50.1505,
+"lon": 8.5608
+},
 "de|essen": {
 "cc": "de",
 "lat": 51.4582,
@@ -1263,6 +1278,11 @@
 "cc": "de",
 "lat": 47.9961,
 "lon": 7.8494
+},
+"de|fulda": {
+"cc": "de",
+"lat": 50.5515,
+"lon": 9.6762
 },
 "de|garching": {
 "cc": "de",
@@ -1320,10 +1340,20 @@
 "lat": 52.4769,
 "lon": 12.8444
 },
+"de|kissing": {
+"cc": "de",
+"lat": 48.2979,
+"lon": 10.9895
+},
 "de|koblenz": {
 "cc": "de",
 "lat": 50.3533,
 "lon": 7.5944
+},
+"de|konstanz": {
+"cc": "de",
+"lat": 47.6592,
+"lon": 9.1751
 },
 "de|kusterdingen": {
 "cc": "de",
@@ -1420,6 +1450,16 @@
 "cc": "de",
 "lat": 48.7999,
 "lon": 9.7978
+},
+"de|schönefeld": {
+"cc": "de",
+"lat": 52.3886,
+"lon": 13.5048
+},
+"de|siegen": {
+"cc": "de",
+"lat": 50.8751,
+"lon": 8.0256
 },
 "de|stuttgart": {
 "cc": "de",
