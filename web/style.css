@@ -886,3 +886,12 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 @media (max-width: 780px) {
   .header-actions [data-open="hired-dialog"], .header-actions [data-open="glossary-dialog"] { display: none; }
 }
+/* Support is never scrolled out of view: it stays pinned at the right end of the tab row */
+@media (min-width: 641px) {
+  .header-actions .btn.support { position: sticky; right: 0; box-shadow: -14px 0 12px -4px var(--surface); }
+}
+@media (max-width: 1240px) and (min-width: 641px) {
+  .updated-pill { display: none !important; }
+}
+/* The header may use more width than the page content, so all tabs fit next to the logo on big screens */
+.site-header .wrap { max-width: 1340px; }

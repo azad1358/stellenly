@@ -79,7 +79,7 @@
     const two = (n) => String(n).padStart(2, "0");
     const clock = `${two(Math.floor(left / 3600))}:${two(Math.floor((left % 3600) / 60))}:${two(left % 60)}`;
     el.innerHTML = `<span class="live-dot" aria-hidden="true"></span>Updated ${ago}<span class="next"> · next in ${clock}</span>`;
-    el.title = `Jobs were last refreshed ${lastUpdate.toLocaleString()}. New jobs are fetched every 6 hours.`;
+    el.title = `Jobs were last refreshed ${lastUpdate.toLocaleString()}. New jobs are fetched every 6 hours — next in ${clock}.`;
     el.hidden = false;
   }
 
