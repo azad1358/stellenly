@@ -38,6 +38,7 @@
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Stellenly home"><img class="brand-logo" src="logo.svg" alt="" width="32" height="32"><span id="brand">Stellenly</span></a>
     <nav class="header-actions">
+      <span class="updated-pill" id="updated-pill" hidden></span>
       <a class="btn ghost" href="companies.html">Companies</a>
       <a class="btn ghost" href="resources.html">Resources</a>
       <a class="btn ghost" href="blog/">Guides</a>
@@ -205,17 +206,34 @@
       <div id="nudge" class="nudge" hidden></div>
 
       <ol id="results" class="results"></ol>
-      <div class="more"><button type="button" class="btn" id="load-more" hidden>Load more jobs</button></div>
+      <nav class="pager" id="pager" aria-label="Result pages"></nav>
       <div id="applied-tools" class="applied-tools" hidden>
         <button type="button" class="btn small" id="export-csv">⬇ Export my applications (CSV)</button>
       </div>
     </section>
   </div>
 
-  <section class="transparency" aria-labelledby="t-h">
-    <h2 id="t-h">This site is free, ad-light and sets no cookies</h2>
-    <p id="owner-note" class="muted"></p>
-    <div class="cost-box" id="cost-box"></div>
+  <section class="about-card" aria-labelledby="t-h">
+    <div class="about-main">
+      <p class="about-kicker">About Stellenly</p>
+      <h2 id="t-h">This site is free, ad-light and sets no cookies</h2>
+      <p class="about-lead">We respect your privacy. Your job search is your business — and keeping your personal data private is your right.</p>
+      <ul class="privacy-points">
+        <li><b>No cookies</b> and no ad trackers</li>
+        <li><b>No accounts</b>, no profiles, no profiling</li>
+        <li><b>No CV uploads</b> — nothing about you is stored on our side</li>
+        <li><b>Saved jobs stay in your browser</b>, never on our servers</li>
+        <li><b>Anonymous visit counts only</b>, to see which pages help</li>
+      </ul>
+      <p class="owner-line" id="owner-note"></p>
+    </div>
+    <div class="about-costs">
+      <h3>What it takes to keep this running</h3>
+      <div class="cost-box" id="cost-box"></div>
+      <p class="about-ask">Help us keep the site running, update it every day and build new features like email job alerts
+        and CV matching. A small donation really motivates us.</p>
+      <button type="button" class="btn support big" data-open="support-dialog">Support us</button>
+    </div>
   </section>
 </main>
 

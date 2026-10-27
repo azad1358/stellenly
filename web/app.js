@@ -45,6 +45,44 @@
     return text ? JSON.parse(text) : null;
   }
 
+  // ---------------------------------------------------------------- "Updated 2 h ago · next in 03:42:10"
+  const RUN_HOURS_UTC = [0, 6, 12, 18], RUN_MINUTE = 17; // schedule of .github/workflows/ingest.yml
+  let lastUpdate = null;
+
+  async function loadFreshness() {
+    if (DEMO) return;
+    try {
+      const [row] = await restGet("jobs?select=last_seen_at&is_active=eq.true&order=last_seen_at.desc&limit=1");
+      if (!row) return;
+      lastUpdate = new Date(row.last_seen_at);
+      tickFreshness();
+      setInterval(tickFreshness, 1000);
+    } catch { /* the pill just stays hidden */ }
+  }
+
+  function nextRun(now) {
+    const d = new Date(now);
+    for (let day = 0; day < 2; day++) {
+      for (const h of RUN_HOURS_UTC) {
+        const t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + day, h, RUN_MINUTE);
+        if (t > now) return t;
+      }
+    }
+    return now;
+  }
+
+  function tickFreshness() {
+    const now = Date.now(), el = $("#updated-pill");
+    const mins = Math.max(0, Math.floor((now - lastUpdate) / 60000));
+    const ago = mins < 1 ? "just now" : mins < 60 ? `${mins} min ago` : `${Math.floor(mins / 60)} h ${mins % 60} min ago`;
+    const left = Math.max(0, Math.floor((nextRun(now) - now) / 1000));
+    const two = (n) => String(n).padStart(2, "0");
+    const clock = `${two(Math.floor(left / 3600))}:${two(Math.floor((left % 3600) / 60))}:${two(left % 60)}`;
+    el.innerHTML = `<span class="live-dot" aria-hidden="true"></span>Updated ${ago}<span class="next"> · next in ${clock}</span>`;
+    el.title = `Jobs were last refreshed ${lastUpdate.toLocaleString()}. New jobs are fetched every 6 hours.`;
+    el.hidden = false;
+  }
+
   // ---------------------------------------------------------------- anonymous event counts
   // GoatCounter (cookieless). If it's blocked or not loaded, this does nothing.
   function track(path, title = "") {
@@ -148,7 +186,7 @@
     const p = new URLSearchParams(location.search);
     const f = {};
     for (const [k, v] of p) {
-      if (k === "job") continue; // the open job popup, not a filter
+      if (k === "job" || k === "page") continue; // popup / page number, not filters
       if (LIST_KEYS.includes(k)) f[k] = v.split(",").filter(Boolean);
       else if (BOOL_KEYS.includes(k)) f[k] = v === "1";
       else f[k] = v;
@@ -597,51 +635,67 @@
   // ---------------------------------------------------------------- state & search
   let tab = "all";
   let offset = 0;
+  let page = 1;
   let total = 0;
   let current = new Map();   // id -> job (jobs currently on screen)
-  const shown = new Set();   // ids already in the result list (de-duplicates overlapping pages)
   let reqId = 0;
 
-  async function search({ append = false } = {}) {
+  // One page of results at a time; ?page=N keeps the page in the URL (back button, sharing).
+  async function search({ page: wanted = 1, scroll = false } = {}) {
     if (tab !== "all") return;
     const f = readFilters();
     const qs = filtersToQuery(f).toString();
-    const withJob = new URLSearchParams(qs);
-    if (openId) withJob.set("job", openId); // keep the open job in the URL
-    history.replaceState(history.state, "", withJob.toString() ? `?${withJob}` : location.pathname);
+    const params = new URLSearchParams(qs);
+    if (wanted > 1) params.set("page", String(wanted));
+    if (openId) params.set("job", openId); // keep the open job in the URL
+    history.replaceState(history.state, "", params.toString() ? `?${params}` : location.pathname);
     updateRss(qs);
     renderActiveTags();
-    if (!append) offset = 0;
+    page = wanted;
+    offset = (page - 1) * PAGE;
     const my = ++reqId;
-    const more = $("#load-more");
-    if (append) { more.disabled = true; more.textContent = "Loading…"; }
-    else $("#result-count").textContent = "Searching…";
+    $("#result-count").textContent = "Searching…";
+    $("#results").classList.add("loading");
     try {
       const term = (f.q || "").trim().toLowerCase().slice(0, 60);
-      if (!append && term && term !== lastTrackedQuery) { lastTrackedQuery = term; track(`search/${term}`, "Search"); }
+      if (page === 1 && term && term !== lastTrackedQuery) { lastTrackedQuery = term; track(`search/${term}`, "Search"); }
       const data = await rpc("search_jobs", rpcParams(f, offset));
       if (my !== reqId) return; // a newer search started
       total = data.total;
-      if (!append) { current.clear(); shown.clear(); $("#results").innerHTML = ""; }
-      // Pages can overlap when many jobs share a posting time: never show a job twice.
-      const items = data.items.map(withDevInsights).filter((j) => !shown.has(j.id));
-      items.forEach((j) => { shown.add(j.id); if (!(current.get(j.id) || {}).description) current.set(j.id, j); });
-      $("#results").insertAdjacentHTML("beforeend", items.map(jobHtml).join(""));
-      if (!append && !data.items.length) {
-        $("#results").innerHTML = `<li class="empty">No jobs match these filters. Try removing a filter or a tag.</li>`;
-      }
-      offset += data.items.length;
-      $("#result-count").textContent = `${total.toLocaleString("en")} job${total === 1 ? "" : "s"} found`;
-      more.hidden = offset >= total || !data.items.length;
-      more.textContent = `Load more jobs (${Math.max(0, total - offset).toLocaleString("en")} left)`;
+      const pages = Math.max(1, Math.ceil(total / PAGE));
+      if (page > pages && total) return search({ page: pages, scroll });
+      current.clear();
+      const items = data.items.map(withDevInsights);
+      items.forEach((j) => current.set(j.id, j));
+      $("#results").innerHTML = items.length ? items.map(jobHtml).join("")
+        : `<li class="empty">No jobs match these filters. Try removing a filter or a tag.</li>`;
+      const from = total ? offset + 1 : 0, to = Math.min(offset + items.length, total);
+      $("#result-count").textContent = total
+        ? `${from.toLocaleString("en")}–${to.toLocaleString("en")} of ${total.toLocaleString("en")} job${total === 1 ? "" : "s"}`
+        : "No jobs found";
+      renderPager(pages);
+      if (scroll) $(".results-col").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {
       console.error(e);
-      if (my !== reqId) return;
-      if (append) more.textContent = "Couldn't load more — tap to try again";
-      else $("#result-count").textContent = "Couldn't load jobs right now. Please try again in a minute.";
+      if (my === reqId) $("#result-count").textContent = "Couldn't load jobs right now. Please try again in a minute.";
     } finally {
-      more.disabled = false;
+      if (my === reqId) $("#results").classList.remove("loading");
     }
+  }
+
+  // 1 … 4 5 [6] 7 8 … 42
+  function renderPager(pages) {
+    const nav = $("#pager");
+    if (pages <= 1) { nav.innerHTML = ""; return; }
+    const nums = new Set([1, pages, page - 2, page - 1, page, page + 1, page + 2].filter((n) => n >= 1 && n <= pages));
+    const list = [...nums].sort((a, b) => a - b);
+    let html = `<button type="button" class="pg" data-page="${page - 1}" ${page === 1 ? "disabled" : ""} aria-label="Previous page">‹ Prev</button>`;
+    list.forEach((n, i) => {
+      if (i && n - list[i - 1] > 1) html += `<span class="pg-gap" aria-hidden="true">…</span>`;
+      html += `<button type="button" class="pg${n === page ? " current" : ""}" data-page="${n}" ${n === page ? 'aria-current="page"' : ""}>${n}</button>`;
+    });
+    html += `<button type="button" class="pg" data-page="${page + 1}" ${page === pages ? "disabled" : ""} aria-label="Next page">Next ›</button>`;
+    nav.innerHTML = html;
   }
 
   function renderLocal(kind) {
@@ -652,7 +706,7 @@
     $("#results").innerHTML = list.length ? list.map((x) => jobHtml(x.job)).join("")
       : `<li class="empty">${kind === "saved" ? "No saved jobs yet. Tap ☆ Save on any job." : "Nothing marked as applied yet. Tap “Applied?” after you apply — it stays private in this browser."}</li>`;
     $("#result-count").textContent = `${list.length} ${kind} job${list.length === 1 ? "" : "s"} (stored only in this browser)`;
-    $("#load-more").hidden = true;
+    $("#pager").innerHTML = "";
   }
 
   function setTab(t) {
@@ -756,13 +810,21 @@
   }
 
   function costsHtml() {
-    const rows = (C.COSTS || []).map((c) => `<tr><td>${esc(c.label)}</td><td>€${Number(c.eur).toFixed(2)}</td></tr>`).join("");
-    const sum = (C.COSTS || []).reduce((s, c) => s + Number(c.eur), 0);
+    const costs = C.COSTS || [];
+    const eur = (n) => `€${Number(n).toFixed(n % 1 ? 2 : 0)}`;
+    const rows = costs.map((c) => `<tr><td>${esc(c.label)}${c.note ? `<small>${esc(c.note)}</small>` : ""}</td>
+        <td>${eur(c.now || 0)}</td><td>${eur(c.grow ?? c.now ?? 0)}</td></tr>`).join("");
+    const now = costs.reduce((s, c) => s + Number(c.now || 0), 0);
+    const grow = costs.reduce((s, c) => s + Number(c.grow ?? c.now ?? 0), 0);
+    const hours = C.HOURS_PER_MONTH ? `<tr class="time"><td>Development, data checks &amp; guides<small>unpaid</small></td>
+        <td colspan="2">~${C.HOURS_PER_MONTH} h / month</td></tr>` : "";
     const goal = C.MONTHLY_GOAL_EUR || 0, raised = C.RAISED_THIS_MONTH_EUR || 0;
     const pct = goal ? Math.min(100, Math.round((raised / goal) * 100)) : 0;
-    return `<table><tbody>${rows}<tr><td><b>Monthly running costs</b></td><td><b>€${sum.toFixed(2)}</b></td></tr></tbody></table>
+    return `<table class="cost-table"><thead><tr><th></th><th>Today</th><th>To keep growing</th></tr></thead>
+      <tbody>${rows}${hours}</tbody>
+      <tfoot><tr><td>Per month</td><td>${eur(now)}</td><td>${eur(grow)}</td></tr></tfoot></table>
       ${goal ? `<div class="goal"><div class="goal-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${raised}"><span style="width:${pct}%"></span></div>
-      <p>€${raised} of €${goal} this month — covers costs plus better job matching (AI tagging, more sources).</p></div>` : ""}`;
+      <p><b>€${raised}</b> of €${goal} raised this month</p></div>` : ""}`;
   }
 
   let siteStats = null;
@@ -831,10 +893,17 @@
   function init() {
     document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
     $("#brand").textContent = C.SITE_NAME;
-    $("#owner-note").textContent = C.OWNER_NOTE || "";
-    if (C.SPONSOR) $("#sponsor-slot").innerHTML =
-      `<a class="sponsor" href="${esc(C.SPONSOR.url)}" rel="sponsored noopener" target="_blank">
-         <span class="sponsor-label">Sponsored</span><b>${esc(C.SPONSOR.label)}</b><span>${esc(C.SPONSOR.text)}</span></a>`;
+    $("#owner-note").innerHTML = `Built by ${C.OWNER_URL ? `<a href="${esc(C.OWNER_URL)}" rel="noopener">${esc(C.OWNER_NAME || "us")}</a>`
+      : esc(C.OWNER_NAME || "us")} ${esc(C.OWNER_NOTE || "")}`;
+    // Sponsor slot: one real sponsor / partner / ad offer, picked at random per visit.
+    const sponsors = C.SPONSORS || (C.SPONSOR ? [C.SPONSOR] : []);
+    if (sponsors.length) {
+      const sp = sponsors[Math.floor(Math.random() * sponsors.length)];
+      const label = { sponsor: "Sponsored", partner: "Partner", offer: "Advertise here" }[sp.kind] || "Sponsored";
+      $("#sponsor-slot").innerHTML = `<a class="sponsor${sp.kind === "offer" ? " offer" : ""}" href="${esc(sp.url)}"
+         rel="${sp.kind === "offer" ? "noopener" : "sponsored noopener"}" target="_blank" data-goatcounter-click="sponsor-${esc(sp.label)}">
+         <span class="sponsor-label">${label}</span><b>${esc(sp.label)}</b><span>${esc(sp.text)}</span></a>`;
+    }
     $("#cost-box").innerHTML = costsHtml();
     $("#support-costs").innerHTML = costsHtml();
     $$("[data-kofi]").forEach((a) => { a.href = C.KOFI_URL; a.addEventListener("click", () => track("kofi")); });
@@ -857,7 +926,12 @@
     $("#f-nogerman").addEventListener("change", (e) => { setChecked("german", e.target.checked ? NO_GERMAN : []); search(); });
     $("#f-remote").addEventListener("change", (e) => { setChecked("remote", e.target.checked ? REMOTE : []); search(); });
     $("#reset-filters").addEventListener("click", () => { writeFilters({}); search(); });
-    $("#load-more").addEventListener("click", () => { track("load-more"); search({ append: true }); });
+    $("#pager").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-page]");
+      if (!b || b.disabled) return;
+      track(`page/${b.dataset.page}`);
+      search({ page: Number(b.dataset.page), scroll: true });
+    });
     $("#results").addEventListener("click", onJobClick);
     $("#tag-cloud").addEventListener("click", (e) => { const b = e.target.closest("[data-tag]"); if (b) toggleTag(b.dataset.tag); });
     $("#active-tags").addEventListener("click", (e) => { const b = e.target.closest("[data-tag]"); if (b) toggleTag(b.dataset.tag); });
@@ -937,14 +1011,16 @@
 
     loadStats();
     loadFacets();
+    loadFreshness();
     const ready = Promise.all([
       fetch("companies-index.json").then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
       C.DEV_INSIGHTS_URL ? fetch(C.DEV_INSIGHTS_URL).then((r) => r.json()).then((d) => { devInsights = d; }).catch(() => {}) : null,
     ]);
+    const startPage = Math.max(1, parseInt(new URLSearchParams(location.search).get("page"), 10) || 1);
     ready.then(() => {
       renderStats();
       renderHiring();
-      search();
+      search({ page: startPage });
       if (startJob) openJob(startJob, { push: false });
     });
   }

@@ -731,3 +731,55 @@ main.wrap > .layout { margin-top: 28px; }
 .cmp-top > span:first-child { font-weight: 600; }
 .cmp-peer { margin: 0; font-size: 0.84rem; color: var(--muted); }
 .cmp-peer b { color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* "Updated 2 h ago · next in 03:42:10" (header, top right) */
+.updated-pill { display: inline-flex; align-items: center; gap: 7px; margin-right: 6px; padding: 5px 11px; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 500; color: var(--muted); background: var(--surface-2); border: 1px solid var(--border);
+  white-space: nowrap; font-variant-numeric: tabular-nums; }
+.updated-pill .next { color: var(--muted); opacity: .85; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-bg);
+  animation: live-pulse 2.4s ease-in-out infinite; }
+@keyframes live-pulse { 50% { box-shadow: 0 0 0 5px transparent; } }
+@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+@media (max-width: 1100px) { .updated-pill .next { display: none; } }
+@media (max-width: 640px) { .updated-pill { order: -1; margin: 0; font-size: 0.75rem; } }
+
+/* Pagination */
+.pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin: 22px 0 8px; }
+.pg { min-width: 40px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface);
+  color: var(--text); font: inherit; font-weight: 600; font-size: 0.92rem; cursor: pointer; font-variant-numeric: tabular-nums; }
+.pg:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.pg.current { background: var(--accent); border-color: var(--accent); color: var(--accent-text); cursor: default; }
+.pg:disabled { opacity: .45; cursor: default; }
+.pg-gap { color: var(--muted); padding: 0 2px; }
+.results.loading { opacity: .5; transition: opacity .15s; }
+
+/* About / privacy / costs card */
+.about-card { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 36px; margin: 48px 0 8px; padding: 32px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+.about-kicker { margin: 0 0 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.about-card h2 { margin: 0 0 10px; font-size: clamp(1.3rem, 2.4vw, 1.65rem); letter-spacing: -0.02em; line-height: 1.2; }
+.about-lead { margin: 0 0 16px; font-size: 1.02rem; color: var(--muted); line-height: 1.55; }
+.privacy-points { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 9px; }
+.privacy-points li { position: relative; padding-left: 28px; font-size: 0.95rem; }
+.privacy-points li::before { content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--ok-bg) no-repeat center / 11px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.5 4.8 9 10 3' fill='none' stroke='%230b7a4b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.owner-line { margin: 0; padding-top: 14px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.92rem; }
+.owner-line a { font-weight: 600; }
+.about-costs { background: var(--surface-2); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; }
+.about-costs h3 { margin: 0 0 12px; font-size: 1.05rem; }
+.cost-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.cost-table th { font-size: 0.72rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  text-align: right; padding: 0 0 6px; }
+.cost-table td { padding: 7px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+.cost-table td + td, .cost-table th + th { text-align: right; padding-left: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cost-table td small { display: block; color: var(--muted); font-size: 0.76rem; }
+.cost-table tr.time td:last-child { color: var(--muted); }
+.cost-table tfoot td { font-weight: 700; border-bottom: 0; padding-top: 10px; }
+.about-costs .goal { margin-top: 14px; max-width: none; }
+.about-ask { margin: 14px 0 14px; font-size: 0.93rem; line-height: 1.55; }
+.about-costs .btn.support { align-self: flex-start; }
+.sponsor.offer { border-style: dashed; }
+@media (max-width: 860px) {
+  .about-card { grid-template-columns: 1fr; padding: 22px; gap: 22px; }
+}
