@@ -92,6 +92,19 @@
   }
   let lastTrackedQuery = "";
 
+  // Anonymous popularity counts per job (no visitor data is sent — only the job id and "open"/"apply").
+  // Each browser counts once per job, kind and day, so reloading doesn't inflate the numbers.
+  function countJobEvent(id, kind) {
+    if (DEMO || !id) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const seenEvents = store.get("events", {});
+    if (seenEvents[`${kind}:${id}`] === today) return;
+    for (const [k, day] of Object.entries(seenEvents)) if (day !== today) delete seenEvents[k]; // keep it small
+    seenEvents[`${kind}:${id}`] = today;
+    store.set("events", seenEvents);
+    rpc("record_job_event", { p_id: id, p_kind: kind }).catch(() => {});
+  }
+
   // ---------------------------------------------------------------- glossary
   const GLOSSARY = {
     "unbefristet": "Permanent contract (no end date).",
@@ -258,6 +271,7 @@
     if (isNew(j)) out.push(`<span class="badge new">NEW</span>`);
     const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
     out.push(`<span class="badge ${gc}">${gl}</span>`);
+    if ((j.popularity || 0) >= 6) out.unshift(`<span class="badge popular" title="Many people opened or applied to this job in the last 14 days">Popular</span>`);
     const bc = blueCard(j);
     if (bc) out.push(`<span class="badge ${bc[0]}" title="${esc(bc[2])}">${bc[1]}</span>`);
     if (REMOTE_LABEL[j.remote_type]) out.push(`<span class="badge">${REMOTE_LABEL[j.remote_type]}</span>`);
@@ -576,6 +590,7 @@
     box.scrollTop = 0;
     markSeen(id);
     track("job-open", j ? j.company : id);
+    countJobEvent(id, "open");
     $$(`.job[data-id="${CSS.escape(id)}"]`).forEach((li) => li.classList.add("seen"));
     if (DEMO) return;
     try {
@@ -614,6 +629,7 @@
     const j = current.get(openId);
     const act = btn.dataset.jd;
     if (act !== "close") track(`popup-${act}`, j ? j.company : "");
+    if (act === "apply") countJobEvent(openId, "apply");
     if (act === "close") closeJob();
     else if (act === "copy") {
       navigator.clipboard?.writeText(location.href).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
