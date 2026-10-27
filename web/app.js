@@ -45,6 +45,15 @@
     return text ? JSON.parse(text) : null;
   }
 
+  // ---------------------------------------------------------------- anonymous event counts
+  // GoatCounter (cookieless). If it's blocked or not loaded, this does nothing.
+  function track(path, title = "") {
+    try {
+      if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title: String(title).slice(0, 120), event: true });
+    } catch { /* analytics must never break the site */ }
+  }
+  let lastTrackedQuery = "";
+
   // ---------------------------------------------------------------- glossary
   const GLOSSARY = {
     "unbefristet": "Permanent contract (no end date).",
@@ -477,6 +486,7 @@
     if (!dlg.open) dlg.showModal();
     box.scrollTop = 0;
     markSeen(id);
+    track("job-open", j ? j.company : id);
     $$(`.job[data-id="${CSS.escape(id)}"]`).forEach((li) => li.classList.add("seen"));
     if (DEMO) return;
     try {
@@ -514,6 +524,7 @@
     if (!btn) return;
     const j = current.get(openId);
     const act = btn.dataset.jd;
+    if (act !== "close") track(`popup-${act}`, j ? j.company : "");
     if (act === "close") closeJob();
     else if (act === "copy") {
       navigator.clipboard?.writeText(location.href).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
@@ -555,6 +566,8 @@
     if (append) { more.disabled = true; more.textContent = "Loading…"; }
     else $("#result-count").textContent = "Searching…";
     try {
+      const term = (f.q || "").trim().toLowerCase().slice(0, 60);
+      if (!append && term && term !== lastTrackedQuery) { lastTrackedQuery = term; track(`search/${term}`, "Search"); }
       const data = await rpc("search_jobs", rpcParams(f, offset));
       if (my !== reqId) return; // a newer search started
       total = data.total;
@@ -660,14 +673,17 @@
       openJob(j);
     } else if (act === "save") {
       toggleList("save", j);
+      if (saved[j.id]) track("save", j.company);
       btn.setAttribute("aria-pressed", String(!!saved[j.id]));
       btn.textContent = saved[j.id] ? "★ Saved" : "☆ Save";
     } else if (act === "applied") {
       toggleList("applied", j);
+      if (applied[j.id]) track("mark-applied", j.company);
       btn.setAttribute("aria-pressed", String(!!applied[j.id]));
       btn.textContent = applied[j.id] ? "✓ Applied" : "Applied?";
       li.classList.add("seen");
     } else if (act === "hide") {
+      track("hide-company", j.company);
       if (!hiddenCompanies.includes(j.company)) hiddenCompanies.push(j.company);
       store.set("hiddenCompanies", hiddenCompanies);
       $$(".job").forEach((el) => { if (current.get(el.dataset.id)?.company === j.company && tab === "all") el.remove(); });
@@ -770,7 +786,7 @@
          <span class="sponsor-label">Sponsored</span><b>${esc(C.SPONSOR.label)}</b><span>${esc(C.SPONSOR.text)}</span></a>`;
     $("#cost-box").innerHTML = costsHtml();
     $("#support-costs").innerHTML = costsHtml();
-    $$("[data-kofi]").forEach((a) => { a.href = C.KOFI_URL; });
+    $$("[data-kofi]").forEach((a) => { a.href = C.KOFI_URL; a.addEventListener("click", () => track("kofi")); });
     $$("[data-supporters]").forEach((a) => { a.href = C.SUPPORTERS_URL || C.KOFI_URL; });
     $("#glossary-list").innerHTML = Object.entries(GLOSSARY).map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join("");
     if (!window.matchMedia("(min-width: 861px)").matches) $("#more-filters").open = false;
@@ -786,10 +802,11 @@
     $("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => search(), 350); });
     $$(".filters select, .filters input, #city, #sort, #f-salary, #f-visa, #f-direct").forEach((el) =>
       el.addEventListener("change", () => { syncQuickChips(); search(); }));
+    $$(".hero .chip input").forEach((el) => el.addEventListener("change", () => { if (el.checked) track(`filter/${el.id.replace(/^f-/, "")}`); }));
     $("#f-nogerman").addEventListener("change", (e) => { setChecked("german", e.target.checked ? NO_GERMAN : []); search(); });
     $("#f-remote").addEventListener("change", (e) => { setChecked("remote", e.target.checked ? REMOTE : []); search(); });
     $("#reset-filters").addEventListener("click", () => { writeFilters({}); search(); });
-    $("#load-more").addEventListener("click", () => search({ append: true }));
+    $("#load-more").addEventListener("click", () => { track("load-more"); search({ append: true }); });
     $("#results").addEventListener("click", onJobClick);
     $("#tag-cloud").addEventListener("click", (e) => { const b = e.target.closest("[data-tag]"); if (b) toggleTag(b.dataset.tag); });
     $("#active-tags").addEventListener("click", (e) => { const b = e.target.closest("[data-tag]"); if (b) toggleTag(b.dataset.tag); });
@@ -803,6 +820,7 @@
       const d = document.getElementById(b.dataset.open);
       if (d.id === "prefs-dialog") renderPrefs();
       if (d.id === "hired-dialog" && store.get("hired", false)) { $("#hired-ask").hidden = true; $("#hired-thanks").hidden = false; }
+      track(`open/${d.id.replace(/-dialog$/, "")}`);
       d.showModal();
     }));
     $$("dialog").forEach((d) => d.addEventListener("click", (e) => { if (e.target === d) d.close(); })); // click backdrop
@@ -824,6 +842,7 @@
     });
 
     $("#hired-yes").addEventListener("click", async () => {
+      track("hired");
       store.set("hired", true);
       $("#hired-ask").hidden = true; $("#hired-thanks").hidden = false;
       try { await rpc("record_hire"); loadStats(); } catch { /* counter is best-effort */ }
