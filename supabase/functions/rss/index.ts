@@ -3,8 +3,8 @@
 // URL:     https://<project>.supabase.co/functions/v1/rss?q=python&german=not_required,nice_to_have
 // Accepts the same query parameters as the website URL.
 
-const SITE_URL = Deno.env.get("SITE_URL") ?? "https://example.com";
-const SITE_NAME = Deno.env.get("SITE_NAME") ?? "English Jobs Germany";
+const SITE_URL = Deno.env.get("SITE_URL") ?? "https://www.stellenly.com";
+const SITE_NAME = Deno.env.get("SITE_NAME") ?? "Stellenly";
 const BLUE_CARD: Record<string, number> = { standard: 50700, reduced: 45934 }; // keep in sync with web/config.js
 
 const esc = (s: unknown) =>

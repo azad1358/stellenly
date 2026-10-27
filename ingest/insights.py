@@ -11,8 +11,9 @@ Results go to jobs.insights via set_job_insights().
     python ingest/insights.py              # needs SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
     python ingest/insights.py --dry-run    # read-only (anon key is enough), prints a summary
 
-Optional LLM check (any OpenAI-compatible API, e.g. Groq's free tier):
-    LLM_API_KEY=...  [LLM_API_URL=https://api.groq.com/openai/v1/chat/completions]  [LLM_MODEL=llama-3.1-8b-instant]
+Optional LLM check (any OpenAI-compatible API; see llm_client.py for retries and defaults):
+    LLM_API_KEY=...  [LLM_MODEL=...]  [LLM_API_URL=...]  [LLM_MAX_JOBS=150]  [LLM_PAUSE=6]
+    A Google AI Studio key ("AIza…") uses Gemini automatically; otherwise Groq.
 """
 from __future__ import annotations
 
@@ -29,6 +30,7 @@ import numpy as np
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
+import llm_client  # noqa: E402
 import llm_facts  # noqa: E402
 from skills import canonical_skill, extract_skills  # noqa: E402
 
@@ -175,21 +177,6 @@ def embed_missing(jobs: list[dict], vecs: dict, meta: dict) -> int:
 
 
 # ---------------------------------------------------------------- optional LLM job analysis
-def _llm(prompt: str) -> dict | None:
-    """One JSON answer from an OpenAI-compatible chat API. None if unavailable or rate-limited."""
-    key = os.environ.get("LLM_API_KEY")
-    if not key:
-        return None
-    r = requests.post((os.environ.get("LLM_API_URL") or "https://api.groq.com/openai/v1/chat/completions"), timeout=90,
-                      headers={"Authorization": f"Bearer {key}"},
-                      json={"model": (os.environ.get("LLM_MODEL") or "llama-3.1-8b-instant"), "temperature": 0,
-                            "response_format": {"type": "json_object"}, "messages": [{"role": "user", "content": prompt}]})
-    if r.status_code == 429:
-        raise RuntimeError("rate limit")
-    r.raise_for_status()
-    return json.loads(r.json()["choices"][0]["message"]["content"])
-
-
 ANALYSIS_PROMPT = """You help international job seekers in Germany. Read this job posting and answer ONLY with JSON:
 {{"summary": "2 sentences: what the job is and who it suits",
   "tasks": ["3-5 short main responsibilities"],
@@ -230,19 +217,17 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
     todo.sort(key=lambda j: (j["german_level"] != "not_mentioned", not j.get("salary_min")))
     todo = todo[:int(os.environ.get("LLM_MAX_JOBS", 150))]
     texts = fetch_texts([j["id"] for j in todo]) if todo else {}
-    done = 0
+    print(f"LLM: analysing up to {len(todo)} jobs with {llm_client._model()}")
+    done, fails = 0, 0
     for j in todo:
         text = texts.get(j["id"], "")
-        try:
-            ans = _llm(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=text[:6000]))
-        except RuntimeError:
-            print("  LLM rate limit reached; the rest waits for the next run")
+        ans = _ask(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=text[:6000]), j["id"], fails)
+        if ans == "stop":
             break
-        except Exception as e:
-            print(f"  ! LLM analysis failed for {j['id']}: {e}")
+        if ans is None:
+            fails += 1
             continue
-        if not ans:
-            break
+        fails = 0
         skills = []
         for s in ans.get("skills") or []:
             name = str(s.get("name") or "").strip()[:40]
@@ -257,8 +242,23 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
         }
         store[j["id"]] = llm_facts.verify(ans, text, j["seniority"])
         done += 1
-        time.sleep(2.1)  # free tiers allow ~30 requests per minute
     return done
+
+
+def _ask(prompt: str, job_id: str, fails: int):
+    """One LLM call with the client's retries. Returns the answer, None (skip this job) or "stop" (end the run)."""
+    try:
+        return llm_client.chat_json(prompt)
+    except llm_client.LLMQuotaExhausted:
+        print("  LLM daily quota used up; the remaining jobs wait for the next run")
+    except llm_client.LLMConfigError as e:
+        print(f"  ! LLM switched off for this run: {e}")
+    except llm_client.LLMUnavailable:
+        print(f"  LLM still busy after retries; skipping {job_id}")
+        if fails + 1 < 3:
+            return None
+        print("  3 jobs in a row failed; the rest waits for the next run")
+    return "stop"
 
 
 # ---------------------------------------------------------------- peers + hints
@@ -425,16 +425,13 @@ def make_hints(j: dict, peers: dict, salary: float, meta: dict, n_cities: int) -
 
 # ---------------------------------------------------------------- optional LLM salary check
 def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> int:
-    key = os.environ.get("LLM_API_KEY")
-    if not key:
+    if not os.environ.get("LLM_API_KEY"):
         return 0
-    url = (os.environ.get("LLM_API_URL") or "https://api.groq.com/openai/v1/chat/completions")
-    model = (os.environ.get("LLM_MODEL") or "llama-3.1-8b-instant")
     todo = [j for j in jobs
             if any(h["k"] in ("salary_error", "salary_high", "salary_low") for h in insights[j["id"]]["hints"])
             and meta.get(j["id"], {}).get("llm", {}).get("for") != [j["salary_min"], j["salary_max"]]][:limit]
     texts = fetch_texts([j["id"] for j in todo]) if todo else {}
-    done = 0
+    done, fails = 0, 0
     for j in todo:
         text = texts.get(j["id"], "")
         snippets = " … ".join(m.group(0) for m in re.finditer(
@@ -447,22 +444,16 @@ def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> 
             '{"correct": true|false, "period": "year|month|hour|unknown", "annual_eur_min": number|null, '
             '"annual_eur_max": number|null, "includes_bonus_or_equity": true|false, '
             '"note": "one short sentence for a job seeker"}')
-        try:
-            r = requests.post(url, timeout=60, headers={"Authorization": f"Bearer {key}"}, json={
-                "model": model, "temperature": 0, "response_format": {"type": "json_object"},
-                "messages": [{"role": "user", "content": prompt}]})
-            if r.status_code == 429:
-                print("  LLM rate limit reached; the rest waits for the next run")
-                break
-            r.raise_for_status()
-            ans = json.loads(r.json()["choices"][0]["message"]["content"])
-        except Exception as e:
-            print(f"  ! LLM check failed for {j['id']}: {e}")
+        ans = _ask(prompt, j["id"], fails)
+        if ans == "stop":
+            break
+        if ans is None:
+            fails += 1
             continue
+        fails = 0
         meta.setdefault(j["id"], {})["llm"] = {"for": [j["salary_min"], j["salary_max"]],
                                                "note": str(ans.get("note") or "")[:240], "answer": ans}
         done += 1
-        time.sleep(2)  # stay well inside free-tier rate limits
     return done
 
 
@@ -506,8 +497,10 @@ def main() -> None:
     if llm_check(jobs, insights, meta):
         insights = compute(jobs, vecs, meta)  # fold the LLM notes into the hints
     save_cache(vecs, meta, {j["id"] for j in jobs})
-    if analysed:
-        print(f"LLM analysed {analysed} jobs")
+    if os.environ.get("LLM_API_KEY"):
+        s = llm_client.stats
+        print(f"LLM ({llm_client._model()}): analysed {analysed} jobs · {s['calls']} calls, "
+              f"{s['retries']} retries, {s['failed']} gave up")
 
     counts = collections.Counter(h["k"] for v in insights.values() for h in v["hints"])
     with_salary_stats = sum("salary" in v["peers"] for v in insights.values())
