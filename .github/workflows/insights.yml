@@ -26,7 +26,7 @@ jobs:
     # Also after an import that ended with a source alert: the other sources' jobs were still saved.
     if: github.event_name != 'workflow_run' || contains(fromJSON('["success", "failure"]'), github.event.workflow_run.conclusion)
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 100   # ~300 AI analyses at the free tier pace (public repo: Actions minutes are free)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -48,6 +48,7 @@ jobs:
           LLM_API_URL: ${{ vars.LLM_API_URL }}          # optional, OpenAI-compatible endpoint (default: Groq)
           LLM_MODEL: ${{ vars.LLM_MODEL }}              # e.g. gemini-2.5-flash
           LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL }}  # used when LLM_MODEL is overloaded or out of quota
+          LLM_MAX_JOBS: ${{ vars.LLM_MAX_JOBS || 300 }}   # AI analyses per run; new jobs wait for the next run
           HF_HUB_DISABLE_PROGRESS_BARS: "1"
         run: python ingest/insights.py
       - name: Commit checked LLM facts
