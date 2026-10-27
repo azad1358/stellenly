@@ -893,5 +893,5 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 @media (max-width: 1240px) and (min-width: 641px) {
   .updated-pill { display: none !important; }
 }
-/* The header may use more width than the page content, so all tabs fit next to the logo on big screens */
-.site-header .wrap { max-width: 1340px; }
+/* Full-width header: logo at the far left of the page, tabs on the right */
+.site-header .wrap { max-width: none; padding: 0 24px; }
