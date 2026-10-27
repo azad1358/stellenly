@@ -94,6 +94,15 @@ def test_unknown_model_falls_back_to_newest_flash(monkeypatch):
     assert calls[-1]["model"] == "gemini-3.8-flash"
 
 
+def test_fallback_model_that_404s_is_skipped(monkeypatch):
+    calls = []
+    queue(monkeypatch, [Resp(404, text="model gemini-test-flash is not found"), Resp(404, text="[{}]"), ok('{"ok": 1}')], calls)
+    monkeypatch.setattr(llm_client.requests, "get", lambda url, **kw: Resp(200, {"data": [
+        {"id": "models/gemini-3.1-flash-lite"}, {"id": "models/gemini-2.5-flash"}]}))
+    assert llm_client.chat_json("hi") == {"ok": 1}
+    assert [c["model"] for c in calls] == ["gemini-test-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite"]
+
+
 def test_rejected_json_mode_is_dropped(monkeypatch):
     calls = []
     queue(monkeypatch, [Resp(400, text="Invalid value for response_format"), ok('{"ok": 1}')], calls)

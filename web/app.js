@@ -419,6 +419,18 @@
     return `<span class="logo mono ${cls}" style="--h:${h}" aria-hidden="true">${esc(initials)}</span>`;
   }
 
+  // "23 views · 5 applied" — anonymous all-time counts from record_job_event (no visitor data).
+  function clicksBadge(j) {
+    const views = j.views || 0, applies = j.apply_clicks || 0;
+    if (!views && !applies) return "";
+    const n = (x) => x.toLocaleString("en");
+    const parts = [`${n(views)} view${views === 1 ? "" : "s"}`];
+    if (applies) parts.push(`${n(applies)} applied`);
+    return `<span class="clicks-badge" title="How often people opened this job and clicked Apply on Stellenly">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        ${parts.join(" · ")}</span>`;
+  }
+
   const jobUrl = (id) => { const p = new URLSearchParams(location.search); p.set("job", id); return `?${p}`; };
   const skillsOf = (j) => (j.insights && j.insights.skills) || [];
 
@@ -437,6 +449,7 @@
       </div>
       <div class="job-side">
         ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : `<div class="job-salary none">Salary not listed</div>`}
+        ${clicksBadge(j)}
         <div class="job-actions">
           <button type="button" class="btn ghost" data-act="save" aria-pressed="${isSaved}" title="Save for later">${isSaved ? "★ Saved" : "☆ Save"}</button>
           <button type="button" class="btn ghost" data-act="applied" aria-pressed="${isApplied}" title="Mark as applied">${isApplied ? "✓ Applied" : "Applied?"}</button>
