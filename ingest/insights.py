@@ -74,7 +74,7 @@ def rpc(name: str, body: dict) -> str:
 
 
 COLS = ("id,title,company,city,seniority,salary_min,salary_max,years_experience,german_level,"
-        "visa_sponsorship,relocation,is_agency,repost_count")
+        "visa_sponsorship,relocation,is_agency,repost_count,db_ai:insights->ai,db_skills:insights->skills")
 
 
 def fetch_active() -> list[dict]:
@@ -107,6 +107,20 @@ def load_cache() -> tuple[dict[str, np.ndarray], dict]:
     if (CACHE / "meta.json").exists():
         meta = json.loads((CACHE / "meta.json").read_text(encoding="utf-8"))
     return vecs, meta
+
+
+def restore_ai(jobs: list[dict], meta: dict) -> int:
+    """The database keeps every AI analysis (jobs.insights.ai); the Actions cache can be evicted. Put the saved
+    analyses back into meta so a lost cache never sends the same posting to the LLM twice."""
+    restored = 0
+    for j in jobs:
+        ai, skills = j.pop("db_ai", None), j.pop("db_skills", None)
+        m = meta.setdefault(j["id"], {})
+        if ai and "ai" not in m:
+            # With an analysis, insights.skills are the LLM's skills (plus the peer share "p", recomputed each run).
+            m["ai"] = {**ai, "skills": [{k: s[k] for k in ("n", "w", "r") if k in s} for s in skills or []]}
+            restored += 1
+    return restored
 
 
 def save_cache(vecs: dict[str, np.ndarray], meta: dict, keep: set[str]) -> None:
@@ -489,6 +503,8 @@ def main() -> None:
 
     jobs = fetch_active()
     vecs, meta = load_cache()
+    if restored := restore_ai(jobs, meta):
+        print(f"Restored {restored} AI analyses from the database (not in the cache)")
     new = embed_missing(jobs, vecs, meta)
     jobs = [j for j in jobs if j["id"] in vecs]
     analysed = llm_analyze(jobs, meta)

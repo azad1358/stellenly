@@ -5,7 +5,7 @@ import pytest
 
 np = pytest.importorskip("numpy")  # only installed for the insights workflow
 sys.path.insert(0, str(Path(__file__).parent))
-from insights import make_hints, scam_signals  # noqa: E402
+from insights import make_hints, restore_ai, scam_signals  # noqa: E402
 
 PEERS = {"n": 30, "german_req": 0.6, "no_german": 0.3, "visa": 0.05, "years": 3.0,
          "salary": {"n": 12, "p25": 50000, "p50": 60000, "p75": 70000}}
@@ -53,3 +53,15 @@ def test_scam_signals_need_contact_context():
     assert not scam_signals("We will never:\nContact you via WhatsApp, Telegram, or similar platforms")
     assert not scam_signals("We do not make job offers via text message, WhatsApp, or instant messaging.")
     assert not scam_signals("Candidates are contacted via WhatsApp or phone, qualified one by one.")
+
+
+def test_restore_ai_from_database_when_cache_is_lost():
+    jobs = [{"id": "a", "db_ai": {"summary": "S", "tasks": ["t"]}, "db_skills": [{"n": "Python", "w": 1.0, "r": 1, "p": 0.4}]},
+            {"id": "b", "db_ai": None, "db_skills": [{"n": "SQL", "w": 1.0, "r": 1}]},
+            {"id": "c", "db_ai": {"summary": "old"}, "db_skills": None}]
+    meta = {"c": {"ai": {"summary": "cached"}}}
+    assert restore_ai(jobs, meta) == 1
+    assert meta["a"]["ai"] == {"summary": "S", "tasks": ["t"], "skills": [{"n": "Python", "w": 1.0, "r": 1}]}
+    assert "ai" not in meta["b"]                    # no analysis saved: the LLM still has to read it
+    assert meta["c"]["ai"]["summary"] == "cached"   # the cache wins when it has one
+    assert all("db_ai" not in j and "db_skills" not in j for j in jobs)
