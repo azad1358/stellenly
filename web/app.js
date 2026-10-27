@@ -482,7 +482,7 @@
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
-        <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}</div>
+        <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
         <div class="badges">${badges(j)}</div>
         ${skills ? `<div class="skills-row">${skills}</div>` : ""}
       </div>
@@ -744,9 +744,12 @@
       $("#results").innerHTML = items.length ? items.map(jobHtml).join("")
         : `<li class="empty">No jobs match these filters. Try removing a filter or a tag.</li>`;
       const from = total ? offset + 1 : 0, to = Math.min(offset + items.length, total);
-      $("#result-count").textContent = total
-        ? `${from.toLocaleString("en")}–${to.toLocaleString("en")} of ${total.toLocaleString("en")} job${total === 1 ? "" : "s"}`
-        : "No jobs found";
+      // Title/company/tag matches come first (search_jobs); say so when some jobs only mention the word.
+      const strong = data.strong_total ?? total, q = (f.q || "").trim(), n = (x) => x.toLocaleString("en");
+      $("#result-count").textContent = !total ? "No jobs found"
+        : q && !strong ? `No job titles match “${q}”. ${n(total)} job${total === 1 ? "" : "s"} only mention it in the description:`
+        : `${n(from)}–${n(to)} of ${n(total)} job${total === 1 ? "" : "s"}`
+          + (q && strong < total ? ` · ${n(strong)} match “${q}” in the title, the rest mention it in the description` : "");
       renderPager(pages);
       if (scroll) $(".results-col").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {

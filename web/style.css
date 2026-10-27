@@ -954,3 +954,4 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .tg-float-text, .tg-float-close { display: none; }
 }
 @media print { .tg-float { display: none; } }
+.match-note { font-size: .75rem; padding: 1px 7px; border-radius: 999px; background: var(--neutral-bg); color: var(--muted); }
