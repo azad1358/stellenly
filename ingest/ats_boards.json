@@ -55,6 +55,16 @@
    "board": "apaleo",
    "company": "Apaleo"
   },
+  "applied": {
+   "ats": "ashby",
+   "board": "applied",
+   "company": "Applied"
+  },
+  "applikegroup": {
+   "ats": "ashby",
+   "board": "applike-group",
+   "company": "Applike Group"
+  },
   "archimed": {
    "ats": "workable",
    "board": "archimed",
@@ -69,6 +79,16 @@
    "ats": "recruitee",
    "board": "jobsatlanticvc",
    "company": "atlantic.vc"
+  },
+  "augustus": {
+   "ats": "ashby",
+   "board": "augustus",
+   "company": "Augustus"
+  },
+  "avomind": {
+   "ats": "workable",
+   "board": "avomind",
+   "company": "Avomind"
   },
   "awin": {
    "ats": "greenhouse",
@@ -89,6 +109,11 @@
    "ats": "ashby",
    "board": "bettermile",
    "company": "Bettermile"
+  },
+  "bigblue": {
+   "ats": "lever",
+   "board": "bigblue",
+   "company": "Bigblue"
   },
   "bjak": {
    "ats": "ashby",
@@ -213,6 +238,11 @@
    "board": "emma-sleep",
    "company": "Emma – The Sleep Company"
   },
+  "engagedmd": {
+   "ats": "ashby",
+   "board": "engagedmd",
+   "company": "Engagedmd"
+  },
   "eunetworks": {
    "ats": "greenhouse",
    "board": "eunetworks",
@@ -228,6 +258,11 @@
    "board": "eye-security",
    "company": "Eye Security"
   },
+  "fender": {
+   "ats": "greenhouse",
+   "board": "fender",
+   "company": "Fender"
+  },
   "fioneer": {
    "ats": "workable",
    "board": "fioneer",
@@ -237,6 +272,11 @@
    "ats": "greenhouse",
    "board": "flexport",
    "company": "Flexport"
+  },
+  "flipgmbh": {
+   "ats": "ashby",
+   "board": "flip",
+   "company": "Flip GmbH"
   },
   "foundersfactory": {
    "ats": "ashby",
@@ -278,6 +318,16 @@
    "board": "hophr",
    "company": "Hop"
   },
+  "hopae": {
+   "ats": "ashby",
+   "board": "hopae",
+   "company": "Hopae"
+  },
+  "huzzle": {
+   "ats": "workable",
+   "board": "huzzle",
+   "company": "Huzzle"
+  },
   "hypersonica": {
    "ats": "lever",
    "board": "hypersonica-prod",
@@ -309,10 +359,20 @@
    "board": "jobgether",
    "company": "Jobgether"
   },
+  "justwatch": {
+   "ats": "lever",
+   "board": "justwatch",
+   "company": "Justwatch"
+  },
   "kayak": {
    "ats": "ashby",
    "board": "kayak",
    "company": "Kayak"
+  },
+  "kertos": {
+   "ats": "ashby",
+   "board": "kertos",
+   "company": "Kertos"
   },
   "klim": {
    "ats": "ashby",
@@ -366,6 +426,12 @@
    "board": "litmus",
    "company": "Litmus"
   },
+  "lovehoneygroup": {
+   "ats": "lever",
+   "board": "lovehoneygroup",
+   "region": "eu",
+   "company": "Lovehoney Group"
+  },
   "machinelearningreply": {
    "ats": "recruitee",
    "board": "machinelearningreply",
@@ -376,15 +442,35 @@
    "board": "mapbox",
    "company": "Mapbox"
   },
+  "melotech": {
+   "ats": "ashby",
+   "board": "melotech",
+   "company": "Melotech"
+  },
+  "mlabs": {
+   "ats": "workable",
+   "board": "mlabs",
+   "company": "Mlabs"
+  },
   "munichelectrification": {
    "ats": "ashby",
    "board": "munich-electrification",
    "company": "Munich Electrification"
   },
+  "netbird": {
+   "ats": "ashby",
+   "board": "netbird",
+   "company": "NetBird"
+  },
   "netgear": {
    "ats": "ashby",
    "board": "netgear",
    "company": "NETGEAR"
+  },
+  "newrelic": {
+   "ats": "greenhouse",
+   "board": "newrelic",
+   "company": "newrelic"
   },
   "omaze": {
    "ats": "ashby",
@@ -395,6 +481,16 @@
    "ats": "greenhouse",
    "board": "onapsis",
    "company": "Onapsis"
+  },
+  "ontargetcommunications": {
+   "ats": "recruitee",
+   "board": "ontarget",
+   "company": "OnTarget Communications"
+  },
+  "parity": {
+   "ats": "ashby",
+   "board": "parity",
+   "company": "Parity"
   },
   "patronus": {
    "ats": "ashby",
@@ -488,10 +584,20 @@
    "board": "reonic",
    "company": "Reonic"
   },
+  "rillet": {
+   "ats": "ashby",
+   "board": "rillet",
+   "company": "Rillet"
+  },
   "rivianvwtech": {
    "ats": "ashby",
    "board": "rivianvw.tech",
    "company": "Rivianvw.tech"
+  },
+  "roadsurfer": {
+   "ats": "ashby",
+   "board": "roadsurfer.com",
+   "company": "Roadsurfer"
   },
   "robco": {
    "ats": "ashby",
@@ -508,10 +614,30 @@
    "board": "rootglobal",
    "company": "Rootglobal"
   },
+  "sardine": {
+   "ats": "ashby",
+   "board": "Sardine",
+   "company": "Sardine"
+  },
+  "se3": {
+   "ats": "ashby",
+   "board": "se3",
+   "company": "Se3"
+  },
   "searoutes": {
    "ats": "workable",
    "board": "searoutes",
    "company": "Searoutes"
+  },
+  "seeq": {
+   "ats": "workable",
+   "board": "seeq",
+   "company": "Seeq"
+  },
+  "seniorsoftwareengineergamifiedsecurityawarenessfullstack": {
+   "ats": "ashby",
+   "board": "hoxhunt",
+   "company": "Senior Software Engineer, Gamified Security Awareness (Full-Stack)"
   },
   "sereactgmbh": {
    "ats": "ashby",
@@ -528,6 +654,11 @@
    "ats": "ashby",
    "board": "sosafe",
    "company": "SoSafe"
+  },
+  "spaitial": {
+   "ats": "ashby",
+   "board": "spaitial",
+   "company": "Spaitial"
   },
   "stealthrocketrystartup": {
    "ats": "ashby",
@@ -575,6 +706,11 @@
    "board": "telli",
    "company": "Telli"
   },
+  "temporaltechnologies": {
+   "ats": "ashby",
+   "board": "temporal",
+   "company": "Temporal Technologies"
+  },
   "tensordyne": {
    "ats": "greenhouse",
    "board": "tensordyne",
@@ -599,6 +735,11 @@
    "ats": "recruitee",
    "board": "trafineo",
    "company": "Trafineo"
+  },
+  "transperfect": {
+   "ats": "recruitee",
+   "board": "transperfect",
+   "company": "TransPerfect"
   },
   "trawa": {
    "ats": "ashby",
@@ -629,6 +770,11 @@
    "ats": "recruitee",
    "board": "up42gmbh",
    "company": "UP42 GmbH"
+  },
+  "vestiairecollective": {
+   "ats": "lever",
+   "board": "vestiairecollective",
+   "company": "Vestiairecollective"
   },
   "visium": {
    "ats": "workable",
@@ -671,26 +817,35 @@
   "alephalpha": "2026-10-27",
   "allyourbi": "2026-10-27",
   "alpineeagle": "2026-10-27",
+  "amperecloudgmbh": "2026-10-27",
+  "anoritech": "2026-10-27",
   "anywherenow": "2026-10-27",
   "appinio": "2026-10-27",
   "auterion": "2026-10-27",
   "beyondservicegmbh": "2026-10-27",
   "bifrostdefence": "2026-10-27",
+  "brighteraitechnologiesgmbh": "2026-10-27",
   "bsimerchgmbh": "2026-10-27",
   "btthealthgmbh": "2026-10-27",
+  "buildingradargmbh": "2026-10-27",
   "camunda": "2026-10-27",
   "caronsale": "2026-10-27",
   "celonis": "2026-10-27",
   "cesiumastro": "2026-10-27",
   "cherryventures": "2026-10-27",
+  "cityscience": "2026-10-27",
   "clarinessgmbh": "2026-10-27",
+  "cohere": "2026-10-27",
   "commercetools": "2026-10-27",
+  "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
   "databricks": "2026-10-27",
+  "dexterhealth": "2026-10-27",
   "doctolib": "2026-10-27",
+  "doopicgmbh": "2026-10-27",
   "dreamlinesgmbh": "2026-10-27",
   "ecopals": "2026-10-27",
   "elevenlabs": "2026-10-27",
@@ -700,6 +855,8 @@
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "fertohealthgmbh": "2026-10-27",
+  "flix": "2026-10-27",
+  "florafoodgroup": "2026-10-27",
   "foodlabs": "2026-10-27",
   "generalmind": "2026-10-27",
   "gfic": "2026-10-27",
@@ -708,13 +865,16 @@
   "grip": "2026-10-27",
   "hellofresh": "2026-10-27",
   "hopnug": "2026-10-27",
+  "hostaway": "2026-10-27",
   "ilertgmbh": "2026-10-27",
   "indiekidzgmbh": "2026-10-27",
   "instagrid": "2026-10-27",
   "isaraerospace": "2026-10-27",
   "itq": "2026-10-27",
   "jetbrains": "2026-10-27",
+  "kittl": "2026-10-27",
   "kolibrigames": "2026-10-27",
+  "konfettigmbh": "2026-10-27",
   "livestorm": "2026-10-27",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
@@ -727,6 +887,8 @@
   "mobileye": "2026-10-27",
   "moonfare": "2026-10-27",
   "moss": "2026-10-27",
+  "muchgmbh": "2026-10-27",
+  "myprojectbox": "2026-10-27",
   "n8n": "2026-10-27",
   "nebius": "2026-10-27",
   "nejo": "2026-10-27",
@@ -736,6 +898,7 @@
   "nomios": "2026-10-27",
   "nviso": "2026-10-27",
   "omicsempowergmbh": "2026-10-27",
+  "openai": "2026-10-27",
   "ordiogmbh": "2026-10-27",
   "ostrom": "2026-10-27",
   "oviva": "2026-10-27",
@@ -748,18 +911,26 @@
   "plantacorpgmbh": "2026-10-27",
   "prefirogmbh": "2026-10-27",
   "pultgmbh": "2026-10-27",
+  "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
+  "replug": "2026-10-27",
   "retoriogmbh": "2026-10-27",
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
+  "roboservicegmbh": "2026-10-27",
+  "rubygmbh": "2026-10-27",
   "scout24": "2026-10-27",
+  "sidessimplydeliverygmbh": "2026-10-27",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
   "smartmicro": "2026-10-27",
   "solactiveag": "2026-10-27",
   "sous": "2026-10-27",
+  "southwestx": "2026-10-27",
+  "spotmyenergygmbh": "2026-10-27",
   "spreadgmbh": "2026-10-27",
+  "stablenergy": "2026-10-27",
   "staffbase": "2026-10-27",
   "statista": "2026-10-27",
   "sumup": "2026-10-27",
@@ -769,6 +940,7 @@
   "talk360": "2026-10-27",
   "tanganygmbh": "2026-10-27",
   "teneo": "2026-10-27",
+  "termios": "2026-10-27",
   "testerwork": "2026-10-27",
   "tetheroperationslimited": "2026-10-27",
   "thoughtworks": "2026-10-27",
@@ -780,7 +952,11 @@
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",
+  "vivalyxgmbh": "2026-10-27",
+  "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
+  "wepush": "2026-10-27",
+  "wettercomgmbh": "2026-10-27",
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",

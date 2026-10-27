@@ -1299,6 +1299,11 @@
 "lat": 48.114,
 "lon": 11.2922
 },
+"de|großostheim": {
+"cc": "de",
+"lat": 49.9133,
+"lon": 9.0685
+},
 "de|göppingen": {
 "cc": "de",
 "lat": 48.7031,
@@ -1360,6 +1365,11 @@
 "lat": 48.5028,
 "lon": 9.1138
 },
+"de|leipzig": {
+"cc": "de",
+"lat": 51.3406,
+"lon": 12.3747
+},
 "de|leonberg": {
 "cc": "de",
 "lat": 48.8013,
@@ -1390,6 +1400,11 @@
 "cc": "de",
 "lat": 48.1371,
 "lon": 11.5754
+},
+"de|mülheim an der ruhr": {
+"cc": "de",
+"lat": 51.4273,
+"lon": 6.8829
 },
 "de|münster": {
 "cc": "de",
