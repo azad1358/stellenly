@@ -205,3 +205,27 @@ def test_strip_board_boilerplate():
     assert strip_boilerplate("Questions? Contact the recruitment department: Jobs in Netherlands on Arbeitnow") == \
         "Questions? Contact the recruitment department:"
     assert strip_boilerplate("We work with Jobs in Germany data.") == "We work with Jobs in Germany data."
+
+
+def test_salary_ignores_funding_revenue_and_budgets():
+    assert parse_salary("Backed by over €385 million in public and private funding, we build fusion.") == (None, None)
+    assert parse_salary("Upvest is backed by €280M in total funding from world-class investors.") == (None, None)
+    assert parse_salary("As we work towards €160m+ in annual revenue by 2027, we are hiring.") == (None, None)
+    assert parse_salary("Employee Development Budget of €400 and one full training day per year.") == (None, None)
+    assert parse_salary("An internship allowance of €400 per month.") == (None, None)
+    assert parse_salary("We raised €50,000,000 in our Series B.") == (None, None)
+
+
+def test_salary_prefers_the_stated_salary():
+    text = ("Backed by €120 million in funding, we are growing fast.\n"
+            "Salary: €70K – €90K")
+    assert parse_salary(text) == (70000, 90000)
+    assert parse_salary("The salary range for this role is 60-80k EUR gross per year.") == (60000, 80000)
+    assert parse_salary("Gross annual salary from €55,000, depending on experience.") == (55000, 55000)
+
+
+def test_salary_ignores_perks_but_keeps_ote():
+    assert parse_salary("Every Upvenger has €20,000 per year to spend on the best AI tools available.") == (None, None)
+    assert parse_salary("Use €60 per month flexibly for public transportation") == (None, None)
+    assert parse_salary("earn serious (uncapped) commission - We're talking €60,000 OTE and above!") == (60000, 60000)
+    assert parse_salary("Salary: €70,000 - €85,000 plus benefits and a learning budget") == (70000, 85000)
