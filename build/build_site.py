@@ -46,6 +46,9 @@ BERLIN = zoneinfo.ZoneInfo("Europe/Berlin")
 NOW = dt.datetime.now(BERLIN)  # dates on the site are German time
 TODAY = NOW.date()
 e = html.escape
+# Cookieless visitor counts (GoatCounter); empty in site.json = no analytics on generated pages.
+ANALYTICS = (f'<script data-goatcounter="{html.escape(SITE["goatcounter"])}" async src="https://gc.zgo.at/count.js"></script>'
+             if SITE.get("goatcounter") else "")
 
 
 # ---------------------------------------------------------------- data
@@ -130,6 +133,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <link rel="alternate" type="application/rss+xml" title="Guides" href="{up}blog/feed.xml">
 <link rel="icon" href="{up}logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{up}style.css">
+{ANALYTICS}
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
 {extra_head}
 </head>
@@ -181,7 +185,7 @@ def job_list_html(jobs: list[dict], up: str) -> str:
                if j.get("salary_min") else "")
         visa = '<span class="badge ok">🛂 Visa sponsorship</span>' if j.get("visa_sponsorship") else ""
         rows.append(f"""<li class="job">
-  <h3 class="job-title"><a href="{e(j['url'])}" target="_blank" rel="noopener nofollow">{e(j['title'])}</a></h3>
+  <h3 class="job-title"><a href="{e(j['url'])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(j['company'])}">{e(j['title'])}</a></h3>
   <div class="job-meta"><span class="company">{e(j['company'])}</span> · {e(j.get('city') or 'Germany')} · {parse_ts(j.get('posted_at')).date().isoformat()}</div>
   <div class="badges"><span class="badge {cls}">{label}</span>{sal}{visa}</div>
 </li>""")
@@ -208,7 +212,7 @@ def resource_cards(cat: dict, up: str = "") -> tuple[str, bool]:
         logo = fetch_logo(f"res-{slugify(it['name'])}", it["url"])
         logo_html = f'<img class="logo logo-sm" src="{up}{logo}" alt="" loading="lazy">' if logo else mono_html(it["name"])
         domain = re.sub(r"^https?://(www\.)?", "", it["url"]).split("/")[0]
-        cards.append(f"""<a class="resource" href="{e(href)}" target="_blank" rel="{rel}">
+        cards.append(f"""<a class="resource" href="{e(href)}" target="_blank" rel="{rel}" data-goatcounter-click="resource-{slugify(it['name'])}" data-goatcounter-title="{e(it['name'])}">
   <span class="res-top">{logo_html}<span class="res-name"><b>{e(it['name'])}</b><small>{e(domain)}</small></span></span>
   <span class="res-desc">{e(it['desc'])}</span><span class="res-foot"><span class="res-go">Visit site ↗</span>{badge}</span></a>""")
     return f'<div class="resource-grid">{"".join(cards)}</div>', has_aff
@@ -695,7 +699,7 @@ def build_companies(jobs: list[dict]) -> list[str]:
         if not m:
             return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>'
                     f' <span class="muted">{jobs_word(n)}</span></li>')
-        roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow">{e(j["title"])}</a></li>'
+        roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(c["name"])}">{e(j["title"])}</a></li>'
                         for j in [j for j in c["jobs"] if place(j) == city][:3])
         hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
         return f"""<li class="co-card" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
