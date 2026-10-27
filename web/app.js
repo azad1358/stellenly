@@ -191,14 +191,16 @@
   const SENIORITY_LABEL = { intern: "Intern / student", junior: "Junior", mid: "Mid-level", senior: "Senior", lead: "Lead", unspecified: "Not specified" };
 
   const k = (n) => (n >= 1000 ? `€${Math.round(n / 1000)}k` : `€${n}`);
+  // A salary no student job pays (old rows parsed from funding amounts) counts as "not listed".
+  const hasSalary = (j) => !!j.salary_min && !(j.seniority === "intern" && j.salary_min > 60000) && j.salary_min <= 300000;
   function salaryText(j) {
-    if (!j.salary_min) return null;
+    if (!hasSalary(j)) return null;
     return j.salary_max && j.salary_max !== j.salary_min ? `${k(j.salary_min)}–${k(j.salary_max).slice(1)}` : k(j.salary_min);
   }
   function blueCard(j) {
     const BC = C.BLUE_CARD;
     const lo = j.salary_min, hi = j.salary_max ?? j.salary_min;
-    if (!lo) return null;
+    if (!hasSalary(j)) return null;
     if (lo >= BC.standard) return ["ok", "Blue Card ✓", `Listed salary meets the ${BC.year} standard Blue Card minimum (€${BC.standard.toLocaleString("en")}).`];
     if (hi >= BC.standard) return ["info", "Blue Card possible", `Top of the range meets the ${BC.year} standard minimum (€${BC.standard.toLocaleString("en")}).`];
     if (hi >= BC.reduced) return ["info", "Blue Card (reduced) possible", `Meets the ${BC.year} reduced minimum (€${BC.reduced.toLocaleString("en")}) for IT/STEM, health and recent graduates.`];
@@ -235,11 +237,12 @@
   }
 
   // ---------------------------------------------------------------- insights (similar jobs, hints)
-  const hints = (j) => (j.insights && j.insights.hints) || [];
+  const hints = (j) => ((j.insights && j.insights.hints) || [])
+    .filter((h) => hasSalary(j) || !/^salary_/.test(h.k)); // no salary talk for jobs without a stated salary
   const plain = (s) => String(s || "").replace(/^[^\p{L}\p{N}]+\s*/u, ""); // "⚠ Check salary" → "Check salary"
   const pct = (x) => `${Math.round(x * 100)}%`;
 
-  const midSalary = (j) => (j.salary_min ? (j.salary_min + (j.salary_max || j.salary_min)) / 2 : null);
+  const midSalary = (j) => (hasSalary(j) ? (j.salary_min + (j.salary_max || j.salary_min)) / 2 : null);
 
   // Warnings and positives from the daily check, shown above the description.
   function jobCheckHtml(j) {
@@ -254,15 +257,12 @@
 
   function salaryCardHtml(j) {
     const p = j.insights && j.insights.peers;
-    if (!p) return "";
-    const s = p.salary, v = midSalary(j);
-    if (!s) {
-      return `<section class="jd-card sal-card"><h3>Salary benchmark</h3>
-          <p class="muted small">Not enough similar jobs list a salary yet to compare pay.</p></section>`;
-    }
+    const s = p && p.salary, v = midSalary(j);
+    // Only when the employer states a salary: never show estimates for jobs that don't.
+    if (!v || !s) return "";
     const lo = Math.min(s.p25, v ?? s.p25) * 0.8, hi = Math.max(s.p75, v ?? s.p75) * 1.15;
     const x = (n) => `${Math.max(0, Math.min(100, ((n - lo) / (hi - lo)) * 100)).toFixed(1)}%`;
-    let verdict = `This job doesn't list a salary. Similar roles typically pay <b>${k(s.p25)}–${k(s.p75).slice(1)}</b>.`, tone = "";
+    let verdict = "", tone = "";
     if (v) {
       const diff = Math.round(((v - s.p50) / s.p50) * 100);
       const flagged = hints(j).some((h) => /^salary_(error|high|low)$/.test(h.k));

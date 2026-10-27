@@ -264,6 +264,9 @@ def compute(jobs: list[dict], vecs: dict, meta: dict) -> dict[str, dict]:
     company = np.array([j["company"].strip().lower() for j in jobs])
     group = np.array([SENIORITY_GROUP.get(j["seniority"], "") for j in jobs])
     sal = np.array([mid_salary(j) or np.nan for j in jobs])
+    implausible = np.array([(j["seniority"] == "intern" and (j["salary_min"] or 0) > 60000) or (j["salary_min"] or 0) > 300000
+                            for j in jobs])
+    sal[implausible] = np.nan  # parsing mistakes in old rows must not skew the comparisons
     has_sal = ~np.isnan(sal)
     german_req = np.array([j["german_level"] == "required" for j in jobs])
     no_german = np.array([j["german_level"] in ("not_required", "nice_to_have") for j in jobs])

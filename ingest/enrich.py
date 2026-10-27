@@ -175,40 +175,76 @@ def _to_number(tok: str) -> float | None:
 
 
 def _yearly(v: float, context: str) -> float:
-    if v < 1000:  # "65k" already multiplied; bare "65" next to € likely thousands
-        v = v * 1000
+    # Bare amounts are taken literally: "€400" is four hundred euros, never €400k.
     if _MONTHLY_RE.search(context) and v < 15000:
         v = v * 12
     return v
 
 
+# Words that make an amount a salary — and words that mean it's something else (funding, revenue, budgets).
+_PAY_WORDS = re.compile(
+    r"salary|salaries|gehalt|vergütung|verguetung|compensation|\bpay\b|\bpaid\b|base\b|\bote\b|gross|brutto|"
+    r"per (?:year|annum|month)|p\.\s?a\.|/\s?(?:year|yr|month)|annual(?:ly)?|yearly|monthly|monatlich|jährlich|"
+    r"earn|income|wage|lohn|remuneration|package|range", re.I)
+_NOT_PAY_WORDS = re.compile(
+    r"fund(?:ing|ed|s)?\b|raised|series [a-e]\b|valuation|valued|revenue|turnover|\barr\b|investors?|investment|backed|"
+    r"budget|allowance for|stipend for|budgets|market|sales of|in assets|assets under|grant|loan|deposits?|"
+    r"to spend|spend on|tools|equipment|training|learning|education|wellbeing|well-being|mobility|benefits? budget|"
+    r"perks?|vouchers?|subsid|ticket|gym|meal", re.I)
+_BIG_UNIT = re.compile(r"\s?(?:m\b|mn\b|mio\b|million|millionen|bn\b|billion|milliard|b\b)", re.I)
+
+
+def _candidate(t: str, m: re.Match) -> tuple[int, str] | None:
+    """Score how clearly the amount at m is a salary: 2 = says so right before it, 1 = pay words nearby."""
+    if _BIG_UNIT.match(t, m.end()):
+        return None  # "€385 million", "€280M", "€160m+"
+    before, around = t[max(0, m.start() - 70): m.start()], t[max(0, m.start() - 110): m.end() + 60]
+    if _HOURLY_RE.search(around):
+        return None
+    pay_before, pay_near, not_pay = _PAY_WORDS.search(before), _PAY_WORDS.search(around), _NOT_PAY_WORDS.search(around)
+    if not pay_near or (not_pay and not pay_before):
+        return None
+    return (2 if pay_before else 1), around
+
+
 def parse_salary(text: str) -> tuple[int | None, int | None]:
-    """Find a yearly salary range in EUR. Ignores hourly pay. Returns (min, max)."""
+    """Find a yearly salary range in EUR, only where the text says it's pay. Returns (min, max) or (None, None).
+    Ignores hourly pay, company funding/revenue ("€385 million"), budgets and other amounts."""
     t = text or ""
+    found = []  # (score, -position, lo, hi)
     for m in _RANGE_RE.finditer(t):
-        span = t[max(0, m.start() - 40): m.end() + 40]
-        if not re.search(_CUR, span, re.I):
+        if not re.search(_CUR, t[max(0, m.start() - 40): m.end() + 40], re.I):
             continue  # require a currency nearby
-        if _HOURLY_RE.search(span):
+        c = _candidate(t, m)
+        if not c:
             continue
-        a, b = _to_number(m.group(1)), _to_number(m.group(2))
+        ta, tb = m.group(1), m.group(2)
+        a, b = _to_number(ta), _to_number(tb)
         if a is None or b is None:
             continue
-        a, b = _yearly(a, span), _yearly(b, span)
+        # "60-80k": the k on one end applies to both
+        if tb.strip().lower().endswith("k") and a < 1000:
+            a *= 1000
+        if ta.strip().lower().endswith("k") and b < 1000:
+            b *= 1000
+        a, b = _yearly(a, c[1]), _yearly(b, c[1])
         lo, hi = sorted((a, b))
-        if 15000 <= lo <= 400000 and hi <= 400000:
-            return int(lo), int(hi)
+        if 15000 <= lo <= 300000 and hi <= 450000 and hi <= lo * 3:
+            found.append((c[0], -m.start(), int(lo), int(hi)))
     for m in _SINGLE_RE.finditer(t):
-        span = t[max(0, m.start() - 40): m.end() + 40]
-        if _HOURLY_RE.search(span):
+        c = _candidate(t, m)
+        if not c:
             continue
         val = _to_number(m.group(1) or m.group(2))
         if val is None:
             continue
-        val = _yearly(val, span)
-        if 15000 <= val <= 400000:
-            return int(val), int(val)
-    return None, None
+        val = _yearly(val, c[1])
+        if 15000 <= val <= 300000:
+            found.append((c[0] - 0.5, -m.start(), int(val), int(val)))  # a range beats a single figure
+    if not found:
+        return None, None
+    _, _, lo, hi = max(found)
+    return lo, hi
 
 
 # ---------------------------------------------------------------------------
@@ -512,5 +548,8 @@ def enrich(raw: dict) -> dict | None:
         "posted_at": raw.get("posted_at"),
     }
     row["salary_min"], row["salary_max"] = parse_salary(text)
+    # A figure no student job pays is a parsing mistake, not a salary: don't show it at all.
+    if row["seniority"] == "intern" and (row["salary_min"] or 0) > 60000:
+        row["salary_min"] = row["salary_max"] = None
     row["tags"] = make_tags(title, text, raw.get("tags"), row)
     return row
