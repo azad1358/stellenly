@@ -25,7 +25,7 @@ window.SITE_CONFIG = {
       kind: "offer",
       label: "Your company here",
       text: "Reach thousands of internationals looking for English-speaking jobs in Germany.",
-      url: "mailto:you@example.com?subject=Sponsoring%20Stellenly",
+      url: "mailto:abad.623@gmail.com?subject=Advertising%20on%20Stellenly",
     },
   ],
 

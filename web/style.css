@@ -783,3 +783,4 @@ main.wrap > .layout { margin-top: 28px; }
 @media (max-width: 860px) {
   .about-card { grid-template-columns: 1fr; padding: 22px; gap: 22px; }
 }
+.badge.popular { background: var(--support); color: #fff; font-weight: 700; }
