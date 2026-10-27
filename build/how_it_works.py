@@ -64,8 +64,7 @@ def body(num: dict, weights: dict, today: str) -> str:
         ("overview", "1. Overview"), ("sources", "2. Where jobs come from"), ("filter", "3. Germany & English only"),
         ("cleaning", "4. Cleaning the text"), ("rules", "5. Reading each posting"), ("freshness", "6. Duplicates & dead jobs"),
         ("ai", "7. AI validation"), ("peers", "8. Similar jobs & hints"), ("score", "9. Hiring Score"),
-        ("views", "10. Views & popularity"), ("files", "11. Pages & site files"), ("privacy", "12. Privacy"),
-        ("limits", "13. Known limits"),
+        ("views", "10. Views & popularity"), ("privacy", "11. Privacy"),
     ]
     w = weights
     return f"""<div class="post-layout wiki">
@@ -295,41 +294,10 @@ visitor is stored: no IP address, no cookie, no ID.</li>
 <li>Page visits are counted with GoatCounter, a privacy-friendly, cookieless analytics service.</li>
 </ul>
 
-<h2 id="files">11. Pages &amp; site files</h2>
-<p>The daily build turns the database into static files:</p>
-<table><thead><tr><th>File</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>sitemap.xml</code> · <code>robots.txt</code></td><td>List every page for search engines, with today's date</td></tr>
-<tr><td><code>blog/feed.xml</code></td><td>RSS feed of guides; a separate feed serves new jobs</td></tr>
-<tr><td><code>companies/*.html</code></td><td>One page per company with schema.org Organization data, Hiring Score and open jobs</td></tr>
-<tr><td><code>jobs/*.html</code></td><td>Landing pages per city and field, only where there are at least 5 jobs</td></tr>
-<tr><td><code>companies-index.json</code></td><td>Company facts and Hiring Scores used by the search page</td></tr>
-<tr><td><code>companies-map.json</code></td><td>Map markers: companies per city with coordinates</td></tr>
-<tr><td><code>german-cities.json</code></td><td>The allowed German cities for the city filter</td></tr>
-<tr><td><code>logos/*.png</code></td><td>Company logos, downloaded once (only if a real logo of 32px+ exists) and served from our own site,
-so no third party sees our visitors</td></tr>
-</tbody></table>
-<p>Data files kept in the code repository, updated by the workflows:</p>
-<table><thead><tr><th>File</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>ats_boards.json</code></td><td>Discovered employer job boards</td></tr>
-<tr><td><code>companies.json</code></td><td>Hand-picked company boards and company facts</td></tr>
-<tr><td><code>cities_de.json</code></td><td>German cities and states used by the location rules</td></tr>
-<tr><td><code>geocache.json</code></td><td>Cached geocoder results, so each place is looked up only once</td></tr>
-<tr><td><code>llm_facts.json</code></td><td>AI facts that passed the quote check</td></tr>
-</tbody></table>
-<p>The database schema is versioned as SQL migrations. Visitors can only <i>read</i> active jobs and call the search and counter
-functions; writing requires a secret key that only the workflows have.</p>
-
-<h2 id="privacy">12. Privacy</h2>
+<h2 id="privacy">11. Privacy</h2>
 <p>No accounts, no cookies and no tracking pixels. Saved and applied jobs stay in your own browser. See the
 <a href="privacy.html">privacy page</a>.</p>
 
-<h2 id="limits">13. Known limits</h2>
-<ul>
-<li>Rules and AI can still misread a posting. <b>Always check the original posting</b> before applying.</li>
-<li>"German not mentioned" doesn't guarantee that you won't need German in the interviews or on the job.</li>
-<li>The Hiring Score only reflects postings. A company with few open jobs, or that lists salaries elsewhere, may score lower than it deserves.</li>
-<li>Salaries are what the employer states. We never estimate them.</li>
-</ul>
 </div>
 </article>
 {_toc(sections)}
