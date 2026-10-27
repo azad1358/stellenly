@@ -9,7 +9,7 @@
 - If LLM_MODEL doesn't exist, lists the available models and falls back to the newest "gemini-…-flash".
 
 Env: LLM_API_KEY (required), LLM_API_URL, LLM_MODEL, LLM_PAUSE, LLM_RETRIES.
-A key starting with "AIza" (Google AI Studio) uses Gemini's OpenAI-compatible endpoint automatically.
+Without LLM_API_URL, Groq keys ("gsk_…") use Groq and every other key uses Gemini's OpenAI-compatible endpoint.
 """
 from __future__ import annotations
 
@@ -47,7 +47,10 @@ def _key() -> str:
 
 
 def _is_gemini() -> bool:
-    return _key().startswith("AIza") or "generativelanguage" in (os.environ.get("LLM_API_URL") or "")
+    url = os.environ.get("LLM_API_URL") or ""
+    if url:
+        return "generativelanguage" in url
+    return not _key().startswith("gsk_")  # Groq keys start with gsk_; anything else: Google AI Studio
 
 
 def _url() -> str:
