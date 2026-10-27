@@ -47,6 +47,11 @@ jobs:
       - run: pip install -r build/requirements.txt
       - name: Job pages (schema.org JobPosting for Google's job search)
         run: python build/job_pages.py
+      - name: Version the CSS/JS links, so browsers load the new files right after a deploy
+        run: |
+          v="${GITHUB_SHA::8}"
+          find web -name '*.html' -print0 | xargs -0 sed -i -E \
+            "s#((href|src)=\"(\.\./)*(style\.css|app\.js|companies\.js|demo\.js|config\.js))\"#\1?v=$v\"#g"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
