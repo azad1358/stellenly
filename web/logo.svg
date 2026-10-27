@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Stellenly">
-  <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-  <rect width="32" height="32" rx="9" fill="url(#sg)"/>
-  <path d="M21.2 10.6h-7.4a3.45 3.45 0 0 0 0 6.9h4.4a3.45 3.45 0 0 1 0 6.9h-7.4" fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="24.6" cy="7.6" r="2.7" fill="#ff8a65"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Stellenly">
+  <defs>
+    <linearGradient id="stl-pin" x1="18" y1="6" x2="40" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2a5cb8"/><stop offset="1" stop-color="#0a2463"/>
+    </linearGradient>
+    <linearGradient id="stl-road" x1="27" y1="57" x2="57" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b5f9e"/><stop offset=".55" stop-color="#11a7a8"/><stop offset="1" stop-color="#2ee59d"/>
+    </linearGradient>
+    <path id="stl-road-shape" d="M24.6 52.2C23 46 26.2 41.2 33 38.2c6.6-2.9 11.6-6.6 16.9-15.1L47.2 21.5 58 12l-2.2 14.5-2.7-1.6C49.4 32.8 44.2 37.8 38.3 41.4c-3.6 2.2-4.6 5-2.2 8.6l-4.9 6.4c-2.2 2-5.2.6-6.6-4.2z"/>
+    <mask id="stl-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <circle cx="30" cy="24.5" r="7" fill="#000"/>
+      <use href="#stl-road-shape" fill="#000" stroke="#000" stroke-width="3.2" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <path d="M30 58C22.6 49.6 10 38.4 10 25.8a20 20 0 0 1 40 0C50 38.4 37.4 49.6 30 58z" fill="url(#stl-pin)" mask="url(#stl-cut)"/>
+  <use href="#stl-road-shape" fill="url(#stl-road)"/>
 </svg>

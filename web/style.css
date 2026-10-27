@@ -361,7 +361,7 @@ body { -webkit-font-smoothing: antialiased; }
 .site-header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 86%, transparent);
   backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--border); }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 1.28rem; font-weight: 800; letter-spacing: -0.03em; }
-.brand-logo { width: 32px; height: 32px; display: block; border-radius: 9px; box-shadow: 0 4px 12px -6px var(--accent); }
+.brand-logo { width: 34px; height: 34px; display: block; }
 .header-actions .btn.ghost { color: var(--muted); font-weight: 500; }
 .header-actions .btn.ghost:hover { color: var(--text); }
 
