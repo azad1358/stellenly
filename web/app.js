@@ -756,11 +756,14 @@
       const plural = (x) => `job${x === 1 ? "" : "s"}`;
       const moreBtn = more > 0 ? ` <button type="button" class="link-btn" data-scope="all">Show ${n(more)} more ${plural(more)} that mention “${esc(q)}” in the description</button>` : "";
       $("#result-count").innerHTML = (!total
-          ? (q ? `No jobs have “${esc(q)}” in the title or skills.` : "No jobs found")
+          ? (q ? "0 jobs" : "No jobs found")
           : `${n(from)}–${n(to)} of ${n(total)} ${plural(total)}${q && !f.desc ? ` with “${esc(q)}” in the title or skills` : ""}`)
-        + moreBtn
+        + (total ? moreBtn : "")
         + (f.desc && q ? ` <button type="button" class="link-btn" data-scope="title">Only jobs with “${esc(q)}” in the title or skills</button>` : "");
-      if (!total && more) $("#results").innerHTML = "";
+      if (!total && q) {  // a keyword nobody hires for: say so loudly, offer the description matches
+        $("#results").innerHTML = `<li class="no-match" role="status"><b>No jobs have “${esc(q)}” in the title or skills.</b>
+          <span>Try another keyword, or remove a filter.</span>${more > 0 ? `<button type="button" class="link-btn" data-scope="all">Show ${n(more)} ${plural(more)} that mention “${esc(q)}” in the description</button>` : ""}</li>`;
+      }
       renderPager(pages);
       if (scroll) $(".results-col").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {
@@ -1019,7 +1022,7 @@
     $("#f-nogerman").addEventListener("change", (e) => { setChecked("german", e.target.checked ? NO_GERMAN : []); search(); });
     $("#f-remote").addEventListener("change", (e) => { setChecked("remote", e.target.checked ? REMOTE : []); search(); });
     $("#reset-filters").addEventListener("click", () => { writeFilters({}); search(); });
-    $("#result-count").addEventListener("click", (e) => {
+    $(".results-col").addEventListener("click", (e) => {
       const b = e.target.closest("[data-scope]");
       if (!b) return;
       descFor = b.dataset.scope === "all" ? $("#q").value.trim() : null;
