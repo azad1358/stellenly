@@ -229,3 +229,19 @@ def test_salary_ignores_perks_but_keeps_ote():
     assert parse_salary("Use €60 per month flexibly for public transportation") == (None, None)
     assert parse_salary("earn serious (uncapped) commission - We're talking €60,000 OTE and above!") == (60000, 60000)
     assert parse_salary("Salary: €70,000 - €85,000 plus benefits and a learning budget") == (70000, 85000)
+
+
+def test_german_required_wordings():
+    for s in ["Fluent written and verbal English and German.",
+              "Languages: English and German",
+              "English and German at C1 level or higher",
+              "You have a good command of German and English.",
+              "Excellent communication skills in both written and spoken English and German"]:
+        assert german_level(s) == "required", s
+    assert german_level("Fluent written and verbal English; German is a plus.") == "nice_to_have"
+    assert german_level("Fluent English. No German required.") == "not_required"
+
+
+def test_german_office_is_not_a_language_requirement():
+    assert german_level("Strong team culture in our German office in Berlin.") == "not_mentioned"
+    assert german_level("Excellent benefits at a fast-growing German startup.") == "not_mentioned"

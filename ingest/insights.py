@@ -29,6 +29,7 @@ import numpy as np
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
+import llm_facts  # noqa: E402
 from skills import canonical_skill, extract_skills  # noqa: E402
 
 CACHE = Path(__file__).parent / ".cache"
@@ -71,7 +72,7 @@ def rpc(name: str, body: dict) -> str:
 
 
 COLS = ("id,title,company,city,seniority,salary_min,salary_max,years_experience,german_level,"
-        "visa_sponsorship,is_agency,repost_count")
+        "visa_sponsorship,relocation,is_agency,repost_count")
 
 
 def fetch_active() -> list[dict]:
@@ -179,9 +180,9 @@ def _llm(prompt: str) -> dict | None:
     key = os.environ.get("LLM_API_KEY")
     if not key:
         return None
-    r = requests.post(os.environ.get("LLM_API_URL", "https://api.groq.com/openai/v1/chat/completions"), timeout=90,
+    r = requests.post((os.environ.get("LLM_API_URL") or "https://api.groq.com/openai/v1/chat/completions"), timeout=90,
                       headers={"Authorization": f"Bearer {key}"},
-                      json={"model": os.environ.get("LLM_MODEL", "llama-3.1-8b-instant"), "temperature": 0,
+                      json={"model": (os.environ.get("LLM_MODEL") or "llama-3.1-8b-instant"), "temperature": 0,
                             "response_format": {"type": "json_object"}, "messages": [{"role": "user", "content": prompt}]})
     if r.status_code == 429:
         raise RuntimeError("rate limit")
@@ -193,8 +194,24 @@ ANALYSIS_PROMPT = """You help international job seekers in Germany. Read this jo
 {{"summary": "2 sentences: what the job is and who it suits",
   "tasks": ["3-5 short main responsibilities"],
   "skills": [{{"name": "skill or tool, short (e.g. Python, SQL, Stakeholder management)", "importance": 1-5, "required": true|false}}],
-  "red_flags": ["anything a candidate should double-check, e.g. unclear pay, very broad role; empty if none"]}}
-List at most 10 skills, most important first. importance 5 = central to the job, 1 = minor. required=false for nice-to-haves.
+  "red_flags": ["anything a candidate should double-check, e.g. unclear pay, very broad role; empty if none"],
+  "german": "required | nice_to_have | not_required | not_mentioned",
+  "german_quote": "the exact sentence from the posting about German, copied word for word, or empty",
+  "salary_stated": true | false,
+  "salary_min_eur_year": number or null,
+  "salary_max_eur_year": number or null,
+  "salary_quote": "the exact text stating the salary for THIS job, copied word for word, or empty",
+  "visa_sponsorship": true | false,
+  "visa_quote": "exact sentence offering visa / work permit support, or empty",
+  "relocation_support": true | false,
+  "relocation_quote": "exact sentence offering relocation help, or empty"}}
+Rules:
+- List at most 10 skills, most important first. importance 5 = central to the job, 1 = minor. required=false for nice-to-haves.
+- german: "required" if German is asked for at any level as a requirement, including "fluent English and German";
+  "nice_to_have" if it is a plus; "not_required" if the posting says German is not needed; otherwise "not_mentioned".
+- salary_stated is true ONLY if the posting states pay for this job (a figure or range). Company funding, revenue,
+  valuations, budgets, perks and benefits are NOT a salary. Convert monthly pay to yearly (x12). Hourly pay: false.
+- Copy quotes exactly from the posting. Never invent text.
 
 Title: {title}
 Company: {company}
@@ -203,15 +220,21 @@ Posting:
 
 
 def llm_analyze(jobs: list[dict], meta: dict) -> int:
-    """Summary, tasks and ranked skills per job, read by an LLM. Cached: each job is analysed once."""
+    """Per job, an LLM reads the posting once: summary, tasks, ranked skills — and the facts the rules can get
+    wrong (German level, salary, visa, relocation), each checked against a quote from the text (llm_facts.py)."""
     if not os.environ.get("LLM_API_KEY"):
         return 0
-    todo = [j for j in jobs if "ai" not in meta.get(j["id"], {})][:int(os.environ.get("LLM_MAX_JOBS", 150))]
+    store = llm_facts.load()
+    todo = [j for j in jobs if "ai" not in meta.get(j["id"], {}) or j["id"] not in store]
+    # Most uncertain first: German "not mentioned" by the rules, or a salary the rules found.
+    todo.sort(key=lambda j: (j["german_level"] != "not_mentioned", not j.get("salary_min")))
+    todo = todo[:int(os.environ.get("LLM_MAX_JOBS", 150))]
     texts = fetch_texts([j["id"] for j in todo]) if todo else {}
     done = 0
     for j in todo:
+        text = texts.get(j["id"], "")
         try:
-            ans = _llm(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=texts.get(j["id"], "")[:6000]))
+            ans = _llm(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=text[:6000]))
         except RuntimeError:
             print("  LLM rate limit reached; the rest waits for the next run")
             break
@@ -232,6 +255,7 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
             "flags": [str(t)[:160] for t in (ans.get("red_flags") or [])][:3],
             "skills": sorted(skills, key=lambda s: -s["w"])[:10],
         }
+        store[j["id"]] = llm_facts.verify(ans, text, j["seniority"])
         done += 1
         time.sleep(2.1)  # free tiers allow ~30 requests per minute
     return done
@@ -404,8 +428,8 @@ def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> 
     key = os.environ.get("LLM_API_KEY")
     if not key:
         return 0
-    url = os.environ.get("LLM_API_URL", "https://api.groq.com/openai/v1/chat/completions")
-    model = os.environ.get("LLM_MODEL", "llama-3.1-8b-instant")
+    url = (os.environ.get("LLM_API_URL") or "https://api.groq.com/openai/v1/chat/completions")
+    model = (os.environ.get("LLM_MODEL") or "llama-3.1-8b-instant")
     todo = [j for j in jobs
             if any(h["k"] in ("salary_error", "salary_high", "salary_low") for h in insights[j["id"]]["hints"])
             and meta.get(j["id"], {}).get("llm", {}).get("for") != [j["salary_min"], j["salary_max"]]][:limit]
@@ -442,6 +466,30 @@ def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> 
     return done
 
 
+def apply_facts(jobs: list[dict]) -> list[dict]:
+    """Use checked LLM facts for the comparisons, and return the corrections to write to the database."""
+    store, out = llm_facts.load(), []
+    for j in jobs:
+        f = store.get(j["id"])
+        if not f:
+            continue
+        fix = {"id": j["id"]}
+        if "german" in f and f["german"] != j["german_level"]:
+            fix["german_level"] = j["german_level"] = f["german"]
+        if "salary" in f:
+            lo, hi = f["salary"] or (None, None)
+            if (lo, hi) != (j.get("salary_min"), j.get("salary_max")):
+                fix.update(salary_known=True, salary_min=lo, salary_max=hi)
+                j["salary_min"], j["salary_max"] = lo, hi
+        if "visa" in f and f["visa"] != bool(j.get("visa_sponsorship")):
+            fix["visa_sponsorship"] = j["visa_sponsorship"] = f["visa"]
+        if "reloc" in f and f["reloc"] != bool(j.get("relocation")):
+            fix["relocation"] = j["relocation"] = f["reloc"]
+        if len(fix) > 1:
+            out.append(fix)
+    return out
+
+
 # ---------------------------------------------------------------- main
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -453,6 +501,7 @@ def main() -> None:
     new = embed_missing(jobs, vecs, meta)
     jobs = [j for j in jobs if j["id"] in vecs]
     analysed = llm_analyze(jobs, meta)
+    corrections = apply_facts(jobs)
     insights = compute(jobs, vecs, meta)
     if llm_check(jobs, insights, meta):
         insights = compute(jobs, vecs, meta)  # fold the LLM notes into the hints
@@ -475,6 +524,12 @@ def main() -> None:
     for i in range(0, len(rows), BATCH):
         written += int(rpc("set_job_insights", {"payload": rows[i:i + BATCH]}) or 0)
     print(f"Wrote insights for {written} jobs")
+    if corrections:
+        fixed = sum(int(rpc("set_job_facts", {"payload": corrections[i:i + BATCH]}) or 0)
+                    for i in range(0, len(corrections), BATCH))
+        print(f"Corrected German level / salary / visa for {fixed} jobs (LLM, checked against quotes)")
+    if os.environ.get("LLM_API_KEY"):
+        llm_facts.save(llm_facts.load(), keep={j["id"] for j in jobs})
 
 
 if __name__ == "__main__":
