@@ -42,14 +42,14 @@
 <nav class="crumbs"><a href="index.html">Stellenly</a> › How it works</nav>
 <h1>How Stellenly works</h1>
 <p class="post-lead">How every job on this site is found, cleaned, read, double-checked by AI and scored, with all the rules
-we use to filter out noise. Job counts are live; the other figures are updated with every daily build (last: 27 Oct 2026).</p>
+we use to filter out noise. Job counts are live; the other figures are updated with every daily build (last: 28 Oct 2026).</p>
 
 <div class="wiki-stats">
-  <div><b data-live="jobs">2,037</b><span>open jobs <i class="live-dot" title="Live"></i></span></div>
-  <div><b>284</b><span>company job boards read directly</span></div>
+  <div><b data-live="jobs">2,080</b><span>open jobs <i class="live-dot" title="Live"></i></span></div>
+  <div><b>299</b><span>company job boards read directly</span></div>
   <div><b data-live="direct_pct">86%</b><span>straight from the employer</span></div>
-  <div><b>472</b><span>postings checked by AI</span></div>
-  <div><b>169</b><span>companies with a Hiring Score</span></div>
+  <div><b>1,032</b><span>postings checked by AI</span></div>
+  <div><b>179</b><span>companies with a Hiring Score</span></div>
 </div>
 
 <div class="article post-body">
@@ -90,10 +90,10 @@ Personio, Recruitee, Workable and SmartRecruiters. This is the same data the com
 that redirect, recognise the system and board name from the address (for example <code>jobs.ashbyhq.com/&lt;company&gt;</code>
 or <code>&lt;company&gt;.jobs.personio.de</code>), check that the board's public API answers, and save it in
 <code>ats_boards.json</code>. From then on that company is read directly. Companies without a recognised board are tried
-again after 30 days. Today <b>284</b> boards are read directly.</p>
+again after 30 days. Today <b>299</b> boards are read directly.</p>
 <p>If the same job appears on both Arbeitnow and the employer's board, <b>the employer's copy wins</b>: its Apply button goes
 straight to the company.</p>
-<table class="data"><thead><tr><th>Source</th><th>Open jobs</th></tr></thead><tbody><tr><td>Ashby</td><td>741</td></tr><tr><td>Greenhouse</td><td>441</td></tr><tr><td>Arbeitnow</td><td>280</td></tr><tr><td>Lever</td><td>224</td></tr><tr><td>Recruitee</td><td>135</td></tr><tr><td>SmartRecruiters</td><td>103</td></tr><tr><td>Workable</td><td>86</td></tr><tr><td>Personio</td><td>27</td></tr></tbody></table>
+<table class="data"><thead><tr><th>Source</th><th>Open jobs</th></tr></thead><tbody><tr><td>Ashby</td><td>756</td></tr><tr><td>Greenhouse</td><td>447</td></tr><tr><td>Arbeitnow</td><td>296</td></tr><tr><td>Lever</td><td>216</td></tr><tr><td>Recruitee</td><td>140</td></tr><tr><td>SmartRecruiters</td><td>113</td></tr><tr><td>Workable</td><td>86</td></tr><tr><td>Personio</td><td>26</td></tr></tbody></table>
 <h3>Being a polite client</h3>
 <ul>
 <li>Requests carry a clear User-Agent that links to the project.</li>
@@ -114,7 +114,7 @@ detected as English is dropped, so German-language postings never appear.</p>
 <li><b>Clearly abroad</b>: a known foreign city or country → drop.</li>
 <li><b>Generic</b> ("Remote", "EMEA", "Europe") → keep only if the job is marked remote.</li>
 <li><b>Anything else</b> is looked up once with OpenStreetMap's Nominatim geocoder and cached
-(331 places cached). If it's in Germany, keep; if it can't be placed, keep only remote roles.</li>
+(336 places cached). If it's in Germany, keep; if it can't be placed, keep only remote roles.</li>
 </ol>
 <p>The city filter on the search page only lists German cities, so foreign locations never show up in the dropdown.</p>
 <h3>Other things we drop</h3>
@@ -167,7 +167,7 @@ unless the sentence clearly calls them salary. So "we raised €385 million" nev
 <tr><td>Work setup</td><td>Hybrid ("3 days a week in the office"), Remote Germany, Remote EU ("anywhere in Europe") or on-site</td></tr>
 <tr><td>Recruiting agency</td><td>Company names like "Recruitment", "Staffing", "Personalvermittlung", known agencies, or
 "on behalf of our client". Marked with a badge; the "Direct employers only" filter hides them
-(<span data-live="agency">29</span> right now)</td></tr>
+(<span data-live="agency">28</span> right now)</td></tr>
 <tr><td>Blue Card badge</td><td>The stated salary meets the current EU Blue Card minimum (standard, or the reduced minimum for shortage jobs and recent graduates). This is about salary eligibility, not sponsorship</td></tr>
 <tr><td>Tags</td><td>Field and tech keywords (Python, Product, Marketing…) plus the flags above, max 25 per job</td></tr>
 </tbody></table>
@@ -212,7 +212,7 @@ reading is right, monthly or yearly, and whether it includes bonus or equity. It
 and an unavailable model falls back to another Flash model.</li>
 <li>Answers wrapped in extra text or code fences are still parsed.</li>
 </ul>
-<p>472 postings have AI-checked facts so far.</p>
+<p>1,032 postings have AI-checked facts so far.</p>
 
 <h2 id="peers">8. Similar jobs &amp; hints</h2>
 <p>Each job is turned into a vector with a small open embedding model (<code>bge-small-en-v1.5</code>), weighted 60% title and 40%
@@ -298,7 +298,7 @@ visitor is stored: no IP address, no cookie, no ID.</li>
 
 </main>
 <footer class="site-footer"><div class="wrap footer-row">
-  <span>Updated 2026-10-27 · Jobs from public job APIs and company career pages.</span>
+  <span>Updated 2026-10-28 · Jobs from public job APIs and company career pages.</span>
   <nav><a href="https://t.me/StellenlyJobs" target="_blank" rel="noopener">Telegram</a><a href="impressum.html">Impressum</a><a href="privacy.html">Privacy</a><a href="resources.html">Resources</a></nav>
 </div></footer>
 <div class="tg-float" id="tg-float">
