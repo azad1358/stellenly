@@ -81,6 +81,9 @@ def test_agency():
     assert is_agency("Hays AG", "")
     assert is_agency("Acme", "On behalf of our client, a fintech in Berlin...")
     assert not is_agency("Zalando SE", "Join our team")
+    assert is_agency("Jobgether", "")
+    assert is_agency("Acme", "This position is listed on behalf of a partner company, who manages all applications")
+    assert is_agency("Acme", "We are filling this position for our client Filics.")
 
 
 def test_city_and_dedupe():
