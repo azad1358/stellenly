@@ -930,6 +930,7 @@
     const n = (x) => x.toLocaleString("en");
     const employers = new Set(Object.values(companies).map((c) => c.n)).size;
     const items = [["Open roles", n(s.active)]];
+    if (s.total) items.push(["Roles so far", n(s.total)]);
     if (employers) items.push(["Companies hiring", n(employers)]);
     // Right after a full re-import every job counts as "new"; only show the figure when it is meaningful.
     if (s.added_today && s.added_today < s.active * 0.4) items.push(["New in 24 hours", n(s.added_today)]);
