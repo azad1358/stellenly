@@ -892,6 +892,11 @@
 "lat": 46.6919,
 "lon": 7.6775
 },
+"*|staines": {
+"cc": "gb",
+"lat": 51.434,
+"lon": -0.511
+},
 "*|stallikon": {
 "cc": "ch",
 "lat": 47.3269,
@@ -1079,10 +1084,20 @@
 "lat": 52.0859,
 "lon": 4.8833
 },
+"*|worchester": {
+"cc": "ca",
+"lat": 47.2783,
+"lon": -72.5512
+},
 "*|york": {
 "cc": "gb",
 "lat": 53.9657,
 "lon": -1.0743
+},
+"*|ypenburg, nederlands": {
+"cc": "nl",
+"lat": 52.0415,
+"lon": 4.3689
 },
 "*|zaltbommel, gelderland, netherlands": {
 "cc": "nl",
@@ -1460,6 +1475,11 @@
 "cc": "de",
 "lat": 54.0887,
 "lon": 12.14
+},
+"de|rudow": {
+"cc": "de",
+"lat": 52.4147,
+"lon": 13.4986
 },
 "de|schwieberdingen": {
 "cc": "de",

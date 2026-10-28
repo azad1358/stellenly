@@ -5,6 +5,11 @@
    "board": "0g",
    "company": "0G"
   },
+  "4lu44n1n37w012k": {
+   "ats": "greenhouse",
+   "board": "4lu44n1n37w012k",
+   "company": "4lu44n1n37w012k"
+  },
   "8returnsgmbh": {
    "ats": "ashby",
    "board": "8returns",
@@ -130,6 +135,11 @@
    "board": "bowatt",
    "company": "Bowatt"
   },
+  "brevo": {
+   "ats": "lever",
+   "board": "brevo",
+   "company": "Brevo"
+  },
   "brunswickgroup": {
    "ats": "greenhouse",
    "board": "brunswickgroup",
@@ -139,6 +149,11 @@
    "ats": "ashby",
    "board": "bunch",
    "company": "bunch"
+  },
+  "cagents": {
+   "ats": "lever",
+   "board": "cagents",
+   "company": "Cagents"
   },
   "ceezer": {
    "ats": "ashby",
@@ -154,6 +169,11 @@
    "ats": "ashby",
    "board": "cinder",
    "company": "Cinder"
+  },
+  "clovirtualfashion": {
+   "ats": "lever",
+   "board": "clovirtualfashion",
+   "company": "Clovirtualfashion"
   },
   "codesphere": {
    "ats": "ashby",
@@ -364,6 +384,11 @@
    "board": "intercom",
    "company": "intercom"
   },
+  "intersnackgroupgmbhcokg": {
+   "ats": "recruitee",
+   "board": "intersnackgroupgmbhcokg",
+   "company": "Intersnack Group GmbH & Co. KG"
+  },
   "jobgether": {
    "ats": "lever",
    "board": "jobgether",
@@ -462,6 +487,11 @@
    "board": "melotech",
    "company": "Melotech"
   },
+  "microagi": {
+   "ats": "ashby",
+   "board": "microagi",
+   "company": "Microagi"
+  },
   "mlabs": {
    "ats": "workable",
    "board": "mlabs",
@@ -482,6 +512,11 @@
    "board": "netgear",
    "company": "NETGEAR"
   },
+  "neuvergetron": {
+   "ats": "ashby",
+   "board": "neuverge-tron",
+   "company": "Neuverge Tron"
+  },
   "newrelic": {
    "ats": "greenhouse",
    "board": "newrelic",
@@ -501,6 +536,11 @@
    "ats": "recruitee",
    "board": "ontarget",
    "company": "OnTarget Communications"
+  },
+  "orbem": {
+   "ats": "ashby",
+   "board": "orbem",
+   "company": "Orbem"
   },
   "parity": {
    "ats": "ashby",
@@ -583,6 +623,11 @@
    "board": "qwello.eu",
    "company": "Qwello.eu"
   },
+  "rebuy": {
+   "ats": "recruitee",
+   "board": "rebuy",
+   "company": "rebuy"
+  },
   "recaredeutschlandgmbh": {
    "ats": "recruitee",
    "board": "recaresolutions",
@@ -629,6 +674,11 @@
    "board": "rootglobal",
    "company": "Rootglobal"
   },
+  "sanity": {
+   "ats": "ashby",
+   "board": "Sanity",
+   "company": "Sanity"
+  },
   "sardine": {
    "ats": "ashby",
    "board": "Sardine",
@@ -658,6 +708,11 @@
    "ats": "ashby",
    "board": "sereact",
    "company": "Sereact GmbH"
+  },
+  "shieldai": {
+   "ats": "lever",
+   "board": "shieldai",
+   "company": "Shieldai"
   },
   "siteimprove": {
    "ats": "lever",
@@ -844,6 +899,7 @@
   "auterion": "2026-10-27",
   "beyondservicegmbh": "2026-10-27",
   "bifrostdefence": "2026-10-27",
+  "bitwarden": "2026-10-28",
   "brighteraitechnologiesgmbh": "2026-10-27",
   "bsimerchgmbh": "2026-10-27",
   "btthealthgmbh": "2026-10-27",
@@ -859,6 +915,7 @@
   "commercetools": "2026-10-27",
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
+  "contentful": "2026-10-28",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
@@ -875,9 +932,12 @@
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "fertohealthgmbh": "2026-10-27",
+  "finn": "2026-10-28",
+  "firesprite": "2026-10-28",
   "fivetran": "2026-10-27",
   "flix": "2026-10-27",
   "florafoodgroup": "2026-10-27",
+  "focalsystems": "2026-10-28",
   "foodlabs": "2026-10-27",
   "freenow": "2026-10-27",
   "generalmind": "2026-10-27",
@@ -903,6 +963,7 @@
   "magazinogmbh": "2026-10-27",
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
+  "maomaotechnologies": "2026-10-28",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
   "milesmobility": "2026-10-27",
@@ -920,6 +981,7 @@
   "nextcloud": "2026-10-27",
   "nomios": "2026-10-27",
   "nviso": "2026-10-27",
+  "okta": "2026-10-28",
   "omicsempowergmbh": "2026-10-27",
   "openai": "2026-10-27",
   "ordiogmbh": "2026-10-27",
@@ -927,6 +989,7 @@
   "oviva": "2026-10-27",
   "paicon": "2026-10-27",
   "pajughaftungsbeschrnkt": "2026-10-27",
+  "palantir": "2026-10-28",
   "payflows": "2026-10-27",
   "pertempserp": "2026-10-27",
   "planeta": "2026-10-27",
@@ -937,6 +1000,7 @@
   "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
+  "remotewoman": "2026-10-28",
   "replug": "2026-10-27",
   "retoriogmbh": "2026-10-27",
   "riiico": "2026-10-27",
@@ -966,6 +1030,7 @@
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",
   "tetheroperationslimited": "2026-10-27",
+  "theconfigteam": "2026-10-28",
   "thoughtworks": "2026-10-27",
   "traciumgmbh": "2026-10-27",
   "unframe": "2026-10-27",
