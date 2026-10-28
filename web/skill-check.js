@@ -4,9 +4,12 @@
 // skill-report Edge Function. "Download PDF" uses the browser's print dialog (print styles in style.css).
 (() => {
   const C = window.SITE_CONFIG || {};
-  const API = (C.SUPABASE_URL || "").replace(/\/$/, "");
+  // Local testing against `supabase start`: localhost/skill-check.html?api=http://127.0.0.1:54321&anon=<local anon key>
   const params = new URLSearchParams(location.search);
-  const FN = (location.hostname === "localhost" && params.get("fn")) || `${API}/functions/v1/skill-report`;
+  const LOCAL = location.hostname === "localhost" && params.get("api");
+  const API = (LOCAL || C.SUPABASE_URL || "").replace(/\/$/, "");
+  const KEY = LOCAL ? params.get("anon") : C.SUPABASE_ANON_KEY;
+  const FN = `${API}/functions/v1/skill-report`;
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const store = {
@@ -82,12 +85,12 @@
     const btn = $("#sc-skills button[type=submit]");
     const status = $("#sc-skills .sc-status");
     btn.disabled = true;
-    status.textContent = "Writing your report… (about 10 seconds)";
+    status.textContent = "Writing your report… (about 15 seconds)";
     try {
       // Anonymous ratings for the candidate comparison — the report still works if this fails.
       await fetch(`${API}/rest/v1/rpc/submit_skill_ratings`, {
         method: "POST",
-        headers: { apikey: C.SUPABASE_ANON_KEY, Authorization: `Bearer ${C.SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+        headers: { apikey: KEY, Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({ p_client: clientId(), p_role: role.t, p_levels: levels }),
       }).catch(() => {});
       const res = await fetch(FN, { method: "POST", headers: { "Content-Type": "application/json" },

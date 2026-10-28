@@ -6,7 +6,8 @@
 
 const SITE_URL = Deno.env.get("SITE_URL") ?? "https://www.stellenly.com";
 const LLM_URL = Deno.env.get("LLM_API_URL") ?? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
-const MODELS = (Deno.env.get("REPORT_MODELS") ?? "gemini-flash-latest,gemini-flash-lite-latest").split(",");
+// Lite first: ~15 s for a report on the free tier; the bigger model is often overloaded or out of daily quota.
+const MODELS = (Deno.env.get("REPORT_MODELS") ?? "gemini-flash-lite-latest,gemini-flash-latest").split(",");
 const DAILY_MAX = Number(Deno.env.get("REPORT_DAILY_MAX") ?? 200);
 const ORIGINS = [SITE_URL, "https://stellenly.com", "http://localhost:8765"];
 
@@ -49,6 +50,7 @@ ${peerLine}
 Self-ratings are rough. Many candidates underrate themselves and job ads are wish lists: hardly anyone meets every point.
 Write a short, concrete report. Rules:
 - Base every claim on the numbers above. Do not invent statistics, companies, salaries or URLs.
+- Percentiles: "higher than 100%" means the best rating of all candidates; say it that way.
 - Focus areas: at most 3 skills where priority is high and the rating is low (priority x gap). For each, explain why it
   matters for this role and how to improve: a small practice project and the kind of free resources to use
   (official docs, well-known free courses or books by name). No links.
@@ -67,12 +69,16 @@ Return JSON only:
 
 async function llm(text: string) {
   for (const model of MODELS) {
-    const res = await fetch(LLM_URL, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${Deno.env.get("LLM_API_KEY")}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, temperature: 0.4, response_format: { type: "json_object" },
-                             messages: [{ role: "user", content: text }] }),
-    });
+    let res: Response;
+    try {
+      res = await fetch(LLM_URL, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${Deno.env.get("LLM_API_KEY")}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ model, temperature: 0.4, response_format: { type: "json_object" },
+                               messages: [{ role: "user", content: text }] }),
+        signal: AbortSignal.timeout(25_000),  // an overloaded model can hang: move on to the next one
+      });
+    } catch { continue; }
     if (res.status === 429 || res.status === 404 || res.status >= 500) continue;  // quota / model gone: try the next one
     if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const content = (await res.json()).choices?.[0]?.message?.content ?? "";

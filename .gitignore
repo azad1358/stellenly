@@ -25,3 +25,7 @@ build/.telegram_state.json
 web/job/
 web/job-sitemap.xml
 web/b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31.txt
+
+# Local secrets for `supabase functions serve` (Gemini key)
+supabase/functions/.env
+supabase/.temp/
