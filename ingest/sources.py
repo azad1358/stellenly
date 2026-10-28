@@ -12,6 +12,7 @@ import html
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
@@ -290,16 +291,23 @@ def company_boards(config_path: Path, discovered: list[dict] | None = None) -> I
         if (e["ats"], e["board"].lower()) not in seen:
             seen.add((e["ats"], e["board"].lower()))
             entries.append(e)
-    for entry in entries:
+
+    def read(entry: dict) -> list[dict]:
         fn = ATS.get(entry.get("ats", "").lower())
         if not fn:
-            continue
+            return []
         name = f"{entry['ats'].lower()}:{entry['board']}"
         try:
             extra = {"region": entry["region"]} if entry.get("region") else {}
-            yield from fn(entry["board"], entry.get("company") or entry["board"], **extra)
+            jobs = list(fn(entry["board"], entry.get("company") or entry["board"], **extra))
             if name not in INCOMPLETE:
                 COMPLETE.add(name)
+            return jobs
         except Exception as e:  # one broken board must not stop the run
             print(f"  ! {name} failed: {e}")
-        time.sleep(0.5)
+            return []
+
+    # Boards are independent (mostly different hosts): read 8 at a time instead of one after another.
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for jobs in pool.map(read, entries):
+            yield from jobs
