@@ -459,6 +459,11 @@
    "board": "krakentech",
    "company": "Kraken"
   },
+  "kurotechnology": {
+   "ats": "ashby",
+   "board": "kuro",
+   "company": "Kuro Technology"
+  },
   "liltproduction": {
    "ats": "ashby",
    "board": "lilt-production",
@@ -495,6 +500,11 @@
    "ats": "ashby",
    "board": "litmus",
    "company": "Litmus"
+  },
+  "livekit": {
+   "ats": "ashby",
+   "board": "livekit",
+   "company": "Livekit"
   },
   "lovehoneygroup": {
    "ats": "lever",
@@ -965,6 +975,7 @@
   "cherryventures": "2026-10-27",
   "cityscience": "2026-10-27",
   "clarinessgmbh": "2026-10-27",
+  "codat": "2026-10-28",
   "cohere": "2026-10-27",
   "commercetools": "2026-10-27",
   "conroogmbh": "2026-10-27",
@@ -1070,6 +1081,7 @@
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
   "roboservicegmbh": "2026-10-27",
+  "roger": "2026-10-28",
   "rubygmbh": "2026-10-27",
   "scout24": "2026-10-27",
   "sidessimplydeliverygmbh": "2026-10-27",
@@ -1100,6 +1112,7 @@
   "traciumgmbh": "2026-10-27",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
+  "upvest": "2026-10-28",
   "vanillasteel": "2026-10-27",
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
