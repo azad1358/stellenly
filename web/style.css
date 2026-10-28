@@ -988,6 +988,10 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 .sc-table th, .sc-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
 .sc-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); font-weight: 600; }
 .sc-table small { color: var(--muted); }
+.sc-table-wrap { overflow-x: auto; }
+.sc-asked { display: block; font-size: .78rem; }
+.sc-bar { display: inline-block; vertical-align: middle; width: 60px; height: 6px; margin-right: 8px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent) var(--w), var(--neutral-bg) var(--w)); }
 .sc-encourage { font-weight: 600; margin-top: 18px; }
 .sc-privacy { font-size: .82rem; color: var(--muted); }
 @media (max-width: 640px) {

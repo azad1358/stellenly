@@ -1,8 +1,12 @@
 """The "Skill check" page: pick a role, rate the 10 skills its postings ask for most, get an AI report.
 
 This module groups job titles into roles and writes web/skill-roles.json (role -> top skills), which both
-the page and the Edge Function (supabase/functions/skill-report) read. Jobs of the last 90 days count,
+the page and the Edge Function (supabase/functions/skill-report) read. Every job in the database counts,
 also closed ones, so smaller roles have enough postings.
+
+Priority score (0–100) of a skill for a role: 100 x share of postings asking for it x (0.5 + 0.5 x share of
+those where it is a must-have) — a skill every posting requires scores 100, one every posting merely
+"would like" scores 50.
 """
 from __future__ import annotations
 
@@ -33,6 +37,10 @@ def role_name(title: str) -> str:
     return re.sub(r"\s+", " ", t)
 
 
+def priority(share: float, must: float) -> int:
+    return round(100 * share * (0.5 + 0.5 * must))
+
+
 def roles(rows: list[dict]) -> list[dict]:
     """rows: [{"title", "skills": [{"n", "r"}, ...]}] -> roles with their most-asked skills, biggest first."""
     names: dict[str, Counter] = {}
@@ -54,18 +62,18 @@ def roles(rows: list[dict]) -> list[dict]:
             for s in {s["n"]: s for s in r["skills"]}.values():
                 asked[s["n"]] += 1
                 required[s["n"]] += int(bool(s.get("r", 1)))
-        out.append({"t": forms.most_common(1)[0][0], "n": len(hits),
-                    "skills": [{"n": s, "s": round(c / len(hits), 2), "r": round(required[s] / c, 2)}
-                               for s, c in asked.most_common(TOP_SKILLS)]})
+        skills = [{"n": s, "s": round(c / len(hits), 2), "r": round(required[s] / c, 2),
+                   "p": priority(c / len(hits), required[s] / c)} for s, c in asked.most_common(TOP_SKILLS)]
+        out.append({"t": forms.most_common(1)[0][0], "n": len(hits), "skills": sorted(skills, key=lambda x: -x["p"])})
     return sorted(out, key=lambda x: -x["n"])
 
 
 def body(roles_: list[dict], n_jobs: int) -> str:
     return f"""<nav class="crumbs"><a href="index.html">Stellenly</a> › Skill check</nav>
 <h1>Skill check: am I ready for this role?</h1>
-<p class="lead">Pick the role you are aiming for. We show the 10 skills its postings ask for most, based on
-{n_jobs:,} jobs from the last 90 days. Rate yourself from 1 to 10 and get an AI report: where you already stand,
-what to learn first, and how you compare with other candidates.</p>
+<p class="lead">Pick the role you are aiming for. We show the 10 skills its postings ask for most — out of
+{n_jobs:,} job descriptions — each with a priority score. Rate yourself from 1 to 10 and get an AI report: where you
+already stand, what to learn first, and how you compare with other candidates.</p>
 <form id="sc-role-form" class="sc-card" autocomplete="off">
   <label for="sc-role">Role</label>
   <div class="sc-row">

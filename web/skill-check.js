@@ -42,7 +42,7 @@
       return;
     }
     $("#sc-role").value = role.t;
-    $("#sc-role-hint").textContent = `Based on ${role.n} postings from the last 90 days.`;
+    $("#sc-role-hint").textContent = `Based on ${role.n} job descriptions for this role.`;
     store.set("ejg.skillLastRole", role.t);
     renderSliders();
     const prev = store.get("ejg.skillHistory", {})[role.t];
@@ -54,11 +54,12 @@
     const saved = store.get("ejg.skillLevels", {});
     const form = $("#sc-skills");
     form.innerHTML = `<h2>Rate yourself</h2>
-      <p class="sc-hint">1 = never used it · 5 = used it in a project · 10 = could teach it. Be honest; nobody sees your name.</p>
+      <p class="sc-hint">1 = never used it · 5 = used it in a project · 10 = could teach it. Be honest; nobody sees your name.
+      Priority (0–100) = how often postings ask for the skill, counting must-haves fully and nice-to-haves half.</p>
       <div class="sc-sliders">${role.skills.map((s, i) => {
         const v = saved[s.n] ?? 5;
         return `<div class="sc-slider">
-          <label for="sc-s${i}"><b>${esc(s.n)}</b><span>asked in ${pct(s.s)} of postings${s.r < 0.5 ? " · often nice-to-have" : ""}</span></label>
+          <label for="sc-s${i}"><b>${esc(s.n)}</b><span>priority ${s.p}/100 · asked in ${pct(s.s)} of postings${s.r < 0.5 ? " · often nice-to-have" : ""}</span></label>
           <input type="range" id="sc-s${i}" min="1" max="10" step="1" value="${v}" data-skill="${esc(s.n)}">
           <output for="sc-s${i}">${v}</output>
         </div>`;
@@ -90,7 +91,7 @@
         body: JSON.stringify({ p_client: clientId(), p_role: role.t, p_levels: levels }),
       }).catch(() => {});
       const res = await fetch(FN, { method: "POST", headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ role: role.t, levels }) });
+                                    body: JSON.stringify({ role: role.t, levels, client: clientId() }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.report) throw new Error(data.error || "The report could not be generated. Please try again.");
       const date = new Date().toISOString().slice(0, 10);
@@ -111,18 +112,23 @@
     const peerSkills = peers?.skills || null;
     const [cls, label] = READINESS[r.readiness] || READINESS.apply_while_learning;
     const list = (items, fn) => (items || []).length ? `<ul>${items.map(fn).join("")}</ul>` : "";
-    const rows = role.skills.map((s) => `<tr><td>${esc(s.n)}</td><td>${pct(s.s)}</td><td><b>${levels[s.n] ?? "–"}</b>${
+    const rows = role.skills.map((s) => `<tr><td>${esc(s.n)}<small class="sc-asked">asked in ${pct(s.s)}</small></td>
+      <td><span class="sc-bar" style="--w:${s.p}%"></span><b>${s.p}</b></td><td><b>${levels[s.n] ?? "–"}</b>${
       before && before[s.n] != null && before[s.n] !== levels[s.n] ? ` <small>(was ${before[s.n]})</small>` : ""}</td>${
-      peerSkills ? `<td>${peerSkills[s.n]?.avg ?? "–"}</td>` : ""}</tr>`).join("");
+      peerSkills ? `<td>${peerSkills[s.n] ? `${peerSkills[s.n].avg}` : "–"}</td><td>${
+        peerSkills[s.n] ? `higher than ${peerSkills[s.n].pct}%` : "–"}</td>` : ""}</tr>`).join("");
     $("#sc-report").innerHTML = `
       <div class="sc-report-head">
         <div><p class="sc-kicker">Skill report · ${esc(role.t)} · ${esc(date)}</p><h2>${esc(r.headline)}</h2></div>
         <span class="badge ${cls}">${label}</span>
       </div>
       <p>${esc(r.readiness_reason)}</p>
-      <table class="sc-table"><thead><tr><th>Skill</th><th>Asked in</th><th>You</th>${peerSkills ? "<th>Others (avg)</th>" : ""}</tr></thead>
-        <tbody>${rows}</tbody></table>
-      <p class="sc-hint">Based on ${role.n} postings from the last 90 days${peers?.n ? ` and ${peers.n} candidate${peers.n === 1 ? "" : "s"} who rated this role` : ""}.</p>
+      <h3>Skills the job descriptions ask for</h3>
+      <div class="sc-table-wrap"><table class="sc-table"><thead><tr><th>Skill</th><th>Priority</th><th>You</th>${
+        peerSkills ? "<th>Others (avg)</th><th>You vs others</th>" : ""}</tr></thead>
+        <tbody>${rows}</tbody></table></div>
+      <p class="sc-hint">Based on ${role.n} job descriptions${peers?.n ? ` and ${peers.n} other candidate${peers.n === 1 ? "" : "s"} who rated this role` : ""}.${
+        peerSkills ? "" : " The comparison with other candidates appears once 10 people have rated this role."}</p>
       ${r.strengths?.length ? `<h3>Your strengths</h3>${list(r.strengths, (s) => `<li><b>${esc(s.skill)}</b> — ${esc(s.note)}</li>`)}` : ""}
       ${r.focus?.length ? `<h3>Where to put your effort</h3>${list(r.focus, (f) =>
         `<li><b>${esc(f.skill)}</b><p>${esc(f.why)}</p><p><i>How:</i> ${esc(f.how)}</p></li>`)}` : ""}

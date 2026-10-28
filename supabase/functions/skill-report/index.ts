@@ -1,6 +1,6 @@
 // AI report for the Skill check page (web/skill-check.html).
 // Deploy:  supabase functions deploy skill-report --no-verify-jwt   (secret: LLM_API_KEY, a Gemini key)
-// POST {role, levels: {"Python": 7, ...}}  ->  {report, role, peers}
+// POST {role, levels: {"Python": 7, ...}, client: "<random browser id>"}  ->  {report, role, peers}
 // The market data comes from the site's own skill-roles.json, never from the request; the candidate
 // comparison from skill_peers(). A daily cap (REPORT_DAILY_MAX) keeps the free LLM quota for the job checks.
 
@@ -10,7 +10,8 @@ const MODELS = (Deno.env.get("REPORT_MODELS") ?? "gemini-flash-latest,gemini-fla
 const DAILY_MAX = Number(Deno.env.get("REPORT_DAILY_MAX") ?? 200);
 const ORIGINS = [SITE_URL, "https://stellenly.com", "http://localhost:8765"];
 
-type Skill = { n: string; s: number; r: number };
+type Skill = { n: string; s: number; r: number; p: number };
+type Peers = { n: number; skills: Record<string, { avg: number; pct: number }> | null };
 type Role = { t: string; n: number; skills: Skill[] };
 
 const cors = (req: Request) => ({
@@ -30,30 +31,30 @@ async function rpc(name: string, body: unknown, key: string) {
   return res.json();
 }
 
-function prompt(role: Role, levels: Record<string, number>, peers: { n: number; skills: Record<string, { avg: number }> | null }) {
+function prompt(role: Role, levels: Record<string, number>, peers: Peers) {
   const rows = role.skills.map((s) => {
-    const peer = peers.skills?.[s.n]?.avg;
-    return `- ${s.n}: asked in ${Math.round(s.s * 100)}% of postings, a must-have in ${Math.round(s.r * 100)}% of those;` +
-      ` candidate ${levels[s.n] ?? "?"}/10${peer != null ? `; other candidates average ${peer}/10` : ""}`;
+    const peer = peers.skills?.[s.n];
+    return `- ${s.n}: priority ${s.p}/100 (asked in ${Math.round(s.s * 100)}% of postings, a must-have in ${Math.round(s.r * 100)}% of those);` +
+      ` candidate ${levels[s.n] ?? "?"}/10${peer ? `; other candidates average ${peer.avg}/10, the candidate rated higher than ${peer.pct}% of them` : ""}`;
   }).join("\n");
   const peerLine = peers.skills
     ? `${peers.n} other candidates rated themselves for this role (anonymous self-ratings).`
     : `Fewer than 10 candidates rated this role so far: there is no candidate comparison yet; say so briefly.`;
   return `You are a friendly, honest career coach for internationals looking for English-speaking jobs in Germany.
-A candidate is aiming for "${role.t}". From ${role.n} job postings of the last 90 days, these are the 10 skills asked most,
-with the candidate's self-rating (1 = beginner, 10 = expert):
+A candidate is aiming for "${role.t}". From ${role.n} job descriptions for this role, these are the 10 skills asked most, with a priority score
+(100 = every posting requires it; nice-to-haves count half) and the candidate's self-rating (1 = beginner, 10 = expert):
 ${rows}
 ${peerLine}
 
 Self-ratings are rough. Many candidates underrate themselves and job ads are wish lists: hardly anyone meets every point.
 Write a short, concrete report. Rules:
 - Base every claim on the numbers above. Do not invent statistics, companies, salaries or URLs.
-- Focus areas: at most 3 skills where demand is high and the rating is low (demand x gap). For each, explain why it
+- Focus areas: at most 3 skills where priority is high and the rating is low (priority x gap). For each, explain why it
   matters for this role and how to improve: a small practice project and the kind of free resources to use
   (official docs, well-known free courses or books by name). No links.
 - Strengths: skills the candidate is already good at relative to demand. Be specific, not flattering.
-- Readiness: "apply_now" (most high-demand skills >= 6), "apply_while_learning" (a few gaps), or "build_first"
-  (several must-haves <= 3). Encourage applying when close — applying while learning is normal.
+- Readiness: "apply_now" (most skills with priority >= 40 rated >= 6), "apply_while_learning" (a few gaps),
+  or "build_first" (several skills with priority >= 40 rated <= 3). Encourage applying when close — applying while learning is normal.
 - Interview: 3 topics to prepare for this role, based on the high-demand skills.
 - A 4-week plan, one line per week.
 - Plain English, short sentences, under 400 words in total.
@@ -86,7 +87,7 @@ Deno.serve(async (req) => {
   const fail = (status: number, error: string) => new Response(JSON.stringify({ error }), { status, headers });
   if (req.method !== "POST") return fail(405, "POST only");
 
-  let body: { role?: unknown; levels?: unknown };
+  let body: { role?: unknown; levels?: unknown; client?: unknown };
   try { body = await req.json(); } catch { return fail(400, "Invalid JSON"); }
   const roles: Role[] = (await (await fetch(`${SITE_URL}/skill-roles.json`)).json()).roles;
   const role = roles.find((r) => r.t === body.role);
@@ -102,7 +103,8 @@ Deno.serve(async (req) => {
   if (!(await rpc("take_report_quota", { p_max: DAILY_MAX }, service))) {
     return fail(429, "Today's free AI reports are used up. Your ratings are saved — please try again tomorrow.");
   }
-  const peers = await rpc("skill_peers", { p_role: role.t }, service);
+  const client = typeof body.client === "string" && /^[0-9a-f-]{36}$/i.test(body.client) ? body.client : null;
+  const peers: Peers = await rpc("skill_peers", { p_role: role.t, p_client: client, p_levels: levels }, service);
   try {
     const report = await llm(prompt(role, levels, peers));
     if (!report) return fail(503, "The AI is busy right now. Please try again in a minute.");

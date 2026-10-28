@@ -972,12 +972,12 @@ def build_how_it_works(jobs: list[dict]) -> str:
 
 
 def load_role_rows(rows_file: str | None) -> list[dict]:
-    """Title + skills of every job seen in the last 90 days (also closed ones) — for the Skill check."""
+    """Title + skills of every job in the database (also closed ones) — for the Skill check."""
     if rows_file:
         return json.loads(Path(rows_file).read_text(encoding="utf-8"))
     url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/rpc/role_skill_rows"
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-    r = requests.post(url, json={"p_days": 90}, headers={"apikey": key, "Authorization": f"Bearer {key}"}, timeout=60)
+    r = requests.post(url, json={}, headers={"apikey": key, "Authorization": f"Bearer {key}"}, timeout=60)
     r.raise_for_status()
     return r.json()
 
@@ -987,7 +987,7 @@ def build_skill_check(rows: list[dict]) -> str:
     (WEB / "skill-roles.json").write_text(json.dumps({"updated": TODAY.isoformat(), "roles": roles},
                                                      ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     (WEB / "skill-check.html").write_text(page(
-        "Skill check", "Pick a role, rate the 10 skills its job postings ask for most and get a free AI report: "
+        "Skill check", "Pick a role, see the priority of the 10 skills its job postings ask for most and get a free AI report: "
         "what to learn first and how you compare with other candidates.", skill_check.body(roles, len(rows)),
         "skill-check.html", 0, extra_head='<script src="config.js" defer></script><script src="skill-check.js" defer></script>',
         main_class="post-page skill-page"), encoding="utf-8")
