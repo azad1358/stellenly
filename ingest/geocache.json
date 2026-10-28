@@ -239,6 +239,11 @@
 "lat": 45.8355,
 "lon": 9.029
 },
+"*|clichy": {
+"cc": "fr",
+"lat": 48.9026,
+"lon": 2.3055
+},
 "*|covent garden - hybrid": null,
 "*|dale, indiana": {
 "cc": "us",
@@ -669,6 +674,11 @@
 "lat": 12.1127,
 "lon": -68.8866
 },
+"*|neuchâtel": {
+"cc": "ch",
+"lat": 46.9896,
+"lon": 6.9293
+},
 "*|new zealand": {
 "cc": "nz",
 "lat": -41.5001,
@@ -931,6 +941,11 @@
 "cc": "za",
 "lat": -32.9819,
 "lon": 27.8884
+},
+"*|studley": {
+"cc": "gb",
+"lat": 52.2691,
+"lon": -1.8959
 },
 "*|switzerland": {
 "cc": "ch",

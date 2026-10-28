@@ -15,6 +15,11 @@
    "board": "8returns",
    "company": "8returns GmbH"
   },
+  "accelerationpartners": {
+   "ats": "greenhouse",
+   "board": "accelerationpartners",
+   "company": "Accelerationpartners"
+  },
   "adjoe": {
    "ats": "ashby",
    "board": "adjoe",
@@ -44,6 +49,11 @@
    "ats": "ashby",
    "board": "amboss",
    "company": "AMBOSS"
+  },
+  "anandaventuresgmbh": {
+   "ats": "recruitee",
+   "board": "anandaventuresgmbh",
+   "company": "Ananda Ventures GmbH"
   },
   "andercore": {
    "ats": "ashby",
@@ -278,6 +288,11 @@
    "board": "engagedmd",
    "company": "Engagedmd"
   },
+  "engelhart": {
+   "ats": "greenhouse",
+   "board": "engelhart",
+   "company": "engelhart"
+  },
   "eunetworks": {
    "ats": "greenhouse",
    "board": "eunetworks",
@@ -342,6 +357,11 @@
    "ats": "ashby",
    "board": "harvey",
    "company": "Harvey"
+  },
+  "hautai": {
+   "ats": "ashby",
+   "board": "haut-ai",
+   "company": "Haut Ai"
   },
   "hirehire": {
    "ats": "ashby",
@@ -847,6 +867,11 @@
    "board": "trm-labs",
    "company": "TRM Labs"
   },
+  "truenorthpartnersllp": {
+   "ats": "recruitee",
+   "board": "tnp",
+   "company": "True North Partners LLP"
+  },
   "truetalentsolutionspartners": {
    "ats": "ashby",
    "board": "true-talent-solutions-partners",
@@ -924,14 +949,17 @@
   "appinio": "2026-10-27",
   "auterion": "2026-10-27",
   "beyondservicegmbh": "2026-10-27",
+  "biahubshellocircle": "2026-10-28",
   "bifrostdefence": "2026-10-27",
   "bitwarden": "2026-10-28",
   "brighteraitechnologiesgmbh": "2026-10-27",
   "bsimerchgmbh": "2026-10-27",
   "btthealthgmbh": "2026-10-27",
   "buildingradargmbh": "2026-10-27",
+  "buyaramen": "2026-10-28",
   "camunda": "2026-10-27",
   "caronsale": "2026-10-27",
+  "cddsag": "2026-10-28",
   "celonis": "2026-10-27",
   "cesiumastro": "2026-10-27",
   "cherryventures": "2026-10-27",
@@ -955,6 +983,7 @@
   "engcmbluenergyag": "2026-10-27",
   "ennovationhub": "2026-10-27",
   "enpal": "2026-10-27",
+  "eventincgmbh": "2026-10-28",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "fertohealthgmbh": "2026-10-27",
@@ -967,13 +996,16 @@
   "foodlabs": "2026-10-27",
   "freenow": "2026-10-27",
   "generalmind": "2026-10-27",
+  "genuinebeautygmbh": "2026-10-28",
   "gfic": "2026-10-27",
   "gitlab": "2026-10-27",
   "glsnxt": "2026-10-27",
   "grip": "2026-10-27",
+  "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
   "hopnug": "2026-10-27",
   "hostaway": "2026-10-27",
+  "hurracom": "2026-10-28",
   "ilertgmbh": "2026-10-27",
   "indiekidzgmbh": "2026-10-27",
   "instagrid": "2026-10-27",
@@ -997,6 +1029,7 @@
   "mobileye": "2026-10-27",
   "moonfare": "2026-10-27",
   "moss": "2026-10-27",
+  "motorai": "2026-10-28",
   "muchgmbh": "2026-10-27",
   "myprojectbox": "2026-10-27",
   "n8n": "2026-10-27",
@@ -1004,6 +1037,7 @@
   "nejo": "2026-10-27",
   "nellysolutions": "2026-10-27",
   "neuralframes": "2026-10-27",
+  "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
   "nomios": "2026-10-27",
   "nviso": "2026-10-27",
@@ -1014,6 +1048,7 @@
   "ostrom": "2026-10-27",
   "oviva": "2026-10-27",
   "paicon": "2026-10-27",
+  "paintgun": "2026-10-28",
   "pajughaftungsbeschrnkt": "2026-10-27",
   "palantir": "2026-10-28",
   "payflows": "2026-10-27",
@@ -1024,6 +1059,7 @@
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
   "prolific": "2026-10-28",
+  "promethionindustries": "2026-10-28",
   "pultgmbh": "2026-10-27",
   "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
@@ -1043,6 +1079,7 @@
   "solactiveag": "2026-10-27",
   "sous": "2026-10-27",
   "southwestx": "2026-10-27",
+  "sphere": "2026-10-28",
   "spotmyenergygmbh": "2026-10-27",
   "spreadgmbh": "2026-10-27",
   "stablenergy": "2026-10-27",
@@ -1066,6 +1103,7 @@
   "vanillasteel": "2026-10-27",
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
+  "verwaltungssprunggmbh": "2026-10-28",
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",
