@@ -35,7 +35,7 @@ REMOTE = {"remote_de": "Remote (Germany)", "remote_eu": "Remote (EU)", "hybrid":
 def load_jobs() -> list[dict]:
     url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/jobs"
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-    out, start, step = [], 0, 500
+    out, start, step = [], 0, 200  # descriptions + insights: 500 rows hit the 3 s anon timeout
     while True:
         r = requests.get(url, params={"select": COLS, "is_active": "eq.true", "order": "posted_at.desc"},
                          headers={"apikey": key, "Authorization": f"Bearer {key}", "Range": f"{start}-{start + step - 1}"},

@@ -27,7 +27,18 @@ import discover  # noqa: E402
 import geo  # noqa: E402
 import sources  # noqa: E402
 
-BATCH = 100  # 200 rows per call hit the database statement timeout (27 Oct)
+BATCH = 100
+
+
+def upsert(rows: list[dict]) -> int:
+    """ingest_jobs() for a batch; on a statement timeout (busy database) retry it in two halves."""
+    try:
+        return int(rpc("ingest_jobs", {"payload": rows}).text or 0)
+    except RuntimeError as err:
+        if "57014" not in str(err) or len(rows) == 1:
+            raise
+        print(f"  timeout on {len(rows)} rows, retrying in halves")
+        return upsert(rows[:len(rows) // 2]) + upsert(rows[len(rows) // 2:])
 
 
 def rpc(name: str, body: dict) -> requests.Response:
@@ -144,8 +155,7 @@ def main() -> None:
 
     written = 0
     for i in range(0, len(rows), BATCH):
-        r = rpc("ingest_jobs", {"payload": rows[i:i + BATCH]})
-        written += int(r.text or 0)
+        written += upsert(rows[i:i + BATCH])
     for i in range(0, len(foreign), 1000):  # hide ones stored before the country check existed
         rpc("mark_checked", {"alive_ids": [], "dead_ids": foreign[i:i + 1000]})
     expired = rpc("expire_jobs", {"max_age_days": 45}).text
