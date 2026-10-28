@@ -962,3 +962,43 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 .results .no-match b { font-size: 1.05rem; }
 .results .no-match span { color: var(--text); font-size: .92rem; }
 .results .no-match .link-btn { padding: 0; margin-top: 4px; }
+
+/* Skill check (skill-check.html) */
+.sc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 18px 0; }
+.sc-card > label { display: block; font-weight: 600; margin-bottom: 6px; }
+.sc-row { display: flex; gap: 8px; }
+.sc-row input { flex: 1 1 auto; min-width: 0; font: inherit; font-size: 1.02rem; color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.sc-hint { font-size: .88rem; color: var(--muted); margin: 8px 0 0; }
+.sc-card h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.sc-sliders { display: grid; gap: 14px; margin: 16px 0; }
+.sc-slider { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 220px) 2ch; align-items: center; gap: 12px; }
+.sc-slider label { display: flex; flex-direction: column; gap: 2px; }
+.sc-slider label span { font-size: .8rem; color: var(--muted); }
+.sc-slider input { width: 100%; accent-color: var(--accent); }
+.sc-slider output { font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.sc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
+.sc-status { font-size: .9rem; color: var(--muted); }
+.sc-report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.sc-report-head h2 { font-size: 1.25rem; }
+.sc-kicker { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 4px; }
+.sc-report h3 { font-size: 1.02rem; margin: 20px 0 6px; }
+.sc-report li p { margin: 2px 0; }
+.sc-table { width: 100%; border-collapse: collapse; margin: 12px 0 0; font-size: .92rem; }
+.sc-table th, .sc-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.sc-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); font-weight: 600; }
+.sc-table small { color: var(--muted); }
+.sc-encourage { font-weight: 600; margin-top: 18px; }
+.sc-privacy { font-size: .82rem; color: var(--muted); }
+@media (max-width: 640px) {
+  .sc-row { flex-direction: column; align-items: stretch; }
+  .sc-row input { width: 100%; }
+  .sc-report-head { flex-direction: column-reverse; }
+  .sc-slider { grid-template-columns: minmax(0, 1fr) 2ch; }
+  .sc-slider input { grid-column: 1 / -1; grid-row: 2; }
+}
+@media print {
+  .site-header, .site-footer, .crumbs, .lead, #sc-role-form, #sc-skills, .sc-privacy, .no-print { display: none !important; }
+  .sc-report { border: 0; padding: 0; margin: 0; }
+  body { background: #fff; color: #000; }
+}

@@ -1,0 +1,143 @@
+// Skill check (skill-check.html): pick a role, rate its 10 most-asked skills, get an AI report.
+// Ratings stay in this browser (for the next check) and go anonymously to submit_skill_ratings()
+// (a random id, the role, the numbers) so candidates can be compared. The report comes from the
+// skill-report Edge Function. "Download PDF" uses the browser's print dialog (print styles in style.css).
+(() => {
+  const C = window.SITE_CONFIG || {};
+  const API = (C.SUPABASE_URL || "").replace(/\/$/, "");
+  const params = new URLSearchParams(location.search);
+  const FN = (location.hostname === "localhost" && params.get("fn")) || `${API}/functions/v1/skill-report`;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const store = {
+    get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode: only this visit */ } },
+  };
+  const clientId = () => {
+    let id = store.get("ejg.clientId", null);
+    if (!id) { id = crypto.randomUUID(); store.set("ejg.clientId", id); }
+    return id;
+  };
+  const pct = (x) => `${Math.round(x * 100)}%`;
+  const READINESS = {
+    apply_now: ["ok", "Ready to apply"],
+    apply_while_learning: ["info", "Apply while you learn"],
+    build_first: ["warn", "Build a few skills first"],
+  };
+
+  let roles = [];
+  let role = null;
+
+  async function init() {
+    try { roles = (await (await fetch("skill-roles.json")).json()).roles; } catch { roles = []; }
+    $("#sc-role-form").addEventListener("submit", (ev) => { ev.preventDefault(); pickRole($("#sc-role").value); });
+    const last = store.get("ejg.skillLastRole", "");
+    if (last && roles.some((r) => r.t === last)) { $("#sc-role").value = last; pickRole(last); }
+  }
+
+  function pickRole(name) {
+    role = roles.find((r) => r.t.toLowerCase() === name.trim().toLowerCase());
+    if (!role) {
+      $("#sc-role-hint").innerHTML = `No role called “${esc(name)}” yet — pick one from the list (start typing to see suggestions).`;
+      return;
+    }
+    $("#sc-role").value = role.t;
+    $("#sc-role-hint").textContent = `Based on ${role.n} postings from the last 90 days.`;
+    store.set("ejg.skillLastRole", role.t);
+    renderSliders();
+    const prev = store.get("ejg.skillHistory", {})[role.t];
+    if (prev?.report) renderReport(prev.report, prev.peers, prev.levels, null, prev.date);
+    else $("#sc-report").hidden = true;
+  }
+
+  function renderSliders() {
+    const saved = store.get("ejg.skillLevels", {});
+    const form = $("#sc-skills");
+    form.innerHTML = `<h2>Rate yourself</h2>
+      <p class="sc-hint">1 = never used it · 5 = used it in a project · 10 = could teach it. Be honest; nobody sees your name.</p>
+      <div class="sc-sliders">${role.skills.map((s, i) => {
+        const v = saved[s.n] ?? 5;
+        return `<div class="sc-slider">
+          <label for="sc-s${i}"><b>${esc(s.n)}</b><span>asked in ${pct(s.s)} of postings${s.r < 0.5 ? " · often nice-to-have" : ""}</span></label>
+          <input type="range" id="sc-s${i}" min="1" max="10" step="1" value="${v}" data-skill="${esc(s.n)}">
+          <output for="sc-s${i}">${v}</output>
+        </div>`;
+      }).join("")}</div>
+      <div class="sc-actions"><button class="btn primary" type="submit">Get my AI report</button>
+      <span class="sc-status" role="status"></span></div>`;
+    form.hidden = false;
+    form.querySelectorAll("input[type=range]").forEach((el) =>
+      el.addEventListener("input", () => { el.nextElementSibling.textContent = el.value; }));
+    form.onsubmit = (ev) => { ev.preventDefault(); submit(); };
+  }
+
+  async function submit() {
+    const levels = {};
+    $("#sc-skills").querySelectorAll("input[type=range]").forEach((el) => { levels[el.dataset.skill] = Number(el.value); });
+    const history = store.get("ejg.skillHistory", {});
+    const before = history[role.t]?.levels || null;
+    store.set("ejg.skillLevels", { ...store.get("ejg.skillLevels", {}), ...levels });
+
+    const btn = $("#sc-skills button[type=submit]");
+    const status = $("#sc-skills .sc-status");
+    btn.disabled = true;
+    status.textContent = "Writing your report… (about 10 seconds)";
+    try {
+      // Anonymous ratings for the candidate comparison — the report still works if this fails.
+      await fetch(`${API}/rest/v1/rpc/submit_skill_ratings`, {
+        method: "POST",
+        headers: { apikey: C.SUPABASE_ANON_KEY, Authorization: `Bearer ${C.SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ p_client: clientId(), p_role: role.t, p_levels: levels }),
+      }).catch(() => {});
+      const res = await fetch(FN, { method: "POST", headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ role: role.t, levels }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.report) throw new Error(data.error || "The report could not be generated. Please try again.");
+      const date = new Date().toISOString().slice(0, 10);
+      history[role.t] = { date, levels, report: data.report, peers: data.peers, before };
+      store.set("ejg.skillHistory", history);
+      status.textContent = "";
+      renderReport(data.report, data.peers, levels, before, date);
+      $("#sc-report").scrollIntoView({ behavior: "smooth", block: "start" });
+      if (window.goatcounter?.count) window.goatcounter.count({ path: "skill-report", event: true });
+    } catch (err) {
+      status.textContent = err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function renderReport(r, peers, levels, before, date) {
+    const peerSkills = peers?.skills || null;
+    const [cls, label] = READINESS[r.readiness] || READINESS.apply_while_learning;
+    const list = (items, fn) => (items || []).length ? `<ul>${items.map(fn).join("")}</ul>` : "";
+    const rows = role.skills.map((s) => `<tr><td>${esc(s.n)}</td><td>${pct(s.s)}</td><td><b>${levels[s.n] ?? "–"}</b>${
+      before && before[s.n] != null && before[s.n] !== levels[s.n] ? ` <small>(was ${before[s.n]})</small>` : ""}</td>${
+      peerSkills ? `<td>${peerSkills[s.n]?.avg ?? "–"}</td>` : ""}</tr>`).join("");
+    $("#sc-report").innerHTML = `
+      <div class="sc-report-head">
+        <div><p class="sc-kicker">Skill report · ${esc(role.t)} · ${esc(date)}</p><h2>${esc(r.headline)}</h2></div>
+        <span class="badge ${cls}">${label}</span>
+      </div>
+      <p>${esc(r.readiness_reason)}</p>
+      <table class="sc-table"><thead><tr><th>Skill</th><th>Asked in</th><th>You</th>${peerSkills ? "<th>Others (avg)</th>" : ""}</tr></thead>
+        <tbody>${rows}</tbody></table>
+      <p class="sc-hint">Based on ${role.n} postings from the last 90 days${peers?.n ? ` and ${peers.n} candidate${peers.n === 1 ? "" : "s"} who rated this role` : ""}.</p>
+      ${r.strengths?.length ? `<h3>Your strengths</h3>${list(r.strengths, (s) => `<li><b>${esc(s.skill)}</b> — ${esc(s.note)}</li>`)}` : ""}
+      ${r.focus?.length ? `<h3>Where to put your effort</h3>${list(r.focus, (f) =>
+        `<li><b>${esc(f.skill)}</b><p>${esc(f.why)}</p><p><i>How:</i> ${esc(f.how)}</p></li>`)}` : ""}
+      ${r.peers ? `<h3>Compared with other candidates</h3><p>${esc(r.peers)}</p>` : ""}
+      ${r.interview?.length ? `<h3>Prepare for the interview</h3>${list(r.interview, (t) => `<li>${esc(t)}</li>`)}` : ""}
+      ${r.plan?.length ? `<h3>Your 4-week plan</h3>${list(r.plan, (t) => `<li>${esc(t)}</li>`)}` : ""}
+      ${r.encouragement ? `<p class="sc-encourage">${esc(r.encouragement)}</p>` : ""}
+      <p class="sc-hint">Written by AI from job-posting statistics and your self-ratings — a starting point, not a verdict.</p>
+      <div class="sc-actions no-print">
+        <button class="btn primary" type="button" id="sc-pdf">Download PDF</button>
+        <a class="btn ghost" href="index.html?q=${encodeURIComponent(role.t)}">See open ${esc(role.t)} jobs</a>
+      </div>`;
+    $("#sc-report").hidden = false;
+    $("#sc-pdf").onclick = () => window.print();
+  }
+
+  init();
+})();

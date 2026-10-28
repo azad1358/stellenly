@@ -1,6 +1,6 @@
 name: Deploy Supabase functions
 
-# Deploys supabase/functions/* (the RSS feed for searches) whenever they change.
+# Deploys supabase/functions/* (the RSS feed for searches, the Skill check AI report) whenever they change.
 # Needs the same secrets as "Migrate database": SUPABASE_ACCESS_TOKEN, SUPABASE_PROJECT_ID.
 on:
   push:
@@ -22,6 +22,12 @@ jobs:
           version: latest
       - name: Deploy RSS feed (public, no login)
         run: supabase functions deploy rss --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Deploy Skill check AI report (public, no login)
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}   # the same Gemini key as "Job insights"
+        run: |
+          supabase secrets set LLM_API_KEY="$LLM_API_KEY" --project-ref "$SUPABASE_PROJECT_ID"
+          supabase functions deploy skill-report --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
       - name: Smoke test
         run: |
           sleep 5

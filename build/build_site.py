@@ -38,6 +38,7 @@ import geo  # noqa: E402  (cached city coordinates for the companies map)
 from enrich import in_germany, normalize_city  # noqa: E402
 from covers import ICONS, cover_svg  # noqa: E402
 import how_it_works  # noqa: E402
+import skill_check  # noqa: E402
 WEB = ROOT / "web"
 CONTENT = ROOT / "content"
 SITE = json.loads((Path(__file__).parent / "site.json").read_text(encoding="utf-8"))
@@ -167,6 +168,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost" href="{up}companies.html">Companies</a>
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
+    <a class="btn ghost" href="{up}skill-check.html">Skill check</a>
     <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
   </nav>
   <div class="header-end"><a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
@@ -969,6 +971,29 @@ def build_how_it_works(jobs: list[dict]) -> str:
     return "how-it-works.html"
 
 
+def load_role_rows(rows_file: str | None) -> list[dict]:
+    """Title + skills of every job seen in the last 90 days (also closed ones) — for the Skill check."""
+    if rows_file:
+        return json.loads(Path(rows_file).read_text(encoding="utf-8"))
+    url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/rpc/role_skill_rows"
+    key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+    r = requests.post(url, json={"p_days": 90}, headers={"apikey": key, "Authorization": f"Bearer {key}"}, timeout=60)
+    r.raise_for_status()
+    return r.json()
+
+
+def build_skill_check(rows: list[dict]) -> str:
+    roles = skill_check.roles(rows)
+    (WEB / "skill-roles.json").write_text(json.dumps({"updated": TODAY.isoformat(), "roles": roles},
+                                                     ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (WEB / "skill-check.html").write_text(page(
+        "Skill check", "Pick a role, rate the 10 skills its job postings ask for most and get a free AI report: "
+        "what to learn first and how you compare with other candidates.", skill_check.body(roles, len(rows)),
+        "skill-check.html", 0, extra_head='<script src="config.js" defer></script><script src="skill-check.js" defer></script>',
+        main_class="post-page skill-page"), encoding="utf-8")
+    return "skill-check.html"
+
+
 def build_sitemap(paths: list[str]) -> None:
     urls = "".join(f"<url><loc>{SITE_URL}/{p.replace('index.html', '')}</loc><lastmod>{TODAY.isoformat()}</lastmod></url>"
                    for p in sorted(set(paths)))
@@ -981,6 +1006,7 @@ def build_sitemap(paths: list[str]) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--jobs-file")
+    ap.add_argument("--role-rows-file")  # offline: [{"title", "skills"}] instead of the role_skill_rows() RPC
     args = ap.parse_args()
 
     jobs = load_jobs(args.jobs_file)
@@ -995,9 +1021,10 @@ def main() -> None:
     landing = build_landing_pages(jobs, stats)
     companies = build_companies(jobs)
     wiki = build_how_it_works(jobs)
+    skills_page = build_skill_check(load_role_rows(args.role_rows_file))
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
-                  + sections + landing + companies + [wiki])
+                  + sections + landing + companies + [wiki, skills_page])
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
           f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")
