@@ -27,7 +27,7 @@ import discover  # noqa: E402
 import geo  # noqa: E402
 import sources  # noqa: E402
 
-BATCH = 200
+BATCH = 100  # 200 rows per call hit the database statement timeout (27 Oct)
 
 
 def rpc(name: str, body: dict) -> requests.Response:
