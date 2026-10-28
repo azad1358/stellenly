@@ -1,11 +1,11 @@
 {
  "2026-W44": {
-  "active": 2080,
-  "median_salary": 80000,
-  "new_7d": 2080,
-  "no_german_pct": 14,
-  "remote_pct": 31,
+  "active": 3754,
+  "median_salary": 83750,
+  "new_7d": 3754,
+  "no_german_pct": 11,
+  "remote_pct": 29,
   "salary_pct": 8,
-  "visa": 117
+  "visa": 161
  }
 }
