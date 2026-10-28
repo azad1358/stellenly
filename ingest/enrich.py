@@ -336,11 +336,11 @@ def relocation(text: str) -> bool:
 _AGENCY_COMPANY = re.compile(
     r"personal(vermittlung|dienstleist|beratung|service)|recruit|staffing|headhunt|talent (partners|solutions)|"
     r"\b(hays|randstad|adecco|manpower|michael page|robert half|gulp|amadeus fire|orizon|"
-    r"jobot|darwin recruitment|hirevue)\b|zeitarbeit|arbeitnehmerüberlassung|\bhr consulting\b",
+    r"jobot|darwin recruitment|hirevue|jobgether|huzzle|pplwise)\b|zeitarbeit|arbeitnehmerüberlassung|\bhr consulting\b",
     re.I,
 )
 _AGENCY_TEXT = re.compile(
-    r"on behalf of (our|a) client|our client,? (is|a)|für unseren (kunden|mandanten)|"
+    r"on behalf of (our|a) (client|partner)|(position|role|vacancy) for our client|our client,? (is|a)|für unseren (kunden|mandanten)|"
     r"we are (currently )?recruiting for|i am (currently )?recruiting for|im auftrag unseres kunden",
     re.I,
 )
