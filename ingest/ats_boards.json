@@ -75,6 +75,11 @@
    "board": "archimed",
    "company": "Archimed"
   },
+  "artefactlinkedin": {
+   "ats": "greenhouse",
+   "board": "artefactlinkedin",
+   "company": "Artefactlinkedin"
+  },
   "atira": {
    "ats": "ashby",
    "board": "atira",
@@ -374,6 +379,11 @@
    "board": "imnoo",
    "company": "Imnoo AG"
   },
+  "imtf": {
+   "ats": "workable",
+   "board": "imtf",
+   "company": "Imtf"
+  },
   "inmobi": {
    "ats": "greenhouse",
    "board": "inmobi",
@@ -472,6 +482,11 @@
    "region": "eu",
    "company": "Lovehoney Group"
   },
+  "lyceum": {
+   "ats": "ashby",
+   "board": "lyceum",
+   "company": "Lyceum"
+  },
   "machinelearningreply": {
    "ats": "recruitee",
    "board": "machinelearningreply",
@@ -501,6 +516,11 @@
    "ats": "ashby",
    "board": "munich-electrification",
    "company": "Munich Electrification"
+  },
+  "nekohealth": {
+   "ats": "ashby",
+   "board": "neko-health",
+   "company": "Neko Health"
   },
   "netbird": {
    "ats": "ashby",
@@ -771,6 +791,12 @@
    "region": "https://jobs.techbiz.global",
    "company": "TechBiz Global GmbH"
   },
+  "tellent": {
+   "ats": "recruitee",
+   "board": "tellent",
+   "region": "https://careers.tellent.com",
+   "company": "Tellent"
+  },
   "telli": {
    "ats": "ashby",
    "board": "telli",
@@ -995,7 +1021,9 @@
   "planeta": "2026-10-27",
   "planetlabs": "2026-10-27",
   "plantacorpgmbh": "2026-10-27",
+  "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
+  "prolific": "2026-10-28",
   "pultgmbh": "2026-10-27",
   "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
@@ -1036,6 +1064,7 @@
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
   "vanillasteel": "2026-10-27",
+  "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
@@ -1044,6 +1073,7 @@
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
   "wepush": "2026-10-27",
+  "werraenergiegmbh": "2026-10-28",
   "wettercomgmbh": "2026-10-27",
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",

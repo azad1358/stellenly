@@ -362,6 +362,11 @@
 "lat": 53.2191,
 "lon": 6.568
 },
+"*|guildford": {
+"cc": "gb",
+"lat": 51.2356,
+"lon": -0.5732
+},
 "*|gèneve-pays de gex": {
 "cc": "fr",
 "lat": 46.3309,
@@ -1203,6 +1208,11 @@
 "cc": "de",
 "lat": 51.2255,
 "lon": 14.5903
+},
+"de|bensheim": {
+"cc": "de",
+"lat": 49.681,
+"lon": 8.6228
 },
 "de|berliini": {
 "cc": "de",
