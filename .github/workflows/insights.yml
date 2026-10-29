@@ -1,14 +1,19 @@
 name: Job insights
 
-# Embeds new jobs, finds similar jobs, compares salary / German / visa /
-# experience with them and writes hints to jobs.insights (ingest/insights.py).
-# Embeddings and the model are kept in the Actions cache, so only new jobs
-# are embedded on each run.
+# WHAT: the AI step of the data pipeline (ingest/insights.py). Embeds new jobs, finds similar jobs, compares
+#   salary / German / visa / experience with them, extracts skills with an LLM and writes it all to jobs.insights.
+#   Embeddings and the model are kept in the Actions cache, so only new jobs are embedded on each run.
+#   Commits ingest/llm_facts.json (checked LLM corrections).
+#
+# WHEN (no other workflow calls this one; it listens for others finishing):
+#   - "Ingest jobs" finished    -> new jobs get skills, comparisons and similar jobs within minutes
+#     (the LLM part stops by itself once the free daily quota is used up)
+#   - "Deploy backend" finished -> a migration may have added something to fill
+#   - daily safety net, and the "Run workflow" button
+# AFTER IT: "Deploy website" starts, so the new insights appear on the job pages.
 on:
-  # Right after every import, so new jobs get skills, comparisons and similar jobs within minutes.
-  # (The LLM part stops by itself once the free daily quota is used up.)
   workflow_run:
-    workflows: ["Ingest jobs", "Migrate database"]
+    workflows: ["Ingest jobs", "Deploy backend"]
     types: [completed]
   schedule:
     - cron: "47 4 * * *"     # daily safety net

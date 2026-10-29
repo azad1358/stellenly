@@ -1,5 +1,11 @@
 name: Check dead links
 
+# WHAT: re-opens up to 800 original postings (least recently checked first) and hides jobs whose posting
+#   was taken down (ingest/check_links.py), so visitors don't click into closed jobs.
+#
+# WHEN (no other workflow calls this one, and it calls none):
+#   - daily, and the "Run workflow" button
+#   Hidden jobs leave the site with the next "Deploy website" (after the next ingest).
 on:
   schedule:
     - cron: "43 3 * * *"     # daily, 03:43 UTC

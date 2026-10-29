@@ -1,0 +1,107 @@
+name: Deploy website
+
+# WHAT: builds every page of www.stellenly.com from the live database and publishes web/ to GitHub Pages.
+#   1. build/build_site.py: blog, weekly job-market report, city/field pages, company pages, Skill check data,
+#      sitemap, RSS
+#   2. build/job_pages.py: one page per job (schema.org JobPosting for Google's job search)
+#   3. publish to GitHub Pages, ping search engines (IndexNow), post new jobs to the Telegram channel
+# Generated pages are NOT committed; they are rebuilt on every deploy. Only the files a build cannot recreate are
+# committed: content/reports/history.json (week-over-week numbers), the frozen pages of past weekly reports
+# (web/blog/job-market-*.html) and downloaded company logos (web/logos/).
+#
+# WHEN (no other workflow calls this one; it starts itself on any of these):
+#   - "Ingest jobs" finished    -> new jobs online right away
+#   - "Job insights" finished   -> the same jobs again, now with skills, hints and similar jobs
+#   - "Deploy backend" finished -> pages that need a new database function (a push that changes both
+#     build/ and supabase/ starts both workflows at once; this run is the one that sees the new database)
+#   - a push to main that changes web/, content/ (guides) or build/ (page code)
+#   - the "Run workflow" button
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", "content/**", "build/**"]
+  workflow_run:
+    workflows: ["Ingest jobs", "Job insights", "Deploy backend"]
+    types: [completed]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write          # commit the report history and logos
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # A run that ended with an alert (e.g. one dead job source) has still saved everything else.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      contains(fromJSON('["success", "failure"]'), github.event.workflow_run.conclusion)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r build/requirements.txt
+      - name: Site pages (guides, report, city/field and company pages, sitemap)
+        run: python build/build_site.py
+      - name: Commit what the next build needs (report history, past reports, logos)
+        run: |
+          git config user.name "site-bot"
+          git config user.email "site-bot@users.noreply.github.com"
+          git add content/reports web/logos web/blog/job-market-*.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Report history and logos $(date -u +%F)"
+          # "Ingest jobs" and "Job insights" also push to main: rebase on top of them and retry.
+          for i in 1 2 3 4 5; do
+            git push && exit 0
+            sleep $((i * 5))
+            git pull --rebase -X theirs origin main
+          done
+          exit 1
+      - name: Job pages (schema.org JobPosting for Google's job search)
+        run: python build/job_pages.py
+      - name: Version the CSS/JS links, so browsers load the new files right after a deploy
+        run: |
+          v="${GITHUB_SHA::8}"
+          find web -name '*.html' -print0 | xargs -0 sed -i -E \
+            "s#((href|src)=\"(\.\./)*(style\.css|app\.js|companies\.js|demo\.js|config\.js))\"#\1?v=$v\"#g"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Tell search engines about new job pages (IndexNow)
+        continue-on-error: true
+        run: python build/job_pages.py --indexnow
+      - uses: actions/cache/restore@v4
+        with:
+          path: build/.telegram_state.json
+          key: telegram-state-${{ github.run_id }}
+          restore-keys: telegram-state-
+      - name: Post new jobs to Telegram
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+        run: python build/telegram_post.py
+      - uses: actions/cache/save@v4
+        if: always() && hashFiles('build/.telegram_state.json') != ''
+        with:
+          path: build/.telegram_state.json
+          key: telegram-state-${{ github.run_id }}

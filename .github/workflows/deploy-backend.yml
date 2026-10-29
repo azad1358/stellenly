@@ -1,0 +1,66 @@
+name: Deploy backend
+
+# WHAT: puts the Supabase side live, in this order:
+#   1. database: applies new files in supabase/migrations/ (already-applied ones are skipped, tracked in
+#      supabase_migrations.schema_migrations, so existing data is untouched)
+#   2. functions: deploys supabase/functions/* (the RSS feed for searches, the Skill check AI report).
+#      Runs after step 1, because functions may call database functions that a new migration adds.
+#
+# WHEN (no other workflow calls this one):
+#   - a push to main that changes supabase/migrations/ or supabase/functions/
+#   - the "Run workflow" button
+# AFTER IT: "Job insights" (new columns may need filling) and "Deploy website" start by themselves.
+#
+# Secrets: SUPABASE_ACCESS_TOKEN, SUPABASE_DB_PASSWORD, SUPABASE_PROJECT_ID, LLM_API_KEY.
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/migrations/**", "supabase/functions/**"]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+env:
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Show pending migrations
+        run: supabase migration list
+      - name: Apply pending migrations
+        run: supabase db push
+
+  functions:
+    needs: migrate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Deploy RSS feed (public, no login)
+        run: supabase functions deploy rss --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Deploy Skill check AI report (public, no login)
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}   # the same Gemini key as "Job insights"
+        run: |
+          supabase secrets set LLM_API_KEY="$LLM_API_KEY" --project-ref "$SUPABASE_PROJECT_ID"
+          supabase functions deploy skill-report --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl -sf "https://$SUPABASE_PROJECT_ID.supabase.co/functions/v1/rss?q=python" | head -c 300

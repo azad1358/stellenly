@@ -64,7 +64,7 @@ npx supabase db push                          # apply to production
 ```
 
 Pushing a new migration to `main` also applies it automatically
-(**Actions → Migrate database**). That workflow needs these secrets:
+(**Actions → Deploy backend**). That workflow needs these secrets:
 `SUPABASE_ACCESS_TOKEN` (account → Access Tokens), `SUPABASE_DB_PASSWORD`, and
 `SUPABASE_PROJECT_ID` (the ref in your project URL).
 
@@ -201,7 +201,7 @@ banner, which breaks the "no cookies, no banner" promise and earns little at low
 
 ## Content that updates itself
 
-`build/build_site.py` (run daily by `.github/workflows/build-site.yml`) generates:
+`build/build_site.py` (run on every deploy by `.github/workflows/deploy-website.yml`) generates:
 
 - **Guides** from `content/blog/*.md`. Write Markdown, push, done. Shortcodes inside posts:
   `{{jobs:tag=no-german,limit=5}}` (live job list, refreshed daily),
@@ -213,7 +213,7 @@ banner, which breaks the "no cookies, no banner" promise and earns little at low
 - `resources.html`, `blog/feed.xml`, `sitemap.xml`, `robots.txt`.
 
 Setup: add the `SUPABASE_ANON_KEY` secret and a repository *variable* `SITE_URL`,
-edit `build/site.json`, then run **Actions → Build site pages** once.
+edit `build/site.json`, then run **Actions → Deploy website** once.
 Preview offline: `python build/build_site.py --jobs-file build/sample_jobs.json`
 (then delete the generated `web/blog`, `web/jobs` and `content/reports` before you commit).
 
