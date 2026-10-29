@@ -3,7 +3,7 @@ name: Job insights
 # WHAT: the AI step of the data pipeline (ingest/insights.py). Embeds new jobs, finds similar jobs, compares
 #   salary / German / visa / experience with them, extracts skills with an LLM and writes it all to jobs.insights.
 #   Embeddings and the model are kept in the Actions cache, so only new jobs are embedded on each run.
-#   Commits ingest/llm_facts.json (checked LLM corrections).
+#   Commits data/cache/llm_facts.json (checked LLM corrections).
 #
 # WHEN (no other workflow calls this one; it listens for others finishing):
 #   - "Ingest jobs" finished    -> new jobs get skills, comparisons and similar jobs within minutes
@@ -20,7 +20,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write            # commit ingest/llm_facts.json (checked LLM corrections)
+  contents: write            # commit data/cache/llm_facts.json (checked LLM corrections)
 
 concurrency:
   group: insights
@@ -61,15 +61,15 @@ jobs:
         # Another run may have saved the file meanwhile: start from the latest main and merge our
         # facts into it (ours win per job) instead of a text merge that can conflict. Retries 3x.
         run: |
-          [ -f ingest/llm_facts.json ] || exit 0
+          [ -f data/cache/llm_facts.json ] || exit 0
           git config user.name "site-bot"
           git config user.email "site-bot@users.noreply.github.com"
-          cp ingest/llm_facts.json "$RUNNER_TEMP/ours.json"
+          cp data/cache/llm_facts.json "$RUNNER_TEMP/ours.json"
           for attempt in 1 2 3; do
             git fetch -q origin main
             git reset -q --hard origin/main
             python ingest/llm_facts.py --merge "$RUNNER_TEMP/ours.json"
-            git add ingest/llm_facts.json
+            git add data/cache/llm_facts.json
             git diff --cached --quiet && exit 0
             git commit -q -m "Update checked LLM facts"
             git push -q && exit 0

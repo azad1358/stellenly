@@ -114,7 +114,7 @@ def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]
         print(f"! source 'arbeitnow' failed: {e}")
 
     # Learn employers' own boards from Arbeitnow's apply links, then read every board directly.
-    config = Path(__file__).parent / "companies.json"
+    config = Path(__file__).parent.parent / "data" / "career_boards.json"
     known = {(e["ats"], e["board"]) for e in json.loads(config.read_text(encoding="utf-8"))}
     try:
         added = discover.update(arbeitnow_raws, known, max_new=int(os.environ.get("DISCOVER_MAX", 120)))

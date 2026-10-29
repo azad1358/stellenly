@@ -48,8 +48,8 @@ jobs:
         run: |
           git config user.name "site-bot"
           git config user.email "site-bot@users.noreply.github.com"
-          git add ingest/geocache.json
-          [ -f ingest/ats_boards.json ] && git add ingest/ats_boards.json
+          git add data/cache/geocache.json
+          [ -f data/cache/discovered_boards.json ] && git add data/cache/discovered_boards.json
           git diff --cached --quiet && exit 0
           git commit -m "Update geocoding cache and discovered boards"
           git pull --rebase && git push

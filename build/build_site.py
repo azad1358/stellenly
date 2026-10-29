@@ -3,7 +3,7 @@ resources page, sitemap. Runs daily in GitHub Actions so the site keeps
 updating itself.
 
     python build/build_site.py                          # live data from Supabase
-    python build/build_site.py --jobs-file build/sample_jobs.json   # offline preview
+    python build/build_site.py --jobs-file tests/fixtures/sample_jobs.json   # offline preview
 
 Env: SUPABASE_URL, SUPABASE_ANON_KEY (public key is enough), SITE_URL.
 
@@ -41,14 +41,14 @@ import how_it_works  # noqa: E402
 import skill_check  # noqa: E402
 WEB = ROOT / "web"
 CONTENT = ROOT / "content"
-SITE = json.loads((Path(__file__).parent / "site.json").read_text(encoding="utf-8"))
+SITE = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
 SITE_URL = os.environ.get("SITE_URL", SITE["site_url"]).rstrip("/")
 import zoneinfo  # noqa: E402
 BERLIN = zoneinfo.ZoneInfo("Europe/Berlin")
 NOW = dt.datetime.now(BERLIN)  # dates on the site are German time
 TODAY = NOW.date()
 e = html.escape
-# Cookieless visitor counts (GoatCounter); empty in site.json = no analytics on generated pages.
+# Cookieless visitor counts (GoatCounter); empty in content/site.json = no analytics on generated pages.
 ANALYTICS = (f'<script data-goatcounter="{html.escape(SITE["goatcounter"])}" async src="https://gc.zgo.at/count.js"></script>'
              if SITE.get("goatcounter") else "")
 

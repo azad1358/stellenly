@@ -80,7 +80,7 @@ Rules that keep production data safe:
 
 ## Adding more job sources
 
-- **Company career pages (best quality):** add boards to `ingest/companies.json`:
+- **Company career pages (best quality):** add boards to `data/career_boards.json`:
   ```json
   [{"ats": "greenhouse", "board": "companyname", "company": "Company GmbH"},
    {"ats": "lever",      "board": "companyname", "company": "Company"},
@@ -90,7 +90,7 @@ Rules that keep production data safe:
   (`boards.greenhouse.io/<board>`, `jobs.lever.co/<board>`, `jobs.ashbyhq.com/<board>`).
   For `jobs.eu.lever.co/<board>`, add `"region": "eu"`.
   Only German locations are imported. What counts as German is defined in
-  `ingest/cities_de.json` (cities, their other spellings, and the states).
+  `data/cities_de.json` (cities, their other spellings, and the states).
 - **More APIs:** write a generator in `ingest/sources.py` that yields the common
   shape, and add it to `collect()` in `ingest/ingest.py`. Candidates are the
   Bundesagentur für Arbeit Jobsuche API and Adzuna (free key).
@@ -106,7 +106,7 @@ facts or 3+ jobs also gets its own page in `web/companies/`, which helps with
 - Company facts (description, founding year, size, HQ, startup tag) live in
   `content/companies.json`. Add or correct entries there; companies without an
   entry still appear, just without facts.
-- City coordinates come from `ingest/geocache.json`, which the ingester fills
+- City coordinates come from `data/cache/geocache.json`, which the ingester fills
   via OpenStreetMap Nominatim (at most one lookup per second, every answer
   cached) and commits after each run. The same lookups drop Arbeitnow jobs
   outside Germany.
@@ -213,8 +213,8 @@ banner, which breaks the "no cookies, no banner" promise and earns little at low
 - `resources.html`, `blog/feed.xml`, `sitemap.xml`, `robots.txt`.
 
 Setup: add the `SUPABASE_ANON_KEY` secret and a repository *variable* `SITE_URL`,
-edit `build/site.json`, then run **Actions → Deploy website** once.
-Preview offline: `python build/build_site.py --jobs-file build/sample_jobs.json`
+edit `content/site.json`, then run **Actions → Deploy website** once.
+Preview offline: `python build/build_site.py --jobs-file tests/fixtures/sample_jobs.json`
 (then delete the generated `web/blog`, `web/jobs` and `content/reports` before you commit).
 
 **Your monthly routine (≈1 hour):** re-check the `reviewed:` date on each guide, update

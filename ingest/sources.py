@@ -82,7 +82,7 @@ def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
 
 # ---------------------------------------------------------------------------
 # Company career pages via public ATS APIs (Greenhouse / Lever / Ashby).
-# List the company board names in companies.json. Many Berlin startups post
+# List the company board names in data/career_boards.json. Many Berlin startups post
 # in English here, so this is the highest-quality source you can add.
 # ---------------------------------------------------------------------------
 def greenhouse(board: str, company: str, region: str | None = None) -> Iterator[dict]:
@@ -282,7 +282,7 @@ ATS = {"greenhouse": greenhouse, "lever": lever, "ashby": ashby, "personio": per
 
 
 def company_boards(config_path: Path, discovered: list[dict] | None = None) -> Iterator[dict]:
-    """companies.json: [{"ats": "greenhouse", "board": "acme", "company": "Acme GmbH"}, ...] plus boards found
+    """data/career_boards.json: [{"ats": "greenhouse", "board": "acme", "company": "Acme GmbH"}, ...] plus boards found
     automatically (discover.py). EU-hosted Greenhouse/Lever boards need "region": "eu", Personio .com boards
     "region": "com", Recruitee custom career domains "region": "https://careers.example.com"."""
     entries = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else []

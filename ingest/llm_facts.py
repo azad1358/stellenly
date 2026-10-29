@@ -2,7 +2,7 @@
 
 The LLM must quote the sentence each answer is based on. An answer is only kept if
 that quote really appears in the posting (and, for salaries, if the number is
-plausible). Kept answers are stored in ingest/llm_facts.json, keyed by job id and
+plausible). Kept answers are stored in data/cache/llm_facts.json, keyed by job id and
 a hash of the description, so the ingester applies them on every run and a
 changed posting gets checked again.
 """
@@ -13,7 +13,7 @@ import json
 import re
 from pathlib import Path
 
-FACTS_PATH = Path(__file__).parent / "llm_facts.json"
+FACTS_PATH = Path(__file__).parent.parent / "data" / "cache" / "llm_facts.json"
 GERMAN_LEVELS = {"required", "nice_to_have", "not_required", "not_mentioned"}
 _facts: dict | None = None
 

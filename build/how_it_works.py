@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 INGEST = ROOT / "ingest"
+DATA = ROOT / "data"
 
 SOURCE_NAMES = {"arbeitnow": "Arbeitnow", "greenhouse": "Greenhouse", "lever": "Lever", "ashby": "Ashby",
                 "personio": "Personio", "recruitee": "Recruitee", "workable": "Workable",
@@ -30,7 +31,7 @@ def _json(path: Path, default):
 def numbers(jobs: list[dict], index: dict) -> dict:
     """Live figures for the page."""
     by_source = collections.Counter((j.get("source") or "other").split(":")[0] for j in jobs)
-    boards = len(_json(INGEST / "ats_boards.json", {}).get("boards", {})) + len(_json(INGEST / "companies.json", []))
+    boards = len(_json(DATA / "cache" / "discovered_boards.json", {}).get("boards", {})) + len(_json(DATA / "career_boards.json", []))
     try:
         sys.path.insert(0, str(INGEST))
         from skills import SKILLS  # noqa: PLC0415
@@ -43,8 +44,8 @@ def numbers(jobs: list[dict], index: dict) -> dict:
         "by_source": by_source.most_common(),
         "direct_pct": round(100 * (1 - by_source.get("arbeitnow", 0) / n)),
         "boards": boards,
-        "facts": len(_json(INGEST / "llm_facts.json", {})),
-        "places": len(_json(INGEST / "geocache.json", {})),
+        "facts": len(_json(DATA / "cache" / "llm_facts.json", {})),
+        "places": len(_json(DATA / "cache" / "geocache.json", {})),
         "skills": n_skills,
         "companies": len(index),
         "scored": sum(1 for c in index.values() if c.get("sc")),
@@ -144,7 +145,7 @@ Personio, Recruitee, Workable and SmartRecruiters. This is the same data the com
 <p>Every Arbeitnow job has an "apply" link that redirects to the employer's tracking system. Once per company we follow
 that redirect, recognise the system and board name from the address (for example <code>jobs.ashbyhq.com/&lt;company&gt;</code>
 or <code>&lt;company&gt;.jobs.personio.de</code>), check that the board's public API answers, and save it in
-<code>ats_boards.json</code>. From then on that company is read directly. Companies without a recognised board are tried
+<code>discovered_boards.json</code>. From then on that company is read directly. Companies without a recognised board are tried
 again after 30 days. Today <b>{num['boards']:,}</b> boards are read directly.</p>
 <p>If the same job appears on both Arbeitnow and the employer's board, <b>the employer's copy wins</b>: its Apply button goes
 straight to the company.</p>

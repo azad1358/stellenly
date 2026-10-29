@@ -1,4 +1,4 @@
-"""Geocoding with a committed cache (ingest/geocache.json).
+"""Geocoding with a committed cache (data/cache/geocache.json).
 
 Used to (1) tell whether a job board location like "Geeste" or "Bristol" is in
 Germany and (2) give the companies map coordinates for each city.
@@ -15,7 +15,7 @@ from pathlib import Path
 
 import requests
 
-CACHE_PATH = Path(__file__).parent / "geocache.json"
+CACHE_PATH = Path(__file__).parent.parent / "data" / "cache" / "geocache.json"
 UA = {"User-Agent": "stellenly/1.0 (+https://github.com/azad1358/stellenly)"}
 
 _cache: dict[str, dict | None] | None = None

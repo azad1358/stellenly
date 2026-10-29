@@ -353,8 +353,8 @@ def is_agency(company: str, text: str) -> bool:
 # ---------------------------------------------------------------------------
 # Location
 # ---------------------------------------------------------------------------
-# Cities and regions live in cities_de.json; keys below are _norm()-ed spellings.
-_PLACES = json.loads((Path(__file__).parent / "cities_de.json").read_text(encoding="utf-8"))
+# Cities and regions live in data/cities_de.json; keys below are _norm()-ed spellings.
+_PLACES = json.loads((Path(__file__).parent.parent / "data" / "cities_de.json").read_text(encoding="utf-8"))
 _UMLAUTS = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss"})
 
 

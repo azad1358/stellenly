@@ -3,7 +3,7 @@
 Every Arbeitnow job has an /apply link that redirects to the employer's applicant tracking
 system (Ashby, Greenhouse, Lever, Personio, Recruitee, Workable, SmartRecruiters ...).
 We follow that redirect once per company, recognise the system and the board name, check
-that the board's public API answers, and remember it in ingest/ats_boards.json. From then
+that the board's public API answers, and remember it in data/cache/discovered_boards.json. From then
 on the ingester reads that company directly — so we depend less on Arbeitnow every day.
 """
 from __future__ import annotations
@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 
 import requests
 
-PATH = Path(__file__).parent / "ats_boards.json"
+PATH = Path(__file__).parent.parent / "data" / "cache" / "discovered_boards.json"
 UA = {"User-Agent": "stellenly/1.0 (+https://github.com/azad1358/stellenly)"}
 RECHECK_DAYS = 30  # companies without a recognised board are tried again after this
 
@@ -104,7 +104,7 @@ def boards(data: dict | None = None) -> list[dict]:
 
 def update(jobs: list[dict], known: set[tuple[str, str]], max_new: int = 120, pause: float = 0.8) -> int:
     """jobs = Arbeitnow raw jobs (company + /apply url). Resolves one job per unknown company.
-    known = {(ats, board)} already listed in companies.json. Returns the number of boards added."""
+    known = {(ats, board)} already listed in data/career_boards.json. Returns the number of boards added."""
     data = load()
     today = dt.date.today()
     first_url: dict[str, tuple[str, str]] = {}
