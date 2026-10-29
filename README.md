@@ -33,7 +33,7 @@ runs on built-in demo jobs, so you can click through every feature.
    - `SUPABASE_SERVICE_ROLE_KEY` (secret; never put it in `web/`)
 4. **First import.** Actions → *Ingest jobs* → *Run workflow*. Check the log
    for the stats line (how many English jobs, German levels, salaries).
-5. **Frontend.** Edit `web/config.js`: Supabase URL, anon key, Ko-fi link, costs.
+5. **Frontend.** Edit `web/js/config.js`: Supabase URL, anon key, Ko-fi link, costs.
 6. **Deploy.** Cloudflare Pages → connect the repo → build command *none*, output
    directory `web`. Point your domain at it.
 7. **RSS (optional).** `supabase functions deploy rss --no-verify-jwt`, then
@@ -113,7 +113,7 @@ facts or 3+ jobs also gets its own page in `web/companies/`, which helps with
 - The map loads OpenStreetMap tiles only after the visitor clicks "Show map"
   (see the privacy page). OSM's free tile servers are for moderate traffic
   ([tile usage policy](https://operations.osmfoundation.org/policies/tiles/)).
-  If the site gets big, switch to a hosted tile provider in `web/companies.js`.
+  If the site gets big, switch to a hosted tile provider in `web/js/companies.js`.
 
 ## SEO checklist
 
@@ -136,7 +136,7 @@ reports, city and tag pages, company pages). To get indexed:
 | English only | `langdetect` on title + description |
 | German level | Sentence-level regex → `required` / `nice_to_have` / `not_required` / `not_mentioned` |
 | Salary | € ranges, monthly ×12, hourly ignored, sanity 15k–400k |
-| Blue Card badge | Salary vs. thresholds in `web/config.js` (**update every January**) |
+| Blue Card badge | Salary vs. thresholds in `web/js/config.js` (**update every January**) |
 | Experience / level | "3+ years of experience", title keywords |
 | Remote | remote flag + "hybrid", "remote (EU)" phrases |
 | Visa / relocation | phrases, with negations ("cannot sponsor") excluded |
@@ -181,7 +181,7 @@ section: visa             # visa | job-search | salary | living (see content/sec
 
 ## Things to update by hand
 
-- `web/config.js`: `RAISED_THIS_MONTH_EUR` (monthly) and `BLUE_CARD` (each January)
+- `web/js/config.js`: `RAISED_THIS_MONTH_EUR` (monthly) and `BLUE_CARD` (each January)
 - `supabase/functions/rss/index.ts`: `BLUE_CARD` (each January)
 
 ## Making money from it
@@ -192,7 +192,7 @@ Three income streams, none of which needs accounts, payments or tracking on your
    tracking link into `affiliate_url`. The site labels it "Partner link", adds
    `rel="sponsored"` and shows a disclosure. The private `program` field holds notes on
    each program (commissions, where to apply).
-2. **One sponsor slot** (`SPONSOR` in `web/config.js`), sold directly to a relocation
+2. **One sponsor slot** (`SPONSOR` in `web/js/config.js`), sold directly to a relocation
    service, a language school or an employer. It's a plain link with no ad network and no cookies.
 3. **Ko-fi support** (already in place).
 

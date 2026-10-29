@@ -145,24 +145,24 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:type" content="website">
-<meta property="og:image" content="{SITE_URL}/og-image.png">
+<meta property="og:image" content="{SITE_URL}/img/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title="Guides" href="{up}blog/feed.xml">
-<link rel="icon" href="{up}logo.svg" type="image/svg+xml">
+<link rel="icon" href="{up}img/logo.svg" type="image/svg+xml">
 <link rel="icon" href="{up}favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="{up}apple-touch-icon.png">
 <link rel="manifest" href="{up}manifest.webmanifest">
 <meta name="theme-color" content="#0a2463">
-<link rel="stylesheet" href="{up}style.css">
+<link rel="stylesheet" href="{up}css/style.css">
 {ANALYTICS}
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
 {extra_head}
 </head>
 <body>
 <header class="site-header"><div class="wrap header-row">
-  <a class="brand" href="{up}index.html"><img class="brand-logo" src="{up}logo.svg" alt="" width="32" height="32"><span>{e(SITE['site_name'])}</span></a>
+  <a class="brand" href="{up}index.html"><img class="brand-logo" src="{up}img/logo.svg" alt="" width="32" height="32"><span>{e(SITE['site_name'])}</span></a>
   <nav class="header-actions">
     <a class="btn ghost" href="{up}index.html">Search jobs</a>
     <a class="btn ghost" href="{up}companies.html">Companies</a>
@@ -728,7 +728,7 @@ def fetch_logo(slug: str, website: str | None) -> str | None:
 
 
 def write_company_index(cos: list[dict]) -> None:
-    """web/companies-index.json: what the job popup shows about a company (keyed like co_key() in app.js)."""
+    """web/data/companies-index.json: what the job popup shows about a company (keyed like co_key() in app.js)."""
     index = {}
     for c in cos:
         m = c["meta"] or {}
@@ -741,7 +741,7 @@ def write_company_index(cos: list[dict]) -> None:
                           "d": m.get("description"), "w": m.get("website")})
         for name in {c["name"], *c["names"], *(m.get("aliases") or [])}:
             index[co_key(name)] = {k: v for k, v in entry.items() if v is not None}
-    (WEB / "companies-index.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")),
+    (WEB / "data" / "companies-index.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")),
                                               encoding="utf-8")
 
 
@@ -840,11 +840,11 @@ def build_companies(jobs: list[dict]) -> list[str]:
                             "u": f"companies/{c['slug']}.html" if c["page"] else None, "s": int(bool(m.get("startup"))),
                             "i": m.get("industry"), "f": m.get("founded"), "z": m.get("size"),
                             "r": [[j["title"][:90], j["url"]] for j in c["jobs"] if place(j) == city][:5]})
-    (WEB / "companies-map.json").write_text(json.dumps(markers, ensure_ascii=False, separators=(",", ":")),
+    (WEB / "data" / "companies-map.json").write_text(json.dumps(markers, ensure_ascii=False, separators=(",", ":")),
                                             encoding="utf-8")
     # City dropdown on the search page: only the city values of jobs that really are in Germany.
     german_cities = sorted({j["city"] for j in jobs if j.get("city") and place(j) not in (None, REMOTE, NO_CITY)})
-    (WEB / "german-cities.json").write_text(json.dumps(german_cities, ensure_ascii=False), encoding="utf-8")
+    (WEB / "data" / "german-cities.json").write_text(json.dumps(german_cities, ensure_ascii=False), encoding="utf-8")
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
@@ -875,7 +875,7 @@ founded 2009 or later, fewer than 5,000 people. Missing a company? It appears he
         "Companies hiring in English in Germany", f"{len(cos):,} employers in {n_cities} German cities with English-speaking "
         "jobs — startups and global companies, with size, founding year and open positions on a map.", body,
         "companies.html", 0, extra_head=f'<script type="application/ld+json">{json.dumps(ld)}</script>'
-                                         '<script src="companies.js" defer></script>'), encoding="utf-8")
+                                         '<script src="js/companies.js" defer></script>'), encoding="utf-8")
     return ["companies.html"] + [f"companies/{c['slug']}.html" for c in cos if c["page"]]
 
 
@@ -962,7 +962,7 @@ def build_blog_index(posts: list[dict], report: dict) -> None:
 
 
 def build_how_it_works(jobs: list[dict]) -> str:
-    index = json.loads((WEB / "companies-index.json").read_text(encoding="utf-8"))
+    index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
     body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()))
     (WEB / "how-it-works.html").write_text(page(
         "How it works", "How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: "
@@ -984,12 +984,12 @@ def load_role_rows(rows_file: str | None) -> list[dict]:
 
 def build_skill_check(rows: list[dict]) -> str:
     roles = skill_check.roles(rows)
-    (WEB / "skill-roles.json").write_text(json.dumps({"updated": TODAY.isoformat(), "roles": roles},
+    (WEB / "data" / "skill-roles.json").write_text(json.dumps({"updated": TODAY.isoformat(), "roles": roles},
                                                      ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     (WEB / "skill-check.html").write_text(page(
         "Skill check", "Pick a role, see the priority of the 10 skills its job postings ask for most and get a free AI report: "
         "what to learn first and how you compare with other candidates.", skill_check.body(roles, len(rows)),
-        "skill-check.html", 0, extra_head='<script src="config.js" defer></script><script src="skill-check.js" defer></script>',
+        "skill-check.html", 0, extra_head='<script src="js/config.js" defer></script><script src="js/skill-check.js" defer></script>',
         main_class="post-page skill-page"), encoding="utf-8")
     return "skill-check.html"
 

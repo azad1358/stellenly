@@ -1,7 +1,7 @@
 // AI report for the Skill check page (web/skill-check.html).
 // Deploy:  supabase functions deploy skill-report --no-verify-jwt   (secret: LLM_API_KEY, a Gemini key)
 // POST {role, levels: {"Python": 7, ...}, client: "<random browser id>"}  ->  {report, role, peers}
-// The market data comes from the site's own skill-roles.json, never from the request; the candidate
+// The market data comes from the site's own data/skill-roles.json, never from the request; the candidate
 // comparison from skill_peers(). A daily cap (REPORT_DAILY_MAX) keeps the free LLM quota for the job checks.
 // The prompt text is in prompts.md at the repo root; prompts.json is made from it before deploying / serving:
 //   python ingest/prompts.py supabase/functions/skill-report/prompts.json
@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
 
   let body: { role?: unknown; levels?: unknown; client?: unknown };
   try { body = await req.json(); } catch { return fail(400, "Invalid JSON"); }
-  const roles: Role[] = (await (await fetch(`${SITE_URL}/skill-roles.json`)).json()).roles;
+  const roles: Role[] = (await (await fetch(`${SITE_URL}/data/skill-roles.json`)).json()).roles;
   const role = roles.find((r) => r.t === body.role);
   if (!role) return fail(400, "Unknown role");
   const levels: Record<string, number> = {};

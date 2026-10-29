@@ -196,7 +196,7 @@ def main() -> None:
             print(f"! IndexNow failed: {err}")
         return
 
-    index = json.loads((WEB / "companies-index.json").read_text(encoding="utf-8"))
+    index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
     by_id = {j["id"]: j for j in jobs}
     OUT.mkdir(exist_ok=True)
     for old in OUT.glob("*.html"):

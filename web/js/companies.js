@@ -88,7 +88,7 @@
       await Promise.all([loadCss("vendor/leaflet/leaflet.css"), loadCss("vendor/leaflet/MarkerCluster.css")]);
       await loadJs("vendor/leaflet/leaflet.js");
       await loadJs("vendor/leaflet/markercluster.js");
-      const data = await (await fetch("companies-map.json")).json();
+      const data = await (await fetch("data/companies-map.json")).json();
       box.innerHTML = "";
       box.classList.remove("loading");
       box.classList.add("ready");

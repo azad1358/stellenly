@@ -953,10 +953,10 @@
     try {
       const [f, german] = await Promise.all([
         rpc("facets", { p_limit: 60 }),
-        fetch("german-cities.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+        fetch("data/german-cities.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
       ]);
       const sel = $("#city").value;
-      // Only German cities in the dropdown (german-cities.json is written by the daily build).
+      // Only German cities in the dropdown (data/german-cities.json is written by the site build).
       const ok = german ? new Set(german) : null;
       f.cities.filter((c) => !ok || ok.has(c.city)).slice(0, 30).forEach((c) => ensureCityOption(c.city));
       $("#city").value = sel;
@@ -1117,7 +1117,7 @@
     loadFacets();
     loadFreshness();
     const ready = Promise.all([
-      fetch("companies-index.json").then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
+      fetch("data/companies-index.json").then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
       C.DEV_INSIGHTS_URL ? fetch(C.DEV_INSIGHTS_URL).then((r) => r.json()).then((d) => { devInsights = d; }).catch(() => {}) : null,
     ]);
     const startPage = Math.max(1, parseInt(new URLSearchParams(location.search).get("page"), 10) || 1);

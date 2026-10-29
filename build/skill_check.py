@@ -1,6 +1,6 @@
 """The "Skill check" page: pick a role, rate the 10 skills its postings ask for most, get an AI report.
 
-This module groups job titles into roles and writes web/skill-roles.json (role -> top skills), which both
+This module groups job titles into roles and writes web/data/skill-roles.json (role -> top skills), which both
 the page and the Edge Function (supabase/functions/skill-report) read. Every job in the database counts,
 also closed ones, so smaller roles have enough postings.
 

@@ -5,7 +5,7 @@
 
 const SITE_URL = Deno.env.get("SITE_URL") ?? "https://www.stellenly.com";
 const SITE_NAME = Deno.env.get("SITE_NAME") ?? "Stellenly";
-const BLUE_CARD: Record<string, number> = { standard: 50700, reduced: 45934 }; // keep in sync with web/config.js
+const BLUE_CARD: Record<string, number> = { standard: 50700, reduced: 45934 }; // keep in sync with web/js/config.js
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]!));

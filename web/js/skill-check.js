@@ -1,7 +1,7 @@
 // Skill check (skill-check.html): pick a role, rate its 10 most-asked skills, get an AI report.
 // Ratings stay in this browser (for the next check) and go anonymously to submit_skill_ratings()
 // (a random id, the role, the numbers) so candidates can be compared. The report comes from the
-// skill-report Edge Function. "Download PDF" uses the browser's print dialog (print styles in style.css).
+// skill-report Edge Function. "Download PDF" uses the browser's print dialog (print styles in css/style.css).
 (() => {
   const C = window.SITE_CONFIG || {};
   // Local testing against `supabase start`: localhost/skill-check.html?api=http://127.0.0.1:54321&anon=<local anon key>
@@ -32,7 +32,7 @@
   let role = null;
 
   async function init() {
-    try { roles = (await (await fetch("skill-roles.json")).json()).roles; } catch { roles = []; }
+    try { roles = (await (await fetch("data/skill-roles.json")).json()).roles; } catch { roles = []; }
     $("#sc-role-form").addEventListener("submit", (ev) => { ev.preventDefault(); pickRole($("#sc-role").value); });
     const last = store.get("ejg.skillLastRole", "");
     if (last && roles.some((r) => r.t === last)) { $("#sc-role").value = last; pickRole(last); }

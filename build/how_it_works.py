@@ -328,5 +328,5 @@ visitor is stored: no IP address, no cookie, no ID.</li>
 </article>
 {_toc(sections)}
 </div>
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script>{LIVE_JS}</script>"""

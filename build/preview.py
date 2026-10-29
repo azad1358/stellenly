@@ -3,7 +3,7 @@
     python build/preview.py            # http://localhost:8000
     python build/preview.py --port 8080 --no-build
 
-Uses the public Supabase URL and anon key from web/config.js (read-only), so no
+Uses the public Supabase URL and anon key from web/js/config.js (read-only), so no
 secrets are needed. The rebuilt pages (web/blog, web/companies, ...) are the
 same files the daily GitHub build commits; don't commit them from a branch.
 """
@@ -29,13 +29,13 @@ def main() -> None:
     args = ap.parse_args()
 
     if not args.no_build:
-        config = (WEB / "config.js").read_text(encoding="utf-8")
+        config = (WEB / "js" / "config.js").read_text(encoding="utf-8")
         for env, key in (("SUPABASE_URL", "SUPABASE_URL"), ("SUPABASE_ANON_KEY", "SUPABASE_ANON_KEY")):
             m = re.search(rf'{key}:\s*"([^"]*)"', config)
             if not os.environ.get(env) and m and m.group(1):
                 os.environ[env] = m.group(1)
         if not os.environ.get("SUPABASE_URL"):
-            sys.exit("web/config.js has no SUPABASE_URL — set it, or run with --no-build.")
+            sys.exit("web/js/config.js has no SUPABASE_URL — set it, or run with --no-build.")
         print("Building pages from live data …")
         sys.path.insert(0, str(ROOT / "build"))
         import build_site  # noqa: E402  (imported here so the env vars above are set first)
