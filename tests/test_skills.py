@@ -1,8 +1,4 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
-from skills import canonical_skill, extract_skills  # noqa: E402
+from skills import canonical_skill, extract_skills
 
 POSTING = """About the role
 You will build data pipelines in Python and SQL.

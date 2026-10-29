@@ -36,7 +36,7 @@ jobs:
           cache: pip
           cache-dependency-path: ingest/requirements.txt
       - run: pip install -r ingest/requirements.txt
-      - run: python -m pytest -q ingest
+      - run: python -m pytest -q tests
       - name: Fetch, enrich and upsert
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

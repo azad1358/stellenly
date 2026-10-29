@@ -1,10 +1,6 @@
-import sys
-from pathlib import Path
-
 import pytest
 
 np = pytest.importorskip("numpy")  # only installed for the insights workflow
-sys.path.insert(0, str(Path(__file__).parent))
 from insights import make_hints, restore_ai, scam_signals  # noqa: E402
 
 PEERS = {"n": 30, "german_req": 0.6, "no_german": 0.3, "visa": 0.05, "years": 3.0,

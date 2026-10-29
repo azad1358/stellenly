@@ -1,9 +1,5 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
-import discover  # noqa: E402
-import sources  # noqa: E402
+import discover
+import sources
 
 
 def test_parse_board_recognises_the_common_systems():

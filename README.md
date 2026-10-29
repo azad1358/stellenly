@@ -44,7 +44,7 @@ Run locally:
 
 ```bash
 pip install -r ingest/requirements.txt
-python -m pytest -q ingest                       # enrichment rules
+python -m pytest -q tests                        # all tests (tests/)
 python ingest/ingest.py --dry-run --max-pages 2  # see what would be imported
 ```
 

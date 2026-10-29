@@ -1,8 +1,4 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
-from enrich import (  # noqa: E402
+from enrich import (
     abroad, enrich, generic_location, german_level, html_to_text, strip_boilerplate, in_germany, is_agency, job_id, normalize_city, parse_salary,
     relocation, remote_type, seniority, visa_sponsorship, years_experience,
 )

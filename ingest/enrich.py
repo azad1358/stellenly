@@ -1,7 +1,7 @@
 """Rule-based enrichment: turns a raw job posting into clean, filterable fields.
 
 Everything here is plain regex + small dictionaries so it is fast, free and
-easy to tweak. Each function is unit-tested in test_enrich.py.
+easy to tweak. Each function is unit-tested in tests/test_enrich.py.
 """
 from __future__ import annotations
 

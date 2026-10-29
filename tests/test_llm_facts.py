@@ -1,8 +1,4 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
-import llm_facts  # noqa: E402
+import llm_facts
 
 POSTING = ("8+ years experience in group reporting.\n"
            "Fluent written and verbal English and German.\n"
