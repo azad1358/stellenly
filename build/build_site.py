@@ -41,6 +41,8 @@ import how_it_works  # noqa: E402
 import skill_check  # noqa: E402
 WEB = ROOT / "web"
 CONTENT = ROOT / "content"
+# Skill check: on locally, off in production until it is redesigned (GitHub repository variable SKILL_CHECK=1 turns it on).
+SKILL_CHECK = os.environ.get("SKILL_CHECK", "1") == "1"
 SITE = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
 SITE_URL = os.environ.get("SITE_URL", SITE["site_url"]).rstrip("/")
 import zoneinfo  # noqa: E402
@@ -130,6 +132,7 @@ w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden
 def page(title: str, description: str, body: str, path: str, depth: int, extra_head: str = "",
          affiliate_note: bool = False, main_class: str = "content-page") -> str:
     up = "../" * depth
+    skill_link = f'    <a class="btn ghost" href="{up}skill-check.html">Skill check</a>\n' if SKILL_CHECK else ""
     canonical = f"{SITE_URL}/{path}".replace("/index.html", "/")
     note = ('<p class="affiliate-note">Some links on this page are partner links: if you sign up, we may earn a small '
             'commission at no extra cost to you. It keeps this site free. We only list services we would recommend anyway.</p>'
@@ -168,8 +171,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost" href="{up}companies.html">Companies</a>
     <a class="btn ghost" href="{up}resources.html">Resources</a>
     <a class="btn ghost" href="{up}blog/index.html">Guides</a>
-    <a class="btn ghost" href="{up}skill-check.html">Skill check</a>
-    <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
+{skill_link}    <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
   </nav>
   <div class="header-end"><a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
@@ -1021,10 +1023,10 @@ def main() -> None:
     landing = build_landing_pages(jobs, stats)
     companies = build_companies(jobs)
     wiki = build_how_it_works(jobs)
-    skills_page = build_skill_check(load_role_rows(args.role_rows_file))
+    skills_page = [build_skill_check(load_role_rows(args.role_rows_file))] if SKILL_CHECK else []
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
-                  + sections + landing + companies + [wiki, skills_page])
+                  + sections + landing + companies + [wiki] + skills_page)
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
           f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")

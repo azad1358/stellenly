@@ -55,6 +55,7 @@ jobs:
       - name: Deploy RSS feed (public, no login)
         run: supabase functions deploy rss --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
       - name: Deploy Skill check AI report (public, no login)
+        if: vars.SKILL_CHECK == '1'      # repository variable; off while the Skill check is redesigned
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}   # the same Gemini key as "Job insights"
         run: |

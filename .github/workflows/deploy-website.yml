@@ -46,6 +46,7 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       SITE_URL: ${{ vars.SITE_URL }}
+      SKILL_CHECK: ${{ vars.SKILL_CHECK }}   # repository variable; "1" = Skill check page on (off while it's redesigned)
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -59,6 +60,9 @@ jobs:
       - run: pip install -r build/requirements.txt
       - name: Site pages (guides, report, city/field and company pages, sitemap)
         run: python build/build_site.py
+      - name: Skill check off -> drop its link from the hand-written main page too
+        if: env.SKILL_CHECK != '1'
+        run: sed -i '/href="skill-check.html"/d' web/index.html
       - name: Commit what the next build needs (report history, past reports, logos)
         run: |
           git config user.name "site-bot"
