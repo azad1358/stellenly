@@ -265,6 +265,11 @@
 "lat": 51.0382,
 "lon": 0.0197
 },
+"*|davos": {
+"cc": "ch",
+"lat": 46.7962,
+"lon": 9.8237
+},
 "*|delft": {
 "cc": "nl",
 "lat": 51.9995,
@@ -618,6 +623,11 @@
 "lat": 45.7578,
 "lon": 4.832
 },
+"*|maidstone": {
+"cc": "gb",
+"lat": 51.2748,
+"lon": 0.5232
+},
 "*|manchester": {
 "cc": "gb",
 "lat": 53.4425,
@@ -795,6 +805,11 @@
 "lon": -4.1424
 },
 "*|portfolio location": null,
+"*|pressig": {
+"cc": "de",
+"lat": 50.3589,
+"lon": 11.3274
+},
 "*|puchheim": {
 "cc": "de",
 "lat": 48.1705,
@@ -1495,6 +1510,11 @@
 "cc": "de",
 "lat": 52.4009,
 "lon": 13.0591
+},
+"de|pressig": {
+"cc": "de",
+"lat": 50.3589,
+"lon": 11.3274
 },
 "de|puchheim": {
 "cc": "de",
