@@ -185,6 +185,11 @@
    "board": "Certa",
    "company": "Certa"
   },
+  "changeorg": {
+   "ats": "ashby",
+   "board": "change",
+   "company": "Change.org"
+  },
   "cinder": {
    "ats": "ashby",
    "board": "cinder",
@@ -367,6 +372,11 @@
    "ats": "workable",
    "board": "getolo",
    "company": "Getolo"
+  },
+  "gotphoto": {
+   "ats": "ashby",
+   "board": "GotPhoto",
+   "company": "Gotphoto"
   },
   "gurobioptimization": {
    "ats": "lever",
@@ -799,6 +809,11 @@
    "board": "shieldai",
    "company": "Shieldai"
   },
+  "singu": {
+   "ats": "ashby",
+   "board": "singu",
+   "company": "Singu"
+  },
   "siteimprove": {
    "ats": "lever",
    "board": "siteimprove",
@@ -942,6 +957,11 @@
    "board": "up42gmbh",
    "company": "UP42 GmbH"
   },
+  "urbansportsclub": {
+   "ats": "greenhouse",
+   "board": "urbansportsclub",
+   "company": "Urban Sports Club"
+  },
   "vestiairecollective": {
    "ats": "lever",
    "board": "vestiairecollective",
@@ -995,6 +1015,7 @@
   "adstrong": "2026-10-27",
   "agilerobotsse": "2026-10-27",
   "aikidosecurity": "2026-10-27",
+  "airwallex": "2026-10-29",
   "alephalpha": "2026-10-27",
   "allyourbi": "2026-10-27",
   "alpineeagle": "2026-10-27",
@@ -1003,6 +1024,7 @@
   "anywherenow": "2026-10-27",
   "appinio": "2026-10-27",
   "auterion": "2026-10-27",
+  "baringa": "2026-10-29",
   "beyondservicegmbh": "2026-10-27",
   "biahubshellocircle": "2026-10-28",
   "bifrostdefence": "2026-10-27",
@@ -1060,6 +1082,7 @@
   "genuinebeautygmbh": "2026-10-28",
   "gfic": "2026-10-27",
   "gitlab": "2026-10-27",
+  "globalreportinginitiative": "2026-10-29",
   "glsnxt": "2026-10-27",
   "grip": "2026-10-27",
   "heidisystems": "2026-10-28",
@@ -1074,6 +1097,7 @@
   "isaraerospace": "2026-10-27",
   "itq": "2026-10-27",
   "jetbrains": "2026-10-27",
+  "kickdowngmbh": "2026-10-29",
   "kittl": "2026-10-27",
   "kolibrigames": "2026-10-27",
   "konfettigmbh": "2026-10-27",
@@ -1081,12 +1105,14 @@
   "livestorm": "2026-10-27",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
+  "luscii": "2026-10-29",
   "magazinogmbh": "2026-10-27",
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
   "maomaotechnologies": "2026-10-28",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
+  "meet5gmbh": "2026-10-29",
   "milesmobility": "2026-10-27",
   "mirakl": "2026-10-27",
   "mobileye": "2026-10-27",
@@ -1119,11 +1145,14 @@
   "planeta": "2026-10-27",
   "planetlabs": "2026-10-27",
   "plantacorpgmbh": "2026-10-27",
+  "polara": "2026-10-29",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
   "prolific": "2026-10-28",
   "promethionindustries": "2026-10-28",
+  "pulseadvertisinggmbh": "2026-10-29",
   "pultgmbh": "2026-10-27",
+  "pvcase": "2026-10-29",
   "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
@@ -1148,6 +1177,7 @@
   "spreadgmbh": "2026-10-27",
   "stablenergy": "2026-10-27",
   "staffbase": "2026-10-27",
+  "startstepsdigitaleducationgmbh": "2026-10-29",
   "statista": "2026-10-27",
   "stenongmbh": "2026-10-29",
   "sumup": "2026-10-27",
@@ -1182,6 +1212,7 @@
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",
+  "worldwideplacementlimited": "2026-10-29",
   "xtpgmbh": "2026-10-27",
   "zattoo": "2026-10-27",
   "zekjugmbh": "2026-10-27"
