@@ -588,12 +588,13 @@ def place(j: dict) -> str | None:
 
 
 def load_companies(jobs: list[dict]) -> list[dict]:
-    """Curated companies (content/companies.json) + every direct employer with 2+ open jobs."""
+    """Curated companies (content/companies.json) + every company with 2+ open jobs. Recruiting agencies are in
+    too (Hiring Score badge on their jobs), labelled "Recruiting agency" on their company page and in the directory."""
     meta = json.loads((CONTENT / "companies.json").read_text(encoding="utf-8"))["companies"]
     by_key = {co_key(n): m for m in meta for n in [m["name"], *m.get("aliases", [])]}
     groups: dict[str, dict] = {co_key(m["name"]): {"meta": m, "names": Counter(), "jobs": []} for m in meta}
     for j in jobs:
-        if j.get("is_agency") or place(j) is None:
+        if place(j) is None:
             continue
         m = by_key.get(co_key(j["company"]))
         g = groups.setdefault(co_key(m["name"]) if m else co_key(j["company"]),
@@ -614,13 +615,15 @@ def load_companies(jobs: list[dict]) -> list[dict]:
         hq_de = bool(m and in_germany(m["hq"]))
         out.append({"name": name, "slug": slug, "meta": m, "jobs": js, "cities": Counter(place(j) for j in js),
                     "hq_city": normalize_city(m["hq"]) if hq_de else None, "hq_de": hq_de,
-                    "page": bool(m) or len(js) >= 3, "names": list(g["names"]), "score": hiring_score(js)})
+                    "page": bool(m) or len(js) >= 3, "names": list(g["names"]), "score": hiring_score(js),
+                    "agency": all(j.get("is_agency") for j in js) if js else False})
     return sorted(out, key=lambda c: (c["meta"] is None, -len(c["jobs"]), c["name"].lower()))
 
 
 def co_badges(c: dict) -> str:
     m = c["meta"] or {}
-    b = '<span class="badge new">Startup</span>' if m.get("startup") else ""
+    b = '<span class="badge warn">Recruiting agency</span>' if c.get("agency") else ""
+    b += '<span class="badge new">Startup</span>' if m.get("startup") else ""
     b += '<span class="badge info">German HQ</span>' if c["hq_de"] else ""
     return b + (f'<span class="badge">{e(m["industry"])}</span>' if m.get("industry") else "")
 
@@ -799,7 +802,8 @@ def build_companies(jobs: list[dict]) -> list[str]:
         href = f"companies/{c['slug']}.html" if c["page"] else f"index.html?q={e(requests.utils.quote(c['name']))}"
         search = e(f"{c['name']} {(m or {}).get('industry', '')} {city}".lower())
         if not m:
-            return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>'
+            agency = ' <span class="badge warn">Recruiting agency</span>' if c.get("agency") else ""
+            return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>{agency}'
                     f' <span class="muted">{jobs_word(n)}</span></li>')
         roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(c["name"])}">{e(j["title"])}</a></li>'
                         for j in [j for j in c["jobs"] if place(j) == city][:3])
