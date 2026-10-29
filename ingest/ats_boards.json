@@ -20,6 +20,11 @@
    "board": "accelerationpartners",
    "company": "Accelerationpartners"
   },
+  "acmaerospace": {
+   "ats": "personio",
+   "board": "acm-aerospace",
+   "company": "Acm Aerospace"
+  },
   "adjoe": {
    "ats": "ashby",
    "board": "adjoe",
@@ -236,6 +241,11 @@
    "board": "deepsetai",
    "company": "Deepsetai"
   },
+  "deltavision": {
+   "ats": "personio",
+   "board": "deltavision",
+   "company": "Deltavision"
+  },
   "dentonseurope": {
    "ats": "workable",
    "board": "dentons-europe",
@@ -256,6 +266,11 @@
    "ats": "ashby",
    "board": "duck-duck-go",
    "company": "Duck Duck Go"
+  },
+  "edri": {
+   "ats": "personio",
+   "board": "edri",
+   "company": "Edri"
   },
   "efficioconsulting": {
    "ats": "lever",
@@ -283,6 +298,11 @@
    "board": "emma-sleep",
    "company": "Emma – The Sleep Company"
   },
+  "empiragroup": {
+   "ats": "personio",
+   "board": "empira",
+   "company": "Empira Group"
+  },
   "engagedmd": {
    "ats": "ashby",
    "board": "engagedmd",
@@ -307,6 +327,11 @@
    "ats": "ashby",
    "board": "eye-security",
    "company": "Eye Security"
+  },
+  "fastned": {
+   "ats": "recruitee",
+   "board": "fastned",
+   "company": "Fastned"
   },
   "fender": {
    "ats": "greenhouse",
@@ -657,6 +682,11 @@
    "board": "purestorage",
    "company": "purestorage"
   },
+  "quantilopegmbh": {
+   "ats": "personio",
+   "board": "quantilope-gmbh",
+   "company": "Quantilope Gmbh"
+  },
   "quantumdiamonds": {
    "ats": "ashby",
    "board": "quantumdiamonds",
@@ -857,6 +887,11 @@
    "board": "thorit",
    "company": "Thorit"
   },
+  "tmh": {
+   "ats": "personio",
+   "board": "tmh",
+   "company": "Tmh"
+  },
   "trafineo": {
    "ats": "recruitee",
    "board": "trafineo",
@@ -916,6 +951,11 @@
    "ats": "lever",
    "board": "vivenu",
    "company": "Vivenu"
+  },
+  "vivirahealthlab": {
+   "ats": "personio",
+   "board": "vivira",
+   "company": "Vivira Health Lab"
   },
   "voize": {
    "ats": "ashby",

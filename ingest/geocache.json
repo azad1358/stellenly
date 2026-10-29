@@ -15,6 +15,11 @@
 "lat": 52.3564,
 "lon": 6.6636
 },
+"*|almere": {
+"cc": "nl",
+"lat": 52.4418,
+"lon": 5.2093
+},
 "*|amsterdam": {
 "cc": "nl",
 "lat": 52.3731,
@@ -223,6 +228,11 @@
 "cc": "gb",
 "lat": 51.5175,
 "lon": -3.2451
+},
+"*|chatham": {
+"cc": "us",
+"lat": 31.9669,
+"lon": -81.0626
 },
 "*|cheltenham": {
 "cc": "gb",
@@ -834,6 +844,11 @@
 "cc": "fr",
 "lat": 48.1113,
 "lon": -1.68
+},
+"*|rijswijk": {
+"cc": "nl",
+"lat": 52.0374,
+"lon": 4.3225
 },
 "*|rijswijk, zuid-holland, netherlands": {
 "cc": "nl",
