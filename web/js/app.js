@@ -1024,6 +1024,12 @@
     $("#search-form").addEventListener("submit", (e) => { e.preventDefault(); setTab("all"); });
     let t;
     $("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => search(), 350); });
+    // Autocomplete: titles of the open jobs (data/job-titles.json, written by the site build), loaded on first focus.
+    $("#q").addEventListener("focus", () => {
+      fetch("data/job-titles.json").then((r) => (r.ok ? r.json() : [])).then((titles) => {
+        $("#q-titles").innerHTML = titles.map(([title]) => `<option value="${esc(title)}"></option>`).join("");
+      }).catch(() => {});
+    }, { once: true });
     $$(".filters select, .filters input, #city, #sort, #f-salary, #f-visa, #f-direct").forEach((el) =>
       el.addEventListener("change", () => { syncQuickChips(); search(); }));
     $$(".hero .chip input").forEach((el) => el.addEventListener("change", () => { if (el.checked) track(`filter/${el.id.replace(/^f-/, "")}`); }));

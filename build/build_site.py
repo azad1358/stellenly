@@ -967,6 +967,20 @@ def build_blog_index(posts: list[dict], report: dict) -> None:
 <description>Guides and weekly job-market reports</description>{items}</channel></rss>""")
 
 
+def write_title_suggestions(jobs: list[dict]) -> None:
+    """web/data/job-titles.json: [[title, open jobs with that title], ...] for the search box autocomplete
+    (most common first; the page shows only the titles).
+    Titles without seniority, gender tags or team suffix ("Senior Data Scientist (m/w/d) – NLP" -> "Data Scientist")."""
+    forms: dict[str, Counter] = {}
+    for j in jobs:
+        t = skill_check.role_name(j["title"])
+        if len(t) >= 3:
+            forms.setdefault(t.lower(), Counter())[t] += 1
+    titles = sorted(((f.most_common(1)[0][0], f.total()) for f in forms.values()), key=lambda x: (-x[1], x[0]))
+    (WEB / "data" / "job-titles.json").write_text(json.dumps(titles[:1000], ensure_ascii=False, separators=(",", ":")),
+                                                  encoding="utf-8")
+
+
 def build_how_it_works(jobs: list[dict]) -> str:
     index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
     body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()))
@@ -1027,6 +1041,7 @@ def main() -> None:
     landing = build_landing_pages(jobs, stats)
     companies = build_companies(jobs)
     wiki = build_how_it_works(jobs)
+    write_title_suggestions(jobs)
     skills_page = [build_skill_check(load_role_rows(args.role_rows_file))] if SKILL_CHECK else []
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
