@@ -564,7 +564,13 @@
 
   function aiHtml(j) {
     const ai = j.insights && j.insights.ai;
-    if (!ai) return "";
+    // Not analysed yet: say so instead of leaving the card out (the free AI quota works through the queue run by run).
+    if (!ai) return `<section class="jd-card jd-ai">
+        <h3><span class="ai-dot" aria-hidden="true">✦</span> AI summary</h3>
+        <p class="muted small">Not ready yet. Our free AI quota summarises a few hundred jobs a day, newest first${
+          siteStats && siteStats.ai_waiting ? ` (${siteStats.ai_waiting.toLocaleString("en")} jobs in the queue)` : ""
+        } — this one is coming.</p>
+      </section>`;
     return `<section class="jd-card jd-ai">
         <h3><span class="ai-dot" aria-hidden="true">✦</span> AI summary</h3>
         ${ai.summary ? `<p>${esc(ai.summary)}</p>` : ""}
@@ -934,6 +940,7 @@
     if (employers) items.push(["Companies hiring", n(employers)]);
     // Right after a full re-import every job counts as "new"; only show the figure when it is meaningful.
     if (s.added_today && s.added_today < s.active * 0.4) items.push(["New in 24 hours", n(s.added_today)]);
+    if (s.ai_waiting != null) items.push(["Waiting for AI summary", n(s.ai_waiting)]);
     if (s.hired) items.push(["People hired", n(s.hired)]);
     items.push(["Refreshed", "every 6 h"]);
     $("#stats").innerHTML = items.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
