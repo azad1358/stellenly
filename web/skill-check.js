@@ -105,7 +105,9 @@
       $("#sc-report").scrollIntoView({ behavior: "smooth", block: "start" });
       if (window.goatcounter?.count) window.goatcounter.count({ path: "skill-report", event: true });
     } catch (err) {
-      status.textContent = err.message;
+      status.textContent = err instanceof TypeError  // network error / blocked request: the browser's text is "Failed to fetch"
+        ? "Could not reach the report service. Check your connection and try again."
+        : err.message;
     } finally {
       btn.disabled = false;
     }
