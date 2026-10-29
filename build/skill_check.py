@@ -74,17 +74,17 @@ def body(roles_: list[dict], n_jobs: int) -> str:
 <p class="lead">Pick the role you are aiming for. We show the 10 skills its postings ask for most — out of
 {n_jobs:,} job descriptions — each with a priority score. Rate yourself from 1 to 10 and get an AI report: where you
 already stand, what to learn first, and how you compare with other candidates.</p>
-<form id="sc-role-form" class="sc-card" autocomplete="off">
-  <label for="sc-role">Role</label>
-  <div class="sc-row">
-    <input id="sc-role" list="sc-roles" placeholder="e.g. {e(roles_[0]['t']) if roles_ else 'Data Scientist'}" required>
-    <datalist id="sc-roles">{''.join(f'<option value="{e(r["t"])}">' for r in roles_)}</datalist>
+<form id="skc-role-form" class="skc-card" autocomplete="off">
+  <label for="skc-role">Role</label>
+  <div class="skc-row">
+    <input id="skc-role" list="skc-roles" placeholder="e.g. {e(roles_[0]['t']) if roles_ else 'Data Scientist'}" required>
+    <datalist id="skc-roles">{''.join(f'<option value="{e(r["t"])}">' for r in roles_)}</datalist>
     <button class="btn primary" type="submit">Show skills</button>
   </div>
-  <p class="sc-hint" id="sc-role-hint">{len(roles_)} roles with at least {MIN_JOBS} postings.</p>
+  <p class="skc-hint" id="skc-role-hint">{len(roles_)} roles with at least {MIN_JOBS} postings.</p>
 </form>
-<form id="sc-skills" class="sc-card" hidden></form>
-<section id="sc-report" class="sc-card sc-report" hidden aria-live="polite"></section>
-<p class="sc-privacy">Anonymous: your ratings are saved in this browser for your next check, and stored without
+<form id="skc-skills" class="skc-card" hidden></form>
+<section id="skc-report" class="skc-card skc-report" hidden aria-live="polite"></section>
+<p class="skc-privacy">Anonymous: your ratings are saved in this browser for your next check, and stored without
 your name, email or IP address (only the role and the numbers) to compare candidates.
 <a href="privacy.html#skill-check">Privacy</a></p>"""

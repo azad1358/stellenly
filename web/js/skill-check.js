@@ -33,42 +33,42 @@
 
   async function init() {
     try { roles = (await (await fetch("data/skill-roles.json")).json()).roles; } catch { roles = []; }
-    $("#sc-role-form").addEventListener("submit", (ev) => { ev.preventDefault(); pickRole($("#sc-role").value); });
+    $("#skc-role-form").addEventListener("submit", (ev) => { ev.preventDefault(); pickRole($("#skc-role").value); });
     const last = store.get("ejg.skillLastRole", "");
-    if (last && roles.some((r) => r.t === last)) { $("#sc-role").value = last; pickRole(last); }
+    if (last && roles.some((r) => r.t === last)) { $("#skc-role").value = last; pickRole(last); }
   }
 
   function pickRole(name) {
     role = roles.find((r) => r.t.toLowerCase() === name.trim().toLowerCase());
     if (!role) {
-      $("#sc-role-hint").innerHTML = `No role called “${esc(name)}” yet — pick one from the list (start typing to see suggestions).`;
+      $("#skc-role-hint").innerHTML = `No role called “${esc(name)}” yet — pick one from the list (start typing to see suggestions).`;
       return;
     }
-    $("#sc-role").value = role.t;
-    $("#sc-role-hint").textContent = `Based on ${role.n} job descriptions for this role.`;
+    $("#skc-role").value = role.t;
+    $("#skc-role-hint").textContent = `Based on ${role.n} job descriptions for this role.`;
     store.set("ejg.skillLastRole", role.t);
     renderSliders();
     const prev = store.get("ejg.skillHistory", {})[role.t];
     if (prev?.report) renderReport(prev.report, prev.peers, prev.levels, null, prev.date);
-    else $("#sc-report").hidden = true;
+    else $("#skc-report").hidden = true;
   }
 
   function renderSliders() {
     const saved = store.get("ejg.skillLevels", {});
-    const form = $("#sc-skills");
+    const form = $("#skc-skills");
     form.innerHTML = `<h2>Rate yourself</h2>
-      <p class="sc-hint">1 = never used it · 5 = used it in a project · 10 = could teach it. Be honest; nobody sees your name.
+      <p class="skc-hint">1 = never used it · 5 = used it in a project · 10 = could teach it. Be honest; nobody sees your name.
       Priority (0–100) = how often postings ask for the skill, counting must-haves fully and nice-to-haves half.</p>
-      <div class="sc-sliders">${role.skills.map((s, i) => {
+      <div class="skc-sliders">${role.skills.map((s, i) => {
         const v = saved[s.n] ?? 5;
-        return `<div class="sc-slider">
-          <label for="sc-s${i}"><b>${esc(s.n)}</b><span>priority ${s.p}/100 · asked in ${pct(s.s)} of postings${s.r < 0.5 ? " · often nice-to-have" : ""}</span></label>
-          <input type="range" id="sc-s${i}" min="1" max="10" step="1" value="${v}" data-skill="${esc(s.n)}">
-          <output for="sc-s${i}">${v}</output>
+        return `<div class="skc-slider">
+          <label for="skc-s${i}"><b>${esc(s.n)}</b><span>priority ${s.p}/100 · asked in ${pct(s.s)} of postings${s.r < 0.5 ? " · often nice-to-have" : ""}</span></label>
+          <input type="range" id="skc-s${i}" min="1" max="10" step="1" value="${v}" data-skill="${esc(s.n)}">
+          <output for="skc-s${i}">${v}</output>
         </div>`;
       }).join("")}</div>
-      <div class="sc-actions"><button class="btn primary" type="submit">Get my AI report</button>
-      <span class="sc-status" role="status"></span></div>`;
+      <div class="skc-actions"><button class="btn primary" type="submit">Get my AI report</button>
+      <span class="skc-status" role="status"></span></div>`;
     form.hidden = false;
     form.querySelectorAll("input[type=range]").forEach((el) =>
       el.addEventListener("input", () => { el.nextElementSibling.textContent = el.value; }));
@@ -77,13 +77,13 @@
 
   async function submit() {
     const levels = {};
-    $("#sc-skills").querySelectorAll("input[type=range]").forEach((el) => { levels[el.dataset.skill] = Number(el.value); });
+    $("#skc-skills").querySelectorAll("input[type=range]").forEach((el) => { levels[el.dataset.skill] = Number(el.value); });
     const history = store.get("ejg.skillHistory", {});
     const before = history[role.t]?.levels || null;
     store.set("ejg.skillLevels", { ...store.get("ejg.skillLevels", {}), ...levels });
 
-    const btn = $("#sc-skills button[type=submit]");
-    const status = $("#sc-skills .sc-status");
+    const btn = $("#skc-skills button[type=submit]");
+    const status = $("#skc-skills .skc-status");
     btn.disabled = true;
     status.textContent = "Writing your report… (about 15 seconds)";
     try {
@@ -102,7 +102,7 @@
       store.set("ejg.skillHistory", history);
       status.textContent = "";
       renderReport(data.report, data.peers, levels, before, date);
-      $("#sc-report").scrollIntoView({ behavior: "smooth", block: "start" });
+      $("#skc-report").scrollIntoView({ behavior: "smooth", block: "start" });
       if (window.goatcounter?.count) window.goatcounter.count({ path: "skill-report", event: true });
     } catch (err) {
       status.textContent = err instanceof TypeError  // network error / blocked request: the browser's text is "Failed to fetch"
@@ -117,22 +117,22 @@
     const peerSkills = peers?.skills || null;
     const [cls, label] = READINESS[r.readiness] || READINESS.apply_while_learning;
     const list = (items, fn) => (items || []).length ? `<ul>${items.map(fn).join("")}</ul>` : "";
-    const rows = role.skills.map((s) => `<tr><td>${esc(s.n)}<small class="sc-asked">asked in ${pct(s.s)}</small></td>
-      <td><span class="sc-bar" style="--w:${s.p}%"></span><b>${s.p}</b></td><td><b>${levels[s.n] ?? "–"}</b>${
+    const rows = role.skills.map((s) => `<tr><td>${esc(s.n)}<small class="skc-asked">asked in ${pct(s.s)}</small></td>
+      <td><span class="skc-bar" style="--w:${s.p}%"></span><b>${s.p}</b></td><td><b>${levels[s.n] ?? "–"}</b>${
       before && before[s.n] != null && before[s.n] !== levels[s.n] ? ` <small>(was ${before[s.n]})</small>` : ""}</td>${
       peerSkills ? `<td>${peerSkills[s.n] ? `${peerSkills[s.n].avg}` : "–"}</td><td>${
         peerSkills[s.n] ? `higher than ${peerSkills[s.n].pct}%` : "–"}</td>` : ""}</tr>`).join("");
-    $("#sc-report").innerHTML = `
-      <div class="sc-report-head">
-        <div><p class="sc-kicker">Skill report · ${esc(role.t)} · ${esc(date)}</p><h2>${esc(r.headline)}</h2></div>
+    $("#skc-report").innerHTML = `
+      <div class="skc-report-head">
+        <div><p class="skc-kicker">Skill report · ${esc(role.t)} · ${esc(date)}</p><h2>${esc(r.headline)}</h2></div>
         <span class="badge ${cls}">${label}</span>
       </div>
       <p>${esc(r.readiness_reason)}</p>
       <h3>Skills the job descriptions ask for</h3>
-      <div class="sc-table-wrap"><table class="sc-table"><thead><tr><th>Skill</th><th>Priority</th><th>You</th>${
+      <div class="skc-table-wrap"><table class="skc-table"><thead><tr><th>Skill</th><th>Priority</th><th>You</th>${
         peerSkills ? "<th>Others (avg)</th><th>You vs others</th>" : ""}</tr></thead>
         <tbody>${rows}</tbody></table></div>
-      <p class="sc-hint">Based on ${role.n} job descriptions${peers?.n ? ` and ${peers.n} other candidate${peers.n === 1 ? "" : "s"} who rated this role` : ""}.${
+      <p class="skc-hint">Based on ${role.n} job descriptions${peers?.n ? ` and ${peers.n} other candidate${peers.n === 1 ? "" : "s"} who rated this role` : ""}.${
         peerSkills ? "" : " The comparison with other candidates appears once 10 people have rated this role."}</p>
       ${r.strengths?.length ? `<h3>Your strengths</h3>${list(r.strengths, (s) => `<li><b>${esc(s.skill)}</b> — ${esc(s.note)}</li>`)}` : ""}
       ${r.focus?.length ? `<h3>Where to put your effort</h3>${list(r.focus, (f) =>
@@ -140,14 +140,14 @@
       ${r.peers ? `<h3>Compared with other candidates</h3><p>${esc(r.peers)}</p>` : ""}
       ${r.interview?.length ? `<h3>Prepare for the interview</h3>${list(r.interview, (t) => `<li>${esc(t)}</li>`)}` : ""}
       ${r.plan?.length ? `<h3>Your 4-week plan</h3>${list(r.plan, (t) => `<li>${esc(t)}</li>`)}` : ""}
-      ${r.encouragement ? `<p class="sc-encourage">${esc(r.encouragement)}</p>` : ""}
-      <p class="sc-hint">Written by AI from job-posting statistics and your self-ratings — a starting point, not a verdict.</p>
-      <div class="sc-actions no-print">
-        <button class="btn primary" type="button" id="sc-pdf">Download PDF</button>
+      ${r.encouragement ? `<p class="skc-encourage">${esc(r.encouragement)}</p>` : ""}
+      <p class="skc-hint">Written by AI from job-posting statistics and your self-ratings — a starting point, not a verdict.</p>
+      <div class="skc-actions no-print">
+        <button class="btn primary" type="button" id="skc-pdf">Download PDF</button>
         <a class="btn ghost" href="index.html?q=${encodeURIComponent(role.t)}">See open ${esc(role.t)} jobs</a>
       </div>`;
-    $("#sc-report").hidden = false;
-    $("#sc-pdf").onclick = () => window.print();
+    $("#skc-report").hidden = false;
+    $("#skc-pdf").onclick = () => window.print();
   }
 
   init();
