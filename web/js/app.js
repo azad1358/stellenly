@@ -105,6 +105,50 @@
     rpc("record_job_event", { p_id: id, p_kind: kind }).catch(() => {});
   }
 
+  // ---------------------------------------------------------------- search box suggestions
+  // Titles of the open jobs (data/job-titles.json, written by the site build, most common first), loaded on first
+  // focus. Picking one only fills the box; the search itself runs on "Search jobs" or Enter.
+  function setupSuggest() {
+    const q = $("#q"), box = $("#q-suggest");
+    let titles = [], shown = [], active = -1;
+    q.addEventListener("focus", () => {
+      fetch("data/job-titles.json").then((r) => (r.ok ? r.json() : [])).then((d) => { titles = d.map(([t]) => t); })
+        .catch(() => {});
+    }, { once: true });
+    const close = () => { box.hidden = true; active = -1; q.setAttribute("aria-expanded", "false"); q.removeAttribute("aria-activedescendant"); };
+    const mark = (t, w) => { const i = t.toLowerCase().indexOf(w); return esc(t.slice(0, i)) + `<b>${esc(t.slice(i, i + w.length))}</b>` + esc(t.slice(i + w.length)); };
+    const show = () => {
+      const w = q.value.trim().toLowerCase();
+      if (w.length < 2) return close();
+      const hits = titles.filter((t) => t.toLowerCase().includes(w));
+      // Titles that start with the typed text first, then the rest; both keep the most-common-first order.
+      shown = [...hits.filter((t) => t.toLowerCase().startsWith(w)), ...hits.filter((t) => !t.toLowerCase().startsWith(w))].slice(0, 8);
+      if (!shown.length) return close();
+      active = -1;
+      box.innerHTML = shown.map((t, i) => `<li id="q-opt-${i}" role="option" data-i="${i}">${mark(t, w)}</li>`).join("");
+      box.hidden = false;
+      q.setAttribute("aria-expanded", "true");
+    };
+    const highlight = (i) => {
+      active = (i + shown.length) % shown.length;
+      $$("#q-suggest li").forEach((li, k) => li.setAttribute("aria-selected", String(k === active)));
+      q.setAttribute("aria-activedescendant", `q-opt-${active}`);
+    };
+    const pick = (i) => { q.value = shown[i]; close(); };
+    q.addEventListener("input", show);
+    q.addEventListener("keydown", (e) => {
+      if (box.hidden) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); highlight(active + (e.key === "ArrowDown" ? 1 : -1)); }
+      else if (e.key === "Enter" && active >= 0) { e.preventDefault(); pick(active); }
+      else if (e.key === "Escape") close();
+    });
+    box.addEventListener("mousedown", (e) => {  // mousedown, not click: it fires before the box loses focus
+      const li = e.target.closest("li");
+      if (li) { e.preventDefault(); pick(Number(li.dataset.i)); }
+    });
+    q.addEventListener("blur", close);
+  }
+
   // ---------------------------------------------------------------- glossary
   const GLOSSARY = {
     "unbefristet": "Permanent contract (no end date).",
@@ -1023,13 +1067,9 @@
     // search triggers
     $("#search-form").addEventListener("submit", (e) => { e.preventDefault(); setTab("all"); });
     let t;
-    $("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => search(), 350); });
-    // Autocomplete: titles of the open jobs (data/job-titles.json, written by the site build), loaded on first focus.
-    $("#q").addEventListener("focus", () => {
-      fetch("data/job-titles.json").then((r) => (r.ok ? r.json() : [])).then((titles) => {
-        $("#q-titles").innerHTML = titles.map(([title]) => `<option value="${esc(title)}"></option>`).join("");
-      }).catch(() => {});
-    }, { once: true });
+    // The search runs on "Search jobs" / Enter; typing only shows suggestions. Clearing the box shows all jobs again.
+    $("#q").addEventListener("input", () => { clearTimeout(t); if (!$("#q").value.trim()) t = setTimeout(() => search(), 350); });
+    setupSuggest();
     $$(".filters select, .filters input, #city, #sort, #f-salary, #f-visa, #f-direct").forEach((el) =>
       el.addEventListener("change", () => { syncQuickChips(); search(); }));
     $$(".hero .chip input").forEach((el) => el.addEventListener("change", () => { if (el.checked) track(`filter/${el.id.replace(/^f-/, "")}`); }));

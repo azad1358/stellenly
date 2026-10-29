@@ -385,6 +385,11 @@ body { -webkit-font-smoothing: antialiased; }
 .search input:focus-visible, .search select:focus-visible { outline: none; }
 .search-field:focus-within { background: var(--surface-2); border-radius: 10px; }
 .search .btn.primary { padding: 0 22px; border-radius: 12px; font-size: 1rem; white-space: nowrap; }
+.q-suggest { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 20; margin: 0; padding: 6px; list-style: none;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+.q-suggest li { padding: 9px 12px; border-radius: 8px; cursor: pointer; color: var(--text); }
+.q-suggest li b { font-weight: 700; }
+.q-suggest li:hover, .q-suggest li[aria-selected="true"] { background: var(--accent-soft); }
 .quick { margin-top: 14px; }
 .chip { border-radius: 999px; padding: 7px 12px; font-size: 0.9rem; transition: border-color .15s, background .15s; }
 .chip:hover { border-color: var(--accent); }
