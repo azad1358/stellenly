@@ -3,6 +3,9 @@
 // POST {role, levels: {"Python": 7, ...}, client: "<random browser id>"}  ->  {report, role, peers}
 // The market data comes from the site's own skill-roles.json, never from the request; the candidate
 // comparison from skill_peers(). A daily cap (REPORT_DAILY_MAX) keeps the free LLM quota for the job checks.
+// The prompt text is in prompts.md at the repo root; prompts.json is made from it before deploying / serving:
+//   python ingest/prompts.py supabase/functions/skill-report/prompts.json
+import PROMPTS from "./prompts.json" with { type: "json" };
 
 const SITE_URL = Deno.env.get("SITE_URL") ?? "https://www.stellenly.com";
 const LLM_URL = Deno.env.get("LLM_API_URL") ?? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
@@ -32,39 +35,18 @@ async function rpc(name: string, body: unknown, key: string) {
   return res.json();
 }
 
+// One pass, like ingest/prompts.py: {key} -> values[key]; other braces (the JSON example) stay.
+const fill = (name: string, values: Record<string, string | number>) =>
+  (PROMPTS as Record<string, string>)[name].replace(/\{(\w+)\}/g, (all, k) => (k in values ? String(values[k]) : all));
+
 function prompt(role: Role, levels: Record<string, number>, peers: Peers) {
   const rows = role.skills.map((s) => {
     const peer = peers.skills?.[s.n];
     return `- ${s.n}: priority ${s.p}/100 (asked in ${Math.round(s.s * 100)}% of postings, a must-have in ${Math.round(s.r * 100)}% of those);` +
       ` candidate ${levels[s.n] ?? "?"}/10${peer ? `; other candidates average ${peer.avg}/10, the candidate rated higher than ${peer.pct}% of them` : ""}`;
   }).join("\n");
-  const peerLine = peers.skills
-    ? `${peers.n} other candidates rated themselves for this role (anonymous self-ratings).`
-    : `Fewer than 10 candidates rated this role so far: there is no candidate comparison yet; say so briefly.`;
-  return `You are a friendly, honest career coach for internationals looking for English-speaking jobs in Germany.
-A candidate is aiming for "${role.t}". From ${role.n} job descriptions for this role, these are the 10 skills asked most, with a priority score
-(100 = every posting requires it; nice-to-haves count half) and the candidate's self-rating (1 = beginner, 10 = expert):
-${rows}
-${peerLine}
-
-Self-ratings are rough. Many candidates underrate themselves and job ads are wish lists: hardly anyone meets every point.
-Write a short, concrete report. Rules:
-- Base every claim on the numbers above. Do not invent statistics, companies, salaries or URLs.
-- Percentiles: "higher than 100%" means the best rating of all candidates; say it that way.
-- Focus areas: at most 3 skills where priority is high and the rating is low (priority x gap). For each, explain why it
-  matters for this role and how to improve: a small practice project and the kind of free resources to use
-  (official docs, well-known free courses or books by name). No links.
-- Strengths: skills the candidate is already good at relative to demand. Be specific, not flattering.
-- Readiness: "apply_now" (most skills with priority >= 40 rated >= 6), "apply_while_learning" (a few gaps),
-  or "build_first" (several skills with priority >= 40 rated <= 3). Encourage applying when close — applying while learning is normal.
-- Interview: 3 topics to prepare for this role, based on the high-demand skills.
-- A 4-week plan, one line per week.
-- Plain English, short sentences, under 400 words in total.
-Return JSON only:
-{"headline": "one sentence", "readiness": "apply_now|apply_while_learning|build_first", "readiness_reason": "1-2 sentences",
- "strengths": [{"skill": "", "note": ""}], "focus": [{"skill": "", "why": "", "how": ""}],
- "peers": "1-2 sentences comparing with other candidates, or saying there is no comparison yet",
- "interview": ["", "", ""], "plan": ["Week 1: ...", "Week 2: ...", "Week 3: ...", "Week 4: ..."], "encouragement": "one sentence"}`;
+  const peerLine = peers.skills ? fill("skill_report_peers", { n: peers.n }) : fill("skill_report_no_peers", {});
+  return fill("skill_report", { role: role.t, n_jobs: role.n, rows, peers: peerLine });
 }
 
 async function llm(text: string) {

@@ -32,6 +32,7 @@ import requests
 sys.path.insert(0, str(Path(__file__).parent))
 import llm_client  # noqa: E402
 import llm_facts  # noqa: E402
+import prompts  # noqa: E402
 from skills import canonical_skill, extract_skills  # noqa: E402
 
 CACHE = Path(__file__).parent / ".cache"
@@ -191,35 +192,6 @@ def embed_missing(jobs: list[dict], vecs: dict, meta: dict) -> int:
 
 
 # ---------------------------------------------------------------- optional LLM job analysis
-ANALYSIS_PROMPT = """You help international job seekers in Germany. Read this job posting and answer ONLY with JSON:
-{{"summary": "2 sentences: what the job is and who it suits",
-  "tasks": ["3-5 short main responsibilities"],
-  "skills": [{{"name": "skill or tool, short (e.g. Python, SQL, Stakeholder management)", "importance": 1-5, "required": true|false}}],
-  "red_flags": ["anything a candidate should double-check, e.g. unclear pay, very broad role; empty if none"],
-  "german": "required | nice_to_have | not_required | not_mentioned",
-  "german_quote": "the exact sentence from the posting about German, copied word for word, or empty",
-  "salary_stated": true | false,
-  "salary_min_eur_year": number or null,
-  "salary_max_eur_year": number or null,
-  "salary_quote": "the exact text stating the salary for THIS job, copied word for word, or empty",
-  "visa_sponsorship": true | false,
-  "visa_quote": "exact sentence offering visa / work permit support, or empty",
-  "relocation_support": true | false,
-  "relocation_quote": "exact sentence offering relocation help, or empty"}}
-Rules:
-- List at most 10 skills, most important first. importance 5 = central to the job, 1 = minor. required=false for nice-to-haves.
-- german: "required" if German is asked for at any level as a requirement, including "fluent English and German";
-  "nice_to_have" if it is a plus; "not_required" if the posting says German is not needed; otherwise "not_mentioned".
-- salary_stated is true ONLY if the posting states pay for this job (a figure or range). Company funding, revenue,
-  valuations, budgets, perks and benefits are NOT a salary. Convert monthly pay to yearly (x12). Hourly pay: false.
-- Copy quotes exactly from the posting. Never invent text.
-
-Title: {title}
-Company: {company}
-Posting:
-{text}"""
-
-
 def llm_analyze(jobs: list[dict], meta: dict) -> int:
     """Per job, an LLM reads the posting once: summary, tasks, ranked skills — and the facts the rules can get
     wrong (German level, salary, visa, relocation), each checked against a quote from the text (llm_facts.py)."""
@@ -235,7 +207,7 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
     done, fails = 0, 0
     for j in todo:
         text = texts.get(j["id"], "")
-        ans = _ask(ANALYSIS_PROMPT.format(title=j["title"], company=j["company"], text=text[:6000]), j["id"], fails)
+        ans = _ask(prompts.get("job_analysis", title=j["title"], company=j["company"], text=text[:6000]), j["id"], fails)
         if ans == "stop":
             break
         if ans is None:
@@ -450,14 +422,8 @@ def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> 
         text = texts.get(j["id"], "")
         snippets = " … ".join(m.group(0) for m in re.finditer(
             r"[^.\n]{0,160}(€|eur\b|euro|salary|gehalt|compensation|k\b|ote)[^.\n]{0,160}", text, re.I))[:1500]
-        prompt = (
-            f"Job title: {j['title']}\nCompany: {j['company']}\n"
-            f"Our parser read the salary as €{j['salary_min']}–{j.get('salary_max') or j['salary_min']} per year.\n"
-            f"Salary-related text from the posting:\n{snippets or '(none found)'}\n\n"
-            "Is our reading right? Answer ONLY with JSON: "
-            '{"correct": true|false, "period": "year|month|hour|unknown", "annual_eur_min": number|null, '
-            '"annual_eur_max": number|null, "includes_bonus_or_equity": true|false, '
-            '"note": "one short sentence for a job seeker"}')
+        prompt = prompts.get("salary_check", title=j["title"], company=j["company"], salary_min=j["salary_min"],
+                             salary_max=j.get("salary_max") or j["salary_min"], snippets=snippets or "(none found)")
         ans = _ask(prompt, j["id"], fails)
         if ans == "stop":
             break

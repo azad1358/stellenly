@@ -7,7 +7,7 @@ name: Deploy backend
 #      Runs after step 1, because functions may call database functions that a new migration adds.
 #
 # WHEN (no other workflow calls this one):
-#   - a push to main that changes supabase/migrations/ or supabase/functions/
+#   - a push to main that changes supabase/migrations/, supabase/functions/ or prompts.md
 #   - the "Run workflow" button
 # AFTER IT: "Job insights" (new columns may need filling) and "Deploy website" start by themselves.
 #
@@ -15,7 +15,7 @@ name: Deploy backend
 on:
   push:
     branches: [main]
-    paths: ["supabase/migrations/**", "supabase/functions/**"]
+    paths: ["supabase/migrations/**", "supabase/functions/**", "prompts.md"]
   workflow_dispatch: {}
 
 concurrency:
@@ -58,6 +58,7 @@ jobs:
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}   # the same Gemini key as "Job insights"
         run: |
+          python3 ingest/prompts.py supabase/functions/skill-report/prompts.json   # its prompt, from prompts.md
           supabase secrets set LLM_API_KEY="$LLM_API_KEY" --project-ref "$SUPABASE_PROJECT_ID"
           supabase functions deploy skill-report --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
       - name: Smoke test

@@ -29,3 +29,5 @@ web/b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31.txt
 # Local secrets for `supabase functions serve` (Gemini key)
 supabase/functions/.env
 supabase/.temp/
+# Made from prompts.md on deploy (python ingest/prompts.py supabase/functions/skill-report/prompts.json)
+supabase/functions/skill-report/prompts.json
