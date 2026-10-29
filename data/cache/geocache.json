@@ -15,6 +15,11 @@
 "lat": 52.3564,
 "lon": 6.6636
 },
+"*|almere": {
+"cc": "nl",
+"lat": 52.4418,
+"lon": 5.2093
+},
 "*|amsterdam": {
 "cc": "nl",
 "lat": 52.3731,
@@ -224,6 +229,16 @@
 "lat": 51.5175,
 "lon": -3.2451
 },
+"*|chatham": {
+"cc": "us",
+"lat": 31.9669,
+"lon": -81.0626
+},
+"*|cheltenham": {
+"cc": "gb",
+"lat": 51.8996,
+"lon": -2.0712
+},
 "*|cheltenham, gloucestershire, england": {
 "cc": "gb",
 "lat": 51.8996,
@@ -233,6 +248,11 @@
 "cc": "ch",
 "lat": 45.8355,
 "lon": 9.029
+},
+"*|clichy": {
+"cc": "fr",
+"lat": 48.9026,
+"lon": 2.3055
 },
 "*|covent garden - hybrid": null,
 "*|dale, indiana": {
@@ -356,6 +376,11 @@
 "cc": "nl",
 "lat": 53.2191,
 "lon": 6.568
+},
+"*|guildford": {
+"cc": "gb",
+"lat": 51.2356,
+"lon": -0.5732
 },
 "*|gèneve-pays de gex": {
 "cc": "fr",
@@ -659,6 +684,11 @@
 "lat": 12.1127,
 "lon": -68.8866
 },
+"*|neuchâtel": {
+"cc": "ch",
+"lat": 46.9896,
+"lon": 6.9293
+},
 "*|new zealand": {
 "cc": "nz",
 "lat": -41.5001,
@@ -815,6 +845,11 @@
 "lat": 48.1113,
 "lon": -1.68
 },
+"*|rijswijk": {
+"cc": "nl",
+"lat": 52.0374,
+"lon": 4.3225
+},
 "*|rijswijk, zuid-holland, netherlands": {
 "cc": "nl",
 "lat": 52.0446,
@@ -887,6 +922,11 @@
 "lat": 46.6919,
 "lon": 7.6775
 },
+"*|staines": {
+"cc": "gb",
+"lat": 51.434,
+"lon": -0.511
+},
 "*|stallikon": {
 "cc": "ch",
 "lat": 47.3269,
@@ -916,6 +956,11 @@
 "cc": "za",
 "lat": -32.9819,
 "lon": 27.8884
+},
+"*|studley": {
+"cc": "gb",
+"lat": 52.2691,
+"lon": -1.8959
 },
 "*|switzerland": {
 "cc": "ch",
@@ -1074,10 +1119,20 @@
 "lat": 52.0859,
 "lon": 4.8833
 },
+"*|worchester": {
+"cc": "ca",
+"lat": 47.2783,
+"lon": -72.5512
+},
 "*|york": {
 "cc": "gb",
 "lat": 53.9657,
 "lon": -1.0743
+},
+"*|ypenburg, nederlands": {
+"cc": "nl",
+"lat": 52.0415,
+"lon": 4.3689
 },
 "*|zaltbommel, gelderland, netherlands": {
 "cc": "nl",
@@ -1183,6 +1238,11 @@
 "cc": "de",
 "lat": 51.2255,
 "lon": 14.5903
+},
+"de|bensheim": {
+"cc": "de",
+"lat": 49.681,
+"lon": 8.6228
 },
 "de|berliini": {
 "cc": "de",
@@ -1455,6 +1515,11 @@
 "cc": "de",
 "lat": 54.0887,
 "lon": 12.14
+},
+"de|rudow": {
+"cc": "de",
+"lat": 52.4147,
+"lon": 13.4986
 },
 "de|schwieberdingen": {
 "cc": "de",
