@@ -335,6 +335,7 @@
     if (j.is_agency) out.push(`<span class="badge warn" title="Posted by a recruiting agency, not the employer">Recruiting agency</span>`);
     if (flagged(j)) out.unshift(`<span class="badge bad" title="Visitors reported that this job is no longer open on the company's site. Other visitors can say it's still open; when reports outnumber them enough, we hide the job.">🚩 ${j.report_count} reported closed${j.open_count ? ` · ${j.open_count} say${j.open_count === 1 ? "s" : ""} open` : ""}</span>`);
     if (j.repost_count > 0) out.push(`<span class="badge warn" title="This job disappeared and came back — it may be hard to fill or an evergreen posting">Reposted ×${j.repost_count}</span>`);
+    if (j.posted_at && Date.now() - new Date(j.posted_at) > 60 * 864e5) out.push(`<span class="badge info" title="Posted more than 2 months ago and still on the employer's careers page: a hard-to-fill role or an evergreen posting">Open 2+ months</span>`);
     (j.job_types || []).slice(0, 2).forEach((t) => out.push(`<span class="badge">${glossaryHtml(t)}</span>`));
     const titleTerm = Object.keys(GLOSSARY).find((g) => j.title.toLowerCase().includes(g) && g !== "m/w/d");
     if (titleTerm) out.push(`<span class="badge"><abbr title="${esc(GLOSSARY[titleTerm])}">What is "${esc(titleTerm)}"?</abbr></span>`);
