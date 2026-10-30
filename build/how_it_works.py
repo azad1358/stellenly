@@ -238,7 +238,9 @@ from two sources, or posted twice, is merged.</li>
 empty the site.</li>
 <li><b>Dead links</b>: every day, postings that return 404/410, redirect to a generic careers or home page, or say "position has been
 filled" / "no longer available" are hidden.</li>
-<li><b>Age limit</b>: jobs posted more than 45 days ago are retired.</li>
+<li><b>No age limit while listed</b>: a job stays online as long as the employer's own career page lists it, because many
+roles take months to fill. A job no import has seen for 7 days (its source failed or was read only in part) is hidden.
+Jobs from Arbeitnow, which copies jobs from other sites, are retired 45 days after they were posted.</li>
 </ul>
 
 <h2 id="ai">7. AI validation</h2>

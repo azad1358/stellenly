@@ -25,10 +25,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from build_site import GERMAN_LABEL, NOW, SITE_URL, WEB, co_key, e, euro, page, parse_ts  # noqa: E402
 
 OUT = WEB / "job"
-VALID_DAYS = 45  # same as expire_jobs(): a job is retired 45 days after it was posted
+VALID_DAYS = 30  # validThrough = last seen at its source + 30 days (expire_jobs() hides it after 7 days unseen)
 INDEXNOW_KEY = "b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31"  # public by design; served at /<key>.txt
 COLS = ("id,url,title,company,city,location,remote_type,german_level,visa_sponsorship,relocation,salary_min,salary_max,"
-        "seniority,is_agency,job_types,tags,description,posted_at,first_seen_at,source,insights")
+        "seniority,is_agency,job_types,tags,description,posted_at,first_seen_at,last_seen_at,source,insights")
 REMOTE = {"remote_de": "Remote (Germany)", "remote_eu": "Remote (EU)", "hybrid": "Hybrid", "onsite": "On-site"}
 
 
@@ -89,12 +89,13 @@ def description_html(text: str) -> str:
 
 def job_posting(j: dict, desc_html: str, co: dict) -> dict:
     posted = parse_ts(j.get("posted_at") or j.get("first_seen_at"))
+    seen = parse_ts(j["last_seen_at"]) if j.get("last_seen_at") else NOW
     ld = {
         "@context": "https://schema.org/", "@type": "JobPosting",
         "title": j["title"], "description": desc_html,
         "identifier": {"@type": "PropertyValue", "name": j["company"], "value": j["id"]},
         "datePosted": posted.date().isoformat(),
-        "validThrough": (posted + dt.timedelta(days=VALID_DAYS)).isoformat(timespec="seconds"),
+        "validThrough": (seen + dt.timedelta(days=VALID_DAYS)).isoformat(timespec="seconds"),
         "hiringOrganization": {"@type": "Organization", "name": j["company"],
                                **({"sameAs": co["w"]} if co.get("w") else {}),
                                **({"logo": f"{SITE_URL}/{co['l']}"} if co.get("l") else {})},
