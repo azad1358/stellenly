@@ -1,0 +1,42 @@
+name: Discord news
+
+# WHAT: posts English news about immigration, visas, jobs and the labour market in Germany to the #news channel
+#   of the Stellenly Discord (build/news_post.py). Feeds and keywords: data/news_feeds.json. Up to 5 new stories
+#   per run, never the same story twice (state in the Actions cache). Needs the DISCORD_NEWS_WEBHOOK_URL secret.
+#
+# WHEN (no other workflow calls this one, and it calls none):
+#   - every 3 hours
+#   - the "Run workflow" button
+on:
+  schedule:
+    - cron: "25 */3 * * *"   # every 3 hours (UTC)
+  workflow_dispatch: {}
+
+concurrency:
+  group: news
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - uses: actions/cache/restore@v4
+        with:
+          path: build/.news_state.json
+          key: news-state-${{ github.run_id }}
+          restore-keys: news-state-
+      - name: Post new stories to Discord #news
+        env:
+          DISCORD_NEWS_WEBHOOK_URL: ${{ secrets.DISCORD_NEWS_WEBHOOK_URL }}
+        run: python build/news_post.py
+      - uses: actions/cache/save@v4
+        if: always() && hashFiles('build/.news_state.json') != ''
+        with:
+          path: build/.news_state.json
+          key: news-state-${{ github.run_id }}
