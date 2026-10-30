@@ -4,7 +4,7 @@ name: News
 #   feeds and keywords: data/news_feeds.json), never the same story twice (state in the Actions cache):
 #   - Discord #news: up to 5 new stories every 3 hours. Needs the DISCORD_NEWS_WEBHOOK_URL secret.
 #   - Telegram channel: one silent digest of up to 5 headlines a day, skipped on days without news.
-#     Uses the job posts' TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID. Off switch: repository variable NEWS_TELEGRAM = 0.
+#     Uses the job posts' TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID. Off switch: repository variable NEWS_TELEGRAM = off.
 #
 # WHEN (no other workflow calls this one, and it calls none):
 #   - every 3 hours (Discord) and daily at 17:00 UTC (Telegram)
@@ -53,7 +53,7 @@ jobs:
           DISCORD_NEWS_WEBHOOK_URL: ${{ secrets.DISCORD_NEWS_WEBHOOK_URL }}
         run: python build/news_post.py
       - name: Post the daily news digest to Telegram
-        if: steps.target.outputs.name == 'tg' && vars.NEWS_TELEGRAM != '0'
+        if: steps.target.outputs.name == 'tg' && vars.NEWS_TELEGRAM != 'off'   # an unset variable would equal '0'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
