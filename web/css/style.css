@@ -1015,3 +1015,8 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .skc-report { border: 0; padding: 0; margin: 0; }
   body { background: #fff; color: #000; }
 }
+/* "Was this job still open?" — shown in the job popup after Apply */
+.jd-ask { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 28px 4px; padding: 10px 14px; border-radius: 10px;
+  background: var(--info-bg); color: var(--text); font-size: 0.92rem; }
+.jd-ask[hidden] { display: none; }
+@media (max-width: 640px) { .jd-ask { margin: 0 16px 4px; } }

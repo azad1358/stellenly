@@ -2,7 +2,8 @@ name: Ingest jobs
 
 # WHAT: the start of the data pipeline (ingest/ingest.py). Runs the tests, downloads jobs from every source
 #   (job APIs, company career pages), filters and cleans them (English only, Germany, agency check, salary,
-#   German level), saves them to Supabase and hides jobs that are no longer listed. Commits the geocoding cache.
+#   German level), saves them to Supabase and hides jobs that are no longer listed or that REPORT_THRESHOLD+
+#   visitors reported closed (repository variable, default 3). Commits the geocoding cache.
 #
 # WHEN (no other workflow calls this one):
 #   - every 6 hours (GitHub's timer is best-effort: runs often start hours late)
@@ -42,6 +43,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DEACTIVATE_MAX_SHARE: ${{ inputs.deactivate_max_share || '0.6' }}
+          REPORT_THRESHOLD: ${{ vars.REPORT_THRESHOLD || '3' }}   # repository variable: visitor reports that hide a job
         run: python ingest/ingest.py
       - name: Commit geocoding cache and discovered boards
         if: always()
