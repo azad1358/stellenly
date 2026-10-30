@@ -61,16 +61,19 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r build/requirements.txt
-      - name: Site pages (guides, report, city/field and company pages, sitemap)
+      - name: Coats of arms for new states and cities (Wikidata / Wikimedia Commons, cached in data/cache)
+        continue-on-error: true    # a missing one only shows a neutral icon
+        run: python build/coats_of_arms.py
+      - name: Site pages (guides, report, state/city/field and company pages, sitemap)
         run: python build/build_site.py
       - name: Skill check off -> drop its link from the hand-written main page too
         if: env.SKILL_CHECK != '1'
         run: sed -i '/href="skill-check.html"/d' web/index.html
-      - name: Commit what the next build needs (report history, past reports, logos)
+      - name: Commit what the next build needs (report history, past reports, logos, coats of arms)
         run: |
           git config user.name "site-bot"
           git config user.email "site-bot@users.noreply.github.com"
-          git add content/reports web/logos web/blog/job-market-*.html
+          git add content/reports web/logos web/blog/job-market-*.html data/cache/coats_of_arms.json web/img/coa
           git diff --cached --quiet && exit 0
           git commit -m "Report history and logos $(date -u +%F)"
           # "Ingest jobs" and "Job insights" also push to main: rebase on top of them and retry.
