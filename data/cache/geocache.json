@@ -1822,6 +1822,7 @@
 "lon": 7.6252,
 "state": "DE-NW"
 },
+"de|nationwide": null,
 "de|neubrandenburg": {
 "cc": "de",
 "lat": 53.5574,
@@ -1908,7 +1909,8 @@
 "de|pressig": {
 "cc": "de",
 "lat": 50.3589,
-"lon": 11.3274
+"lon": 11.3274,
+"state": "DE-BY"
 },
 "de|puchheim": {
 "cc": "de",
@@ -2088,5 +2090,11 @@
 "lat": 51.437,
 "lon": 7.3351,
 "state": "DE-NW"
+},
+"de|würzburg": {
+"cc": "de",
+"lat": 49.778,
+"lon": 9.9435,
+"state": "DE-BY"
 }
 }
