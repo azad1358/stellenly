@@ -1,16 +1,24 @@
-name: Discord news
+name: News
 
-# WHAT: posts English news about immigration, visas, jobs and the labour market in Germany to the #news channel
-#   of the Stellenly Discord (build/news_post.py). Feeds and keywords: data/news_feeds.json. Up to 5 new stories
-#   per run, never the same story twice (state in the Actions cache). Needs the DISCORD_NEWS_WEBHOOK_URL secret.
+# WHAT: posts English news about immigration, visas, jobs and the labour market in Germany (build/news_post.py;
+#   feeds and keywords: data/news_feeds.json), never the same story twice (state in the Actions cache):
+#   - Discord #news: up to 5 new stories every 3 hours. Needs the DISCORD_NEWS_WEBHOOK_URL secret.
+#   - Telegram channel: one silent digest of up to 5 headlines a day, skipped on days without news.
+#     Uses the job posts' TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID. Off switch: repository variable NEWS_TELEGRAM = 0.
 #
 # WHEN (no other workflow calls this one, and it calls none):
-#   - every 3 hours
-#   - the "Run workflow" button
+#   - every 3 hours (Discord) and daily at 17:00 UTC (Telegram)
+#   - the "Run workflow" button (Discord, or Telegram with the checkbox)
 on:
   schedule:
-    - cron: "25 */3 * * *"   # every 3 hours (UTC)
-  workflow_dispatch: {}
+    - cron: "25 */3 * * *"   # every 3 hours (UTC): Discord
+    - cron: "0 17 * * *"     # daily, 18:00 German winter time / 19:00 summer time: Telegram
+  workflow_dispatch:
+    inputs:
+      telegram:
+        description: "Post the Telegram digest instead of Discord"
+        type: boolean
+        default: false
 
 concurrency:
   group: news
@@ -26,17 +34,32 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests
+      - name: Choose the target
+        id: target
+        run: |
+          if [ "${{ github.event.schedule }}" = "0 17 * * *" ] || [ "${{ inputs.telegram }}" = "true" ]; then
+            echo "name=tg" >> "$GITHUB_OUTPUT"; echo "state=build/.news_tg_state.json" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=discord" >> "$GITHUB_OUTPUT"; echo "state=build/.news_state.json" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/cache/restore@v4
         with:
-          path: build/.news_state.json
-          key: news-state-${{ github.run_id }}
-          restore-keys: news-state-
+          path: ${{ steps.target.outputs.state }}
+          key: news-${{ steps.target.outputs.name }}-state-${{ github.run_id }}
+          restore-keys: news-${{ steps.target.outputs.name }}-state-
       - name: Post new stories to Discord #news
+        if: steps.target.outputs.name == 'discord'
         env:
           DISCORD_NEWS_WEBHOOK_URL: ${{ secrets.DISCORD_NEWS_WEBHOOK_URL }}
         run: python build/news_post.py
+      - name: Post the daily news digest to Telegram
+        if: steps.target.outputs.name == 'tg' && vars.NEWS_TELEGRAM != '0'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+        run: python build/news_post.py --telegram
       - uses: actions/cache/save@v4
-        if: always() && hashFiles('build/.news_state.json') != ''
+        if: always() && hashFiles(steps.target.outputs.state) != ''
         with:
-          path: build/.news_state.json
-          key: news-state-${{ github.run_id }}
+          path: ${{ steps.target.outputs.state }}
+          key: news-${{ steps.target.outputs.name }}-state-${{ github.run_id }}

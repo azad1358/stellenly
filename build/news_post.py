@@ -1,15 +1,18 @@
 """Post English news about immigration, visas, jobs and the labour market in Germany to the
-#news channel of the Stellenly Discord.
+#news channel of the Stellenly Discord, and once a day to the Telegram channel (--telegram).
 
-Runs every 3 hours (news.yml). Reads the RSS feeds in data/news_feeds.json, keeps stories from the
-last MAX_AGE_DAYS whose title or summary matches a keyword, drops the same story from a second
-source, and posts the newest MAX_POSTS as cards (title, short summary, source, link) in one
-message. Remembers posted stories in a small state file kept in the GitHub Actions cache, so a
-story is never posted twice; the first run posts only FIRST_RUN stories. Skips quietly without
-DISCORD_NEWS_WEBHOOK_URL.
+Discord runs every 3 hours, Telegram once a day (news.yml). Reads the RSS feeds in
+data/news_feeds.json, keeps stories from the last MAX_AGE_DAYS whose title or summary matches a
+keyword, drops the same story from a second source, and posts the newest MAX_POSTS: on Discord as
+cards (title, short summary, source, link), on Telegram as one silent digest of linked headlines,
+so the job posts stay the ones that ring. Each target remembers its posted stories in its own state
+file kept in the GitHub Actions cache, so a story is never posted twice; Discord's first run posts
+only FIRST_RUN stories. Skips quietly without DISCORD_NEWS_WEBHOOK_URL (or, with --telegram,
+TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID).
 
     DISCORD_NEWS_WEBHOOK_URL=https://discord.com/api/webhooks/... python build/news_post.py
-    python build/news_post.py --dry-run    # print what would be posted
+    TELEGRAM_BOT_TOKEN=123:abc TELEGRAM_CHAT_ID=@StellenlyJobs python build/news_post.py --telegram
+    python build/news_post.py [--telegram] --dry-run    # print what would be posted
 """
 from __future__ import annotations
 
@@ -28,6 +31,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = json.loads((ROOT / "data" / "news_feeds.json").read_text(encoding="utf-8"))
 STATE = Path(os.environ.get("NEWS_STATE", Path(__file__).parent / ".news_state.json"))
+TG_STATE = Path(os.environ.get("NEWS_TG_STATE", Path(__file__).parent / ".news_tg_state.json"))
 SITE_URL = os.environ.get("SITE_URL") or "https://www.stellenly.com"
 MAX_AGE_DAYS, MAX_POSTS, FIRST_RUN = 3, 5, 3
 NOW = dt.datetime.now(dt.timezone.utc)
@@ -114,31 +118,48 @@ def payload(items: list[dict]) -> dict:
     }
 
 
+def telegram_text(items: list[dict]) -> str:
+    e = html.escape
+    lines = [f'• <a href="{e(it["link"])}">{e(it["title"])}</a> <i>({e(it["source"])})</i>' for it in items]
+    return ("📰 <b>Germany for internationals: today's news</b>\n\n" + "\n\n".join(lines)
+            + f'\n\n💼 <a href="{SITE_URL}/?utm_source=telegram-news">English-speaking jobs on Stellenly →</a>')
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="print the stories instead of posting them")
+    ap.add_argument("--telegram", action="store_true", help="post the daily digest to the Telegram channel instead of Discord")
     args = ap.parse_args()
     hook = os.environ.get("DISCORD_NEWS_WEBHOOK_URL")
-    if not hook and not args.dry_run:
-        print("News: DISCORD_NEWS_WEBHOOK_URL not set, skipping")
+    token, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
+    if not args.dry_run and not ((token and chat) if args.telegram else hook):
+        print(f"News: {'TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID' if args.telegram else 'DISCORD_NEWS_WEBHOOK_URL'} not set, skipping")
         return
 
-    first = not STATE.exists()
-    posted = {} if first else json.loads(STATE.read_text(encoding="utf-8"))
+    state = TG_STATE if args.telegram else STATE
+    first = not state.exists()
+    posted = {} if first else json.loads(state.read_text(encoding="utf-8"))
     posted = {k: t for k, t in posted.items() if _date(t) > NOW - dt.timedelta(days=14)}  # keep it small
     fresh = [it for it in collect() if key(it) not in posted]
-    picked = fresh[:FIRST_RUN if first else MAX_POSTS]
+    picked = fresh[:FIRST_RUN if first and not args.telegram else MAX_POSTS]
     if not picked:
-        print("News: nothing new")
+        print("News: nothing new")  # no news, no post
     elif args.dry_run:
-        for it in picked:
-            print(f"- {it['title']} ({it['source']}, {it['date']:%Y-%m-%d %H:%M})\n  {it['summary'][:120]}\n  {it['link'][:90]}")
+        print(telegram_text(picked) if args.telegram else "\n".join(
+            f"- {it['title']} ({it['source']}, {it['date']:%Y-%m-%d %H:%M})\n  {it['summary'][:120]}\n  {it['link'][:90]}" for it in picked))
+    elif args.telegram:
+        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=30, json={
+            "chat_id": chat, "text": telegram_text(picked), "parse_mode": "HTML",
+            "disable_web_page_preview": True, "disable_notification": True})  # silent: the job posts are the ones that ring
+        if not r.ok:
+            raise SystemExit(f"News: Telegram sending failed: {r.status_code} {r.text[:300]}")
+        print(f"News: posted a Telegram digest of {len(picked)} stories ({len(fresh) - len(picked)} older ones skipped)")
     else:
         requests.post(hook, json=payload(picked), timeout=30).raise_for_status()
         print(f"News: posted {len(picked)} stories ({len(fresh) - len(picked)} older ones skipped)")
     if not args.dry_run:
         # Everything found now counts as seen: the next run only posts stories that appear after this one.
-        STATE.write_text(json.dumps({**posted, **{key(it): NOW.isoformat() for it in fresh}}), encoding="utf-8")
+        state.write_text(json.dumps({**posted, **{key(it): NOW.isoformat() for it in fresh}}), encoding="utf-8")
 
 
 if __name__ == "__main__":

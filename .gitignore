@@ -23,6 +23,7 @@ web/_*.html
 build/.telegram_state.json
 build/.discord_state.json
 build/.news_state.json
+build/.news_tg_state.json
 # Job pages + IndexNow key are generated at deploy time (build/job_pages.py)
 web/job/
 web/job-sitemap.xml
