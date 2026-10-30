@@ -748,7 +748,11 @@
     const j = current.get(openId);
     const act = btn.dataset.jd;
     if (act !== "close") track(`popup-${act}`, j ? j.company : "");
-    if (act === "apply") { countJobEvent(openId, "apply"); askAfterApply = reports[openId] ? null : openId; }
+    if (act === "apply") {
+      countJobEvent(openId, "apply");
+      const ask = $("#jd .jd-ask");
+      if (ask && !reports[openId]) ask.hidden = false;  // waiting under the buttons when the visitor comes back
+    }
     if (act === "close") closeJob();
     else if (j && act === "report") {
       if (confirm("Report this job as no longer open on the company's site?\n\nOnly a counter goes up. When enough people report it, we hide the job.")) answerJob(j.id, "gone");
@@ -769,15 +773,8 @@
   }
 
   // "Job closed" reports: anonymous, only the job id is sent (report_job), once per browser and job. Enough reports
-  // hide the job at the next import (REPORT_THRESHOLD in the ingest workflow). Right after Apply, the popup asks
-  // "Was this job still open?" when the visitor comes back from the company's site.
-  let askAfterApply = null;
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState !== "visible" || !askAfterApply || askAfterApply !== openId || reports[openId]) return;
-    askAfterApply = null;
-    const ask = $("#jd .jd-ask");
-    if (ask) ask.hidden = false;
-  });
+  // hide the job at the next import (REPORT_THRESHOLD in the ingest workflow). Clicking Apply shows
+  // "Was this job still open?" in the popup, so it is there when the visitor comes back from the company's site.
   function answerJob(id, answer) {
     reports[id] = answer;
     store.set("reports", reports);
