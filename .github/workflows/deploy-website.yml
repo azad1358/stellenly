@@ -5,6 +5,8 @@ name: Deploy website
 #      sitemap, RSS
 #   2. build/job_pages.py: one page per job (schema.org JobPosting for Google's job search)
 #   3. publish to GitHub Pages, ping search engines (IndexNow), post new jobs to the Telegram channel
+#   4. post the code changes since the last post to the Discord #changelog channel (build/discord_post.py;
+#      only real changes, not the bot's data updates)
 # Generated pages are NOT committed; they are rebuilt on every deploy. Only the files a build cannot recreate are
 # committed: content/reports/history.json (week-over-week numbers), the frozen pages of past weekly reports
 # (web/blog/job-market-*.html) and downloaded company logos (web/logos/).
@@ -54,6 +56,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0       # full history: the Discord changelog lists the commits since its last post
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -109,3 +112,18 @@ jobs:
         with:
           path: build/.telegram_state.json
           key: telegram-state-${{ github.run_id }}
+      - uses: actions/cache/restore@v4
+        with:
+          path: build/.discord_state.json
+          key: discord-state-${{ github.run_id }}
+          restore-keys: discord-state-
+      - name: Post code changes to Discord #changelog
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python build/discord_post.py
+      - uses: actions/cache/save@v4
+        if: always() && hashFiles('build/.discord_state.json') != ''
+        with:
+          path: build/.discord_state.json
+          key: discord-state-${{ github.run_id }}
