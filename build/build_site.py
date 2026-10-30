@@ -116,17 +116,27 @@ def compute_stats(jobs: list[dict]) -> dict:
 
 
 # ---------------------------------------------------------------- html helpers
-# Telegram channel card, fixed in the bottom-right corner (same markup in web/index.html).
-TG_FLOAT = """<div class="tg-float" id="tg-float">
-  <a class="tg-float-card" href="{url}" target="_blank" rel="noopener" data-goatcounter-click="telegram-float" aria-label="Join the Stellenly Jobs channel on Telegram">
+# Discord and Telegram cards, fixed in the bottom-right corner (same markup in web/index.html). Each has its own ×,
+# remembered per browser (ejg.dcHidden / ejg.tgHidden).
+TG_FLOAT = """<div class="float-stack">
+<div class="tg-float dc-float" data-hide="dcHidden">
+  <a class="tg-float-card" href="{dc}" target="_blank" rel="noopener" data-goatcounter-click="discord-float" aria-label="Join the Stellenly community on Discord">
+    <svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5865F2"/><path fill="#fff" transform="translate(5.5 5.5) scale(.54)" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+    <span class="tg-float-text"><b>Join our Discord</b><small>Report bugs, share ideas, get news</small></span>
+  </a>
+  <button type="button" class="tg-float-close" aria-label="Hide the Discord card">×</button>
+</div>
+<div class="tg-float" id="tg-float" data-hide="tgHidden">
+  <a class="tg-float-card" href="{tg}" target="_blank" rel="noopener" data-goatcounter-click="telegram-float" aria-label="Join the Stellenly Jobs channel on Telegram">
     <svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M5.4 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1l-6.9 4.4-3-.9c-.6-.2-.6-.6.2-.9z"/></svg>
     <span class="tg-float-text"><b>Join us on Telegram</b><small>New English-speaking jobs every day</small></span>
   </a>
   <button type="button" class="tg-float-close" aria-label="Hide the Telegram card">×</button>
 </div>
-<script>(function(){{var w=document.getElementById("tg-float");try{{if(localStorage.getItem("ejg.tgHidden"))w.hidden=true;}}catch(e){{}}
-w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden=true;try{{localStorage.setItem("ejg.tgHidden","1");}}catch(e){{}}}});}})();</script>
-""".format(url=html.escape(SITE["telegram_url"]))
+</div>
+<script>document.querySelectorAll(".tg-float").forEach(function(w){{var k="ejg."+w.dataset.hide;try{{if(localStorage.getItem(k))w.hidden=true;}}catch(e){{}}
+w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden=true;try{{localStorage.setItem(k,"1");}}catch(e){{}}}});}});</script>
+""".format(tg=html.escape(SITE["telegram_url"]), dc=html.escape(SITE["discord_url"]))
 
 
 def page(title: str, description: str, body: str, path: str, depth: int, extra_head: str = "",
@@ -181,7 +191,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 </main>
 <footer class="site-footer"><div class="wrap footer-row">
   <span>Updated {TODAY.isoformat()} · Jobs from public job APIs and company career pages.</span>
-  <nav><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
+  <nav><a class="footer-discord" href="{e(SITE['discord_url'])}" target="_blank" rel="noopener"><svg class="footer-logo" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>Discord</a><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
 </div></footer>
 {TG_FLOAT}
 </body>
