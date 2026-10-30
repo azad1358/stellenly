@@ -1,43 +1,112 @@
 name: Social posts
 
-# WHAT: posts to the Stellenly Instagram account (build/instagram_post.py). For now only by hand: "check" tests the
-#   token, "post" publishes one image (a JPEG at a public URL, e.g. https://www.stellenly.com/social/welcome.jpg)
-#   with a caption. Needs the IG_USER_ID and IG_ACCESS_TOKEN secrets.
+# WHAT: weekly posts for Instagram and the Facebook Page, made from the site's data (build/social_posts.py):
+#   Monday "5 jobs that sponsor your visa", Wednesday a city spotlight, Friday a fact or the Blue Card guide.
+#   1. draft:   makes the images and caption, stores the images on the branch "social-media" (public URLs the
+#               platforms download), and sends a preview to the private Discord channel #social-drafts.
+#   2. publish: waits for the owner's approval (GitHub environment "social", required reviewer), then posts to
+#               Instagram + Facebook (build/instagram_post.py) and reports the links in Discord. A draft older
+#               than a day is never posted.
+#   Secrets: IG_USER_ID, IG_ACCESS_TOKEN, FB_PAGE_ID, DISCORD_SOCIAL_WEBHOOK_URL, SUPABASE_URL, SUPABASE_ANON_KEY.
 #
 # WHEN (no other workflow calls this one, and it calls none):
-#   - only the "Run workflow" button
+#   - Monday, Wednesday and Friday at 07:00 UTC (08:00 German winter time)
+#   - the "Run workflow" button: any of the three posts, or "check" to test the token
 on:
+  schedule:
+    - cron: "0 7 * * 1,3,5"
   workflow_dispatch:
     inputs:
-      action:
-        description: "check = test the token · post = publish the image below"
+      kind:
+        description: "visa · city · fact (a post, after your approval) · check (only test the token)"
         type: choice
-        options: [check, post]
+        options: [visa, city, fact, check]
         default: check
-      image_url:
-        description: "Public JPEG URL (for post)"
-        default: "https://www.stellenly.com/social/welcome.jpg"
-      caption:
-        description: "Caption (for post)"
-        default: ""
+
+permissions:
+  contents: write            # push the images to the "social-media" branch
+
+concurrency:
+  group: social
+  cancel-in-progress: false
 
 jobs:
-  instagram:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      base: ${{ steps.store.outputs.base }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r build/requirements.txt
+      - uses: actions/setup-node@v4
+        if: inputs.kind != 'check'
+        with:
+          node-version: "22"     # build/social/render.mjs uses the built-in WebSocket
+      - name: Emoji font for the images
+        if: inputs.kind != 'check'
+        run: sudo apt-get install -y -q fonts-noto-color-emoji > /dev/null
+      - name: Test the token only
+        if: inputs.kind == 'check'
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: python build/instagram_post.py check
+      - name: Make the post (images + caption)
+        if: inputs.kind != 'check'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: python build/social_posts.py ${{ inputs.kind }} --out out/social
+      - name: Store the images on the "social-media" branch (public URLs)
+        id: store
+        if: inputs.kind != 'check'
+        run: |
+          folder="$(date -u +%F)-$(python -c 'import json; print(json.load(open("out/social/post.json"))["kind"])')-${{ github.run_id }}"
+          git config user.name "site-bot"
+          git config user.email "site-bot@users.noreply.github.com"
+          if git fetch -q origin social-media; then git worktree add -q /tmp/sm origin/social-media && git -C /tmp/sm switch -q -c social-media
+          else git worktree add -q --orphan -b social-media /tmp/sm; fi
+          mkdir -p "/tmp/sm/$folder" && cp out/social/slide-*.jpg out/social/post.json "/tmp/sm/$folder/"
+          git -C /tmp/sm add -A && git -C /tmp/sm commit -q -m "Social post $folder" && git -C /tmp/sm push -q origin social-media
+          echo "base=https://raw.githubusercontent.com/${{ github.repository }}/social-media/$folder" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: inputs.kind != 'check'
+        with:
+          name: post
+          path: out/social/post.json
+      - name: Preview in Discord #social-drafts
+        if: inputs.kind != 'check'
+        env:
+          DISCORD_SOCIAL_WEBHOOK_URL: ${{ secrets.DISCORD_SOCIAL_WEBHOOK_URL }}
+        run: python build/social_discord.py draft out/social/post.json "${{ steps.store.outputs.base }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+  publish:
+    needs: draft
+    if: inputs.kind != 'check'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    environment: social      # pauses here until the owner approves in GitHub
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install requests
-      - name: Instagram
+      - uses: actions/download-artifact@v4
+        with:
+          name: post
+      - name: Post to Instagram and Facebook
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          ACTION: ${{ inputs.action }}
-          IMAGE_URL: ${{ inputs.image_url }}
-          CAPTION: ${{ inputs.caption }}
-        run: |
-          if [ "$ACTION" = post ]; then python build/instagram_post.py post "$IMAGE_URL" "$CAPTION"
-          else python build/instagram_post.py check; fi
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        run: python build/instagram_post.py publish post.json "${{ needs.draft.outputs.base }}"
+      - name: Report in Discord
+        if: always()
+        env:
+          DISCORD_SOCIAL_WEBHOOK_URL: ${{ secrets.DISCORD_SOCIAL_WEBHOOK_URL }}
+        run: python build/social_discord.py posted posted.txt
