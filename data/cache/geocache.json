@@ -896,6 +896,11 @@
 "lat": 48.9384,
 "lon": 2.3628
 },
+"*|saint-sulpice": {
+"cc": "fr",
+"lat": 49.3505,
+"lon": 2.1222
+},
 "*|satigny, switzerland": {
 "cc": "ch",
 "lat": 46.2158,
@@ -976,6 +981,11 @@
 "cc": "gb",
 "lat": 52.2691,
 "lon": -1.8959
+},
+"*|suffolk": {
+"cc": "gb",
+"lat": 52.241,
+"lon": 1.0466
 },
 "*|switzerland": {
 "cc": "ch",
@@ -1099,6 +1109,11 @@
 "lat": 52.0907,
 "lon": 5.1216
 },
+"*|veenendaal": {
+"cc": "nl",
+"lat": 52.0232,
+"lon": 5.5518
+},
 "*|villejuif": {
 "cc": "fr",
 "lat": 48.7921,
@@ -1108,6 +1123,11 @@
 "cc": "fr",
 "lat": 50.6193,
 "lon": 3.1314
+},
+"*|waardenburg, gelderland": {
+"cc": "nl",
+"lat": 51.8313,
+"lon": 5.2575
 },
 "*|weert": {
 "cc": "nl",
@@ -1486,10 +1506,20 @@
 "lat": 51.9625,
 "lon": 7.6252
 },
+"de|neumark": {
+"cc": "de",
+"lat": 51.079,
+"lon": 11.246
+},
 "de|nuremberg": {
 "cc": "de",
 "lat": 49.4539,
 "lon": 11.0773
+},
+"de|ohrdruf": {
+"cc": "de",
+"lat": 50.827,
+"lon": 10.7319
 },
 "de|osnabrück": {
 "cc": "de",
@@ -1520,6 +1550,11 @@
 "cc": "de",
 "lat": 48.1705,
 "lon": 11.3526
+},
+"de|regensburg": {
+"cc": "de",
+"lat": 49.0195,
+"lon": 12.0975
 },
 "de|renningen": {
 "cc": "de",

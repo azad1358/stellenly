@@ -145,6 +145,11 @@
    "board": "bjakcareer",
    "company": "Bjak"
   },
+  "blackforestlabs": {
+   "ats": "ashby",
+   "board": "black-forest-labs",
+   "company": "Black Forest Labs"
+  },
   "blacksemiconductorgmbh": {
    "ats": "ashby",
    "board": "blacksemiconductor",
@@ -194,6 +199,11 @@
    "ats": "ashby",
    "board": "cinder",
    "company": "Cinder"
+  },
+  "clickhouse": {
+   "ats": "ashby",
+   "board": "clickhouse",
+   "company": "Clickhouse"
   },
   "clovirtualfashion": {
    "ats": "lever",
@@ -261,6 +271,11 @@
    "board": "distribusion",
    "region": "https://careers.distribusion.com",
    "company": "Distribusion Technologies"
+  },
+  "dkbcodefactory": {
+   "ats": "greenhouse",
+   "board": "dkbcodefactory",
+   "company": "dkbcodefactory"
   },
   "docebo": {
    "ats": "ashby",
@@ -759,6 +774,11 @@
    "board": "rohlik",
    "company": "Rohlik"
   },
+  "roompricegenie": {
+   "ats": "ashby",
+   "board": "roompricegenie",
+   "company": "Roompricegenie"
+  },
   "rootglobal": {
    "ats": "ashby",
    "board": "rootglobal",
@@ -768,6 +788,11 @@
    "ats": "ashby",
    "board": "Sanity",
    "company": "Sanity"
+  },
+  "sanovio": {
+   "ats": "ashby",
+   "board": "sanovio",
+   "company": "Sanovio"
   },
   "sardine": {
    "ats": "ashby",
@@ -798,6 +823,11 @@
    "ats": "ashby",
    "board": "sereact",
    "company": "Sereact GmbH"
+  },
+  "sgbsmitgroup": {
+   "ats": "recruitee",
+   "board": "sgbsmitgroup",
+   "company": "SGB-SMIT Group"
   },
   "sharkninjaoperatingllc": {
    "ats": "greenhouse",
@@ -1016,6 +1046,7 @@
   "agilerobotsse": "2026-10-27",
   "aikidosecurity": "2026-10-27",
   "airwallex": "2026-10-29",
+  "alaika": "2026-10-30",
   "alephalpha": "2026-10-27",
   "allyourbi": "2026-10-27",
   "alpineeagle": "2026-10-27",
@@ -1024,6 +1055,7 @@
   "anywherenow": "2026-10-27",
   "appinio": "2026-10-27",
   "auterion": "2026-10-27",
+  "auxiliusai": "2026-10-30",
   "baringa": "2026-10-29",
   "beyondservicegmbh": "2026-10-27",
   "biahubshellocircle": "2026-10-28",
@@ -1032,6 +1064,7 @@
   "boardwisegmbh": "2026-10-29",
   "boominggames": "2026-10-29",
   "brighteraitechnologiesgmbh": "2026-10-27",
+  "bromcomcomputersplc": "2026-10-30",
   "bsimerchgmbh": "2026-10-27",
   "btthealthgmbh": "2026-10-27",
   "buildingradargmbh": "2026-10-27",
@@ -1054,6 +1087,7 @@
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
   "databricks": "2026-10-27",
+  "dataiku": "2026-10-30",
   "dexterhealth": "2026-10-27",
   "doctolib": "2026-10-27",
   "doopicgmbh": "2026-10-27",
@@ -1165,6 +1199,7 @@
   "roger": "2026-10-28",
   "rubygmbh": "2026-10-27",
   "scout24": "2026-10-27",
+  "shopfully": "2026-10-30",
   "sidessimplydeliverygmbh": "2026-10-27",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
@@ -1186,6 +1221,7 @@
   "swisspeakpartnersgmbh": "2026-10-27",
   "talk360": "2026-10-27",
   "tanganygmbh": "2026-10-27",
+  "tanium": "2026-10-30",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",
@@ -1193,6 +1229,7 @@
   "theconfigteam": "2026-10-28",
   "thoughtworks": "2026-10-27",
   "traciumgmbh": "2026-10-27",
+  "tulipinterfaces": "2026-10-30",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
   "upvest": "2026-10-28",
