@@ -1,0 +1,234 @@
+{
+ "city:Aachen": {
+  "file": "DEU Aachen COA.svg",
+  "img": "img/coa/city-aachen.png"
+ },
+ "city:Augsburg": {
+  "file": "DEU Augsburg COA 1811.svg",
+  "img": "img/coa/city-augsburg.png"
+ },
+ "city:Bad Hersfeld": {
+  "file": "DEU Bad Hersfeld COA.svg",
+  "img": "img/coa/city-bad-hersfeld.png"
+ },
+ "city:Berlin": {
+  "file": "DEU Berlin COA.svg",
+  "img": "img/coa/city-berlin.png"
+ },
+ "city:Bochum": {
+  "file": "DEU Bochum COA.svg",
+  "img": "img/coa/city-bochum.png"
+ },
+ "city:Böblingen": {
+  "file": "DEU Boeblingen COA.svg",
+  "img": "img/coa/city-boeblingen.png"
+ },
+ "city:Cologne": {
+  "file": "DEU Koeln COA.svg",
+  "img": "img/coa/city-cologne.png"
+ },
+ "city:Contwig": {
+  "file": "DEU Contwig COA.svg",
+  "img": "img/coa/city-contwig.png"
+ },
+ "city:Darmstadt": {
+  "file": "Wappen Darmstadt.svg",
+  "img": "img/coa/city-darmstadt.png"
+ },
+ "city:Dortmund": {
+  "file": "DEU Dortmund COA.svg",
+  "img": "img/coa/city-dortmund.png"
+ },
+ "city:Dresden": {
+  "file": "Dresden Stadtwappen.svg",
+  "img": "img/coa/city-dresden.png"
+ },
+ "city:Düsseldorf": {
+  "file": "DEU Düsseldorf COA.svg",
+  "img": "img/coa/city-duesseldorf.png"
+ },
+ "city:Erfurt": {
+  "file": "DEU Erfurt COA.svg",
+  "img": "img/coa/city-erfurt.png"
+ },
+ "city:Essen": {
+  "file": "DEU Essen COA.svg",
+  "img": "img/coa/city-essen.png"
+ },
+ "city:Frankfurt": {
+  "file": "DEU Frankfurt am Main COA.svg",
+  "img": "img/coa/city-frankfurt.png"
+ },
+ "city:Freiburg": {
+  "file": "DEU Freiburg im Breisgau COA.svg",
+  "img": "img/coa/city-freiburg.png"
+ },
+ "city:Gerlingen": {
+  "file": "DEU Gerlingen COA.svg",
+  "img": "img/coa/city-gerlingen.png"
+ },
+ "city:Gilching": {
+  "file": "DEU Gilching COA.svg",
+  "img": "img/coa/city-gilching.png"
+ },
+ "city:Großenkneten": {
+  "file": "DEU Großenkneten COA.svg",
+  "img": "img/coa/city-grossenkneten.png"
+ },
+ "city:Göppingen": {
+  "file": "DEU Göppingen COA.svg",
+  "img": "img/coa/city-goeppingen.png"
+ },
+ "city:Hamburg": {
+  "file": "DEU Hamburg COA.svg",
+  "img": "img/coa/city-hamburg.png"
+ },
+ "city:Heidelberg": {
+  "file": "Wappen Heidelberg.svg",
+  "img": "img/coa/city-heidelberg.png"
+ },
+ "city:Karlsruhe": {
+  "file": "DEU Karlsruhe COA.svg",
+  "img": "img/coa/city-karlsruhe.png"
+ },
+ "city:Kassel": {
+  "file": "DEU Kassel COA.svg",
+  "img": "img/coa/city-kassel.png"
+ },
+ "city:Ketzin": {
+  "file": "Wappen Ketzin-Havel.png",
+  "img": "img/coa/city-ketzin.png"
+ },
+ "city:Leipzig": {
+  "file": "Coat of arms of Leipzig.svg",
+  "img": "img/coa/city-leipzig.png"
+ },
+ "city:Leonberg": {
+  "file": "DEU Leonberg Böblingen COA.svg",
+  "img": "img/coa/city-leonberg.png"
+ },
+ "city:Ludwigsburg": {
+  "file": "DEU Ludwigsburg COA.svg",
+  "img": "img/coa/city-ludwigsburg.png"
+ },
+ "city:Munich": {
+  "file": "DEU München COA.svg",
+  "img": "img/coa/city-munich.png"
+ },
+ "city:Ottobrunn": {
+  "file": "DEU Ottobrunn COA.svg",
+  "img": "img/coa/city-ottobrunn.png"
+ },
+ "city:Parsdorf": {
+  "file": null,
+  "img": null
+ },
+ "city:Regensburg": {
+  "file": "Wappen Regensburg.svg",
+  "img": "img/coa/city-regensburg.png"
+ },
+ "city:Renningen": {
+  "file": "Stadtwappen Renningen.svg",
+  "img": "img/coa/city-renningen.png"
+ },
+ "city:Reutlingen": {
+  "file": "Wappen Stadt Reutlingen.svg",
+  "img": "img/coa/city-reutlingen.png"
+ },
+ "city:Rostock": {
+  "file": "DEU Rostock COA.svg",
+  "img": "img/coa/city-rostock.png"
+ },
+ "city:Siegen": {
+  "file": "Wappen Siegen.svg",
+  "img": "img/coa/city-siegen.png"
+ },
+ "city:Stuttgart": {
+  "file": "DEU Stuttgart COA.svg",
+  "img": "img/coa/city-stuttgart.png"
+ },
+ "city:Verden": {
+  "file": "DEU Verden (Aller) COA.svg",
+  "img": "img/coa/city-verden.png"
+ },
+ "city:Walldorf": {
+  "file": "DEU Walldorf (Baden) COA.svg",
+  "img": "img/coa/city-walldorf.png"
+ },
+ "city:Weßling": {
+  "file": "DEU Weßling COA.svg",
+  "img": "img/coa/city-wessling.png"
+ },
+ "city:Wiesbaden": {
+  "file": "DEU Wiesbaden COA.svg",
+  "img": "img/coa/city-wiesbaden.png"
+ },
+ "city:Winsen": {
+  "file": "DEU Winsen (Luhe) COA.svg",
+  "img": "img/coa/city-winsen.png"
+ },
+ "state:DE-BB": {
+  "file": "DEU Brandenburg COA.svg",
+  "img": "img/coa/state-brandenburg.png"
+ },
+ "state:DE-BE": {
+  "file": "DEU Berlin COA.svg",
+  "img": "img/coa/state-berlin.png"
+ },
+ "state:DE-BW": {
+  "file": "Greater coat of arms of Baden-Württemberg.svg",
+  "img": "img/coa/state-baden-wuerttemberg.png"
+ },
+ "state:DE-BY": {
+  "file": "Coat of arms of Bavaria.svg",
+  "img": "img/coa/state-bavaria.png"
+ },
+ "state:DE-HB": {
+  "file": "Bremen greater coat of arms.svg",
+  "img": "img/coa/state-bremen.png"
+ },
+ "state:DE-HE": {
+  "file": "Coat of arms of Hesse.svg",
+  "img": "img/coa/state-hesse.png"
+ },
+ "state:DE-HH": {
+  "file": "DEU Hamburg COA.svg",
+  "img": "img/coa/state-hamburg.png"
+ },
+ "state:DE-MV": {
+  "file": "Coat of arms of Mecklenburg-Western Pomerania (great).svg",
+  "img": "img/coa/state-mecklenburg-western-pomerania.png"
+ },
+ "state:DE-NI": {
+  "file": "Coat of arms of Lower Saxony.svg",
+  "img": "img/coa/state-lower-saxony.png"
+ },
+ "state:DE-NW": {
+  "file": "Coat of arms of North Rhine-Westphalia.svg",
+  "img": "img/coa/state-north-rhine-westphalia.png"
+ },
+ "state:DE-RP": {
+  "file": "Coat of arms of Rhineland-Palatinate.svg",
+  "img": "img/coa/state-rhineland-palatinate.png"
+ },
+ "state:DE-SH": {
+  "file": "DEU Schleswig-Holstein COA.svg",
+  "img": "img/coa/state-schleswig-holstein.png"
+ },
+ "state:DE-SL": {
+  "file": "Wappen des Saarlands.svg",
+  "img": "img/coa/state-saarland.png"
+ },
+ "state:DE-SN": {
+  "file": "Coat of arms of Saxony.svg",
+  "img": "img/coa/state-saxony.png"
+ },
+ "state:DE-ST": {
+  "file": "Wappen Sachsen-Anhalt.svg",
+  "img": "img/coa/state-saxony-anhalt.png"
+ },
+ "state:DE-TH": {
+  "file": "Coat of arms of Thuringia.svg",
+  "img": "img/coa/state-thuringia.png"
+ }
+}

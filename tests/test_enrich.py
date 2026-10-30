@@ -147,6 +147,13 @@ def test_normalize_city_variants():
     assert normalize_city("Garching bei München") == "Garching"
 
 
+def test_normalize_city_ignores_placeholders():
+    assert normalize_city("All, Germany") is None
+    assert normalize_city("DEU") is None
+    assert normalize_city("Any location") is None
+    assert normalize_city("Germany; Spain; U.S.A; United Kingdom") is None
+
+
 def test_normalize_city_picks_german_part():
     assert normalize_city("Munich - London") == "Munich"
     assert normalize_city("London or Berlin") == "Berlin"

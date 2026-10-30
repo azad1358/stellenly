@@ -6,6 +6,9 @@
   const C = window.SITE_CONFIG;
   const DEMO = !C.SUPABASE_URL;
   const PAGE = C.PAGE_SIZE || 20;
+  // Site root ("https://www.stellenly.com/"), so the popup's logos, links and data also work on jobs/*.html.
+  const BASE = ((document.currentScript && document.currentScript.src) || location.href).replace(/js\/app\.js.*$/, "");
+  let baseTitle = document.title;  // restored when the job popup closes
 
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -468,7 +471,7 @@
 
   function logoHtml(name, cls = "") {
     const c = companyInfo(name);
-    if (c && c.l) return `<img class="logo ${cls}" src="${esc(c.l)}" alt="" loading="lazy" data-name="${esc(name)}">`;
+    if (c && c.l) return `<img class="logo ${cls}" src="${esc(BASE + c.l)}" alt="" loading="lazy" data-name="${esc(name)}">`;
     const words = (name || "?").replace(/\(.*?\)/g, "").trim().split(/\s+/);
     const initials = (words[0][0] + (words[1] ? words[1][0] : words[0][1] || "")).toUpperCase();
     let h = 0;
@@ -647,7 +650,7 @@
         ${c && c.d ? `<p>${esc(c.d)}</p>` : `<p class="muted small">No company profile yet.</p>`}
         ${facts.length ? `<dl class="co-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>` : ""}
         <p class="jd-links">
-          ${c && c.u ? `<a href="${esc(c.u)}">All jobs at ${esc(c.n)} →</a>` : ""}
+          ${c && c.u ? `<a href="${esc(BASE + c.u)}">All jobs at ${esc(c.n)} →</a>` : ""}
           ${c && c.w ? `<a href="${esc(c.w)}" target="_blank" rel="noopener">Website ↗</a>` : ""}
           <a href="${kununu}" target="_blank" rel="noopener noreferrer nofollow">Employee reviews ↗</a>
         </p>
@@ -743,7 +746,7 @@
     const dlg = $("#job-dialog");
     openId = null;
     if (dlg.open) dlg.close();
-    document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
+    document.title = baseTitle;
     if (!pop) {
       const p = new URLSearchParams(location.search); p.delete("job");
       history.pushState(null, "", p.toString() ? `?${p}` : location.pathname);
@@ -752,6 +755,7 @@
 
   function onDialogClick(e) {
     const tagBtn = e.target.closest("[data-tag]");
+    if (tagBtn && !$("#results")) { location.href = `${BASE}index.html?tags=${encodeURIComponent(tagBtn.dataset.tag)}`; return; }
     if (tagBtn) { closeJob(); toggleTag(tagBtn.dataset.tag); return; }
     const sim = e.target.closest("[data-similar]");
     if (sim) { e.preventDefault(); openJob(sim.dataset.similar); return; }
@@ -771,7 +775,7 @@
     } else if (j && (act === "gone" || act === "still-open")) answerJob(j.id, act === "gone" ? "gone" : "open");
     else if (act === "copy") {
       // The job's own page (built at deploy time) shares better: it has a proper title and preview.
-      const link = j && !DEMO ? new URL(`job/${j.id}.html`, location.href).href : location.href;
+      const link = j && !DEMO ? `${BASE}job/${j.id}.html` : location.href;
       navigator.clipboard?.writeText(link).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
     } else if (j && (act === "save" || act === "applied")) {
       toggleList(act, j);
@@ -902,6 +906,7 @@
 
   function updateCounts() {
     const s = Object.keys(saved).length, a = Object.keys(applied).length;
+    if (!$("#saved-count")) return;  // pages without the search (jobs/*.html)
     $("#saved-count").textContent = s ? `(${s})` : "";
     $("#applied-count").textContent = a ? `(${a})` : "";
   }
@@ -985,6 +990,7 @@
     if (n < (C.NUDGE_AFTER_APPLIED || 5) || store.get("nudged", false)) return;
     store.set("nudged", true);
     const box = $("#nudge");
+    if (!box) return;
     box.innerHTML = `<p>🙌 You've tracked ${n} applications here — glad it's helping! This site runs on coffee.</p>
       <span><a class="btn support small" href="${esc(C.KOFI_URL)}" target="_blank" rel="noopener">☕ Support</a>
       <button type="button" class="btn ghost small" id="nudge-close">Not now</button></span>`;
@@ -1011,6 +1017,15 @@
   }
 
   let siteStats = null;
+  // "Browse by location" under the search: the biggest states and cities (data/locations.json, written by the build)
+  // with their coats of arms, linking to the location pages (jobs/state-*.html, jobs/city-*.html).
+  async function loadLocations() {
+    try {
+      const items = await (await fetch("data/locations.json")).json();
+      $("#loc-chips").innerHTML = items.map((l) => `<a class="loc-chip" href="${esc(l.u)}">${l.i ? `<img src="${esc(l.i)}" alt="" width="18" height="18">` : ""}${esc(l.n)}<b>${l.k.toLocaleString("en")}</b></a>`).join("");
+    } catch { /* the "All states & cities" link still works */ }
+  }
+
   async function loadStats() {
     try { siteStats = await rpc("site_stats"); } catch { siteStats = null; }
     renderStats();
@@ -1080,8 +1095,35 @@
   }
 
   // ---------------------------------------------------------------- init
+  // Pages without the search (jobs/state-*.html, jobs/city-*.html): their job cards open the same popup as the
+  // home page, on the same page (?job=<id>, the back button closes it). A card's link still leads to the job page,
+  // for search engines and for opening it in a new tab.
+  function initPopupOnly() {
+    const dlg = $("#job-dialog");
+    if (!dlg) return;
+    dlg.addEventListener("click", onDialogClick);
+    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); }); // click backdrop
+    dlg.addEventListener("close", () => { if (openId) closeJob(); });
+    document.addEventListener("click", (e) => {
+      const card = e.target.closest("[data-job]"); // the whole card, like on the home page
+      if (!card || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; // new tab / window: the job page
+      if (e.target.closest("a") && !e.target.closest("a[data-job]")) return; // another link inside the card
+      e.preventDefault();
+      openJob(card.dataset.job);
+    });
+    window.addEventListener("popstate", () => {
+      const id = new URLSearchParams(location.search).get("job");
+      if (id) openJob(id, { push: false }); else if (openId) closeJob({ pop: true });
+    });
+    const startJob = new URLSearchParams(location.search).get("job");
+    fetch(`${BASE}data/companies-index.json`).then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {})
+      .finally(() => { if (startJob) openJob(startJob, { push: false }); });
+  }
+
   function init() {
+    if (!$("#results")) return initPopupOnly();
     document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
+    baseTitle = document.title;
     $("#brand").textContent = C.SITE_NAME;
     $("#owner-note").innerHTML = `Built by ${C.OWNER_URL ? `<a href="${esc(C.OWNER_URL)}" rel="noopener">${esc(C.OWNER_NAME || "us")}</a>`
       : esc(C.OWNER_NAME || "us")} ${esc(C.OWNER_NOTE || "")}`;
@@ -1209,10 +1251,11 @@
     const startJob = new URLSearchParams(location.search).get("job");
 
     loadStats();
+    loadLocations();
     loadFacets();
     loadFreshness();
     const ready = Promise.all([
-      fetch("data/companies-index.json").then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
+      fetch(`${BASE}data/companies-index.json`).then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {}),
       C.DEV_INSIGHTS_URL ? fetch(C.DEV_INSIGHTS_URL).then((r) => r.json()).then((d) => { devInsights = d; }).catch(() => {}) : null,
     ]);
     const startPage = Math.max(1, parseInt(new URLSearchParams(location.search).get("page"), 10) || 1);

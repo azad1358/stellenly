@@ -134,9 +134,10 @@ def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]
         except Exception as e:
             print(f"! source 'amazon' failed: {e}")
 
-    # Coordinates for the companies map (build_site.py reads them from the cache).
+    # Coordinates for the companies map and states for the job pages per state (build_site.py reads the cache).
     for city in sorted({r["city"] for r in rows.values() if r.get("city") and r["city"] != "Remote"}):
         geo.lookup(city, "de")
+        geo.add_state(city)  # the state for the job pages per state
     geo.save()
     sources_of_rows = collections.Counter(r["source"].split(":")[0] for r in rows.values())
     print("Stats:", dict(stats))

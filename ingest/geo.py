@@ -1,7 +1,8 @@
 """Geocoding with a committed cache (data/cache/geocache.json).
 
 Used to (1) tell whether a job board location like "Geeste" or "Bristol" is in
-Germany and (2) give the companies map coordinates for each city.
+Germany, (2) give the companies map coordinates for each city and (3) the German
+state of each city ("DE-BY") for the job pages per state.
 Lookups go to OpenStreetMap Nominatim at most once per second, and every
 answer (including "not found") is cached, so each place is asked only once.
 Policy: https://operations.osmfoundation.org/policies/nominatim/
@@ -64,10 +65,27 @@ def lookup(query: str, country: str | None = None) -> dict | None | bool:
         return False  # not cached: try again next run
     finally:
         _last_call = time.monotonic()
-    cache[key] = ({"cc": (hits[0].get("address") or {}).get("country_code"),
-                   "lat": round(float(hits[0]["lat"]), 4), "lon": round(float(hits[0]["lon"]), 4)}
+    address = (hits[0].get("address") or {}) if hits else {}
+    cache[key] = ({"cc": address.get("country_code"), "lat": round(float(hits[0]["lat"]), 4),
+                   "lon": round(float(hits[0]["lon"]), 4), "state": address.get("ISO3166-2-lvl4")}
                   if hits else None)
     return cache[key]
+
+
+def add_state(city: str) -> None:
+    """Entries cached before states were stored have none: ask once more (within this run's lookup budget)."""
+    cache, key = _load(), _key(city, "de")
+    old = cache.get(key)
+    if old and "state" not in old and lookups_left > 0:
+        del cache[key]
+        if lookup(city, "de") is False:  # network trouble: keep the coordinates, try again next run
+            cache[key] = old
+
+
+def city_state(city: str) -> str | None:
+    """Cached state code of a German city, e.g. "DE-BY" (never calls the network)."""
+    hit = _load().get(_key(city, "de"))
+    return (hit or {}).get("state")
 
 
 def cached_country(query: str) -> str | None:

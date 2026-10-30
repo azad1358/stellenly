@@ -426,6 +426,8 @@ _DE_CITY = re.compile(
     r"\b(?:" + "|".join(re.escape(k) for k in sorted(set(_CITY_ALIASES) - {"remote"}, key=len, reverse=True)) + r")\b"
 )
 _LOC_NOISE = re.compile(r"\b(office|hq|headquarters?|hybrid|campus|building|onsite|on-site)\b", re.I)
+# Not a city: "All, Germany", "DEU", "Any location", "Germany; Spain; U.S.A".
+_NOT_A_CITY = re.compile(r"^(all|any|anywhere|various|multiple|several|deu|usa|u s a|us)( locations?| cities)?$")
 
 
 def normalize_city(location: str | None) -> str | None:
@@ -441,7 +443,8 @@ def normalize_city(location: str | None) -> str | None:
     for part in re.split(r"[,/|;(]| - | or | & ", location):  # a small town: "Geeste", "Parsdorf, Bavaria"
         part = _LOC_NOISE.sub(" ", part).strip(" -)")
         key = _norm(part)
-        if key and key not in _REGIONS and not _DE_COUNTRY.search(key) and not _FOREIGN.search(key):
+        if key and key not in _REGIONS and not _DE_COUNTRY.search(key) and not _FOREIGN.search(key) \
+                and not _NOT_A_CITY.match(key):
             return " ".join(part.split())[:60]
     return None
 

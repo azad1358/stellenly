@@ -660,6 +660,17 @@ body { -webkit-font-smoothing: antialiased; }
 .hero-band .chip:hover { border-color: rgba(255, 255, 255, .5); }
 .hero-band .chip:has(input:checked) { background: #fff; color: #0c1630; border-color: #fff; }
 .hero-band .chip input { accent-color: #4f46e5; }
+/* "Browse by location" row under the quick filters (app.js loadLocations) */
+.loc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; font-size: .88rem; }
+.loc-row-label { color: #8f9bb8; margin-right: 4px; }
+#loc-chips { display: contents; }
+.loc-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; color: #dfe5f3;
+  text-decoration: none; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14); }
+.loc-chip:hover { background: rgba(255, 255, 255, .14); }
+.loc-chip img { width: 18px; height: 18px; object-fit: contain; }
+.loc-chip b { font-weight: 600; color: #a5b4fc; font-variant-numeric: tabular-nums; }
+.loc-all { color: #c7d2fe; font-weight: 600; text-decoration: none; margin-left: 4px; }
+.loc-all:hover { text-decoration: underline; }
 .hero-stats { display: flex; flex-wrap: wrap; gap: 14px 44px; margin: 34px 0 0; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .12); }
 .hero-stats div { display: flex; flex-direction: column-reverse; gap: 2px; }
 .hero-stats dt { font-size: 0.78rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: #8f9bb8; }
@@ -1028,3 +1039,55 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 @media (max-width: 640px) { .jd-ask { margin: 0 16px 4px; } }
 /* Amazon's jobs: title and link only (app.js titleOnly) */
 .title-only-note { margin: 8px 0 0; font-size: .85rem; color: var(--muted); }
+/* Location pages (jobs/state-*.html, jobs/city-*.html, jobs/index.html), built from the site's own parts: KPI tiles,
+   the search page's job cards, place tiles with the coat of arms, and a map of Germany (build/germany_map.py) */
+.content-page.loc-page { max-width: 1160px; }  /* the full page width: cards and map side by side */
+.loc-head { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.loc-head > div { flex: 1 1 260px; }
+.loc-head h1 { margin: 0 0 2px; }
+.loc-head p { margin: 0; }
+.logo.coa { background: var(--surface); }
+.loc-kpis { margin: 0 0 8px; }
+.loc-kpis b { color: var(--accent); }
+.loc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: start; }
+.loc-list h2 { margin: 18px 0 10px; }
+.loc-side { position: sticky; top: 76px; display: grid; gap: 14px; margin-top: 18px; max-height: calc(100vh - 92px); overflow: auto; }
+.static-cards .job { background: var(--surface); border: 1px solid var(--border); }  /* clickable: opens the job popup (app.js initPopupOnly) */
+.static-cards .job-sum { margin: 8px 0 0; color: var(--muted); font-size: .92rem; line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.static-cards .badges { margin-top: 10px; }
+.de-map { display: block; width: 100%; max-width: 300px; height: auto; margin: 0 auto 6px; }
+.de-map .st { fill: var(--surface-2); stroke: var(--surface); stroke-width: 1.2; transition: fill .15s; }
+.de-map a .st:hover { fill: color-mix(in srgb, var(--accent) 22%, var(--surface-2)); }
+.de-map .st.on { fill: color-mix(in srgb, var(--accent) 30%, var(--surface)); stroke: var(--accent); stroke-width: 1; }
+.de-map .dot { fill: var(--accent); fill-opacity: .55; stroke: var(--surface); stroke-width: 1; }
+.de-map .dot.here { fill: var(--support); fill-opacity: .9; }
+.de-map a:hover .dot { fill-opacity: 1; }
+.loc-map-card p { margin: 0; text-align: center; }
+.place-tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.loc-page > .place-tiles, .loc-index .place-tiles { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.place-tile { position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 12px 12px; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); text-decoration: none; }
+a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px rgba(0,0,0,.35); }
+.place-tile.here { border-color: var(--accent); }
+.place-tile .logo { padding: 3px; }
+.pt-text { display: flex; flex-direction: column; min-width: 0; }
+.pt-text b { line-height: 1.25; }
+.pt-text small { color: var(--muted); }
+.pt-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: var(--w); background: var(--accent); opacity: .5; }
+.loc-side .place-tile { padding: 8px 10px 10px; }
+.loc-side .place-tile .logo { width: 32px; height: 32px; }
+.loc-index { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 24px; align-items: start; }
+.loc-index h2 { margin-top: 0; }
+.loc-tags .tag { text-decoration: none; padding: 5px 12px; }
+@media (max-width: 960px) {
+  .loc-layout, .loc-index { grid-template-columns: minmax(0, 1fr); }
+  .loc-side { position: static; max-height: none; }  /* phones: the jobs first, the map and cities after them */
+  .de-map { max-width: 240px; }
+}
+@media (max-width: 640px) {
+  .loc-head > div { flex-basis: 200px; }
+  .loc-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .loc-kpis div { padding: 10px; }
+  .loc-kpis b { font-size: 1.25rem; }
+}
