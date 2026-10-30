@@ -265,6 +265,11 @@
 "lat": 51.0382,
 "lon": 0.0197
 },
+"*|daresbury": {
+"cc": "gb",
+"lat": 53.3402,
+"lon": -2.633
+},
 "*|davos": {
 "cc": "ch",
 "lat": 46.7962,
@@ -1249,6 +1254,11 @@
 "lat": 49.0684,
 "lon": 9.2908
 },
+"de|achim": {
+"cc": "de",
+"lat": 53.0207,
+"lon": 9.0247
+},
 "de|all": {
 "cc": "de",
 "lat": 47.759,
@@ -1268,6 +1278,11 @@
 "cc": "de",
 "lat": 52.4887,
 "lon": 13.3968
+},
+"de|bad hersfeld": {
+"cc": "de",
+"lat": 50.8604,
+"lon": 9.6768
 },
 "de|bad salzungen": {
 "cc": "de",
@@ -1289,6 +1304,11 @@
 "lat": 51.2255,
 "lon": 14.5903
 },
+"de|bayreuth": {
+"cc": "de",
+"lat": 49.9446,
+"lon": 11.5744
+},
 "de|bensheim": {
 "cc": "de",
 "lat": 49.681,
@@ -1304,6 +1324,11 @@
 "lat": 52.5174,
 "lon": 13.3951
 },
+"de|biblis": {
+"cc": "de",
+"lat": 49.6927,
+"lon": 8.4217
+},
 "de|bochum": {
 "cc": "de",
 "lat": 51.4818,
@@ -1314,10 +1339,25 @@
 "lat": 50.7353,
 "lon": 7.1025
 },
+"de|borgstedt": {
+"cc": "de",
+"lat": 54.3333,
+"lon": 9.7101
+},
 "de|braunschweig": {
 "cc": "de",
 "lat": 52.2647,
 "lon": 10.5236
+},
+"de|bremen": {
+"cc": "de",
+"lat": 53.0758,
+"lon": 8.8072
+},
+"de|bremerhaven": {
+"cc": "de",
+"lat": 53.5505,
+"lon": 8.5852
 },
 "de|böblingen": {
 "cc": "de",
@@ -1329,10 +1369,30 @@
 "lat": 50.8324,
 "lon": 12.9189
 },
+"de|cloppenburg": {
+"cc": "de",
+"lat": 52.8461,
+"lon": 8.0439
+},
 "de|cologne": {
 "cc": "de",
 "lat": 50.9384,
 "lon": 6.96
+},
+"de|contwig": {
+"cc": "de",
+"lat": 49.2481,
+"lon": 7.4293
+},
+"de|darmstadt": {
+"cc": "de",
+"lat": 49.8728,
+"lon": 8.6512
+},
+"de|deu": {
+"cc": "de",
+"lat": 51.3319,
+"lon": 10.5292
 },
 "de|dietzenbach": {
 "cc": "de",
@@ -1354,6 +1414,11 @@
 "lat": 51.435,
 "lon": 6.7596
 },
+"de|dummerstorf": {
+"cc": "de",
+"lat": 54.0131,
+"lon": 12.2282
+},
 "de|düsseldorf": {
 "cc": "de",
 "lat": 51.2254,
@@ -1363,6 +1428,11 @@
 "cc": "de",
 "lat": 52.1449,
 "lon": 14.6294
+},
+"de|erfurt": {
+"cc": "de",
+"lat": 50.9778,
+"lon": 11.0287
 },
 "de|erlangen": {
 "cc": "de",
@@ -1378,6 +1448,21 @@
 "cc": "de",
 "lat": 51.4582,
 "lon": 7.0158
+},
+"de|estorf": {
+"cc": "de",
+"lat": 52.5906,
+"lon": 9.1599
+},
+"de|finsterwalde": {
+"cc": "de",
+"lat": 51.6315,
+"lon": 13.7074
+},
+"de|frankenthal": {
+"cc": "de",
+"lat": 49.5353,
+"lon": 8.3541
 },
 "de|frankfurt": {
 "cc": "de",
@@ -1399,15 +1484,45 @@
 "lat": 48.2514,
 "lon": 11.651
 },
+"de|gattendorf": {
+"cc": "de",
+"lat": 50.3261,
+"lon": 12.0004
+},
+"de|gera": {
+"cc": "de",
+"lat": 50.8766,
+"lon": 12.0833
+},
 "de|gerlingen": {
 "cc": "de",
 "lat": 48.7984,
 "lon": 9.0624
 },
+"de|gernsheim": {
+"cc": "de",
+"lat": 49.7466,
+"lon": 8.5112
+},
+"de|gersthofen": {
+"cc": "de",
+"lat": 48.4248,
+"lon": 10.8779
+},
 "de|gilching": {
 "cc": "de",
 "lat": 48.114,
 "lon": 11.2922
+},
+"de|graben": {
+"cc": "de",
+"lat": 48.1891,
+"lon": 10.822
+},
+"de|großenkneten": {
+"cc": "de",
+"lat": 52.9442,
+"lon": 8.2542
 },
 "de|großostheim": {
 "cc": "de",
@@ -1419,15 +1534,35 @@
 "lat": 48.7031,
 "lon": 9.6541
 },
+"de|halle": {
+"cc": "de",
+"lat": 51.4824,
+"lon": 11.9713
+},
 "de|hamburg": {
 "cc": "de",
 "lat": 53.5502,
 "lon": 10.0013
 },
+"de|hanover": {
+"cc": "de",
+"lat": 52.3745,
+"lon": 9.7386
+},
 "de|heidelberg": {
 "cc": "de",
 "lat": 49.4094,
 "lon": 8.6947
+},
+"de|heidenheim": {
+"cc": "de",
+"lat": 48.6768,
+"lon": 10.1529
+},
+"de|helmstedt": {
+"cc": "de",
+"lat": 52.2087,
+"lon": 11.003
 },
 "de|hemau": {
 "cc": "de",
@@ -1440,6 +1575,26 @@
 "lon": 9.9518
 },
 "de|homebased": null,
+"de|hoppegarten": {
+"cc": "de",
+"lat": 52.5502,
+"lon": 13.6412
+},
+"de|horn-bad meinberg": {
+"cc": "de",
+"lat": 51.8801,
+"lon": 8.9732
+},
+"de|kabelsketal": {
+"cc": "de",
+"lat": 51.4376,
+"lon": 12.105
+},
+"de|kaiserslautern": {
+"cc": "de",
+"lat": 49.4432,
+"lon": 7.769
+},
 "de|karlsruhe": {
 "cc": "de",
 "lat": 49.0069,
@@ -1460,6 +1615,16 @@
 "lat": 48.2979,
 "lon": 10.9895
 },
+"de|kitzingen": {
+"cc": "de",
+"lat": 49.7474,
+"lon": 10.1538
+},
+"de|kobern-gondorf": {
+"cc": "de",
+"lat": 50.307,
+"lon": 7.4583
+},
 "de|koblenz": {
 "cc": "de",
 "lat": 50.3533,
@@ -1470,6 +1635,16 @@
 "lat": 47.6592,
 "lon": 9.1751
 },
+"de|korntal-münchingen": {
+"cc": "de",
+"lat": 48.8433,
+"lon": 9.1069
+},
+"de|krefeld": {
+"cc": "de",
+"lat": 51.3331,
+"lon": 6.5623
+},
 "de|kusterdingen": {
 "cc": "de",
 "lat": 48.5028,
@@ -1479,6 +1654,16 @@
 "cc": "de",
 "lat": 52.2995,
 "lon": 13.6244
+},
+"de|könnern": {
+"cc": "de",
+"lat": 51.6707,
+"lon": 11.7714
+},
+"de|lampertswalde": {
+"cc": "de",
+"lat": 51.3309,
+"lon": 13.6696
 },
 "de|leipzig": {
 "cc": "de",
@@ -1500,21 +1685,41 @@
 "lat": 48.8954,
 "lon": 9.1895
 },
+"de|ludwigsfelde": {
+"cc": "de",
+"lat": 52.3016,
+"lon": 13.261
+},
 "de|mannheim": {
 "cc": "de",
 "lat": 49.4893,
 "lon": 8.4673
 },
 "de|mapbox germany": null,
+"de|meßkirch": {
+"cc": "de",
+"lat": 47.994,
+"lon": 9.1121
+},
 "de|michendorf": {
 "cc": "de",
 "lat": 52.2871,
 "lon": 13.0658
 },
+"de|mittenwalde": {
+"cc": "de",
+"lat": 52.2642,
+"lon": 13.5361
+},
 "de|munich": {
 "cc": "de",
 "lat": 48.1371,
 "lon": 11.5754
+},
+"de|mönchengladbach": {
+"cc": "de",
+"lat": 51.1947,
+"lon": 6.4354
 },
 "de|mülheim an der ruhr": {
 "cc": "de",
@@ -1526,15 +1731,35 @@
 "lat": 51.9625,
 "lon": 7.6252
 },
+"de|neubrandenburg": {
+"cc": "de",
+"lat": 53.5574,
+"lon": 13.2603
+},
 "de|neumark": {
 "cc": "de",
 "lat": 51.079,
 "lon": 11.246
 },
+"de|neuwied": {
+"cc": "de",
+"lat": 50.4302,
+"lon": 7.4663
+},
 "de|nuremberg": {
 "cc": "de",
 "lat": 49.4539,
 "lon": 11.0773
+},
+"de|oberkrämer": {
+"cc": "de",
+"lat": 52.7079,
+"lon": 13.1099
+},
+"de|oelde": {
+"cc": "de",
+"lat": 51.8261,
+"lon": 8.1455
 },
 "de|ohrdruf": {
 "cc": "de",
@@ -1551,6 +1776,11 @@
 "lat": 48.0648,
 "lon": 11.6648
 },
+"de|paderborn": {
+"cc": "de",
+"lat": 51.7177,
+"lon": 8.7527
+},
 "de|parsdorf": {
 "cc": "de",
 "lat": 48.1419,
@@ -1560,6 +1790,11 @@
 "cc": "de",
 "lat": 47.7519,
 "lon": 11.3763
+},
+"de|pforzheim": {
+"cc": "de",
+"lat": 48.8909,
+"lon": 8.7026
 },
 "de|potsdam": {
 "cc": "de",
@@ -1576,6 +1811,16 @@
 "lat": 48.1705,
 "lon": 11.3526
 },
+"de|ramstein-miesenbach": {
+"cc": "de",
+"lat": 49.4519,
+"lon": 7.5543
+},
+"de|raunheim": {
+"cc": "de",
+"lat": 50.0098,
+"lon": 8.4499
+},
 "de|regensburg": {
 "cc": "de",
 "lat": 49.0195,
@@ -1591,6 +1836,11 @@
 "lat": 48.492,
 "lon": 9.2114
 },
+"de|rheinberg": {
+"cc": "de",
+"lat": 51.5459,
+"lon": 6.6014
+},
 "de|rostock": {
 "cc": "de",
 "lat": 54.0887,
@@ -1600,6 +1850,11 @@
 "cc": "de",
 "lat": 52.4147,
 "lon": 13.4986
+},
+"de|schortens": {
+"cc": "de",
+"lat": 53.5367,
+"lon": 7.9467
 },
 "de|schwieberdingen": {
 "cc": "de",
@@ -1621,10 +1876,20 @@
 "lat": 50.8751,
 "lon": 8.0256
 },
+"de|sindelfingen": {
+"cc": "de",
+"lat": 48.7084,
+"lon": 9.0035
+},
 "de|stuttgart": {
 "cc": "de",
 "lat": 48.7784,
 "lon": 9.18
+},
+"de|sülzetal": {
+"cc": "de",
+"lat": 52.0154,
+"lon": 11.5433
 },
 "de|u.s.a": {
 "cc": "de",
@@ -1646,10 +1911,20 @@
 "lat": 49.3033,
 "lon": 8.6432
 },
+"de|wenden": {
+"cc": "de",
+"lat": 50.9691,
+"lon": 7.8733
+},
 "de|wernau": {
 "cc": "de",
 "lat": 48.6889,
 "lon": 9.4211
+},
+"de|werne": {
+"cc": "de",
+"lat": 51.6627,
+"lon": 7.6355
 },
 "de|wetzlar": {
 "cc": "de",
@@ -1670,5 +1945,15 @@
 "cc": "de",
 "lat": 50.7977,
 "lon": 7.5746
+},
+"de|winsen": {
+"cc": "de",
+"lat": 53.3636,
+"lon": 10.2059
+},
+"de|witten": {
+"cc": "de",
+"lat": 51.437,
+"lon": 7.3351
 }
 }

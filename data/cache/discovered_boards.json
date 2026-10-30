@@ -230,6 +230,11 @@
    "board": "comstruct",
    "company": "comstruct ICT"
   },
+  "corteaai": {
+   "ats": "ashby",
+   "board": "cortea",
+   "company": "Cortea AI"
+  },
   "cosuno": {
    "ats": "ashby",
    "board": "cosuno",
@@ -388,6 +393,11 @@
    "board": "flip",
    "company": "Flip GmbH"
   },
+  "focused": {
+   "ats": "ashby",
+   "board": "focused",
+   "company": "Focused"
+  },
   "foundersfactory": {
    "ats": "ashby",
    "board": "founders-factory",
@@ -427,6 +437,11 @@
    "ats": "ashby",
    "board": "haut-ai",
    "company": "Haut Ai"
+  },
+  "hilobyaktiia": {
+   "ats": "workable",
+   "board": "hilobyaktiia",
+   "company": "Hilobyaktiia"
   },
   "hirehire": {
    "ats": "ashby",
@@ -524,6 +539,11 @@
    "board": "knowbe4",
    "company": "knowbe4"
   },
+  "knowunitygmbh": {
+   "ats": "ashby",
+   "board": "knowunity",
+   "company": "Knowunity GmbH"
+  },
   "kraken": {
    "ats": "ashby",
    "board": "krakentech",
@@ -533,6 +553,11 @@
    "ats": "ashby",
    "board": "kuro",
    "company": "Kuro Technology"
+  },
+  "lemonmarkets": {
+   "ats": "ashby",
+   "board": "lemon-markets",
+   "company": "Lemon Markets"
   },
   "liltproduction": {
    "ats": "ashby",
@@ -607,6 +632,11 @@
    "board": "microagi",
    "company": "Microagi"
   },
+  "mindpeak": {
+   "ats": "ashby",
+   "board": "mindpeak",
+   "company": "Mindpeak"
+  },
   "mlabs": {
    "ats": "workable",
    "board": "mlabs",
@@ -661,6 +691,11 @@
    "ats": "ashby",
    "board": "orbem",
    "company": "Orbem"
+  },
+  "parallel": {
+   "ats": "ashby",
+   "board": "beparallel",
+   "company": "Parallel"
   },
   "parity": {
    "ats": "ashby",
@@ -1172,8 +1207,10 @@
   "kittl": "2026-10-27",
   "kolibrigames": "2026-10-27",
   "konfettigmbh": "2026-10-27",
+  "l1vegmbh": "2026-10-30",
   "limatica": "2026-10-29",
   "livestorm": "2026-10-27",
+  "lleverage": "2026-10-30",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
   "luscii": "2026-10-29",
@@ -1222,12 +1259,14 @@
   "prefirogmbh": "2026-10-27",
   "prolific": "2026-10-28",
   "promethionindustries": "2026-10-28",
+  "pt1": "2026-10-30",
   "pulseadvertisinggmbh": "2026-10-29",
   "pultgmbh": "2026-10-27",
   "pvcase": "2026-10-29",
   "qadogmbh": "2026-10-27",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
+  "relex": "2026-10-30",
   "remotewoman": "2026-10-28",
   "replug": "2026-10-27",
   "retoriogmbh": "2026-10-27",
@@ -1236,6 +1275,7 @@
   "roboservicegmbh": "2026-10-27",
   "roger": "2026-10-28",
   "rubygmbh": "2026-10-27",
+  "samsara": "2026-10-30",
   "scout24": "2026-10-27",
   "shopfully": "2026-10-30",
   "sidessimplydeliverygmbh": "2026-10-27",
