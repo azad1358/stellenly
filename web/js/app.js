@@ -529,7 +529,7 @@
     const sal = salaryText(j);
     const skills = skillsOf(j).slice(0, 4).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
     return `
-    <li class="job${seen.has(j.id) ? " seen" : ""}" data-id="${esc(j.id)}">
+    <li class="job${seen.has(j.id) ? " seen" : ""}${j.report_count > 0 ? " reported" : ""}" data-id="${esc(j.id)}">
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
