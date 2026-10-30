@@ -462,6 +462,11 @@
 "lat": 52.06,
 "lon": -0.3475
 },
+"*|kaiseraugst": {
+"cc": "ch",
+"lat": 47.54,
+"lon": 7.723
+},
 "*|keynsham, bristol, england": {
 "cc": "gb",
 "lat": 51.4138,
@@ -471,6 +476,11 @@
 "cc": "de",
 "lat": 48.2979,
 "lon": 10.9895
+},
+"*|königs wusterhausen": {
+"cc": "de",
+"lat": 52.2995,
+"lon": 13.6244
 },
 "*|lausanne": {
 "cc": "ch",
@@ -798,6 +808,11 @@
 "cc": "fr",
 "lat": 48.8535,
 "lon": 2.3484
+},
+"*|penzberg": {
+"cc": "de",
+"lat": 47.7519,
+"lon": 11.3763
 },
 "*|plymouth": {
 "cc": "gb",
@@ -1460,6 +1475,11 @@
 "lat": 48.5028,
 "lon": 9.1138
 },
+"de|königs wusterhausen": {
+"cc": "de",
+"lat": 52.2995,
+"lon": 13.6244
+},
 "de|leipzig": {
 "cc": "de",
 "lat": 51.3406,
@@ -1535,6 +1555,11 @@
 "cc": "de",
 "lat": 48.1419,
 "lon": 11.7874
+},
+"de|penzberg": {
+"cc": "de",
+"lat": 47.7519,
+"lon": 11.3763
 },
 "de|potsdam": {
 "cc": "de",

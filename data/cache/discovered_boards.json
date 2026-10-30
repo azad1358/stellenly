@@ -65,6 +65,11 @@
    "board": "andercore",
    "company": "Andercore"
   },
+  "angeheuertgmbh": {
+   "ats": "recruitee",
+   "board": "deintraumjobwartet",
+   "company": "ANGEHEUERT GmbH"
+  },
   "anyvan": {
    "ats": "ashby",
    "board": "anyvan",
@@ -298,6 +303,11 @@
    "region": "eu",
    "company": "Efficioconsulting"
   },
+  "eggai": {
+   "ats": "ashby",
+   "board": "eggai",
+   "company": "Eggai"
+  },
   "eleqtrongmbh": {
    "ats": "recruitee",
    "board": "eleqtron",
@@ -342,6 +352,11 @@
    "ats": "ashby",
    "board": "everai",
    "company": "EverAI"
+  },
+  "everdropgmbh": {
+   "ats": "recruitee",
+   "board": "everdrop",
+   "company": "everdrop GmbH"
   },
   "eyesecurity": {
    "ats": "ashby",
@@ -473,6 +488,11 @@
    "ats": "lever",
    "board": "jobgether",
    "company": "Jobgether"
+  },
+  "jupus": {
+   "ats": "ashby",
+   "board": "jupus",
+   "company": "Jupus"
   },
   "justdice": {
    "ats": "ashby",
@@ -860,6 +880,11 @@
    "board": "spaitial",
    "company": "Spaitial"
   },
+  "springhealth": {
+   "ats": "ashby",
+   "board": "deaa6ad2-d184-436b-b69e-17f761da1d94",
+   "company": "Spring Health"
+  },
   "stealthrocketrystartup": {
    "ats": "ashby",
    "board": "StealthRocketryStartup",
@@ -1032,6 +1057,17 @@
    "board": "workmotion",
    "company": "Workmotion"
   },
+  "yalwagmbh": {
+   "ats": "recruitee",
+   "board": "yalwa",
+   "region": "https://careers.yalwa.info",
+   "company": "Yalwa GmbH"
+  },
+  "zealnetwork": {
+   "ats": "ashby",
+   "board": "zeal-network",
+   "company": "Zeal Network"
+  },
   "zip": {
    "ats": "ashby",
    "board": "zip",
@@ -1054,6 +1090,7 @@
   "anoritech": "2026-10-27",
   "anywherenow": "2026-10-27",
   "appinio": "2026-10-27",
+  "augleticsgmbh": "2026-10-30",
   "auterion": "2026-10-27",
   "auxiliusai": "2026-10-30",
   "baringa": "2026-10-29",
@@ -1163,6 +1200,7 @@
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
   "nomios": "2026-10-27",
+  "nscglobal": "2026-10-30",
   "nviso": "2026-10-27",
   "okta": "2026-10-28",
   "omicsempowergmbh": "2026-10-27",
@@ -1211,6 +1249,7 @@
   "spotmyenergygmbh": "2026-10-27",
   "spreadgmbh": "2026-10-27",
   "stablenergy": "2026-10-27",
+  "stackginigmbh": "2026-10-30",
   "staffbase": "2026-10-27",
   "startstepsdigitaleducationgmbh": "2026-10-29",
   "statista": "2026-10-27",
@@ -1222,12 +1261,14 @@
   "talk360": "2026-10-27",
   "tanganygmbh": "2026-10-27",
   "tanium": "2026-10-30",
+  "tarebase": "2026-10-30",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",
   "tetheroperationslimited": "2026-10-27",
   "theconfigteam": "2026-10-28",
   "thoughtworks": "2026-10-27",
+  "tiens": "2026-10-30",
   "traciumgmbh": "2026-10-27",
   "tulipinterfaces": "2026-10-30",
   "unframe": "2026-10-27",
@@ -1250,6 +1291,8 @@
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",
   "worldwideplacementlimited": "2026-10-29",
+  "wundermanthompson": "2026-10-30",
+  "wundermobility": "2026-10-30",
   "xtpgmbh": "2026-10-27",
   "zattoo": "2026-10-27",
   "zekjugmbh": "2026-10-27"
