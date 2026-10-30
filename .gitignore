@@ -21,6 +21,7 @@ web/_*.html
 
 # Telegram bot state (kept in the Actions cache)
 build/.telegram_state.json
+build/.discord_state.json
 # Job pages + IndexNow key are generated at deploy time (build/job_pages.py)
 web/job/
 web/job-sitemap.xml
