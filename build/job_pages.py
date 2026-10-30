@@ -121,6 +121,8 @@ def job_posting(j: dict, desc_html: str, co: dict) -> dict:
 
 def job_html(j: dict, co: dict, by_id: dict) -> str:
     cls, label = GERMAN_LABEL.get(j["german_level"], GERMAN_LABEL["not_mentioned"])
+    if j.get("source") == "amazon" and j["german_level"] == "not_mentioned":  # title only: never read the posting
+        label = "German: see posting"
     badges = [f'<span class="badge {cls}">{label}</span>']
     if j.get("salary_min"):
         hi = j.get("salary_max")
@@ -147,8 +149,13 @@ def job_html(j: dict, co: dict, by_id: dict) -> str:
              if sc and co.get("u") else "")
     place = j.get("city") or j.get("location") or "Germany"
     posted = parse_ts(j.get("posted_at") or j.get("first_seen_at")).date()
-    desc = description_html(j.get("description") or "")
+    title_only = j.get("source") == "amazon"  # only title and link (ingest/sources.py amazon())
+    desc = ("<p>ℹ️ We can't show more information for this job right now. The full posting is on Amazon's site.</p>"
+            f'<p><a class="btn" href="{e(j["url"])}" target="_blank" rel="noopener nofollow">Read the full posting on amazon.jobs ↗</a></p>'
+            if title_only else description_html(j.get("description") or ""))
+    # Google's job search needs the full description: a title-only page stays out of the index.
     ld = json.dumps(job_posting(j, desc, co), ensure_ascii=False).replace("</", "<\\/")
+    head = '<meta name="robots" content="noindex">' if title_only else f'<script type="application/ld+json">{ld}</script>'
     body = f"""<nav class="crumbs"><a href="../index.html">Jobs</a> › {company}</nav>
 <article class="job-page">
   <header class="job-page-head">
@@ -169,7 +176,7 @@ def job_html(j: dict, co: dict, by_id: dict) -> str:
     desc_meta = (f"{j['company']} is hiring in {place}. {label}"
                  + (f", {euro(j['salary_min'])}+ a year" if j.get("salary_min") else "") + ". Apply in English.")
     return page(f"{j['title']} at {j['company']}", desc_meta, body, f"job/{j['id']}.html", 1,
-                extra_head=f'<script type="application/ld+json">{ld}</script>', main_class="content-page")
+                extra_head=head, main_class="content-page")
 
 
 def indexnow(urls: list[str]) -> None:
@@ -189,7 +196,8 @@ def main() -> None:
     jobs = load_jobs()
     if args.indexnow:
         recent = NOW - dt.timedelta(days=2)
-        new = [f"{SITE_URL}/job/{j['id']}.html" for j in jobs if parse_ts(j.get("first_seen_at")) >= recent]
+        new = [f"{SITE_URL}/job/{j['id']}.html" for j in jobs
+               if parse_ts(j.get("first_seen_at")) >= recent and j.get("source") != "amazon"]  # title-only pages are noindex
         try:
             indexnow([f"{SITE_URL}/", f"{SITE_URL}/job-sitemap.xml"] + new)
         except requests.RequestException as err:  # never fail the deploy over a ping
@@ -206,7 +214,7 @@ def main() -> None:
     (WEB / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
     urls = "".join(f"<url><loc>{SITE_URL}/job/{j['id']}.html</loc>"
                    f"<lastmod>{parse_ts(j.get('first_seen_at') or j.get('posted_at')).date().isoformat()}</lastmod></url>"
-                   for j in jobs)
+                   for j in jobs if j.get("source") != "amazon")  # title-only pages are noindex
     (WEB / "job-sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n'
                                          f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n',
                                          encoding="utf-8")

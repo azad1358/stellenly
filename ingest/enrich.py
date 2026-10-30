@@ -534,7 +534,8 @@ def enrich(raw: dict) -> dict | None:
         return None
 
     text = strip_boilerplate(html_to_text(raw.get("description_html")))
-    if detect_language(f"{title}\n{text}") != "en":
+    title_only = raw.get("title_only")  # only title and link (Amazon): the source already dropped German titles
+    if not title_only and detect_language(f"{title}\n{text}") != "en":
         return None
 
     city = normalize_city(raw.get("location"))
@@ -550,7 +551,8 @@ def enrich(raw: dict) -> dict | None:
         "city": city,
         "description": text,
         "job_types": [j for j in (raw.get("job_types") or []) if j][:10],
-        "german_level": german_level(text),
+        "german_level": german_level(text) if not title_only else
+                        ("required" if re.search(r"\bgerman\b", title, re.I) else "not_mentioned"),
         "visa_sponsorship": visa_sponsorship(text),
         "relocation": relocation(text),
         "years_experience": years,

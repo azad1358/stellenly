@@ -126,6 +126,13 @@ def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]
             take("company boards", raw)
     except Exception as e:
         print(f"! source 'company boards' failed: {e}")
+    # Amazon: titles and links only, once a day (the first run after midnight UTC), see sources.amazon().
+    if dt.datetime.now(dt.timezone.utc).hour < 6 or os.environ.get("AMAZON") == "1":
+        try:
+            for raw in sources.amazon():
+                take("amazon", raw)
+        except Exception as e:
+            print(f"! source 'amazon' failed: {e}")
 
     # Coordinates for the companies map (build_site.py reads them from the cache).
     for city in sorted({r["city"] for r in rows.values() if r.get("city") and r["city"] != "Remote"}):

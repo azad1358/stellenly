@@ -76,7 +76,7 @@ def rpc(name: str, body: dict) -> str:
 
 
 COLS = ("id,title,company,city,seniority,salary_min,salary_max,years_experience,german_level,"
-        "visa_sponsorship,relocation,is_agency,repost_count,first_seen_at,db_ai:insights->ai,db_skills:insights->skills")
+        "visa_sponsorship,relocation,is_agency,repost_count,first_seen_at,source,db_ai:insights->ai,db_skills:insights->skills")
 
 
 def fetch_active() -> list[dict]:
@@ -213,7 +213,8 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
     if not os.environ.get("LLM_API_KEY"):
         return 0
     store = llm_facts.load()
-    todo = [j for j in jobs if "ai" not in meta.get(j["id"], {}) or j["id"] not in store]
+    todo = [j for j in jobs if ("ai" not in meta.get(j["id"], {}) or j["id"] not in store)
+            and j.get("source") != "amazon"]  # title only: no posting text to read
     # The free quota covers a few hundred jobs a day; the rest waits for the next run, in this order:
     # newest day first (what visitors see most), then jobs visitors opened in the last 14 days, then the most
     # uncertain (German "not mentioned" by the rules, or a salary the rules found).

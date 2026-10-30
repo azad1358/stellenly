@@ -4,7 +4,7 @@
     is_remote, tags, job_types, posted_at (ISO 8601 string)
 
 Add a new source by writing one generator function and registering it in
-ingest.py. Only free, public APIs are used — no scraping of sites that forbid it.
+ingest.py. Free, public APIs; the one exception is amazon() (titles and links only, see there).
 """
 from __future__ import annotations
 
@@ -275,6 +275,52 @@ def smartrecruiters(board: str, company: str, region: str | None = None, max_job
             "posted_at": d.get("releasedDate"),
         }
         time.sleep(0.2)
+
+
+# ---------------------------------------------------------------------------
+# Amazon (amazon.jobs): title, city, date and link only. Its robots.txt allows the public job search, but
+# Amazon's Conditions of Use exclude automated data gathering, so we take the least we can (no descriptions),
+# once a day, slowly, and every click goes to Amazon's own posting (decided by the site owner).
+# ---------------------------------------------------------------------------
+_GERMAN_TITLE = re.compile(r"\((m|w|f|d)/|:in\b|/in\b|[äöüßÄÖÜ]|\b(im|für|und|der|die|das|mit|bei)\b|praktikum|duales|studium|"
+                           r"ausbildung|mitarbeiter|leiter|fachkraft|elektroniker|mechatroniker|techniker|schicht|lager|"
+                           r"spezialist|rezeption|kaufm|werkstudent", re.I)
+
+
+def amazon(max_jobs: int = 1000, pause: float = 3.0) -> Iterator[dict]:
+    api, offset, total = "https://www.amazon.jobs/en/search.json", 0, None
+    while total is None or offset < min(total, max_jobs):
+        page = _get(api, params={"normalized_country_code[]": "DEU", "result_limit": 100, "offset": offset, "sort": "recent"}).json()
+        total = page.get("hits") or 0
+        for j in page.get("jobs") or []:
+            title = (j.get("title") or "").strip()
+            if _GERMAN_TITLE.search(title):  # German posting: we can't read the text, the title tells
+                continue
+            yield {
+                "source": "amazon",
+                "source_id": j.get("id_icims") or j.get("id"),
+                "url": f"https://www.amazon.jobs{j.get('job_path')}",
+                "title": title,
+                "company": "Amazon",
+                "location": j.get("normalized_location") or j.get("city"),
+                "description_html": "",  # title only, see above
+                "title_only": True,
+                "is_remote": False,
+                "tags": [t for t in (j.get("job_category"),) if t],
+                "job_types": [j["job_schedule_type"].replace("-", " ").title()] if j.get("job_schedule_type") else [],
+                "posted_at": _amazon_date(j.get("posted_date")),
+            }
+        offset += 100
+        time.sleep(pause)
+    if total <= max_jobs:
+        COMPLETE.add("amazon")  # every page was read: Amazon jobs we didn't see are gone
+
+
+def _amazon_date(s: str | None) -> str | None:
+    try:
+        return datetime.strptime(s or "", "%B %d, %Y").replace(tzinfo=timezone.utc).isoformat()
+    except ValueError:
+        return None
 
 
 ATS = {"greenhouse": greenhouse, "lever": lever, "ashby": ashby, "personio": personio,

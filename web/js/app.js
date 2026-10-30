@@ -290,6 +290,9 @@
     not_mentioned: ["", "German: not mentioned"],
     required: ["bad", "German required"],
   };
+  // A title-only job (Amazon) was never read, so "not mentioned" would claim more than we know.
+  const germanBadge = (j) => (titleOnly(j) && j.german_level === "not_mentioned" ? ["", "German: see posting"]
+    : GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned);
   const REMOTE_LABEL = { remote_de: "Remote (DE)", remote_eu: "Remote (EU)", hybrid: "Hybrid", onsite: "On-site", unknown: "" };
   const SENIORITY_LABEL = { intern: "Intern / student", junior: "Junior", mid: "Mid-level", senior: "Senior", lead: "Lead", unspecified: "Not specified" };
 
@@ -321,7 +324,7 @@
   function badges(j) {
     const out = [];
     if (isNew(j)) out.push(`<span class="badge new">NEW</span>`);
-    const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
+    const [gc, gl] = germanBadge(j);
     out.push(`<span class="badge ${gc}">${gl}</span>`);
     if ((j.popularity || 0) >= 6) out.unshift(`<span class="badge popular" title="Many people opened or applied to this job in the last 14 days">Popular</span>`);
     const bc = blueCard(j);
@@ -394,7 +397,7 @@
   function compareCardHtml(j) {
     const p = j.insights && j.insights.peers;
     if (!p || !p.n) return "";
-    const [gc, gl] = GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned;
+    const [gc, gl] = germanBadge(j);
     // Each row: what THIS job says first, then how common it is among similar jobs.
     const rows = [
       { label: "German", mine: gl.replace(/^German:\s*/, "").replace(/^./, (c) => c.toUpperCase()),
@@ -442,7 +445,7 @@
   function factsHtml(j) {
     const facts = [
       ["Salary", salaryText(j) ? `${salaryText(j)} / year` : "Not listed"],
-      ["German", (GERMAN_BADGE[j.german_level] || GERMAN_BADGE.not_mentioned)[1].replace("🇬🇧 ", "")],
+      ["German", germanBadge(j)[1].replace("🇬🇧 ", "")],
       ["Work setup", REMOTE_LABEL[j.remote_type] || "Not specified"],
       ["Level", SENIORITY_LABEL[j.seniority] || "Not specified"],
       ["Experience asked", j.years_experience ? `${j.years_experience}+ years` : "Not specified"],
@@ -525,6 +528,9 @@
 
   const jobUrl = (id) => { const p = new URLSearchParams(location.search); p.set("job", id); return `?${p}`; };
   const skillsOf = (j) => (j.insights && j.insights.skills) || [];
+  // Amazon's jobs: only title, city and link (ingest/sources.py amazon()); the details live on amazon.jobs.
+  const titleOnly = (j) => /^https:\/\/www\.amazon\.jobs\//.test(j.url || "");
+  const TITLE_ONLY_NOTE = "We can't show more information for this job right now. The full posting is on Amazon's site.";
 
   function jobHtml(j) {
     const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
@@ -538,6 +544,7 @@
         <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
         <div class="badges">${badges(j)}</div>
         ${skills ? `<div class="skills-row">${skills}</div>` : ""}
+        ${titleOnly(j) ? `<p class="title-only-note">ℹ️ ${TITLE_ONLY_NOTE}</p>` : ""}
       </div>
       <div class="job-side">
         ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : `<div class="job-salary none">Salary not listed</div>`}
@@ -676,18 +683,20 @@
       <div class="jd-body">
         <div class="jd-main">
           <div class="badges">${badges(j)}</div>
-          ${aiHtml(j)}
+          ${titleOnly(j) ? "" : aiHtml(j)}
           ${jobCheckHtml(j)}
           <section class="jd-card jd-desc">
             <h3>Job description</h3>
-            ${loading ? `<p class="muted">Loading the full description…</p>` : (j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`)}
+            ${titleOnly(j) ? `<p class="title-only-note">ℹ️ ${TITLE_ONLY_NOTE}</p>
+              <p><a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Read the full posting on amazon.jobs ↗</a></p>`
+              : loading ? `<p class="muted">Loading the full description…</p>` : (j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`)}
             <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
           </section>
         </div>
         <aside class="jd-side">
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
           ${scoreCardHtml(j)}
-          ${j.insights || loading ? "" : `<section class="jd-card pending-card"><h3>Analysis coming soon</h3>
+          ${j.insights || loading || titleOnly(j) ? "" : `<section class="jd-card pending-card"><h3>Analysis coming soon</h3>
             <p class="small muted">This job is new. Skills, salary benchmark and similar jobs are added automatically
             within a few hours.</p></section>`}
           ${salaryCardHtml(j)}
