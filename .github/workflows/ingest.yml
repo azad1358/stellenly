@@ -17,6 +17,10 @@ on:
       deactivate_max_share:
         description: "Max share of a source's jobs that may be hidden as 'no longer listed' in one run (0.6 = 60%)"
         default: "0.6"
+      amazon:
+        description: "Also fetch Amazon's jobs now (normally only the first run after midnight UTC)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write            # commit the geocoding cache
@@ -43,6 +47,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DEACTIVATE_MAX_SHARE: ${{ inputs.deactivate_max_share || '0.6' }}
+          AMAZON: ${{ inputs.amazon && '1' || '' }}             # "1" = fetch Amazon in this run too
           REPORT_THRESHOLD: ${{ vars.REPORT_THRESHOLD || '3' }}   # repository variable: visitor reports that hide a job
         run: python ingest/ingest.py
       - name: Commit geocoding cache and discovered boards
