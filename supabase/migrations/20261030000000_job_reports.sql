@@ -1,14 +1,18 @@
 -- =====================================================================
 -- Crowd reports: visitors can flag a job whose posting is gone from the
 -- company's careers page while its API still lists it. Anonymous — only
--- a counter per job, no visitor data. The card shows "⚑ N reported
--- closed"; after each import, ingest.py hides jobs with at least
--- REPORT_THRESHOLD reports (deactivate_reported), and ingest_jobs no
--- longer brings such a job back when its API keeps listing it.
+-- counters per job, no visitor data. Other visitors can answer "still
+-- open" (confirm_open), which cancels a report: net = reports − open.
+-- The card is flagged while net > 0; after each import, ingest.py hides
+-- jobs with net >= REPORT_THRESHOLD (deactivate_reported), and
+-- ingest_jobs no longer brings such a job back when its API keeps
+-- listing it.
 -- =====================================================================
 alter table public.jobs
   add column if not exists report_count       integer not null default 0,
   add column if not exists last_reported_at   timestamptz,
+  add column if not exists open_count         integer not null default 0,  -- "still open" answers
+  add column if not exists last_confirmed_at  timestamptz,
   add column if not exists reported_closed_at timestamptz;  -- set when hidden because of reports
 
 -- Called by the website (anon key). One call = +1, at most one counted report per job
@@ -31,7 +35,26 @@ begin
 end;
 $$;
 
--- Called by the ingester after a run: hide the jobs that at least p_threshold visitors reported closed.
+-- Called by the website: a visitor says the job is still open. Same limits as report_job.
+create or replace function public.confirm_open(p_id text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  n integer;
+begin
+  update public.jobs
+     set open_count = open_count + 1, last_confirmed_at = now()
+   where id = p_id and is_active
+     and (last_confirmed_at is null or last_confirmed_at < now() - interval '10 minutes')
+  returning open_count into n;
+  return n;
+end;
+$$;
+
+-- Called by the ingester after a run: hide the jobs whose reports outnumber the "still open" answers by p_threshold.
 create or replace function public.deactivate_reported(p_threshold integer)
 returns integer
 language plpgsql
@@ -43,15 +66,17 @@ declare
 begin
   update public.jobs
      set is_active = false, reported_closed_at = now(), last_checked_at = now()
-   where is_active and report_count >= greatest(p_threshold, 1);
+   where is_active and report_count - open_count >= greatest(p_threshold, 1);
   get diagnostics n = row_count;
   return n;
 end;
 $$;
 
 revoke all on function public.report_job(text) from public;
+revoke all on function public.confirm_open(text) from public;
 revoke all on function public.deactivate_reported(integer) from public, anon, authenticated;
 grant execute on function public.report_job(text) to anon, authenticated;
+grant execute on function public.confirm_open(text) to anon, authenticated;
 grant execute on function public.deactivate_reported(integer) to service_role;
 
 -- ingest_jobs: as before, but a job hidden because of reports stays hidden even though its API still lists it.
@@ -133,7 +158,7 @@ begin
 end;
 $$;
 
--- search_jobs: each item also returns its report_count (shown on the card).
+-- search_jobs: each item also returns report_count and open_count (the card's flag).
 create or replace function public.search_jobs(
   p_q               text    default null,
   p_tags            text[]  default null,  -- job must have ALL of these tags
@@ -241,6 +266,7 @@ as $$
         'views', views,
         'apply_clicks', apply_clicks,
         'report_count', report_count,
+        'open_count', open_count,
         'match', case when strong then 'title' else 'text' end
       ))
       from page), '[]'::jsonb)
