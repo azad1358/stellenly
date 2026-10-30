@@ -160,6 +160,10 @@ def main() -> None:
         rpc("mark_checked", {"alive_ids": [], "dead_ids": foreign[i:i + 1000]})
     expired = rpc("expire_jobs", {"max_age_days": 45}).text
     print(f"Upserted {written} rows, expired {expired} old jobs")
+    # Jobs that visitors reported as gone from the company's site (report_job on the website).
+    threshold = int(os.environ.get("REPORT_THRESHOLD") or 3)
+    reported = rpc("deactivate_reported", {"p_threshold": threshold}).text
+    print(f"Hid {reported} jobs reported closed by {threshold}+ visitors")
 
     # Hide jobs that are gone from their source — only for sources read completely in this run.
     # Arbeitnow and the company boards are checked separately, each with the safety limit.

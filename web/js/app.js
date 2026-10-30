@@ -18,6 +18,9 @@
   };
   let saved = store.get("saved", {});        // id -> {job, at}
   let applied = store.get("applied", {});    // id -> {job, at}
+  const reports = store.get("reports", {});  // id -> "gone" | "open" (this browser's answer to "Was this job still open?")
+  const REPORT_LABEL = { gone: "✓ Reported closed", open: "✓ You said it's open" };
+  const flagged = (j) => (j.report_count || 0) > (j.open_count || 0);  // more "closed" reports than "still open" answers
   let seenList = store.get("seen", []);
   const seen = new Set(seenList);
   let hiddenCompanies = store.get("hiddenCompanies", []);
@@ -327,6 +330,7 @@
     if (j.visa_sponsorship) out.push(`<span class="badge ok">Visa sponsorship</span>`);
     if (j.relocation) out.push(`<span class="badge ok">Relocation support</span>`);
     if (j.is_agency) out.push(`<span class="badge warn" title="Posted by a recruiting agency, not the employer">Recruiting agency</span>`);
+    if (flagged(j)) out.unshift(`<span class="badge bad" title="Visitors reported that this job is no longer open on the company's site. Other visitors can say it's still open; when reports outnumber them enough, we hide the job.">🚩 ${j.report_count} reported closed${j.open_count ? ` · ${j.open_count} say${j.open_count === 1 ? "s" : ""} open` : ""}</span>`);
     if (j.repost_count > 0) out.push(`<span class="badge warn" title="This job disappeared and came back — it may be hard to fill or an evergreen posting">Reposted ×${j.repost_count}</span>`);
     (j.job_types || []).slice(0, 2).forEach((t) => out.push(`<span class="badge">${glossaryHtml(t)}</span>`));
     const titleTerm = Object.keys(GLOSSARY).find((g) => j.title.toLowerCase().includes(g) && g !== "m/w/d");
@@ -527,7 +531,7 @@
     const sal = salaryText(j);
     const skills = skillsOf(j).slice(0, 4).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
     return `
-    <li class="job${seen.has(j.id) ? " seen" : ""}" data-id="${esc(j.id)}">
+    <li class="job${seen.has(j.id) ? " seen" : ""}${flagged(j) ? " reported" : ""}" data-id="${esc(j.id)}">
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
@@ -550,7 +554,7 @@
   // ---------------------------------------------------------------- job popup (?job=<id>)
   const DETAIL_COLS = "id,url,title,company,location,city,remote_type,description,tags,job_types,german_level," +
     "visa_sponsorship,relocation,salary_min,salary_max,years_experience,seniority,is_agency,posted_at,first_seen_at," +
-    "repost_count,insights";
+    "repost_count,report_count,open_count,insights";
 
   async function restGet(path) {
     const res = await fetch(`${C.SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${path}`,
@@ -662,6 +666,12 @@
         <button type="button" class="btn" data-jd="save" aria-pressed="${isSaved}">${isSaved ? "★ Saved" : "☆ Save"}</button>
         <button type="button" class="btn" data-jd="applied" aria-pressed="${isApplied}">${isApplied ? "✓ Applied" : "Mark applied"}</button>
         <button type="button" class="btn ghost" data-jd="copy" title="Copy a link to this job">🔗 Copy link</button>
+        <button type="button" class="btn ghost" data-jd="report" title="The job is gone from the company's site"${REPORT_LABEL[reports[j.id]] ? ` disabled>${REPORT_LABEL[reports[j.id]]}` : ">🚩 Job closed?"}</button>
+      </div>
+      <div class="jd-ask"${flagged(j) && !reports[j.id] ? "" : " hidden"}>
+        <span>${flagged(j) ? `🚩 <b>${j.report_count} ${j.report_count === 1 ? "person" : "people"} reported this job as closed.</b> Is it still open on the company's site?` : "Was this job still open on the company's site?"}</span>
+        <button type="button" class="btn small" data-jd="still-open">Yes, it's open</button>
+        <button type="button" class="btn small" data-jd="gone">No, it's gone</button>
       </div>
       <div class="jd-body">
         <div class="jd-main">
@@ -740,8 +750,15 @@
     const j = current.get(openId);
     const act = btn.dataset.jd;
     if (act !== "close") track(`popup-${act}`, j ? j.company : "");
-    if (act === "apply") countJobEvent(openId, "apply");
+    if (act === "apply") {
+      countJobEvent(openId, "apply");
+      const ask = $("#jd .jd-ask");
+      if (ask && !reports[openId]) ask.hidden = false;  // waiting under the buttons when the visitor comes back
+    }
     if (act === "close") closeJob();
+    else if (j && act === "report") {
+      if (confirm("Report this job as no longer open on the company's site?\n\nOnly a counter goes up. When enough people report it, we hide the job.")) answerJob(j.id, "gone");
+    } else if (j && (act === "gone" || act === "still-open")) answerJob(j.id, act === "gone" ? "gone" : "open");
     else if (act === "copy") {
       // The job's own page (built at deploy time) shares better: it has a proper title and preview.
       const link = j && !DEMO ? new URL(`job/${j.id}.html`, location.href).href : location.href;
@@ -755,6 +772,21 @@
         b.textContent = act === "save" ? (saved[j.id] ? "★ Saved" : "☆ Save") : (applied[j.id] ? "✓ Applied" : "Applied?");
       });
     }
+  }
+
+  // "Job closed" reports: anonymous, only the job id is sent, one answer per browser and job. "No, it's gone" counts
+  // a report (report_job), "Yes, it's open" cancels one (confirm_open). A job is flagged while reports outnumber the
+  // "open" answers, and hidden at the next import when they do by REPORT_THRESHOLD (ingest workflow). Clicking Apply
+  // shows "Was this job still open?" in the popup, so it is there when the visitor comes back; a flagged job asks
+  // right away.
+  function answerJob(id, answer) {
+    reports[id] = answer;
+    store.set("reports", reports);
+    const ask = $("#jd .jd-ask");
+    if (ask && !ask.hidden) ask.innerHTML = `<span>${answer === "gone" ? "Thanks, we counted your report. Enough reports hide the job." : "Thanks! Your answer helps others see that it's still open."}</span>`;
+    const btn = $('#jd [data-jd="report"]');
+    if (btn) { btn.disabled = true; btn.textContent = REPORT_LABEL[answer]; }
+    if (!DEMO) rpc(answer === "gone" ? "report_job" : "confirm_open", { p_id: id }).catch(() => {});
   }
 
   // Local preview only: config.js may point DEV_INSIGHTS_URL at an insights JSON produced by `insights.py --dry-run`.

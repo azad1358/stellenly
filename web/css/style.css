@@ -433,6 +433,8 @@ body { -webkit-font-smoothing: antialiased; }
 .job { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; padding: 18px 20px;
   border-radius: var(--radius); cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
 .job:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); box-shadow: var(--shadow); transform: translateY(-1px); }
+/* Reported closed by visitors: very light red, so it stands out from the other cards */
+.job.reported { background: color-mix(in srgb, var(--bad-bg) 55%, var(--surface)); border-color: color-mix(in srgb, var(--bad) 25%, var(--border)); }
 .job-title { font-size: 1.06rem; letter-spacing: -0.01em; }
 .job-title a { color: var(--text); text-decoration: none; font-weight: 700; }
 .job-title a:hover { color: var(--accent); }
@@ -1015,3 +1017,8 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   .skc-report { border: 0; padding: 0; margin: 0; }
   body { background: #fff; color: #000; }
 }
+/* "Was this job still open?" — shown in the job popup after Apply */
+.jd-ask { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 28px 4px; padding: 10px 14px; border-radius: 10px;
+  background: var(--info-bg); color: var(--text); font-size: 0.92rem; }
+.jd-ask[hidden] { display: none; }
+@media (max-width: 640px) { .jd-ask { margin: 0 16px 4px; } }
