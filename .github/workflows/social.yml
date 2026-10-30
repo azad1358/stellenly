@@ -1,0 +1,43 @@
+name: Social posts
+
+# WHAT: posts to the Stellenly Instagram account (build/instagram_post.py). For now only by hand: "check" tests the
+#   token, "post" publishes one image (a JPEG at a public URL, e.g. https://www.stellenly.com/social/welcome.jpg)
+#   with a caption. Needs the IG_USER_ID and IG_ACCESS_TOKEN secrets.
+#
+# WHEN (no other workflow calls this one, and it calls none):
+#   - only the "Run workflow" button
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "check = test the token · post = publish the image below"
+        type: choice
+        options: [check, post]
+        default: check
+      image_url:
+        description: "Public JPEG URL (for post)"
+        default: "https://www.stellenly.com/social/welcome.jpg"
+      caption:
+        description: "Caption (for post)"
+        default: ""
+
+jobs:
+  instagram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Instagram
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          ACTION: ${{ inputs.action }}
+          IMAGE_URL: ${{ inputs.image_url }}
+          CAPTION: ${{ inputs.caption }}
+        run: |
+          if [ "$ACTION" = post ]; then python build/instagram_post.py post "$IMAGE_URL" "$CAPTION"
+          else python build/instagram_post.py check; fi
