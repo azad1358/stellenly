@@ -622,6 +622,65 @@ def place_tiles_html(items: list[tuple[int, str | None, str, str | None]], up: s
     return f'<ul class="place-tiles">{"".join(tiles)}</ul>'
 
 
+def faq_html(items: list[tuple[str, str]], title: str = "Frequently asked questions") -> str:
+    """[(question, answer HTML)] as foldable questions, plus schema.org FAQPage data so Google can show the answers."""
+    plain = lambda h: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", h))).strip()  # noqa: E731
+    ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in items]}
+    qa = "".join(f"<details><summary>{e(q)}</summary><div class=\"faq-a\">{a}</div></details>" for q, a in items)
+    return (f'<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">{e(title)}</h2>{qa}</section>'
+            f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")}</script>')
+
+
+def required_pct(jobs: list[dict]) -> int:
+    """Share of jobs that require German ("not mentioned" doesn't count: most such teams work in English)."""
+    return round(100 * sum(j["german_level"] == "required" for j in jobs) / max(len(jobs), 1))
+
+
+def write_home_faq(jobs: list[dict], stats: dict, cities: list[tuple[str, int, str]]) -> None:
+    """The FAQ on the hand-written home page, with today's numbers, between <!-- faq:start --> and <!-- faq:end -->."""
+    req, visa, n = required_pct(jobs), stats["visa"], len(jobs)
+    plus = round(100 * (stats["german"].get("not_required", 0) + stats["german"].get("nice_to_have", 0)) / max(n, 1))
+    bc = {k: int(v) if v.isdigit() else v for k, v in re.findall(
+        r"(\w+): (\d+)", re.search(r"BLUE_CARD: \{([^}]*)\}", (WEB / "js" / "config.js").read_text(encoding="utf-8")).group(1))}
+    city_links = ", ".join(f'<a href="{e(u)}">{e(c)}</a> ({k:,})' for c, k, u in cities[:5])
+    items = [
+        ("Can I get a job in Germany without speaking German?",
+         f"Yes. Only {req}% of the {n:,} English-speaking jobs on Stellenly require German; {plus}% say it's not needed "
+         f"or just a plus, and most of the rest don't mention it, which usually means the team works in English. "
+         f'Tick <b>No German needed</b> above to see only those jobs.'),
+        ("How do you know whether a job needs German?",
+         "We read every posting and show its German level on the card: not required, nice to have, not mentioned or "
+         "required, with the exact sentence from the posting in the job details. We don't hide jobs that need German, so "
+         'you can decide yourself. <a href="how-it-works.html">How we read job postings</a>.'),
+        ("Which jobs offer visa sponsorship?",
+         f"Right now {visa:,} jobs mention visa sponsorship or work-permit support. Tick <b>Visa sponsorship</b> above. "
+         f"Most non-EU candidates need a work permit, usually the EU Blue Card."),
+        (f"How much do I need to earn for an EU Blue Card in {bc['year']}?",
+         f"At least {euro(bc['standard'])} gross a year, or {euro(bc['reduced'])} for IT and other shortage jobs, health "
+         f"care and recent graduates. Jobs whose listed salary reaches it are marked <b>Blue Card ✓</b>. "
+         f'<a href="blog/eu-blue-card-salary-{bc["year"]}.html">Read the Blue Card guide</a>.'),
+        ("Which German cities have the most English-speaking jobs?",
+         f'{city_links}. <a href="jobs/index.html">All states and cities</a>.'),
+        ("Is Stellenly free? Do I need an account?",
+         "It's free, and there is no sign-up: we store no personal data and set no cookies. Saved jobs stay in your "
+         "browser. You apply directly on the employer's site."),
+        ("Where do the jobs come from, and how fresh are they?",
+         "From company career pages and public job APIs, updated every 6 hours. Jobs that disappear from their source "
+         "are removed automatically, and visitors can report a closed job with 🚩."),
+        ("Can I get new jobs sent to me?",
+         'Yes, without an email address: follow our <a href="https://t.me/StellenlyJobs" rel="noopener">Telegram channel</a> '
+         'for new jobs every day, or join the community on <a href="https://discord.gg/wMqjvq6dw" rel="noopener">Discord</a>.'),
+    ]
+    home = WEB / "index.html"
+    text = home.read_text(encoding="utf-8")
+    start, end = "<!-- faq:start", "<!-- faq:end -->"
+    if start in text and end in text:
+        a = text.index("-->", text.index(start)) + 3
+        text = text[:a] + "\n  " + faq_html(items) + "\n  " + text[text.index(end):]
+        home.write_text(text, encoding="utf-8", newline="\n")
+
+
 def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     """jobs/state-*.html, jobs/city-*.html, jobs/tag-*.html and jobs/index.html, built from the site's own parts:
     KPI tiles, the job cards of the search page, place tiles with the coat of arms, and beside the list a map of
@@ -655,6 +714,20 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
         if s["median_salary"]:
             items.append((euro(s["median_salary"]), f"median listed salary ({s['salary_pct']}% list one)"))
         return '<div class="kpis loc-kpis">' + "".join(f"<div><b>{v}</b><span>{k}</span></div>" for v, k in items) + "</div>"
+
+    def place_faq(name: str, sel: list[dict], s: dict) -> str:
+        top = Counter(index.get(co_key(j["company"]), {}).get("n") or j["company"] for j in sel if not j.get("is_agency"))
+        req = required_pct(sel)
+        return faq_html([
+            (f"Do I need German for a job in {name}?",
+             f"Only {req}% of the {len(sel):,} English-speaking jobs in {e(name)} require German. Each job shows its German "
+             f"level, with the exact sentence from the posting."),
+            (f"Which companies hire English speakers in {name}?",
+             f"Right now the most open English-speaking jobs are at {e(', '.join(c for c, _ in top.most_common(5)))}."),
+            (f"Are there jobs with visa sponsorship in {name}?",
+             f"{s['visa']:,} of them mention visa sponsorship or work-permit support"
+             + (f", and the median listed salary is {euro(s['median_salary'])} a year." if s["median_salary"] else ".")),
+        ], f"English-speaking jobs in {name}: questions")
 
     def location(kind: str, val: str, sel: list[dict], state: str | None) -> str:
         name = STATES[val] if kind == "state" else val
@@ -690,6 +763,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
       {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities], "../", len(state_jobs.get(state, sel)))}</section>
   </aside>
 </div>
+{place_faq(name, sel, s)}
 <p class="muted small">Always apply on the original posting.</p>
 {JOB_POPUP}"""
         title = f"{s['active']:,} English-speaking jobs in {name}"
@@ -736,7 +810,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
   <section><h2>States</h2>{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
 </div>
 <h2>Cities</h2>{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}
-<h2>Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
+<h2 id="fields">Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
         main_class="content-page loc-page"), encoding="utf-8")
 
     # Home page "Browse by location" row (app.js): the biggest states, then the biggest other cities.
@@ -744,7 +818,11 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
            for st in states_sorted[:4]]
     top += [{"n": c, "k": len(by_city[c]), "u": f"jobs/{url('city', c)}", "i": coa("city", c)}
             for c in cities_sorted if c not in {t["n"] for t in top}][:6]
-    (WEB / "data" / "locations.json").write_text(json.dumps(top, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    levels = {"intern", "junior", "mid", "senior", "lead"}  # seniority tags aren't fields
+    fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in levels][:8]
+    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields}, ensure_ascii=False,
+                                                            separators=(",", ":")), encoding="utf-8")
+    write_home_faq(jobs, stats, [(c, len(by_city[c]), f"jobs/{url('city', c)}") for c in cities_sorted])
     return paths + ["jobs/index.html"]
 
 

@@ -104,6 +104,7 @@
       <label class="chip"><input type="checkbox" id="f-salary"> Salary listed</label>
       <label class="chip"><input type="checkbox" id="f-visa"> Visa sponsorship</label>
       <label class="chip"><input type="checkbox" id="f-remote"> Remote</label>
+      <label class="chip"><input type="checkbox" id="f-entry"> Entry level</label>
       <label class="chip"><input type="checkbox" id="f-direct"> Direct employers only</label>
     </div>
 
@@ -111,6 +112,11 @@
       <span class="loc-row-label">Browse by location</span>
       <span id="loc-chips"></span>
       <a class="loc-all" href="jobs/index.html">All states &amp; cities →</a>
+    </nav>
+    <nav class="loc-row" aria-label="Browse jobs by field">
+      <span class="loc-row-label">Popular fields</span>
+      <span id="field-chips"></span>
+      <a class="loc-all" href="jobs/index.html#fields">All fields →</a>
     </nav>
 
     <dl class="hero-stats" id="stats" aria-live="polite"></dl>
@@ -232,6 +238,31 @@
       </div>
     </section>
   </div>
+
+  <section class="home-info" aria-labelledby="why-h">
+    <div class="why">
+      <h2 id="why-h">Why Stellenly</h2>
+      <ul class="why-grid">
+        <li><span class="why-ic">🗣️</span><b>German level, with proof</b><span>We read every posting and show the exact sentence about German. We don't quietly hide jobs, so you decide.</span></li>
+        <li><span class="why-ic">💶</span><b>Salary &amp; Blue Card check</b><span>The listed salary on every job, and whether it reaches the EU Blue Card minimum.</span></li>
+        <li><span class="why-ic">🛂</span><b>Visa &amp; relocation</b><span>Jobs that offer visa sponsorship or relocation help are marked, straight from the posting.</span></li>
+        <li><span class="why-ic">🔒</span><b>No sign-up, no tracking</b><span>No account, no cookies, no CV upload. You apply directly on the employer's site.</span></li>
+      </ul>
+    </div>
+    <div class="how">
+      <h2>How it works</h2>
+      <ol class="how-steps">
+        <li><b>Search</b><span>By city, field, German level, salary or visa sponsorship.</span></li>
+        <li><b>Check</b><span>AI summary, the German quote, the company's Hiring Score, similar jobs.</span></li>
+        <li><b>Apply directly</b><span>On the employer's own site: no middleman, no account.</span></li>
+      </ol>
+      <a class="how-more" href="how-it-works.html">How we collect and check every job →</a>
+    </div>
+  </section>
+
+  <!-- faq:start (build/build_site.py write_home_faq fills this in with today's numbers) -->
+  <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><details><summary>Can I get a job in Germany without speaking German?</summary><div class="faq-a">Yes. Only 28% of the 4,600 English-speaking jobs on Stellenly require German; 14% say it's not needed or just a plus, and most of the rest don't mention it, which usually means the team works in English. Tick <b>No German needed</b> above to see only those jobs.</div></details><details><summary>How do you know whether a job needs German?</summary><div class="faq-a">We read every posting and show its German level on the card: not required, nice to have, not mentioned or required, with the exact sentence from the posting in the job details. We don't hide jobs that need German, so you can decide yourself. <a href="how-it-works.html">How we read job postings</a>.</div></details><details><summary>Which jobs offer visa sponsorship?</summary><div class="faq-a">Right now 274 jobs mention visa sponsorship or work-permit support. Tick <b>Visa sponsorship</b> above. Most non-EU candidates need a work permit, usually the EU Blue Card.</div></details><details><summary>How much do I need to earn for an EU Blue Card in 2026?</summary><div class="faq-a">At least €51k gross a year, or €46k for IT and other shortage jobs, health care and recent graduates. Jobs whose listed salary reaches it are marked <b>Blue Card ✓</b>. <a href="blog/eu-blue-card-salary-2026.html">Read the Blue Card guide</a>.</div></details><details><summary>Which German cities have the most English-speaking jobs?</summary><div class="faq-a"><a href="jobs/city-berlin.html">Berlin</a> (1,616), <a href="jobs/city-munich.html">Munich</a> (1,084), <a href="jobs/city-hamburg.html">Hamburg</a> (175), <a href="jobs/city-parsdorf.html">Parsdorf</a> (101), <a href="jobs/city-frankfurt.html">Frankfurt</a> (100). <a href="jobs/index.html">All states and cities</a>.</div></details><details><summary>Is Stellenly free? Do I need an account?</summary><div class="faq-a">It's free, and there is no sign-up: we store no personal data and set no cookies. Saved jobs stay in your browser. You apply directly on the employer's site.</div></details><details><summary>Where do the jobs come from, and how fresh are they?</summary><div class="faq-a">From company career pages and public job APIs, updated every 6 hours. Jobs that disappear from their source are removed automatically, and visitors can report a closed job with 🚩.</div></details><details><summary>Can I get new jobs sent to me?</summary><div class="faq-a">Yes, without an email address: follow our <a href="https://t.me/StellenlyJobs" rel="noopener">Telegram channel</a> for new jobs every day, or join the community on <a href="https://discord.gg/wMqjvq6dw" rel="noopener">Discord</a>.</div></details></section><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I get a job in Germany without speaking German?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Only 28% of the 4,600 English-speaking jobs on Stellenly require German; 14% say it's not needed or just a plus, and most of the rest don't mention it, which usually means the team works in English. Tick No German needed above to see only those jobs."}}, {"@type": "Question", "name": "How do you know whether a job needs German?", "acceptedAnswer": {"@type": "Answer", "text": "We read every posting and show its German level on the card: not required, nice to have, not mentioned or required, with the exact sentence from the posting in the job details. We don't hide jobs that need German, so you can decide yourself. How we read job postings."}}, {"@type": "Question", "name": "Which jobs offer visa sponsorship?", "acceptedAnswer": {"@type": "Answer", "text": "Right now 274 jobs mention visa sponsorship or work-permit support. Tick Visa sponsorship above. Most non-EU candidates need a work permit, usually the EU Blue Card."}}, {"@type": "Question", "name": "How much do I need to earn for an EU Blue Card in 2026?", "acceptedAnswer": {"@type": "Answer", "text": "At least €51k gross a year, or €46k for IT and other shortage jobs, health care and recent graduates. Jobs whose listed salary reaches it are marked Blue Card ✓. Read the Blue Card guide."}}, {"@type": "Question", "name": "Which German cities have the most English-speaking jobs?", "acceptedAnswer": {"@type": "Answer", "text": "Berlin (1,616), Munich (1,084), Hamburg (175), Parsdorf (101), Frankfurt (100). All states and cities."}}, {"@type": "Question", "name": "Is Stellenly free? Do I need an account?", "acceptedAnswer": {"@type": "Answer", "text": "It's free, and there is no sign-up: we store no personal data and set no cookies. Saved jobs stay in your browser. You apply directly on the employer's site."}}, {"@type": "Question", "name": "Where do the jobs come from, and how fresh are they?", "acceptedAnswer": {"@type": "Answer", "text": "From company career pages and public job APIs, updated every 6 hours. Jobs that disappear from their source are removed automatically, and visitors can report a closed job with 🚩."}}, {"@type": "Question", "name": "Can I get new jobs sent to me?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, without an email address: follow our Telegram channel for new jobs every day, or join the community on Discord."}}]}</script>
+  <!-- faq:end -->
 
   <section class="about-card" aria-labelledby="t-h">
     <div class="about-main">

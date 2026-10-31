@@ -184,6 +184,7 @@
   // ---------------------------------------------------------------- filters
   const NO_GERMAN = ["not_required", "nice_to_have", "not_mentioned"];
   const REMOTE = ["remote_de", "remote_eu"];
+  const ENTRY = ["intern", "junior"]; // the "Entry level" chip
   const checked = (name) => $$(`input[name="${name}"]:checked`).map((i) => i.value);
   const setChecked = (name, vals) => $$(`input[name="${name}"]`).forEach((i) => { i.checked = vals.includes(i.value); });
   const sameSet = (a, b) => a.length === b.length && b.every((x) => a.includes(x));
@@ -235,6 +236,7 @@
   function syncQuickChips() {
     $("#f-nogerman").checked = sameSet(checked("german"), NO_GERMAN);
     $("#f-remote").checked = sameSet(checked("remote"), REMOTE);
+    $("#f-entry").checked = sameSet(checked("seniority"), ENTRY);
   }
 
   // URL <-> filters (so searches can be bookmarked and shared)
@@ -1021,8 +1023,9 @@
   // with their coats of arms, linking to the location pages (jobs/state-*.html, jobs/city-*.html).
   async function loadLocations() {
     try {
-      const items = await (await fetch("data/locations.json")).json();
-      $("#loc-chips").innerHTML = items.map((l) => `<a class="loc-chip" href="${esc(l.u)}">${l.i ? `<img src="${esc(l.i)}" alt="" width="18" height="18">` : ""}${esc(l.n)}<b>${l.k.toLocaleString("en")}</b></a>`).join("");
+      const { places, fields } = await (await fetch("data/locations.json")).json();
+      $("#field-chips").innerHTML = fields.map((f) => `<a class="loc-chip" href="${esc(f.u)}">#${esc(f.n)}<b>${f.k.toLocaleString("en")}</b></a>`).join("");
+      $("#loc-chips").innerHTML = places.map((l) => `<a class="loc-chip" href="${esc(l.u)}">${l.i ? `<img src="${esc(l.i)}" alt="" width="18" height="18">` : ""}${esc(l.n)}<b>${l.k.toLocaleString("en")}</b></a>`).join("");
     } catch { /* the "All states & cities" link still works */ }
   }
 
@@ -1159,6 +1162,7 @@
     $$(".hero .chip input").forEach((el) => el.addEventListener("change", () => { if (el.checked) track(`filter/${el.id.replace(/^f-/, "")}`); }));
     $("#f-nogerman").addEventListener("change", (e) => { setChecked("german", e.target.checked ? NO_GERMAN : []); search(); });
     $("#f-remote").addEventListener("change", (e) => { setChecked("remote", e.target.checked ? REMOTE : []); search(); });
+    $("#f-entry").addEventListener("change", (e) => { setChecked("seniority", e.target.checked ? ENTRY : []); search(); });
     $("#reset-filters").addEventListener("click", () => { writeFilters({}); search(); });
     $(".results-col").addEventListener("click", (e) => {
       const b = e.target.closest("[data-scope]");
