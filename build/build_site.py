@@ -821,8 +821,8 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
            for st in states_sorted[:4]]
     top += [{"n": c, "k": len(by_city[c]), "u": f"jobs/{url('city', c)}", "i": coa("city", c)}
             for c in cities_sorted if c not in {t["n"] for t in top}][:6]
-    levels = {"intern", "junior", "mid", "senior", "lead"}  # seniority tags aren't fields
-    fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in levels][:8]
+    # Seniority, remote, visa etc. are filters, not fields.
+    fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in META_TAGS][:8]
     kpi = {"req": stats["german_required_pct"], "visa": stats["visa"], "median": stats["median_salary"],
            "salary_pct": stats["salary_pct"]}
     (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields, "kpi": kpi}, ensure_ascii=False,

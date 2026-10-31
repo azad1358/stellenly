@@ -1114,6 +1114,12 @@
   let siteStats = null;
   // "Browse by location" under the search: the biggest states and cities (data/locations.json, written by the build)
   // with their coats of arms, linking to the location pages (jobs/state-*.html, jobs/city-*.html).
+  // Explore: a ranked list with a bar per row (share of the top entry) instead of tags.
+  const FIELD_NAMES = { "ai-ml": "AI & machine learning", it: "IT", hr: "HR", qa: "QA", devops: "DevOps" };
+  const fieldName = (t) => FIELD_NAMES[t] || t.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+  const rankHtml = (items, label) => items.map((x, i) => `<li><a href="${esc(x.u)}"><span class="rk-i">${i + 1}</span>${label(x)}
+      <span class="rk-bar" aria-hidden="true"><span style="width:${Math.max(4, (100 * x.k) / items[0].k).toFixed(1)}%"></span></span>
+      <b>${num(x.k)}</b></a></li>`).join("");
   let kpi = null, places = [];  // data/locations.json: figures the daily build computes (German, visa, salary)
   async function loadLocations() {
     try {
@@ -1121,8 +1127,11 @@
       ({ places, kpi } = data);
       const { fields } = data;
       renderStats();
-      $("#field-chips").innerHTML = fields.map((f) => `<a class="loc-chip" href="${esc(f.u)}">#${esc(f.n)}<b>${f.k.toLocaleString("en")}</b></a>`).join("");
-      $("#loc-chips").innerHTML = places.map((l) => `<a class="loc-chip" href="${esc(l.u)}">${l.i ? `<img src="${esc(l.i)}" alt="" width="18" height="18">` : ""}${esc(l.n)}<b>${l.k.toLocaleString("en")}</b></a>`).join("");
+      $("#loc-chips").innerHTML = rankHtml([...places].sort((a, b) => b.k - a.k).slice(0, 8), (l) =>
+        `${l.i ? `<img src="${esc(l.i)}" alt="" width="20" height="20">` : `<span class="rk-ic">${esc(l.n[0])}</span>`}
+         <span class="rk-name">${esc(l.n)}${/state-/.test(l.u) ? "<small>state</small>" : ""}</span>`);
+      $("#field-chips").innerHTML = rankHtml(fields, (f) =>
+        `<span class="rk-ic">${esc(f.n[0].toUpperCase())}</span><span class="rk-name">${esc(fieldName(f.n))}</span>`);
     } catch { /* the "All states & cities" link still works */ }
   }
 
