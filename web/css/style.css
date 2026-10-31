@@ -962,6 +962,25 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 }
 /* Home page: "Why Stellenly" + "How it works" (web/index.html) and the FAQ (build_site.py faq_html, also on jobs/*.html) */
 .faq { margin: 28px 0 0; }
+.faq-split { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 56px;
+  padding: 32px; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); }
+.faq-intro { position: sticky; top: 90px; }
+.faq-split h2 { margin: 0 0 12px; font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.2; }
+.faq-lead { margin: 0; color: var(--muted); line-height: 1.55; }
+.faq-ask { display: flex; flex-direction: column; gap: 4px; margin-top: 22px; padding: 16px 18px; border-radius: 16px; background: var(--accent-soft); }
+.faq-ask span { color: var(--muted); font-size: .92rem; }
+.faq-links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; }
+.faq-links a { font-weight: 600; text-decoration: none; }
+.faq-split details { background: var(--surface-2); border-color: transparent; }
+.faq-split details:hover { border-color: var(--border); }
+.faq-split details[open] { background: var(--surface); box-shadow: var(--shadow); }
+.faq-n { color: var(--accent); font-size: .82rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.faq summary:has(.faq-n) { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; gap: 14px; }
+.faq details:has(.faq-n) .faq-a { padding-left: 50px; }
+@media (max-width: 860px) {
+  .faq-split { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 20px; }
+  .faq-intro { position: static; }
+}
 .faq h2 { margin: 0 0 12px; font-size: clamp(1.3rem, 2.4vw, 1.65rem); letter-spacing: -0.02em; }
 .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
 .faq details[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
@@ -989,7 +1008,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .site-header .wrap { max-width: none; padding: 0 24px; }
 .header-row { display: flex; flex-wrap: nowrap; align-items: center; gap: 16px; min-height: 64px; }
 .brand { flex: none; display: inline-flex; align-items: center; gap: 8px; }
-.header-actions { display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; margin: 0 auto 0 12px; }
+.header-actions { display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; margin: 0 0 0 12px; }
 .header-actions > a, .nav-more > summary { white-space: nowrap; }
 .header-actions a[aria-current="page"] { color: var(--accent); font-weight: 600; }
 .header-end { display: flex; align-items: center; gap: 6px; flex: none; }
@@ -1003,7 +1022,10 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   background: none; color: var(--text); font: inherit; font-size: .95rem; text-decoration: none; cursor: pointer; }
 .nav-menu a:hover, .nav-menu button:hover { background: var(--surface-2); }
 .m-only { display: none !important; }
-.header-actions .updated-pill { margin-right: 8px; }
+/* timer: centred in the space between the tabs and the buttons on the right */
+.header-row > .updated-pill { margin: 0 auto; }
+.header-row > .updated-pill[hidden] + .header-end { margin-left: auto; }
+@media (max-width: 760px) { .header-end { margin-left: auto; } }
 @media (max-width: 1150px) { .updated-pill .upd { display: none; } }
 @media (max-width: 760px) { .updated-pill { display: none !important; } }
 @media (max-width: 760px) {
@@ -1263,8 +1285,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .ticker-viewport { overflow-x: auto; } }
 
 /* The AI console floats bottom-right on the home page (always there); Telegram and Discord sit bottom-left */
-.float-stack { right: auto; left: 20px; }
-.ai-float { position: fixed; right: 20px; bottom: 20px; z-index: 30; width: 340px; padding: 14px 16px;
+.float-stack:has(.ai-float) { width: 340px; }
+.ai-float { width: 340px; padding: 14px 16px;
   background: linear-gradient(180deg, rgba(24, 30, 62, .97), rgba(10, 16, 36, .97)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .ai-float .stelli { width: 40px; height: 40px; }
 .ai-float .bubble { min-height: 4.7em; margin: 10px 0 12px; padding: 10px 12px; font-size: .86rem; }
@@ -1273,8 +1295,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .ai-float .agent-name small { display: none; }
 .ai-float .agent-stat { grid-column: 2; text-align: left; font-size: .72rem; }
 @media (max-width: 640px) {
-  .float-stack { left: 14px; }
-  .ai-float { right: 12px; bottom: 12px; width: min(300px, calc(100vw - 96px)); display: flex; align-items: center; gap: 10px; padding: 8px 10px; }
+  .float-stack:has(.ai-float) { width: auto; right: 12px; bottom: 12px; align-items: flex-end; }
+  .ai-float { width: min(320px, calc(100vw - 24px)); display: flex; align-items: center; gap: 10px; padding: 8px 10px; }
   .ai-float .console-head div, .ai-float .agents { display: none; }
   .ai-float .stelli { width: 34px; height: 34px; }
   .ai-float .bubble { flex: 1; min-height: 0; margin: 0; padding: 6px 9px; font-size: .78rem; }

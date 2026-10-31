@@ -625,13 +625,17 @@ def place_tiles_html(items: list[tuple[int, str | None, str, str | None]], up: s
     return f'<ul class="place-tiles">{"".join(tiles)}</ul>'
 
 
-def faq_html(items: list[tuple[str, str]], title: str = "Frequently asked questions") -> str:
-    """[(question, answer HTML)] as foldable questions, plus schema.org FAQPage data so Google can show the answers."""
+def faq_html(items: list[tuple[str, str]], title: str = "Frequently asked questions", intro: str = "") -> str:
+    """[(question, answer HTML)] as numbered foldable questions, plus schema.org FAQPage data so Google can show the
+    answers. With `intro` (home page) the title and intro sit in a column next to the questions."""
     plain = lambda h: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", h))).strip()  # noqa: E731
     ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in items]}
-    qa = "".join(f"<details><summary>{e(q)}</summary><div class=\"faq-a\">{a}</div></details>" for q, a in items)
-    return (f'<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">{e(title)}</h2>{qa}</section>'
+    qa = "".join(f'<details><summary><span class="faq-n">{i:02d}</span><span>{e(q)}</span></summary><div class="faq-a">{a}</div></details>'
+                 for i, (q, a) in enumerate(items, 1))
+    head = f'<div class="faq-intro"><p class="kicker accent">FAQ</p><h2 id="faq-h">{e(title)}</h2>{intro}</div>' if intro \
+        else f'<h2 id="faq-h">{e(title)}</h2>'
+    return (f'<section class="faq{" faq-split" if intro else ""}" aria-labelledby="faq-h">{head}<div class="faq-list">{qa}</div></section>'
             f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")}</script>')
 
 
@@ -680,7 +684,11 @@ def write_home_faq(jobs: list[dict], stats: dict, cities: list[tuple[str, int, s
     start, end = "<!-- faq:start", "<!-- faq:end -->"
     if start in text and end in text:
         a = text.index("-->", text.index(start)) + 3
-        text = text[:a] + "\n  " + faq_html(items) + "\n  " + text[text.index(end):]
+        intro = (f'<p class="faq-lead">The answers use today\'s numbers from {n:,} open jobs and update every day.</p>'
+                 '<div class="faq-ask"><b>Still have a question?</b><span>Ask the community or write to us.</span>'
+                 f'<span class="faq-links"><a href="{e(SITE["discord_url"])}" rel="noopener">Ask on Discord →</a>'
+                 '<a href="mailto:info@stellenly.com">info@stellenly.com</a></span></div>')
+        text = text[:a] + "\n  " + faq_html(items, "Questions, answered with live numbers", intro) + "\n  " + text[text.index(end):]
         home.write_text(text, encoding="utf-8", newline="\n")
 
 
