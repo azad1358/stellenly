@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job — Stellenly</title>
+  <!-- Every open job, rendered by js/app.js from ?id=<id>. Search engines index job/<id>.html instead. -->
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0a2463">
+  <link rel="stylesheet" href="css/style.css">
+  <script data-goatcounter="https://stellenly.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  <script>try { var t = localStorage.getItem("ejg.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./" aria-label="Stellenly home"><img class="brand-logo" src="img/logo.svg" alt="" width="32" height="32"><span>Stellenly</span></a>
+    <nav class="header-actions" aria-label="Main">
+      <a class="btn ghost nav-link" href="./">Jobs</a>
+      <a class="btn ghost nav-link" href="companies.html">Companies</a>
+      <a class="btn ghost nav-link" href="jobs/index.html">Cities</a>
+      <a class="btn ghost nav-link" href="blog/">Guides</a>
+      <details class="nav-more"><summary class="btn ghost">More</summary>
+        <div class="nav-menu">
+          <a class="m-only" href="./">Jobs</a>
+          <a class="m-only" href="companies.html">Companies</a>
+          <a class="m-only" href="jobs/index.html">Cities</a>
+          <a class="m-only" href="blog/">Guides</a>
+          <a href="how-it-works.html">How it works</a>
+          <a href="skill-check.html">Skill check</a>
+          <a href="resources.html">Resources</a>
+        </div>
+      </details>
+    </nav>
+    <div class="header-end">
+      <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
+      <a class="btn support" href="https://ko-fi.com/drazadabad" target="_blank" rel="noopener">Support us</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap jp-wrap">
+  <div id="jd" class="jp"><p class="muted jp-gone">Loading the job…</p></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span>Jobs come from public job APIs and company career pages. Always apply on the original site.</span>
+    <nav>
+      <a href="https://discord.gg/wMqjvq6dw" target="_blank" rel="noopener">Discord</a>
+      <a href="https://t.me/StellenlyJobs" target="_blank" rel="noopener">Telegram</a>
+      <a href="jobs/index.html">Jobs by location</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

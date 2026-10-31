@@ -44,45 +44,38 @@
 <header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Stellenly home"><img class="brand-logo" src="img/logo.svg" alt="" width="32" height="32"><span id="brand">Stellenly</span></a>
-    <nav class="header-actions">
-      <span class="updated-pill" id="updated-pill" hidden></span>
-      <a class="btn ghost" href="companies.html">Companies</a>
-      <a class="btn ghost" href="resources.html">Resources</a>
-      <a class="btn ghost" href="blog/">Guides</a>
-      <a class="btn ghost" href="skill-check.html">Skill check</a>
-      <a class="btn ghost" href="how-it-works.html">How it works</a>
-      <button type="button" class="btn ghost" data-open="hired-dialog">I got hired</button>
-      <button type="button" class="btn ghost" data-open="glossary-dialog" title="German job terms explained">Glossary</button>
+    <nav class="header-actions" aria-label="Main">
+      <a class="btn ghost nav-link" href="./" aria-current="page">Jobs</a>
+      <a class="btn ghost nav-link" href="companies.html">Companies</a>
+      <a class="btn ghost nav-link" href="jobs/index.html">Cities</a>
+      <a class="btn ghost nav-link" href="blog/">Guides</a>
+      <details class="nav-more"><summary class="btn ghost">More</summary>
+        <div class="nav-menu">
+          <a class="m-only" href="companies.html">Companies</a>
+          <a class="m-only" href="jobs/index.html">Cities</a>
+          <a class="m-only" href="blog/">Guides</a>
+          <a href="how-it-works.html">How it works</a>
+          <a href="skill-check.html">Skill check</a>
+          <a href="resources.html">Resources</a>
+          <button type="button" data-open="glossary-dialog">German job terms</button>
+          <button type="button" data-open="hired-dialog">I got hired 🎉</button>
+        </div>
+      </details>
     </nav>
     <div class="header-end">
+      <span class="updated-pill" id="updated-pill" hidden></span>
       <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
       <button type="button" class="btn support" data-open="support-dialog">Support us</button>
     </div>
   </div>
 </header>
 
-<section class="hero-band">
-  <svg class="hero-skyline" viewBox="0 0 1440 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <g fill="currentColor">
-      <rect x="0" y="120" width="70" height="50"/><rect x="70" y="100" width="46" height="70"/><rect x="116" y="128" width="60" height="42"/>
-      <rect x="176" y="112" width="38" height="58"/>
-      <rect x="236" y="104" width="148" height="12"/><rect x="242" y="98" width="136" height="8"/><rect x="300" y="84" width="22" height="14"/>
-      <rect x="244" y="116" width="9" height="54"/><rect x="267" y="116" width="9" height="54"/><rect x="290" y="116" width="9" height="54"/>
-      <rect x="322" y="116" width="9" height="54"/><rect x="345" y="116" width="9" height="54"/><rect x="368" y="116" width="9" height="54"/>
-      <rect x="236" y="160" width="148" height="10"/>
-      <rect x="406" y="118" width="54" height="52"/><rect x="460" y="92" width="34" height="78"/><rect x="494" y="126" width="72" height="44"/>
-      <rect x="566" y="106" width="44" height="64"/><path d="M630 170V120l40-22 40 22v50z"/><rect x="730" y="130" width="80" height="40"/>
-      <rect x="810" y="96" width="30" height="74"/><rect x="840" y="116" width="66" height="54"/><rect x="906" y="134" width="70" height="36"/>
-      <rect x="1074" y="58" width="10" height="112"/><circle cx="1079" cy="58" r="15"/><rect x="1077" y="6" width="4" height="40"/>
-      <rect x="1068" y="80" width="22" height="5" rx="2"/>
-      <rect x="976" y="122" width="48" height="48"/><rect x="1024" y="108" width="36" height="62"/><rect x="1100" y="114" width="56" height="56"/>
-      <rect x="1156" y="128" width="64" height="42"/><rect x="1220" y="100" width="40" height="70"/><rect x="1260" y="120" width="74" height="50"/>
-      <rect x="1334" y="108" width="40" height="62"/><rect x="1374" y="126" width="66" height="44"/>
-    </g>
-  </svg>
-  <div class="wrap hero">
-    <h1 id="tagline">English-speaking jobs in Germany</h1>
-    <p class="hero-sub">Every listing tells you up front whether German is required, what it pays and whether the employer sponsors visas.</p>
+<section class="hero-band ai">
+  <div class="wrap hero hero-grid">
+    <div class="hero-left">
+    <p class="hero-kicker"><span class="live-dot" aria-hidden="true"></span> AI-checked job board for English speakers</p>
+    <h1 id="tagline">English-speaking jobs in Germany, <span class="grad-text">read by AI</span></h1>
+    <p class="hero-sub">Our AI agents read every posting and tell you up front whether German is required, what it pays and whether the employer sponsors visas.</p>
 
     <form id="search-form" class="search" role="search" autocomplete="off">
       <label class="visually-hidden" for="q">Search jobs</label>
@@ -105,27 +98,24 @@
       <label class="chip"><input type="checkbox" id="f-visa"> Visa sponsorship</label>
       <label class="chip"><input type="checkbox" id="f-remote"> Remote</label>
       <label class="chip"><input type="checkbox" id="f-entry"> Entry level</label>
-      <label class="chip"><input type="checkbox" id="f-direct"> Direct employers only</label>
+    </div>
     </div>
 
-    <nav class="loc-row" aria-label="Browse jobs by location">
-      <span class="loc-row-label">Browse by location</span>
-      <span id="loc-chips"></span>
-      <a class="loc-all" href="jobs/index.html">All states &amp; cities →</a>
-    </nav>
-    <nav class="loc-row" aria-label="Browse jobs by field">
-      <span class="loc-row-label">Popular fields</span>
-      <span id="field-chips"></span>
-      <a class="loc-all" href="jobs/index.html#fields">All fields →</a>
-    </nav>
-
-    <dl class="hero-stats" id="stats" aria-live="polite"></dl>
+    <aside class="ai-console" aria-label="Stellenly's AI agents, live">
+      <div class="console-head"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
+          <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
+          <circle class="stelli-light" cx="32" cy="6" r="4"/>
+          <rect x="10" y="14" width="44" height="36" rx="14" fill="url(#stelli-g)"/>
+          <rect x="16" y="22" width="32" height="18" rx="9" fill="#0b1020"/>
+          <g class="stelli-eyes" fill="#7dd3fc"><circle cx="25" cy="31" r="3.4"/><circle cx="39" cy="31" r="3.4"/></g>
+          <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg>
+        <div><b>Stelli</b><small><span class="live-dot" aria-hidden="true"></span> 4 AI agents online</small></div></div>
+      <p class="bubble" id="stelli-text">Checking the latest jobs…</p>
+      <ul class="agents" id="agents"></ul>
+    </aside>
   </div>
-</section>
-
-<section class="hiring-strip" aria-label="Companies hiring now">
-  <div class="wrap hiring-row"><span class="hiring-label">Companies hiring now</span><div class="hiring-logos" id="hiring-logos"></div>
-    <a class="hiring-all" href="companies.html">All companies →</a></div>
+  <div class="wrap"><div class="hero-kpis" id="stats" aria-live="polite"></div></div>
 </section>
 
 <main class="wrap">
@@ -187,6 +177,7 @@
         </label>
 
         <label class="field check"><input type="checkbox" id="f-reloc"> Relocation support</label>
+        <label class="field check"><input type="checkbox" id="f-direct"> Direct employers only</label>
 
         <div class="filter-actions">
           <button type="button" class="btn ghost small" id="reset-filters">Reset filters</button>
@@ -239,25 +230,28 @@
     </section>
   </div>
 
-  <section class="home-info" aria-labelledby="why-h">
-    <div class="why">
-      <h2 id="why-h">Why Stellenly</h2>
-      <ul class="why-grid">
-        <li><span class="why-ic">🗣️</span><b>German level, with proof</b><span>We read every posting and show the exact sentence about German. We don't quietly hide jobs, so you decide.</span></li>
-        <li><span class="why-ic">💶</span><b>Salary &amp; Blue Card check</b><span>The listed salary on every job, and whether it reaches the EU Blue Card minimum.</span></li>
-        <li><span class="why-ic">🛂</span><b>Visa &amp; relocation</b><span>Jobs that offer visa sponsorship or relocation help are marked, straight from the posting.</span></li>
-        <li><span class="why-ic">🔒</span><b>No sign-up, no tracking</b><span>No account, no cookies, no CV upload. You apply directly on the employer's site.</span></li>
-      </ul>
+  <section class="explore" aria-labelledby="explore-h">
+    <div class="section-head"><p class="kicker accent">Explore</p><h2 id="explore-h">Where the jobs are</h2></div>
+    <div class="explore-grid">
+      <div class="explore-card"><h3>Top locations</h3><div id="loc-chips" class="chip-cloud"></div>
+        <a class="more" href="jobs/index.html">All states &amp; cities →</a></div>
+      <div class="explore-card"><h3>Popular fields</h3><div id="field-chips" class="chip-cloud"></div>
+        <a class="more" href="jobs/index.html#fields">All fields →</a></div>
+      <div class="explore-card hiring-strip"><h3>Companies hiring now</h3><div class="hiring-logos" id="hiring-logos"></div>
+        <a class="more" href="companies.html">All companies →</a></div>
     </div>
-    <div class="how">
-      <h2>How it works</h2>
-      <ol class="how-steps">
-        <li><b>Search</b><span>By city, field, German level, salary or visa sponsorship.</span></li>
-        <li><b>Check</b><span>AI summary, the German quote, the company's Hiring Score, similar jobs.</span></li>
-        <li><b>Apply directly</b><span>On the employer's own site: no middleman, no account.</span></li>
-      </ol>
-      <a class="how-more" href="how-it-works.html">How we collect and check every job →</a>
-    </div>
+  </section>
+
+  <section class="ai-checks" aria-labelledby="checks-h">
+    <p class="kicker">How it works</p>
+    <h2 id="checks-h">Every job is checked by AI before you see it</h2>
+    <ol class="check-steps">
+      <li><span class="step-n">01 · Scout</span><b>Collect</b><span>Jobs from company career pages and public job APIs, every 6 hours.</span></li>
+      <li><span class="step-n">02 · Linguist</span><b>Read</b><span>How much German the job needs, with the posting's own words.</span></li>
+      <li><span class="step-n">03 · Analyst</span><b>Score</b><span>AI summary, skills, salary benchmark, Blue Card check and an Expat fit score.</span></li>
+      <li><span class="step-n">04 · Inspector</span><b>Retire</b><span>Closed, reported and duplicate jobs disappear, so you don't apply into the void.</span></li>
+    </ol>
+    <p class="checks-foot">🔒 No account, no cookies, no CV upload: you apply directly on the employer's site. <a href="how-it-works.html">The full method →</a></p>
   </section>
 
   <!-- faq:start (build/build_site.py write_home_faq fills this in with today's numbers) -->
@@ -303,10 +297,6 @@
 </footer>
 
 <!-- ============================ Dialogs ============================ -->
-<dialog id="job-dialog" class="job-dialog" aria-labelledby="jd-title">
-  <div id="jd" class="jd"></div>
-</dialog>
-
 <dialog id="support-dialog" class="dialog">
   <form method="dialog" class="dialog-close"><button aria-label="Close">✕</button></form>
   <h2>☕ Keep this site free</h2>

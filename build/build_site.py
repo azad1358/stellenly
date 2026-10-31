@@ -145,7 +145,7 @@ w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden
 def page(title: str, description: str, body: str, path: str, depth: int, extra_head: str = "",
          affiliate_note: bool = False, main_class: str = "content-page") -> str:
     up = "../" * depth
-    skill_link = f'    <a class="btn ghost" href="{up}skill-check.html">Skill check</a>\n' if SKILL_CHECK else ""
+    skill_link = f'<a href="{up}skill-check.html">Skill check</a>' if SKILL_CHECK else ""
     canonical = f"{SITE_URL}/{path}".replace("/index.html", "/")
     note = ('<p class="affiliate-note">Some links on this page are partner links: if you sign up, we may earn a small '
             'commission at no extra cost to you. It keeps this site free. We only list services we would recommend anyway.</p>'
@@ -179,14 +179,18 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <body>
 <header class="site-header"><div class="wrap header-row">
   <a class="brand" href="{up}index.html"><img class="brand-logo" src="{up}img/logo.svg" alt="" width="32" height="32"><span>{e(SITE['site_name'])}</span></a>
-  <nav class="header-actions">
-    <a class="btn ghost" href="{up}index.html">Search jobs</a>
-    <a class="btn ghost" href="{up}companies.html">Companies</a>
-    <a class="btn ghost" href="{up}resources.html">Resources</a>
-    <a class="btn ghost" href="{up}blog/index.html">Guides</a>
-{skill_link}    <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
+  <nav class="header-actions" aria-label="Main">
+    <a class="btn ghost nav-link" href="{up}index.html">Jobs</a>
+    <a class="btn ghost nav-link" href="{up}companies.html">Companies</a>
+    <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
+    <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
+    <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
+      <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}blog/index.html">Guides</a>
+      <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a></div></details>
   </nav>
-  <div class="header-end"><a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
+  <div class="header-end"><button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
+    <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
 <main class="wrap {main_class}">
 {body}
@@ -604,8 +608,7 @@ def job_cards_html(jobs: list[dict], up: str, logos: dict[str, str]) -> str:
 
 
 # The job popup of the home page (app.js openJob), on the location and field pages: a card opens it in place.
-JOB_POPUP = """<dialog id="job-dialog" class="job-dialog" aria-labelledby="jd-title"><div id="jd" class="jd"></div></dialog>
-<script src="../js/config.js"></script>
+CARD_SCRIPTS = """<script src="../js/config.js"></script>
 <script src="../js/app.js"></script>"""
 
 
@@ -765,7 +768,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
 </div>
 {place_faq(name, sel, s)}
 <p class="muted small">Always apply on the original posting.</p>
-{JOB_POPUP}"""
+{CARD_SCRIPTS}"""
         title = f"{s['active']:,} English-speaking jobs in {name}"
         (out / url(kind, val)).write_text(page(title, f"{title}: German requirement, salary and visa sponsorship shown for every job.",
                                                body, f"jobs/{url(kind, val)}", 1, main_class="content-page loc-page"), encoding="utf-8")
@@ -788,7 +791,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
 {kpis(s)}
 <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}</div>
 <p class="muted small">Always apply on the original posting.</p>
-{JOB_POPUP}"""
+{CARD_SCRIPTS}"""
         (out / f"tag-{slugify(t)}.html").write_text(page(title, f"{title}: German requirement, salary and visa sponsorship "
                                                           f"shown for every job.", body, f"jobs/tag-{slugify(t)}.html", 1,
                                                           main_class="content-page loc-page"), encoding="utf-8")
@@ -820,7 +823,9 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
             for c in cities_sorted if c not in {t["n"] for t in top}][:6]
     levels = {"intern", "junior", "mid", "senior", "lead"}  # seniority tags aren't fields
     fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in levels][:8]
-    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields}, ensure_ascii=False,
+    kpi = {"req": stats["german_required_pct"], "visa": stats["visa"], "median": stats["median_salary"],
+           "salary_pct": stats["salary_pct"]}
+    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields, "kpi": kpi}, ensure_ascii=False,
                                                             separators=(",", ":")), encoding="utf-8")
     write_home_faq(jobs, stats, [(c, len(by_city[c]), f"jobs/{url('city', c)}") for c in cities_sorted])
     return paths + ["jobs/index.html"]

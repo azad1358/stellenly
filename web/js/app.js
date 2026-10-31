@@ -8,7 +8,6 @@
   const PAGE = C.PAGE_SIZE || 20;
   // Site root ("https://www.stellenly.com/"), so the popup's logos, links and data also work on jobs/*.html.
   const BASE = ((document.currentScript && document.currentScript.src) || location.href).replace(/js\/app\.js.*$/, "");
-  let baseTitle = document.title;  // restored when the job popup closes
 
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -61,6 +60,7 @@
       const [row] = await restGet("jobs?select=last_seen_at&is_active=eq.true&order=last_seen_at.desc&limit=1");
       if (!row) return;
       lastUpdate = new Date(row.last_seen_at);
+      renderAgents();
       tickFreshness();
       setInterval(tickFreshness, 1000);
     } catch { /* the pill just stays hidden */ }
@@ -84,7 +84,7 @@
     const left = Math.max(0, Math.floor((nextRun(now) - now) / 1000));
     const two = (n) => String(n).padStart(2, "0");
     const clock = `${two(Math.floor(left / 3600))}:${two(Math.floor((left % 3600) / 60))}:${two(left % 60)}`;
-    el.innerHTML = `<span class="live-dot" aria-hidden="true"></span>Updated ${ago}<span class="next"> · next in ${clock}</span>`;
+    el.innerHTML = `<span class="live-dot" aria-hidden="true"></span>Live · updated ${ago}<span class="next"> · next scan ${clock}</span>`;
     el.title = `Jobs were last refreshed ${lastUpdate.toLocaleString()}. New jobs are fetched every 6 hours — next in ${clock}.`;
     el.hidden = false;
   }
@@ -441,7 +441,7 @@
       const items = await rpc("jobs_by_ids", { p_ids: el.dataset.ids.split(",") });
       if (!items.length) { el.remove(); return; }
       el.innerHTML = `<h3>Similar jobs at other companies</h3><ul class="similar-list">${items.map((s) => `
-          <li>${logoHtml(s.company, "logo-xs")}<div><a href="${esc(jobUrl(s.id))}" data-similar="${esc(s.id)}">${esc(s.title)}</a>
+          <li>${logoHtml(s.company, "logo-xs")}<div><a href="${esc(jobUrl(s.id))}">${esc(s.title)}</a>
           <span class="muted">${esc(s.company)} · ${esc(s.city || "Germany")}${salaryText(s) ? ` · ${salaryText(s)}` : ""}</span></div></li>`).join("")}</ul>`;
     } catch (e) {
       el.remove();
@@ -532,7 +532,9 @@
         ${parts.join(" · ")}</span>`;
   }
 
-  const jobUrl = (id) => { const p = new URLSearchParams(location.search); p.set("job", id); return `?${p}`; };
+  // Every job has its own page. job.html works for every open job, also one imported an hour ago; job/<id>.html (built
+  // at deploy time, for search engines) shows the same page.
+  const jobUrl = (id) => `${BASE}job.html?id=${encodeURIComponent(id)}`;
   const skillsOf = (j) => (j.insights && j.insights.skills) || [];
   // Amazon's jobs: only title, city and link (ingest/sources.py amazon()); the details live on amazon.jobs.
   const titleOnly = (j) => /^https:\/\/www\.amazon\.jobs\//.test(j.url || "");
@@ -546,7 +548,7 @@
     <li class="job${seen.has(j.id) ? " seen" : ""}${flagged(j) ? " reported" : ""}" data-id="${esc(j.id)}">
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
-        <h3 class="job-title"><a href="${esc(jobUrl(j.id))}" data-act="open">${esc(j.title)}</a></h3>
+        <h3 class="job-title"><a href="${esc(jobUrl(j.id))}">${esc(j.title)}</a></h3>
         <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
         <div class="badges">${badges(j)}</div>
         ${skills ? `<div class="skills-row">${skills}</div>` : ""}
@@ -564,7 +566,7 @@
     </li>`;
   }
 
-  // ---------------------------------------------------------------- job popup (?job=<id>)
+  // ---------------------------------------------------------------- job page (job.html?id=<id>, job/<id>.html)
   const DETAIL_COLS = "id,url,title,company,location,city,remote_type,description,tags,job_types,german_level," +
     "visa_sponsorship,relocation,salary_min,salary_max,years_experience,seniority,is_agency,posted_at,first_seen_at," +
     "repost_count,report_count,open_count,insights";
@@ -623,22 +625,118 @@
       </section>`;
   }
 
-  function aiHtml(j) {
+  // Stelli, the robot face of the AI agents (home page console, job page verdict). The antenna light blinks.
+  const STELLI = `<svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+      <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
+      <circle class="stelli-light" cx="32" cy="6" r="4"/>
+      <rect x="10" y="14" width="44" height="36" rx="14" fill="url(#stelli-g)"/>
+      <rect x="16" y="22" width="32" height="18" rx="9" fill="#0b1020"/>
+      <g class="stelli-eyes" fill="#7dd3fc"><circle cx="25" cy="31" r="3.4"/><circle cx="39" cy="31" r="3.4"/></g>
+      <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg>`;
+
+  // "Expat fit": how easy the job is for an English speaker moving to Germany, from what the posting says. Every part
+  // and its points are listed on the page: a transparent rule, not a black box.
+  function expatFit(j) {
+    if (titleOnly(j)) return null;
+    const bc = blueCard(j);
+    const parts = [
+      ["Language", 40, { not_required: 40, nice_to_have: 32, not_mentioned: 24 }[j.german_level] || 0, germanBadge(j)[1]],
+      ["Visa & relocation", 20, j.visa_sponsorship ? 20 : j.relocation ? 10 : 0,
+        j.visa_sponsorship ? "Visa sponsorship offered" : j.relocation ? "Relocation support" : "Not mentioned"],
+      ["Salary listed", 15, hasSalary(j) ? 15 : 0, salaryText(j) ? `${salaryText(j)} a year` : "No salary in the posting"],
+      ["Blue Card salary", 15, !bc ? 0 : bc[0] === "ok" ? 15 : 9, bc ? bc[1] : "Unknown without a salary"],
+      ["Direct employer", 10, j.is_agency ? 0 : 10, j.is_agency ? "Recruiting agency" : "Posted by the employer"],
+    ];
+    return { total: parts.reduce((t, x) => t + x[2], 0), parts };
+  }
+
+  function ringHtml(v) {
+    const r = 52, c = 2 * Math.PI * r;
+    return `<svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+        <defs><linearGradient id="ring-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+        <circle cx="60" cy="60" r="${r}" class="ring-bg"/>
+        <circle cx="60" cy="60" r="${r}" class="ring-fg" stroke="url(#ring-g)" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}"/></svg>`;
+  }
+
+  function fitHtml(j) {
+    const f = expatFit(j);
+    if (!f) return "";
+    const word = f.total >= 80 ? "Excellent" : f.total >= 60 ? "Good" : f.total >= 40 ? "Fair" : "Hard";
+    return `<div class="fit">
+        <div class="fit-ring">${ringHtml(f.total)}<span class="fit-num"><b>${f.total}</b><small>/100</small></span></div>
+        <div class="fit-text"><p class="kicker">Expat fit</p><p class="fit-word">${word}</p>
+          <button type="button" class="linkish" popovertarget="fit-help">How is this calculated?</button></div>
+        <div popover id="fit-help" class="sc-pop">
+          <h4>Expat fit: ${f.total} of 100 points</h4>
+          <p class="small muted">How easy this job is for an English speaker moving to Germany, only from what the posting says.</p>
+          <ul class="fit-parts">${f.parts.map(([label, max, got, why]) => `<li><span>${esc(label)}<small>${esc(why)}</small></span>
+            <b>${got}<small>/${max}</small></b></li>`).join("")}</ul>
+        </div>
+      </div>`;
+  }
+
+  // Four facts an expat needs first, as big tiles: German, salary vs. the market, Blue Card, visa.
+  function verdictTilesHtml(j) {
+    const p = (j.insights && j.insights.peers) || {};
+    const [gc, gl] = germanBadge(j);
+    const s = p.salary, v = midSalary(j);
+    const diff = v && s ? Math.round(((v - s.p50) / s.p50) * 100) : null;
+    const bc = blueCard(j), BC = C.BLUE_CARD;
+    const tile = (tone, icon, label, value, sub, meter) => `<div class="vtile ${tone}">
+        <span class="vt-label"><span aria-hidden="true">${icon}</span> ${label}</span>
+        <b class="vt-value">${value}</b>
+        ${meter != null ? `<span class="vt-meter" aria-hidden="true"><span style="width:${Math.max(3, Math.min(100, meter))}%"></span></span>` : ""}
+        <span class="vt-sub">${sub}</span></div>`;
+    return `<div class="vtiles">
+      ${tile(gc === "ok" ? "good" : gc === "bad" ? "warn" : "", "🗣️", "German", esc(gl.replace(/^German:\s*/, "").replace(/^./, (c) => c.toUpperCase())),
+        p.german_req != null ? `${pct(p.german_req)} of similar jobs require German` : "Read from the posting", null)}
+      ${tile(diff == null ? "" : diff >= 0 ? "good" : "warn", "💶", "Salary", salaryText(j) || "Not listed",
+        diff == null ? (salaryText(j) ? "Per year, gross" : "The posting gives no salary")
+          : `${diff === 0 ? "Right at" : `${Math.abs(diff)}% ${diff > 0 ? "above" : "below"}`} the median of ${s.n} similar jobs`,
+        diff == null ? null : 50 + diff)}
+      ${tile(bc ? (bc[0] === "ok" ? "good" : "") : "", "🪪", `Blue Card ${BC.year}`, bc ? (bc[0] === "ok" ? "Meets it" : "Possible") : "Unknown",
+        bc ? esc(bc[2]) : `Needs €${BC.standard.toLocaleString("en")} (€${BC.reduced.toLocaleString("en")} for shortage jobs)`, null)}
+      ${tile(j.visa_sponsorship ? "good" : "", "🛂", "Visa", j.visa_sponsorship ? "Sponsored" : "Not mentioned",
+        [j.relocation && "Relocation support too", p.visa != null && `${pct(p.visa)} of similar jobs mention it`].filter(Boolean).join(" · ") || "Ask the employer", null)}
+    </div>`;
+  }
+
+  // Stelli's summary: the AI summary in a speech bubble, with what you'd do and what to double-check.
+  function stelliSaysHtml(j) {
+    if (titleOnly(j)) return `<div class="stelli-say">${STELLI}<div class="bubble"><p>${TITLE_ONLY_NOTE}</p></div></div>`;
     const ai = j.insights && j.insights.ai;
-    // Not analysed yet: say so instead of leaving the card out (the free AI quota works through the queue run by run).
-    if (!ai) return `<section class="jd-card jd-ai">
-        <h3><span class="ai-dot" aria-hidden="true">✦</span> AI summary</h3>
-        <p class="muted small">Not ready yet. Our free AI quota summarises a few hundred jobs a day, newest first${
-          siteStats && siteStats.ai_waiting ? ` (${siteStats.ai_waiting.toLocaleString("en")} jobs in the queue)` : ""
-        } — this one is coming.</p>
-      </section>`;
-    return `<section class="jd-card jd-ai">
-        <h3><span class="ai-dot" aria-hidden="true">✦</span> AI summary</h3>
+    if (!ai) return `<div class="stelli-say">${STELLI}<div class="bubble"><p><b>I haven't read this one yet.</b> I summarise a few
+        hundred new jobs a day, newest first${siteStats && siteStats.ai_waiting ? ` (${siteStats.ai_waiting.toLocaleString("en")} in my queue)` : ""}.
+        The facts above come straight from the posting.</p></div></div>`;
+    return `<div class="stelli-say">${STELLI}<div class="bubble">
         ${ai.summary ? `<p>${esc(ai.summary)}</p>` : ""}
-        ${ai.tasks && ai.tasks.length ? `<p class="small"><b>What you'd do</b></p><ul>${ai.tasks.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-        ${ai.flags && ai.flags.length ? `<p class="small"><b>Worth double-checking</b></p><ul class="flags">${ai.flags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-        <p class="tiny muted">Generated automatically from the posting. Always read the original.</p>
-      </section>`;
+        <div class="bubble-cols">
+          ${ai.tasks && ai.tasks.length ? `<div><p class="kicker">What you'd do</p><ul>${ai.tasks.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
+          ${ai.flags && ai.flags.length ? `<div class="flags"><p class="kicker">Worth double-checking</p><ul>${ai.flags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
+        </div>
+        <p class="tiny muted">Written by AI from the posting. Always read the original.</p></div></div>`;
+  }
+
+  // Saved → Applied → Interview → Offer, kept in this browser. Saved and Applied are the same lists as on the
+  // home page (tabs, CSV export).
+  let stages = store.get("stages", {});
+  const STAGES = ["Saved", "Applied", "Interview", "Offer"];
+  const stageOf = (j) => Math.max(stages[j.id] || 0, applied[j.id] ? 2 : saved[j.id] ? 1 : 0);
+  function setStage(j, n) {
+    if (n >= 1 && !saved[j.id]) toggleList("save", j);
+    if (n < 1 && saved[j.id]) toggleList("save", j);
+    if (n >= 2 && !applied[j.id]) toggleList("applied", j);
+    if (n < 2 && applied[j.id]) toggleList("applied", j);
+    if (n > 2) stages[j.id] = n; else delete stages[j.id];
+    store.set("stages", stages);
+  }
+  function trackerHtml(j) {
+    const at = stageOf(j);
+    return `<section class="jd-card tracker"><h3>Your progress</h3>
+        <ol class="steps">${STAGES.map((label, i) => `<li><button type="button" data-jd="stage" data-stage="${i + 1}"
+          class="${i + 1 <= at ? "done" : ""}" aria-pressed="${i + 1 <= at}">${label}</button></li>`).join("")}</ol>
+        <p class="tiny muted">Only in this browser. Click a step again to undo it.</p></section>`;
   }
 
   function companyHtml(j) {
@@ -659,134 +757,134 @@
       </section>`;
   }
 
-  function jobDialogHtml(j, loading) {
-    const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
+  function jobPageHtml(j) {
+    const isSaved = !!saved[j.id];
     const sal = salaryText(j);
-    const meta = [j.city || j.location || "Germany", REMOTE_LABEL[j.remote_type], j.posted_at && `Posted ${ago(j.posted_at)}`]
-      .filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
+    const c = companyInfo(j.company);
+    const meta = [j.city || j.location || "Germany", REMOTE_LABEL[j.remote_type], SENIORITY_LABEL[j.seniority] !== "Not specified" && SENIORITY_LABEL[j.seniority],
+      j.posted_at && `Posted ${ago(j.posted_at)}`].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
+    const tabs = [["overview", "Overview"], ["skills", `Skills${skillsOf(j).length ? ` <small>${skillsOf(j).length}</small>` : ""}`],
+      ["market", "Salary &amp; market"], ["company", "Company"]];
+    const market = salaryCardHtml(j) + compareCardHtml(j);
     return `
-      <header class="jd-head">
+      <nav class="crumbs"><a href="${BASE}index.html">Jobs</a> ›
+        ${c && c.u ? `<a href="${esc(BASE + c.u)}">${esc(c.n)}</a>` : esc(j.company)} › <span>${esc(j.title)}</span></nav>
+      <header class="jp-hero">
         ${logoHtml(j.company, "logo-lg")}
-        <div class="jd-titles">
-          <p class="jd-company">${esc(j.company)}</p>
-          <h2 id="jd-title">${esc(j.title)}</h2>
-          <p class="jd-meta">${meta}${sal ? `<span class="jd-salary">${sal} / year</span>` : ""}</p>
+        <div class="jp-titles">
+          <p class="jd-company">${esc(j.company)}${scoreChip(j)}</p>
+          <h1 id="jd-title">${esc(j.title)}</h1>
+          <p class="jp-meta">${meta}</p>
+          <div class="badges">${badges(j)}</div>
         </div>
-        <button type="button" class="jd-close" data-jd="close" aria-label="Close">✕</button>
+        <div class="jp-apply">
+          <p class="jp-salary">${sal ? `${sal}<small> / year</small>` : `<span class="muted">Salary not listed</span>`}</p>
+          <a class="btn primary big" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Apply now ↗</a>
+          <div class="jp-tools">
+            <button type="button" class="btn ghost" data-jd="save" aria-pressed="${isSaved}">${isSaved ? "★ Saved" : "☆ Save"}</button>
+            <button type="button" class="btn ghost" data-jd="copy" title="Copy a link to this job">🔗 Copy link</button>
+            <button type="button" class="btn ghost" data-jd="report" title="The job is gone from the company's site"${REPORT_LABEL[reports[j.id]] ? ` disabled>${REPORT_LABEL[reports[j.id]]}` : ">🚩 Closed?"}</button>
+          </div>
+        </div>
       </header>
-      <div class="jd-actions">
-        <a class="btn primary big" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Apply on original site ↗</a>
-        <button type="button" class="btn" data-jd="save" aria-pressed="${isSaved}">${isSaved ? "★ Saved" : "☆ Save"}</button>
-        <button type="button" class="btn" data-jd="applied" aria-pressed="${isApplied}">${isApplied ? "✓ Applied" : "Mark applied"}</button>
-        <button type="button" class="btn ghost" data-jd="copy" title="Copy a link to this job">🔗 Copy link</button>
-        <button type="button" class="btn ghost" data-jd="report" title="The job is gone from the company's site"${REPORT_LABEL[reports[j.id]] ? ` disabled>${REPORT_LABEL[reports[j.id]]}` : ">🚩 Job closed?"}</button>
-      </div>
       <div class="jd-ask"${flagged(j) && !reports[j.id] ? "" : " hidden"}>
         <span>${flagged(j) ? `🚩 <b>${j.report_count} ${j.report_count === 1 ? "person" : "people"} reported this job as closed.</b> Is it still open on the company's site?` : "Was this job still open on the company's site?"}</span>
         <button type="button" class="btn small" data-jd="still-open">Yes, it's open</button>
         <button type="button" class="btn small" data-jd="gone">No, it's gone</button>
       </div>
-      <div class="jd-body">
-        <div class="jd-main">
-          <div class="badges">${badges(j)}</div>
-          ${titleOnly(j) ? "" : aiHtml(j)}
-          ${jobCheckHtml(j)}
-          <section class="jd-card jd-desc">
-            <h3>Job description</h3>
-            ${titleOnly(j) ? `<p class="title-only-note">ℹ️ ${TITLE_ONLY_NOTE}</p>
-              <p><a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Read the full posting on amazon.jobs ↗</a></p>`
-              : loading ? `<p class="muted">Loading the full description…</p>` : (j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`)}
-            <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
-          </section>
+      <section class="jp-verdict" aria-labelledby="verdict-h">
+        <div class="jp-verdict-head"><p class="kicker"><span class="live-dot" aria-hidden="true"></span> AI analysis</p>
+          <h2 id="verdict-h">What Stellenly's AI found</h2></div>
+        <div class="jp-verdict-grid">${fitHtml(j)}${verdictTilesHtml(j)}</div>
+        ${stelliSaysHtml(j)}
+      </section>
+      <div class="jp-body">
+        <div class="jp-main">
+          <div class="jp-tabs" role="tablist">${tabs.map(([k, label], i) => `<button type="button" role="tab" data-jd="tab" data-tab="${k}"
+            aria-selected="${i === 0}">${label}</button>`).join("")}</div>
+          <div class="jp-panel" data-panel="overview">
+            ${jobCheckHtml(j)}
+            <section class="jd-card jd-desc">
+              <h3>Job description</h3>
+              ${titleOnly(j) ? `<p><a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Read the full posting on amazon.jobs ↗</a></p>`
+                : j.description ? descHtml(j.description) : `<p>${esc(j.snippet || "")}</p>`}
+              <div class="job-tags">${(j.tags || []).map((t) => `<button type="button" class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
+            </section>
+          </div>
+          <div class="jp-panel" data-panel="skills" hidden>${skillsHtml(j) || `<p class="muted jp-empty">The skills analysis for this job isn't ready yet.</p>`}</div>
+          <div class="jp-panel" data-panel="market" hidden>${market || `<p class="muted jp-empty">No salary benchmark: the posting gives no salary, or there are too few similar jobs yet.</p>`}</div>
+          <div class="jp-panel" data-panel="company" hidden>${scoreCardHtml(j)}${companyHtml(j)}</div>
         </div>
-        <aside class="jd-side">
+        <aside class="jp-side">
+          ${trackerHtml(j)}
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
-          ${scoreCardHtml(j)}
-          ${j.insights || loading || titleOnly(j) ? "" : `<section class="jd-card pending-card"><h3>Analysis coming soon</h3>
-            <p class="small muted">This job is new. Skills, salary benchmark and similar jobs are added automatically
-            within a few hours.</p></section>`}
-          ${salaryCardHtml(j)}
-          ${compareCardHtml(j)}
-          ${skillsHtml(j)}
-          ${companyHtml(j)}
           ${similarCardHtml(j)}
         </aside>
-      </div>`;
+      </div>
+      <p class="muted small jp-note">We show this posting as published by the employer. Always check the details on the original
+        posting before you apply. <a href="${BASE}how-it-works.html">How we read job postings</a>.</p>
+      <div class="jp-bar" hidden><span class="jp-bar-title">${esc(j.title)} <small>${esc(j.company)}</small></span>
+        <a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Apply ↗</a></div>`;
   }
 
   let openId = null;
-  async function openJob(idOrJob, { push = true } = {}) {
-    const id = typeof idOrJob === "string" ? idOrJob : idOrJob.id;
-    let j = typeof idOrJob === "string" ? current.get(id) : idOrJob;
-    const dlg = $("#job-dialog"), box = $("#jd");
+  async function loadJobPage(box, id) {
     openId = id;
-    if (push) history.pushState({ job: id }, "", jobUrl(id));
-    box.innerHTML = j ? jobDialogHtml(j, !DEMO) : `<p class="muted jd-wait">Loading job…</p>`;
-    if (!dlg.open) dlg.showModal();
-    box.scrollTop = 0;
     markSeen(id);
-    track("job-open", j ? j.company : id);
     countJobEvent(id, "open");
-    $$(`.job[data-id="${CSS.escape(id)}"]`).forEach((li) => li.classList.add("seen"));
-    if (DEMO) return;
+    let j = null;
     try {
-      const [full] = await restGet(`jobs?id=eq.${encodeURIComponent(id)}&select=${DETAIL_COLS}`);
-      if (openId !== id) return; // another job was opened meanwhile
-      if (!full) { box.innerHTML = `<p class="jd-wait">This job is no longer online. <button class="btn" data-jd="close">Close</button></p>`; return; }
-      j = withDevInsights({ ...(j || {}), ...full });
-      current.set(id, j);
-      box.innerHTML = jobDialogHtml(j, false);
-      document.title = `${j.title} at ${j.company} — ${C.SITE_NAME}`;
-      loadSimilar(box);
-    } catch (e) {
-      console.error(e);
-      if (j) box.innerHTML = jobDialogHtml(j, false);
+      if (!DEMO) [j] = await restGet(`jobs?id=eq.${encodeURIComponent(id)}&select=${DETAIL_COLS}`);
+    } catch (e) { console.error(e); }
+    if (!j) {
+      // A static page (job/<id>.html) keeps its own text; job.html says so.
+      if (!box.dataset.id) box.innerHTML = `<div class="jp-gone"><h1>This job is no longer online</h1>
+          <p>It was filled or removed from the company's site. <a class="btn primary" href="${BASE}index.html">Search open jobs</a></p></div>`;
+      return;
+    }
+    j = withDevInsights(j);
+    current.set(id, j);
+    document.title = `${j.title} at ${j.company} — ${C.SITE_NAME}`;
+    track("job-open", j.company);
+    box.innerHTML = jobPageHtml(j);
+    box.classList.add("ready");
+    loadSimilar(box);
+    // The compact apply bar appears once the big Apply button scrolls out of view.
+    const bar = $(".jp-bar", box), apply = $(".jp-apply .btn.primary", box);
+    if (bar && apply && "IntersectionObserver" in window) {
+      new IntersectionObserver(([en]) => { bar.hidden = en.isIntersecting; }).observe(apply);
     }
   }
 
-  function closeJob({ pop = false } = {}) {
-    const dlg = $("#job-dialog");
-    openId = null;
-    if (dlg.open) dlg.close();
-    document.title = baseTitle;
-    if (!pop) {
-      const p = new URLSearchParams(location.search); p.delete("job");
-      history.pushState(null, "", p.toString() ? `?${p}` : location.pathname);
-    }
-  }
-
-  function onDialogClick(e) {
+  function onJobPageClick(e) {
     const tagBtn = e.target.closest("[data-tag]");
-    if (tagBtn && !$("#results")) { location.href = `${BASE}index.html?tags=${encodeURIComponent(tagBtn.dataset.tag)}`; return; }
-    if (tagBtn) { closeJob(); toggleTag(tagBtn.dataset.tag); return; }
-    const sim = e.target.closest("[data-similar]");
-    if (sim) { e.preventDefault(); openJob(sim.dataset.similar); return; }
+    if (tagBtn) { location.href = `${BASE}index.html?tags=${encodeURIComponent(tagBtn.dataset.tag)}`; return; }
     const btn = e.target.closest("[data-jd]");
     if (!btn) return;
     const j = current.get(openId);
     const act = btn.dataset.jd;
-    if (act !== "close") track(`popup-${act}`, j ? j.company : "");
+    if (act !== "tab") track(`job-${act}`, j ? j.company : "");
     if (act === "apply") {
       countJobEvent(openId, "apply");
       const ask = $("#jd .jd-ask");
-      if (ask && !reports[openId]) ask.hidden = false;  // waiting under the buttons when the visitor comes back
-    }
-    if (act === "close") closeJob();
-    else if (j && act === "report") {
+      if (ask && !reports[openId]) ask.hidden = false;  // waiting under the header when the visitor comes back
+    } else if (act === "tab") {
+      $$("#jd .jp-tabs [data-tab]").forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+      $$("#jd .jp-panel").forEach((p) => { p.hidden = p.dataset.panel !== btn.dataset.tab; });
+    } else if (j && act === "report") {
       if (confirm("Report this job as no longer open on the company's site?\n\nOnly a counter goes up. When enough people report it, we hide the job.")) answerJob(j.id, "gone");
     } else if (j && (act === "gone" || act === "still-open")) answerJob(j.id, act === "gone" ? "gone" : "open");
     else if (act === "copy") {
       // The job's own page (built at deploy time) shares better: it has a proper title and preview.
       const link = j && !DEMO ? `${BASE}job/${j.id}.html` : location.href;
       navigator.clipboard?.writeText(link).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
-    } else if (j && (act === "save" || act === "applied")) {
-      toggleList(act, j);
-      btn.setAttribute("aria-pressed", String(act === "save" ? !!saved[j.id] : !!applied[j.id]));
-      btn.textContent = act === "save" ? (saved[j.id] ? "★ Saved" : "☆ Save") : (applied[j.id] ? "✓ Applied" : "Mark applied");
-      $$(`.job[data-id="${CSS.escape(j.id)}"] [data-act="${act}"]`).forEach((b) => {
-        b.setAttribute("aria-pressed", btn.getAttribute("aria-pressed"));
-        b.textContent = act === "save" ? (saved[j.id] ? "★ Saved" : "☆ Save") : (applied[j.id] ? "✓ Applied" : "Applied?");
-      });
+    } else if (j && (act === "save" || act === "stage")) {
+      const n = act === "save" ? (saved[j.id] ? 0 : 1) : Number(btn.dataset.stage);
+      setStage(j, act === "stage" && stageOf(j) === n ? n - 1 : n);
+      $("#jd .tracker").outerHTML = trackerHtml(j);
+      const sv = $('#jd [data-jd="save"]');
+      sv.setAttribute("aria-pressed", String(!!saved[j.id]));
+      sv.textContent = saved[j.id] ? "★ Saved" : "☆ Save";
     }
   }
 
@@ -824,7 +922,6 @@
     const qs = filtersToQuery(f).toString();
     const params = new URLSearchParams(qs);
     if (wanted > 1) params.set("page", String(wanted));
-    if (openId) params.set("job", openId); // keep the open job in the URL
     history.replaceState(history.state, "", params.toString() ? `?${params}` : location.pathname);
     updateRss(qs);
     renderActiveTags();
@@ -951,8 +1048,8 @@
     const tagBtn = e.target.closest("[data-tag]");
     if (tagBtn) { toggleTag(tagBtn.dataset.tag); return; }
     const card = e.target.closest(".job");
-    if (card && !e.target.closest("[data-act], a, button") && current.get(card.dataset.id)) {
-      openJob(current.get(card.dataset.id)); // the whole card is clickable
+    if (card && !e.target.closest("[data-act], a, button")) {
+      location.href = jobUrl(card.dataset.id); // the whole card is clickable
       return;
     }
     const btn = e.target.closest("[data-act]");
@@ -962,11 +1059,7 @@
     if (!j) return;
     const act = btn.dataset.act;
 
-    if (act === "open") {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // let "open in new tab" work
-      e.preventDefault();
-      openJob(j);
-    } else if (act === "save") {
+    if (act === "save") {
       toggleList("save", j);
       if (saved[j.id]) track("save", j.company);
       btn.setAttribute("aria-pressed", String(!!saved[j.id]));
@@ -1021,9 +1114,13 @@
   let siteStats = null;
   // "Browse by location" under the search: the biggest states and cities (data/locations.json, written by the build)
   // with their coats of arms, linking to the location pages (jobs/state-*.html, jobs/city-*.html).
+  let kpi = null, places = [];  // data/locations.json: figures the daily build computes (German, visa, salary)
   async function loadLocations() {
     try {
-      const { places, fields } = await (await fetch("data/locations.json")).json();
+      const data = await (await fetch("data/locations.json")).json();
+      ({ places, kpi } = data);
+      const { fields } = data;
+      renderStats();
       $("#field-chips").innerHTML = fields.map((f) => `<a class="loc-chip" href="${esc(f.u)}">#${esc(f.n)}<b>${f.k.toLocaleString("en")}</b></a>`).join("");
       $("#loc-chips").innerHTML = places.map((l) => `<a class="loc-chip" href="${esc(l.u)}">${l.i ? `<img src="${esc(l.i)}" alt="" width="18" height="18">` : ""}${esc(l.n)}<b>${l.k.toLocaleString("en")}</b></a>`).join("");
     } catch { /* the "All states & cities" link still works */ }
@@ -1034,20 +1131,71 @@
     renderStats();
   }
 
+  // ---------------------------------------------------------------- live numbers, AI agents and Stelli (home page)
+  const num = (x) => Number(x).toLocaleString("en");
   function renderStats() {
     const s = siteStats;
-    if (!s) { $("#stats").innerHTML = ""; return; }
-    const n = (x) => x.toLocaleString("en");
-    const employers = new Set(Object.values(companies).map((c) => c.n)).size;
-    const items = s.total ? [["Roles so far", n(s.total)]] : [];
-    items.push(["Open roles", n(s.active)]);
-    if (employers) items.push(["Companies hiring", n(employers)]);
-    // Right after a full re-import every job counts as "new"; only show the figure when it is meaningful.
-    if (s.added_today && s.added_today < s.active * 0.4) items.push(["New in 24 hours", n(s.added_today)]);
-    if (s.ai_waiting != null) items.push(["Waiting for AI summary", n(s.ai_waiting)]);
-    if (s.hired) items.push(["People hired", n(s.hired)]);
-    items.push(["Refreshed", "every 6 h"]);
-    $("#stats").innerHTML = items.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+    if (!s) return;
+    const fresh = s.added_today && s.added_today < s.active * 0.4; // right after a full re-import every job counts as new
+    const tiles = [[num(s.active), "live English-speaking jobs", fresh ? `+${num(s.added_today)} in the last 24 h` : "refreshed every 6 hours", null]];
+    if (kpi) {
+      tiles.push([`${100 - kpi.req}%`, "don't require German", `only ${kpi.req}% of jobs do`, 100 - kpi.req]);
+      tiles.push([num(kpi.visa), "mention visa sponsorship", `${Math.round((100 * kpi.visa) / Math.max(s.active, 1))}% of all jobs`, null]);
+      if (kpi.median) tiles.push([k(kpi.median), "median listed salary", `${kpi.salary_pct}% of jobs list a salary`, kpi.salary_pct]);
+    }
+    $("#stats").innerHTML = tiles.map(([v, label, sub, bar]) => `<div class="kpi"><b>${v}</b><span class="kpi-label">${label}</span>
+        ${bar != null ? `<span class="kpi-bar" aria-hidden="true"><span style="width:${bar}%"></span></span>` : ""}<span class="kpi-sub">${sub}</span></div>`).join("");
+    renderAgents();
+    runStelli();
+  }
+
+  // The pipeline behind the site, shown as four agents with a status light each (green: idle and fine, pulsing
+  // violet: working through a queue). Every figure is live.
+  function renderAgents() {
+    const s = siteStats, box = $("#agents");
+    if (!s || !box) return;
+    const mins = lastUpdate ? Math.max(0, Math.floor((Date.now() - lastUpdate) / 60000)) : null;
+    const done = s.active - (s.ai_waiting || 0);
+    const agents = [
+      ["Scout", "Collects jobs from career pages and job APIs",
+        mins == null ? "Scans every 6 hours" : `Last scan ${mins < 60 ? `${mins} min` : `${Math.floor(mins / 60)} h`} ago`, "ok"],
+      ["Linguist", "Reads how much German each job needs", `${num(s.active)} postings read`, "ok"],
+      ["Analyst", "AI summaries, salary benchmarks, Blue Card", s.ai_waiting ? `${num(done)} done · ${num(s.ai_waiting)} queued` : `${num(done)} analysed`,
+        s.ai_waiting ? "busy" : "ok"],
+      ["Inspector", "Retires closed, reported and duplicate jobs", `${num(Math.max(0, s.total - s.active))} retired so far`, "ok"],
+    ];
+    box.innerHTML = agents.map(([name, what, stat, st]) => `<li class="${st}"><span class="agent-dot" aria-hidden="true"></span>
+        <span class="agent-name"><b>${name}</b><small>${what}</small></span><span class="agent-stat">${stat}</span></li>`).join("");
+  }
+
+  // Stelli's speech bubble: one live fact after another, typed out.
+  function stelliLines() {
+    const s = siteStats, out = [];
+    if (s) out.push(`Hi, I'm Stelli. Right now I'm watching ${num(s.active)} English-speaking jobs in Germany.`);
+    if (s && s.added_today && s.added_today < s.active * 0.4) out.push(`${num(s.added_today)} new jobs came in during the last 24 hours. I've checked every one.`);
+    if (kpi) out.push(`Only ${kpi.req}% of these jobs require German. Tick “No German needed” to see the safest ones.`);
+    if (kpi && kpi.median) out.push(`${num(kpi.visa)} jobs mention visa sponsorship. The median listed salary is ${k(kpi.median)} a year.`);
+    if (places.length > 1) out.push(`${places[0].n} leads with ${num(places[0].k)} jobs, ${places[1].n} follows with ${num(places[1].k)}.`);
+    if (s && s.ai_waiting != null) out.push(`I've summarised ${num(s.active - s.ai_waiting)} jobs so far, and ${num(s.ai_waiting)} are waiting in my queue.`);
+    if (s && s.hired) out.push(`${num(s.hired)} people told us they got hired through Stellenly.`);
+    return out;
+  }
+  let stelliType = null, stelliTurn = null;
+  function runStelli() {
+    const el = $("#stelli-text"), lines = stelliLines();
+    if (!el || !lines.length) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let i = 0;
+    const show = () => {
+      const line = lines[i++ % lines.length];
+      clearInterval(stelliType);
+      if (still) { el.textContent = line; return; }
+      let c = 0;
+      stelliType = setInterval(() => { el.textContent = line.slice(0, ++c); if (c >= line.length) clearInterval(stelliType); }, 18);
+    };
+    clearInterval(stelliTurn);
+    show();
+    stelliTurn = setInterval(show, 7000);
   }
 
   // Logos of well-known employers that currently have a profile (and a logo) on the site.
@@ -1071,7 +1219,7 @@
       const ok = german ? new Set(german) : null;
       f.cities.filter((c) => !ok || ok.has(c.city)).slice(0, 30).forEach((c) => ensureCityOption(c.city));
       $("#city").value = sel;
-      $("#tag-cloud").innerHTML = f.tags.map((t) =>
+      $("#tag-cloud").innerHTML = f.tags.slice(0, 16).map((t) =>
         `<button type="button" class="tag" data-tag="${esc(t.tag)}" aria-pressed="${tags.includes(t.tag)}">#${esc(t.tag)}<span class="n">${t.count}</span></button>`).join("");
     } catch (e) { console.error(e); }
   }
@@ -1098,35 +1246,54 @@
   }
 
   // ---------------------------------------------------------------- init
-  // Pages without the search (jobs/state-*.html, jobs/city-*.html): their job cards open the same popup as the
-  // home page, on the same page (?job=<id>, the back button closes it). A card's link still leads to the job page,
-  // for search engines and for opening it in a new tab.
-  function initPopupOnly() {
-    const dlg = $("#job-dialog");
-    if (!dlg) return;
-    dlg.addEventListener("click", onDialogClick);
-    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); }); // click backdrop
-    dlg.addEventListener("close", () => { if (openId) closeJob(); });
+  // A logo that fails to load becomes coloured initials instead of a broken-image icon.
+  function fixBrokenLogos() {
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || !img.classList.contains("logo")) return;
+      const tmp = document.createElement("div");
+      companies[coKey(img.dataset.name)] = { ...(companies[coKey(img.dataset.name)] || {}), l: null };
+      tmp.innerHTML = logoHtml(img.dataset.name || "?", [...img.classList].filter((c) => c !== "logo").join(" "));
+      img.replaceWith(tmp.firstElementChild);
+    }, true);
+  }
+
+  // job.html?id=<id> and job/<id>.html: the static page's text (for search engines) is replaced by the full page.
+  function initJobPage(box) {
+    const id = box.dataset.id || new URLSearchParams(location.search).get("id");
+    if (!id) { location.replace(`${BASE}index.html`); return; }
+    box.addEventListener("click", onJobPageClick);
+    Promise.allSettled([
+      fetch(`${BASE}data/companies-index.json`).then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }),
+      DEMO ? null : rpc("site_stats").then((x) => { siteStats = x; }), // "N jobs in my queue"
+      C.DEV_INSIGHTS_URL ? fetch(C.DEV_INSIGHTS_URL).then((r) => r.json()).then((d) => { devInsights = d; }) : null,
+    ]).then(() => loadJobPage(box, id));
+  }
+
+  // Pages with job cards but no search (jobs/state-*.html, jobs/city-*.html): the whole card leads to the job page.
+  function initCards() {
     document.addEventListener("click", (e) => {
-      const card = e.target.closest("[data-job]"); // the whole card, like on the home page
-      if (!card || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; // new tab / window: the job page
-      if (e.target.closest("a") && !e.target.closest("a[data-job]")) return; // another link inside the card
-      e.preventDefault();
-      openJob(card.dataset.job);
+      const card = e.target.closest("[data-job]");
+      if (!card || e.target.closest("a, button") || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+      const a = $("a[href]", card);
+      if (a) location.href = a.href;
     });
-    window.addEventListener("popstate", () => {
-      const id = new URLSearchParams(location.search).get("job");
-      if (id) openJob(id, { push: false }); else if (openId) closeJob({ pop: true });
-    });
-    const startJob = new URLSearchParams(location.search).get("job");
-    fetch(`${BASE}data/companies-index.json`).then((r) => (r.ok ? r.json() : {})).then((d) => { companies = d; }).catch(() => {})
-      .finally(() => { if (startJob) openJob(startJob, { push: false }); });
   }
 
   function init() {
-    if (!$("#results")) return initPopupOnly();
+    fixBrokenLogos();
+    const tt = $("#theme-toggle");
+    if (tt) tt.addEventListener("click", () => {
+      const root = document.documentElement;
+      const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+      root.dataset.theme = dark ? "light" : "dark";
+      try { localStorage.setItem("ejg.theme", root.dataset.theme); } catch { /* ignore */ }
+    });
+    if ($("#jd.jp")) return initJobPage($("#jd.jp"));
+    if (!$("#results")) return initCards();
+    const startJob = new URLSearchParams(location.search).get("job");
+    if (startJob) { location.replace(jobUrl(startJob)); return; } // old links (Telegram, Discord) opened a popup
     document.title = `${C.SITE_NAME} — English-speaking jobs in Germany`;
-    baseTitle = document.title;
     $("#brand").textContent = C.SITE_NAME;
     $("#owner-note").innerHTML = `Built by ${C.OWNER_URL ? `<a href="${esc(C.OWNER_URL)}" rel="noopener">${esc(C.OWNER_NAME || "us")}</a>`
       : esc(C.OWNER_NAME || "us")} ${esc(C.OWNER_NOTE || "")}`;
@@ -1224,35 +1391,9 @@
       else { try { await navigator.clipboard.writeText(url); e.target.textContent = "Link copied ✓"; } catch { prompt("Copy this link:", url); } }
     });
 
-    $("#theme-toggle").addEventListener("click", () => {
-      const root = document.documentElement;
-      const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-      root.dataset.theme = dark ? "light" : "dark";
-      try { localStorage.setItem("ejg.theme", root.dataset.theme); } catch { /* ignore */ }
-    });
-
     document.addEventListener("keydown", (e) => {
       if (e.key === "/" && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $("#q").focus(); }
     });
-
-    // A logo that fails to load becomes coloured initials instead of a broken-image icon.
-    document.addEventListener("error", (e) => {
-      const img = e.target;
-      if (!(img instanceof HTMLImageElement) || !img.classList.contains("logo")) return;
-      const tmp = document.createElement("div");
-      companies[coKey(img.dataset.name)] = { ...(companies[coKey(img.dataset.name)] || {}), l: null };
-      tmp.innerHTML = logoHtml(img.dataset.name || "?", [...img.classList].filter((c) => c !== "logo").join(" "));
-      img.replaceWith(tmp.firstElementChild);
-    }, true);
-
-    // job popup: its own URL (?job=<id>), back button closes it
-    $("#job-dialog").addEventListener("click", onDialogClick);
-    $("#job-dialog").addEventListener("close", () => { if (openId) closeJob(); });
-    window.addEventListener("popstate", () => {
-      const id = new URLSearchParams(location.search).get("job");
-      if (id) openJob(id, { push: false }); else if (openId) closeJob({ pop: true });
-    });
-    const startJob = new URLSearchParams(location.search).get("job");
 
     loadStats();
     loadLocations();
@@ -1267,7 +1408,6 @@
       renderStats();
       renderHiring();
       search({ page: startPage });
-      if (startJob) openJob(startJob, { push: false });
     });
   }
 
