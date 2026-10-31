@@ -1216,6 +1216,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .jp-tabs small { margin-left: 4px; padding: 1px 7px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
 .jp-tabs button[aria-selected="true"] small { background: rgba(255, 255, 255, .15); color: #fff; }
 .jp-panel > * + * { margin-top: 14px; }
+.jp .score-card { background: var(--surface); border-color: var(--border); box-shadow: none; }
 .jp-empty { padding: 28px; text-align: center; background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); }
 .jp .jd-desc { font-size: 1rem; line-height: 1.7; }
 .jp-side { position: sticky; top: 80px; display: flex; flex-direction: column; gap: 14px; }

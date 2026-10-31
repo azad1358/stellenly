@@ -493,7 +493,7 @@
     return sc ? `<span class="score-chip inline" title="Stellenly Hiring Score ${sc.t}/100 — based on this company's job postings">★ ${(sc.t / 20).toFixed(1)}</span>` : "";
   }
 
-  function scoreCardHtml(j, key = "") {
+  function scoreCardHtml(j) {
     const sc = scoreOf(j.company);
     if (!sc) return "";
     const rows = sc.f.map(([, label, p, text]) => `<li><div class="sc-row"><span>${esc(label)}</span>${starsHtml(p, "sm")}<b>${p}</b></div>
@@ -504,10 +504,10 @@
           <div><p class="sc-kicker">Stellenly Hiring Score</p>
             <div class="sc-total"><b>${(sc.t / 20).toFixed(1)}</b>${starsHtml(sc.t)}</div>
             <p class="sc-grade">${grade(sc.t)} · ${sc.t}/100 points · based on ${sc.n} open jobs</p></div>
-          <button type="button" class="sc-help" popovertarget="jd-score-help${key}">ⓘ How we calculate this</button>
+          <button type="button" class="sc-help" popovertarget="jd-score-help">ⓘ How we calculate this</button>
         </div>
         <ul class="sc-list">${rows}</ul>
-        <div popover id="jd-score-help${key}" class="sc-pop">
+        <div popover id="jd-score-help" class="sc-pop">
           <h4>How the Hiring Score works</h4>
           <p>It rates how ${esc(j.company)} hires — based only on its current job postings on Stellenly, <b>not on employee
           reviews</b>. Each factor gives 0–100 points; the total is their weighted average (100 points = 5 stars):</p>
@@ -817,7 +817,6 @@
         </div>
         <aside class="jp-side">
           ${trackerHtml(j)}
-          ${scoreCardHtml(j, "-side")}
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
           ${similarCardHtml(j)}
         </aside>
