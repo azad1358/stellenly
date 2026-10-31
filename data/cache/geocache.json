@@ -354,6 +354,12 @@
 },
 "*|france - remote": null,
 "*|france remote": null,
+"*|freienbach": {
+"cc": "ch",
+"lat": 47.2044,
+"lon": 8.7599,
+"state": "CH-SZ"
+},
 "*|gb - london": {
 "cc": "gb",
 "lat": 51.5074,
@@ -630,6 +636,12 @@
 "lat": 51.5338,
 "lon": -0.2261
 },
+"*|longcross": {
+"cc": "gb",
+"lat": 51.3853,
+"lon": -0.5951,
+"state": "GB-ENG"
+},
 "*|lucerne": {
 "cc": "ch",
 "lat": 47.0521,
@@ -852,6 +864,7 @@
 "lat": 43.0059,
 "lon": -123.8926
 },
+"*|remote (utc-3 to utc+3)": null,
 "*|remote - europe timezone": null,
 "*|remote - france": null,
 "*|remote - uk": {
