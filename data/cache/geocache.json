@@ -133,6 +133,12 @@
 "lat": 52.4949,
 "lon": -1.8518
 },
+"*|blackburn, lancashire": {
+"cc": "gb",
+"lat": 53.7493,
+"lon": -2.4841,
+"state": "GB-ENG"
+},
 "*|bordeaux": {
 "cc": "fr",
 "lat": 44.8412,
@@ -214,6 +220,7 @@
 "lat": 42.3656,
 "lon": -71.104
 },
+"*|cambridge, ma, philadelphia, pa, maidenhead": null,
 "*|cambridge, uk": {
 "cc": "gb",
 "lat": 52.1976,

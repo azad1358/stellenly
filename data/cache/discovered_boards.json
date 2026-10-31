@@ -5,6 +5,11 @@
    "board": "0g",
    "company": "0G"
   },
+  "1global": {
+   "ats": "workable",
+   "board": "1global",
+   "company": "1Global"
+  },
   "4lu44n1n37w012k": {
    "ats": "greenhouse",
    "board": "4lu44n1n37w012k",
@@ -489,6 +494,11 @@
    "board": "inmobi",
    "company": "InMobi "
   },
+  "insiderone": {
+   "ats": "lever",
+   "board": "insiderone",
+   "company": "Insider One"
+  },
   "intercom": {
    "ats": "greenhouse",
    "board": "intercom",
@@ -513,6 +523,11 @@
    "ats": "ashby",
    "board": "justdice",
    "company": "Justdice"
+  },
+  "justplaygmbh": {
+   "ats": "ashby",
+   "board": "justplay-gmbh",
+   "company": "JustPlay GmbH"
   },
   "justwatch": {
    "ats": "lever",
@@ -676,6 +691,11 @@
    "ats": "ashby",
    "board": "omaze",
    "company": "Omaze"
+  },
+  "omegga": {
+   "ats": "ashby",
+   "board": "omegga",
+   "company": "Omegga"
   },
   "onapsis": {
    "ats": "greenhouse",
@@ -921,6 +941,12 @@
    "board": "spaitial",
    "company": "Spaitial"
   },
+  "sportalliancegmbh": {
+   "ats": "lever",
+   "board": "sportalliance",
+   "region": "eu",
+   "company": "Sport Alliance GmbH"
+  },
   "springhealth": {
    "ats": "ashby",
    "board": "deaa6ad2-d184-436b-b69e-17f761da1d94",
@@ -1093,6 +1119,12 @@
    "board": "Watershed",
    "company": "Watershed"
   },
+  "westernacher": {
+   "ats": "lever",
+   "board": "westernacher",
+   "region": "eu",
+   "company": "Westernacher"
+  },
   "workmotion": {
    "ats": "workable",
    "board": "workmotion",
@@ -1104,10 +1136,20 @@
    "region": "https://careers.yalwa.info",
    "company": "Yalwa GmbH"
   },
+  "yepoda": {
+   "ats": "ashby",
+   "board": "yepoda",
+   "company": "Yepoda"
+  },
   "zealnetwork": {
    "ats": "ashby",
    "board": "zeal-network",
    "company": "Zeal Network"
+  },
+  "zimperium": {
+   "ats": "lever",
+   "board": "zimperium",
+   "company": "Zimperium"
   },
   "zip": {
    "ats": "ashby",
@@ -1131,7 +1173,9 @@
   "amperecloudgmbh": "2026-10-27",
   "anoritech": "2026-10-27",
   "anywherenow": "2026-10-27",
+  "appen2": "2026-10-31",
   "appinio": "2026-10-27",
+  "atolls": "2026-10-31",
   "augleticsgmbh": "2026-10-30",
   "auterion": "2026-10-27",
   "auxiliusai": "2026-10-30",
@@ -1241,6 +1285,7 @@
   "nebius": "2026-10-27",
   "nejo": "2026-10-27",
   "nellysolutions": "2026-10-27",
+  "netlight": "2026-10-31",
   "neuralframes": "2026-10-27",
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
