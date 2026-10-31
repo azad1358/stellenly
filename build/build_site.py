@@ -646,12 +646,67 @@ def required_pct(jobs: list[dict]) -> int:
     return round(100 * sum(j["german_level"] == "required" for j in jobs) / max(len(jobs), 1))
 
 
+def blue_card() -> dict:
+    """{year, standard, reduced} from web/js/config.js, the site's one place for the Blue Card minimums."""
+    return {k: int(v) for k, v in re.findall(
+        r"(\w+): (\d+)", re.search(r"BLUE_CARD: \{([^}]*)\}", (WEB / "js" / "config.js").read_text(encoding="utf-8")).group(1))}
+
+
+def agent_facts(jobs: list[dict], stats: dict, by_city: dict[str, list[dict]], cities: list[str], index: dict) -> list[str]:
+    """Short reports from today's jobs for Stelli's speech bubble on the home page (app.js stelliLines): cities,
+    fields, salaries, remote, entry level, Blue Card, agencies, employers. Each one only when the numbers carry it."""
+    n = len(jobs) or 1
+    pct = lambda part, whole: round(100 * part / max(whole, 1))  # noqa: E731
+    mid = lambda j: (j["salary_min"] + (j.get("salary_max") or j["salary_min"])) / 2  # noqa: E731
+    name = lambda c: index.get(co_key(c), {}).get("n") or c  # noqa: E731
+    paid = lambda sel: [mid(j) for j in sel if j.get("salary_min") and j["salary_min"] <= 300000]  # noqa: E731
+    out = []
+    for city in cities[:6]:
+        sel = by_city[city]
+        k = len(sel)
+        visa = sum(bool(j.get("visa_sponsorship")) for j in sel)
+        out.append(f"📍 {city}: {k:,} open jobs. Only {pct(sum(j['german_level'] == 'required' for j in sel), k)}% require German"
+                   + (f", and {visa} mention visa sponsorship." if visa else "."))
+        top = Counter(name(j["company"]) for j in sel if not j.get("is_agency")).most_common(1)
+        if top and top[0][1] >= 0.8 * k:
+            out.append(f"🏢 {'All' if top[0][1] == k else f'{top[0][1]} of the'} {k} jobs in {city} are at {top[0][0]}.")
+        elif top and top[0][1] >= 5:
+            out.append(f"🏢 The busiest English-speaking employer in {city} right now: {top[0][0]}, with {top[0][1]} open jobs.")
+        sal = paid(sel)
+        if len(sal) >= 8:
+            out.append(f"💶 Median listed salary in {city}: {euro(statistics.median(sal))} a year, from {len(sal)} jobs that show one.")
+        remote = pct(sum(j["remote_type"] in ("remote_de", "remote_eu", "hybrid") for j in sel), k)
+        if k >= 50 and remote >= 20:
+            out.append(f"🏠 {remote}% of the jobs in {city} are remote or hybrid.")
+    fields = [(t, c) for t, c in stats["tags"] if t not in META_TAGS][:3]
+    if len(fields) == 3:
+        out.append("🧭 Biggest fields today: " + ", ".join(f"{t} ({c:,})" for t, c in fields) + ".")
+    for t, m, c in [x for x in stats["salary_by_tag"] if x[2] >= 10][:3]:  # 10+ salaries, not a lucky handful
+        out.append(f"💶 #{t} jobs pay a median of {euro(m)} a year ({c} jobs list a salary).")
+    if stats["new_7d"] < n * 0.4:  # right after a full re-import every job is "new"
+        out.append(f"🆕 {stats['new_7d']:,} new English-speaking jobs came in during the last 7 days.")
+    out.append(f"🌍 {stats['remote_pct']}% of all jobs are fully remote, in Germany or anywhere in the EU.")
+    entry = sum(j.get("seniority") in ("intern", "junior") for j in jobs)
+    if entry:
+        out.append(f"🎓 {entry:,} jobs are entry level (intern, working student or junior). Tick “Entry level” to see them.")
+    bc = blue_card()
+    over = sum(bool(j.get("salary_min")) and j["salary_min"] >= bc["standard"] for j in jobs)
+    if over:
+        out.append(f"🪪 {over:,} jobs list a salary above the {bc['year']} Blue Card minimum of {euro(bc['standard'])}.")
+    agency = pct(sum(bool(j.get("is_agency")) for j in jobs), n)
+    if agency >= 5:
+        out.append(f"🔎 {agency}% of the jobs come from recruiting agencies. Tick “Direct employers only” to hide them.")
+    top = [(name(c), k) for c, k in stats["companies"][:3]]
+    if len(top) == 3:
+        out.append("🏢 Most open jobs right now: " + ", ".join(f"{c} ({k})" for c, k in top) + ".")
+    return out
+
+
 def write_home_faq(jobs: list[dict], stats: dict, cities: list[tuple[str, int, str]]) -> None:
     """The FAQ on the hand-written home page, with today's numbers, between <!-- faq:start --> and <!-- faq:end -->."""
     req, visa, n = required_pct(jobs), stats["visa"], len(jobs)
     plus = round(100 * (stats["german"].get("not_required", 0) + stats["german"].get("nice_to_have", 0)) / max(n, 1))
-    bc = {k: int(v) if v.isdigit() else v for k, v in re.findall(
-        r"(\w+): (\d+)", re.search(r"BLUE_CARD: \{([^}]*)\}", (WEB / "js" / "config.js").read_text(encoding="utf-8")).group(1))}
+    bc = blue_card()
     city_links = ", ".join(f'<a href="{e(u)}">{e(c)}</a> ({k:,})' for c, k, u in cities[:5])
     items = [
         ("Can I get a job in Germany without speaking German?",
@@ -835,8 +890,9 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in META_TAGS][:8]
     kpi = {"req": stats["german_required_pct"], "visa": stats["visa"], "median": stats["median_salary"],
            "salary_pct": stats["salary_pct"]}
-    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields, "kpi": kpi}, ensure_ascii=False,
-                                                            separators=(",", ":")), encoding="utf-8")
+    facts = agent_facts(jobs, stats, by_city, cities_sorted, index)
+    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields, "kpi": kpi, "facts": facts},
+                                                            ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     write_home_faq(jobs, stats, [(c, len(by_city[c]), f"jobs/{url('city', c)}") for c in cities_sorted])
     return paths + ["jobs/index.html"]
 

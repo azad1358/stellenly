@@ -1120,11 +1120,12 @@
   const rankHtml = (items, label) => items.map((x, i) => `<li><a href="${esc(x.u)}"><span class="rk-i">${i + 1}</span>${label(x)}
       <span class="rk-bar" aria-hidden="true"><span style="width:${Math.max(4, (100 * x.k) / items[0].k).toFixed(1)}%"></span></span>
       <b>${num(x.k)}</b></a></li>`).join("");
-  let kpi = null, places = [];  // data/locations.json: figures the daily build computes (German, visa, salary)
+  let kpi = null, places = [], facts = [];  // data/locations.json: figures the daily build computes (German, visa, salary)
   async function loadLocations() {
     try {
       const data = await (await fetch("data/locations.json")).json();
       ({ places, kpi } = data);
+      facts = data.facts || [];
       const { fields } = data;
       renderStats();
       $("#loc-chips").innerHTML = rankHtml([...places].sort((a, b) => b.k - a.k).slice(0, 8), (l) =>
@@ -1187,7 +1188,10 @@
     if (places.length > 1) out.push(`${places[0].n} leads with ${num(places[0].k)} jobs, ${places[1].n} follows with ${num(places[1].k)}.`);
     if (s && s.ai_waiting != null) out.push(`I've summarised ${num(s.active - s.ai_waiting)} jobs so far, and ${num(s.ai_waiting)} are waiting in my queue.`);
     if (s && s.hired) out.push(`${num(s.hired)} people told us they got hired through Stellenly.`);
-    return out;
+    const shuffled = facts.map((f) => [Math.random(), f]).sort((a, b) => a[0] - b[0]).map(([, f]) => f);
+    const mixed = out.slice(0, 2);
+    out.slice(2).forEach((line, i) => mixed.push(...shuffled.slice(i * 2, i * 2 + 2), line));
+    return mixed.concat(shuffled.slice(Math.max(0, out.length - 2) * 2));
   }
   let stelliType = null, stelliTurn = null;
   function runStelli() {
