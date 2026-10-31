@@ -818,7 +818,6 @@
         <aside class="jp-side">
           ${trackerHtml(j)}
           ${scoreCardHtml(j, "-side")}
-          ${salaryCardHtml(j)}
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
           ${similarCardHtml(j)}
         </aside>
