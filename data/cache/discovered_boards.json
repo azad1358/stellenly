@@ -190,6 +190,11 @@
    "board": "cagents",
    "company": "Cagents"
   },
+  "caracare": {
+   "ats": "workable",
+   "board": "cara-care",
+   "company": "Cara Care"
+  },
   "ceezer": {
    "ats": "ashby",
    "board": "ceezer",
@@ -224,6 +229,11 @@
    "ats": "ashby",
    "board": "codesphere",
    "company": "Codesphere"
+  },
+  "comandai": {
+   "ats": "ashby",
+   "board": "comand-ai",
+   "company": "Comand Ai"
   },
   "comena": {
    "ats": "ashby",
@@ -651,6 +661,11 @@
    "ats": "ashby",
    "board": "mindpeak",
    "company": "Mindpeak"
+  },
+  "mistralai": {
+   "ats": "ashby",
+   "board": "mistral.ai",
+   "company": "Mistral.ai"
   },
   "mlabs": {
    "ats": "workable",
@@ -1125,6 +1140,11 @@
    "region": "eu",
    "company": "Westernacher"
   },
+  "wongdoody": {
+   "ats": "greenhouse",
+   "board": "wongdoody",
+   "company": "wongdoody"
+  },
   "workmotion": {
    "ats": "workable",
    "board": "workmotion",
@@ -1146,6 +1166,11 @@
    "board": "zeal-network",
    "company": "Zeal Network"
   },
+  "zetaglobal": {
+   "ats": "greenhouse",
+   "board": "zetaglobal",
+   "company": "zetaglobal"
+  },
   "zimperium": {
    "ats": "lever",
    "board": "zimperium",
@@ -1160,6 +1185,7 @@
  "none": {
   "1komma5": "2026-10-27",
   "7nxtgmbh": "2026-10-27",
+  "acadiajoblistings": "2026-10-31",
   "accuridsgmbh": "2026-10-27",
   "adstrong": "2026-10-27",
   "agentixlakegmbh": "2026-10-30",
@@ -1217,6 +1243,7 @@
   "dreamlinesgmbh": "2026-10-27",
   "ease": "2026-10-29",
   "ecopals": "2026-10-27",
+  "ecosio": "2026-10-31",
   "elevenlabs": "2026-10-27",
   "emnify": "2026-10-29",
   "engcmbluenergyag": "2026-10-27",
