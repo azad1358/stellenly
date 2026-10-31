@@ -1001,10 +1001,12 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
    2026 design: AI-first, numbers first
    ===================================================================== */
 :root { --grad: linear-gradient(135deg, #6366f1, #a855f7); --night: #0a1024; }
-.btn.grad, .jp-apply .btn.primary, .jp-bar .btn.primary, .hero-band .search .btn.primary {
-  background: var(--grad); border: 0; color: #fff; }
-.btn.grad:hover, .jp-apply .btn.primary:hover, .jp-bar .btn.primary:hover, .hero-band .search .btn.primary:hover {
-  background: var(--grad); filter: brightness(1.1); }
+.btn.grad, .hero-band .search .btn.primary { background: var(--grad); border: 0; color: #fff; }
+.btn.grad:hover, .hero-band .search .btn.primary:hover { background: var(--grad); filter: brightness(1.1); }
+/* Job page: every button and active control in the dark navy of the AI analysis */
+.jp-apply .btn.primary, .jp-bar .btn.primary, .jp-tabs button[aria-selected="true"], .steps button.done {
+  background: var(--night); border: 1px solid rgba(129, 140, 248, .45); color: #fff; }
+.jp-apply .btn.primary:hover, .jp-bar .btn.primary:hover { background: #1a2350; filter: none; }
 
 /* Header: logo · 4 tabs + "More" · live pill, theme, Support. Sticky, frosted. */
 .site-header { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--surface) 84%, transparent);
@@ -1144,7 +1146,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 /* ---------------------------------------------------------------- job page (app.js jobPageHtml) */
 .jp-wrap { max-width: 1160px; }
 .jp { padding-top: 14px; }
-.jp-hero { display: grid; grid-template-columns: auto minmax(0, 1fr) 300px; gap: 22px; align-items: start; margin-top: 6px; padding: 28px;
+.jp-hero { display: grid; grid-template-columns: auto minmax(0, 1fr) 380px; gap: 22px; align-items: start; margin-top: 6px; padding: 28px;
   border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); }
 .jp-titles h1 { margin: 2px 0 10px; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.03em; line-height: 1.15; }
 .jp-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
@@ -1154,8 +1156,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .jp-salary small { font-size: .85rem; font-weight: 500; color: var(--muted); }
 .jp-salary .muted { font-size: 1rem; font-weight: 600; }
 .jp-apply .btn.primary { justify-content: center; }
-.jp-tools { display: flex; flex-wrap: wrap; gap: 4px; }
-.jp-tools .btn { padding: 6px 9px; font-size: .86rem; }
+.jp-tools { display: flex; gap: 4px; }
+.jp-tools .btn { flex: 1 1 auto; justify-content: center; padding: 7px 8px; font-size: .86rem; white-space: nowrap; }
 .jp .jd-ask { margin: 12px 0 0; }
 
 .jp-verdict { margin-top: 18px; padding: 26px; border-radius: 24px; color: #e6e9f5; background:
@@ -1206,13 +1208,13 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .jp-verdict .muted { color: #8f9bb8; }
 
 .jp-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; margin-top: 20px; }
-.jp-tabs { display: flex; gap: 4px; margin-bottom: 14px; padding: 4px; border-radius: 14px; background: var(--surface);
-  border: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
-.jp-tabs button { flex: 1 0 auto; padding: 10px 14px; border: 0; border-radius: 10px; background: none; color: var(--muted);
-  font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
-.jp-tabs button:hover { color: var(--text); }
-.jp-tabs button[aria-selected="true"] { background: var(--grad); color: #fff; }
-.jp-tabs small { font-weight: 500; opacity: .8; }
+.jp-tabs { position: sticky; top: 72px; z-index: 5; display: flex; gap: 6px; margin-bottom: 16px; padding: 6px; border-radius: 16px;
+  background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); overflow-x: auto; scrollbar-width: none; }
+.jp-tabs button { flex: 1 0 auto; padding: 13px 16px; border: 1px solid transparent; border-radius: 12px; background: var(--surface-2);
+  color: var(--text); font: inherit; font-size: 1rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.jp-tabs button:hover { border-color: rgba(129, 140, 248, .45); }
+.jp-tabs small { margin-left: 4px; padding: 1px 7px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+.jp-tabs button[aria-selected="true"] small { background: rgba(255, 255, 255, .15); color: #fff; }
 .jp-panel > * + * { margin-top: 14px; }
 .jp-empty { padding: 28px; text-align: center; background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); }
 .jp .jd-desc { font-size: 1rem; line-height: 1.7; }
@@ -1222,7 +1224,6 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .steps { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .steps button { width: 100%; padding: 10px 2px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2);
   color: var(--muted); font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer; }
-.steps button.done { background: var(--grad); border-color: transparent; color: #fff; }
 .jp-note { margin-top: 20px; }
 .jp-bar { position: fixed; left: 50%; bottom: 16px; z-index: 25; transform: translateX(-50%); display: flex; align-items: center; gap: 14px;
   width: min(720px, calc(100vw - 24px)); padding: 10px 10px 10px 18px; border-radius: 16px; border: 1px solid var(--border);
@@ -1231,6 +1232,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .jp-bar-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
 .jp-bar-title small { margin-left: 6px; color: var(--muted); font-weight: 500; }
 .jp-gone { padding: 60px 20px; text-align: center; }
+@media (max-width: 1100px) { .jp-hero { grid-template-columns: auto minmax(0, 1fr) 330px; } }
 @media (max-width: 960px) {
   .jp-hero { grid-template-columns: auto minmax(0, 1fr); }
   .jp-apply { grid-column: 1 / -1; }

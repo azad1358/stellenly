@@ -493,7 +493,7 @@
     return sc ? `<span class="score-chip inline" title="Stellenly Hiring Score ${sc.t}/100 — based on this company's job postings">★ ${(sc.t / 20).toFixed(1)}</span>` : "";
   }
 
-  function scoreCardHtml(j) {
+  function scoreCardHtml(j, key = "") {
     const sc = scoreOf(j.company);
     if (!sc) return "";
     const rows = sc.f.map(([, label, p, text]) => `<li><div class="sc-row"><span>${esc(label)}</span>${starsHtml(p, "sm")}<b>${p}</b></div>
@@ -504,10 +504,10 @@
           <div><p class="sc-kicker">Stellenly Hiring Score</p>
             <div class="sc-total"><b>${(sc.t / 20).toFixed(1)}</b>${starsHtml(sc.t)}</div>
             <p class="sc-grade">${grade(sc.t)} · ${sc.t}/100 points · based on ${sc.n} open jobs</p></div>
-          <button type="button" class="sc-help" popovertarget="jd-score-help">ⓘ How we calculate this</button>
+          <button type="button" class="sc-help" popovertarget="jd-score-help${key}">ⓘ How we calculate this</button>
         </div>
         <ul class="sc-list">${rows}</ul>
-        <div popover id="jd-score-help" class="sc-pop">
+        <div popover id="jd-score-help${key}" class="sc-pop">
           <h4>How the Hiring Score works</h4>
           <p>It rates how ${esc(j.company)} hires — based only on its current job postings on Stellenly, <b>not on employee
           reviews</b>. Each factor gives 0–100 points; the total is their weighted average (100 points = 5 stars):</p>
@@ -763,8 +763,8 @@
     const c = companyInfo(j.company);
     const meta = [j.city || j.location || "Germany", REMOTE_LABEL[j.remote_type], SENIORITY_LABEL[j.seniority] !== "Not specified" && SENIORITY_LABEL[j.seniority],
       j.posted_at && `Posted ${ago(j.posted_at)}`].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join("");
-    const tabs = [["overview", "Overview"], ["skills", `Skills${skillsOf(j).length ? ` <small>${skillsOf(j).length}</small>` : ""}`],
-      ["market", "Salary &amp; market"], ["company", "Company"]];
+    const tabs = [["overview", "📄 Overview"], ["skills", `🧠 Skills${skillsOf(j).length ? ` <small>${skillsOf(j).length}</small>` : ""}`],
+      ["market", "💶 Salary &amp; market"], ["company", `🏢 Company${scoreOf(j.company) ? ` <small>★ ${(scoreOf(j.company).t / 20).toFixed(1)}</small>` : ""}`]];
     const market = salaryCardHtml(j) + compareCardHtml(j);
     return `
       <nav class="crumbs"><a href="${BASE}index.html">Jobs</a> ›
@@ -817,6 +817,8 @@
         </div>
         <aside class="jp-side">
           ${trackerHtml(j)}
+          ${scoreCardHtml(j, "-side")}
+          ${salaryCardHtml(j)}
           <section class="jd-card"><h3>At a glance</h3>${factsHtml(j)}</section>
           ${similarCardHtml(j)}
         </aside>
