@@ -1028,10 +1028,10 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   background: none; color: var(--text); font: inherit; font-size: .95rem; text-decoration: none; cursor: pointer; }
 .nav-menu a:hover, .nav-menu button:hover { background: var(--surface-2); }
 .m-only { display: none !important; }
-/* timer: right after the logo, its left edge on the page's content edge (where the hero text starts) when there is
-   room; 174px = header padding + logo + gap */
+/* timer: right after the menu; on screens wide enough it starts where the hero's "AI-checked" pill starts
+   (the content edge, 50vw - 564px), the menu ends about 600px from the left */
 .header-end { margin-left: auto; }
-.header-row > .updated-pill { margin-left: max(12px, calc(50vw - 580px + 16px - 174px)); }
+.header-row > .updated-pill { margin-left: max(16px, calc(50vw - 564px - 600px)); }
 @media (max-width: 1150px) { .updated-pill .upd { display: none; } }
 @media (max-width: 760px) { .updated-pill { display: none !important; } }
 @media (max-width: 760px) {
