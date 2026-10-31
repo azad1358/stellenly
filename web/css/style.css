@@ -849,6 +849,10 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 @media print { .float-stack { display: none; } }
 .footer-discord { display: inline-flex; align-items: center; gap: 5px; }
 .footer-logo { flex: none; color: #5865F2; }
+.footer-logo.ig { color: #E1306C; }
+.footer-logo.fb { color: #1877F2; }
+.header-end .social .footer-logo { width: 18px; height: 18px; }
+@media (max-width: 760px) { .header-end .social { display: none; } }
 .match-note { font-size: .75rem; padding: 1px 7px; border-radius: 999px; background: var(--neutral-bg); color: var(--muted); }
 .link-btn { font: inherit; font-size: inherit; color: var(--accent); background: none; border: 0; padding: 0 0 0 4px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .link-btn:hover { color: var(--text); }
@@ -1023,9 +1027,10 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .nav-menu a:hover, .nav-menu button:hover { background: var(--surface-2); }
 .m-only { display: none !important; }
 /* timer: centred in the space between the tabs and the buttons on the right */
+.header-end { margin-left: auto; }
 .header-row > .updated-pill { margin: 0 auto; }
-.header-row > .updated-pill[hidden] + .header-end { margin-left: auto; }
-@media (max-width: 760px) { .header-end { margin-left: auto; } }
+.header-row > .updated-pill:not([hidden]) + .header-end { margin-left: 0; }
+@media (max-width: 760px) { .header-row > .updated-pill + .header-end { margin-left: auto; } }
 @media (max-width: 1150px) { .updated-pill .upd { display: none; } }
 @media (max-width: 760px) { .updated-pill { display: none !important; } }
 @media (max-width: 760px) {
