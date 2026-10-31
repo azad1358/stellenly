@@ -1268,6 +1268,11 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .hero-berlin * { vector-effect: non-scaling-stroke; }
 .hero-berlin .lines { opacity: .2; }
 .hero-berlin .guides { opacity: .1; stroke-dasharray: 3 6; }
+/* the Fernsehturm's red aviation light (antenna tip: x 1060 + the tower's 270 shift) */
+.hero-berlin .tv-light { fill: #ff3b3b; stroke: none; filter: drop-shadow(0 0 4px #ff3b3b) drop-shadow(0 0 10px #ff3b3b);
+  animation: tv-blink 2s ease-in-out infinite; }
+@keyframes tv-blink { 0%, 55%, 100% { opacity: .15; } 65%, 85% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-berlin .tv-light { animation: none; opacity: .8; } }
 .hero-berlin .labels { opacity: .22; fill: currentColor; stroke: none; font: 600 9px/1 var(--font); letter-spacing: .14em; }
 .hero-band.ai .hero, .hero-band.ai > .wrap { position: relative; z-index: 1; }
 @media (max-width: 760px) { .hero-berlin { height: 260px; -webkit-mask-image: none; mask-image: none; opacity: .6; } .hero-berlin .labels { display: none; } }
