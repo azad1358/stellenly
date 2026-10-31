@@ -84,7 +84,7 @@
     const left = Math.max(0, Math.floor((nextRun(now) - now) / 1000));
     const two = (n) => String(n).padStart(2, "0");
     const clock = `${two(Math.floor(left / 3600))}:${two(Math.floor((left % 3600) / 60))}:${two(left % 60)}`;
-    el.innerHTML = `<span class="live-dot" aria-hidden="true"></span>Live · updated ${ago}<span class="next"> · next scan ${clock}</span>`;
+    el.innerHTML = `<span class="live-dot" aria-hidden="true"></span><span class="upd">Updated ${ago} · </span><span class="next">next in ${clock}</span>`;
     el.title = `Jobs were last refreshed ${lastUpdate.toLocaleString()}. New jobs are fetched every 6 hours — next in ${clock}.`;
     el.hidden = false;
   }
@@ -1198,13 +1198,15 @@
     stelliTurn = setInterval(show, 7000);
   }
 
-  // Logos of well-known employers that currently have a profile (and a logo) on the site.
-  const FEATURED = ["Celonis", "N26", "DeepL", "Trade Republic", "HelloFresh", "GetYourGuide", "SumUp", "Helsing",
-    "Databricks", "Enpal", "Contentful", "Raisin", "Babbel", "Doctolib", "Flix", "Spotify"];
+  // "Hiring now" ticker: companies with a logo, most open jobs first, running like a news line (the row is
+  // repeated once so the loop is seamless).
   function renderHiring() {
-    const picks = FEATURED.map((name) => companyInfo(name)).filter((c) => c && c.l && c.u).slice(0, 6);
-    $("#hiring-logos").innerHTML = picks.map((c) =>
-      `<a href="${esc(c.u)}" title="${esc(c.n)}"><img src="${esc(c.l)}" alt="${esc(c.n)}" loading="lazy"><span>${esc(c.n)}</span></a>`).join("");
+    const byPage = new Map();
+    Object.values(companies).forEach((c) => { if (c.l && c.u && c.sc) byPage.set(c.u, c); });
+    const picks = [...byPage.values()].sort((a, b) => b.sc.n - a.sc.n).slice(0, 30);
+    const row = (copy) => picks.map((c) => `<a href="${esc(c.u)}"${copy ? ' tabindex="-1" aria-hidden="true"' : ""}>
+        <img src="${esc(c.l)}" alt="" loading="lazy"><span>${esc(c.n)}</span><b>${num(c.sc.n)} jobs</b></a>`).join("");
+    $("#hiring-logos").innerHTML = row(false) + row(true);
     $(".hiring-strip").hidden = !picks.length;
   }
 

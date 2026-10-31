@@ -45,6 +45,7 @@
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Stellenly home"><img class="brand-logo" src="img/logo.svg" alt="" width="32" height="32"><span id="brand">Stellenly</span></a>
     <nav class="header-actions" aria-label="Main">
+      <span class="updated-pill" id="updated-pill" hidden></span>
       <a class="btn ghost nav-link" href="./" aria-current="page">Jobs</a>
       <a class="btn ghost nav-link" href="companies.html">Companies</a>
       <a class="btn ghost nav-link" href="jobs/index.html">Cities</a>
@@ -63,7 +64,6 @@
       </details>
     </nav>
     <div class="header-end">
-      <span class="updated-pill" id="updated-pill" hidden></span>
       <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
       <button type="button" class="btn support" data-open="support-dialog">Support us</button>
     </div>
@@ -71,10 +71,40 @@
 </header>
 
 <section class="hero-band ai">
-  <div class="wrap hero hero-grid">
+  <div class="wrap hero">
+    <svg class="hero-berlin" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <g class="guides"><path d="M0 210H1440M0 120H1440"/><circle cx="1330" cy="120" r="44"/>
+        <path d="M1420 22V318M1414 22h12M1414 318h12M980 306v10M1264 306v10M980 311H1264"/></g>
+      <g class="lines"><path d="M0 318H1440"/>
+      <g transform="translate(0 0)"><path d="M12 318V214h56v104M12 236h56M12 258h56M12 280h56M12 300h56M31 214v104M50 214v104"/>
+<path d="M80 318V182h48v136M80 204h48M80 226h48M80 248h48M80 270h48M80 292h48M96 182v136M112 182v136"/>
+<path d="M136 318V246h30v72M136 266h30M136 286h30"/></g>
+      <g transform="translate(-328 0)"><path d="M528 318V196h42v122M750 196h42v122M570 318V212h180v106M570 246h180M570 276h180"/>
+<path d="M528 196l6-8h30l6 8M750 196l6-8h30l6 8"/>
+<path d="M604 318v-78M618 318v-78M632 318v-78M688 318v-78M702 318v-78M716 318v-78M598 240h124M598 240l62-24 62 24"/>
+<path d="M610 212a50 56 0 0 1 100 0M635 212q4-40 25-56M685 212q-4-40-25-56M660 212v-56M616 192h88M627 176h66M642 163h36M654 156h12v-5h-12z"/></g>
+      <g transform="translate(-358 0)"><path d="M838 318v-30h44v30M846 288v-12h28v12M853 276V160M867 276V160M850 244h20M850 214h20M850 184h20M849 160h22v-9h-22zM860 151v-24M860 136l-13-7M860 136l13-7"/>
+<circle cx="860" cy="123" r="4"/></g>
+      <g transform="translate(-606 0)"><path d="M1166 318V212h148v106M1166 230h148M1208 212v-38h64v38M1203 174a37 42 0 0 1 74 0M1234 132v-8h12v8M1236 124a4 5 0 0 1 8 0M1240 119v-12M1236 111h8"/>
+<path d="M1170 212v-30h24v30M1286 212v-30h24v30M1168 182a14 15 0 0 1 28 0M1284 182a14 15 0 0 1 28 0"/>
+<path d="M1184 300v-28a8 8 0 0 1 16 0v28M1216 300v-34a10 10 0 0 1 20 0v34M1244 300v-34a10 10 0 0 1 20 0v34M1280 300v-28a8 8 0 0 1 16 0v28"/></g>
+      <g transform="translate(-140 0)"><path d="M900 318V198h40v120M900 222h40M900 246h40M900 270h40M900 294h40M920 198v120M948 318v-80h38v80M948 258h38M948 278h38M948 298h38"/></g>
+      <g transform="translate(812 0)"><path d="M195 318v-10h230v10M168 318v-58h27M425 260h27v58M168 260l13-10 14 10M425 260l14-10 13 10"/>
+<path d="M205 308V232M219 308V232M243 308V232M257 308V232M281 308V232M295 308V232M325 308V232M339 308V232M363 308V232M377 308V232M401 308V232M415 308V232"/>
+<path d="M198 232h224v-16H198zM198 224h224M240 216v-18h140v18M252 198v-6h116v6"/>
+<path d="M294 192v-10h32v10M290 182q5-15 13-13M298 182q5-17 13-15M311 182q5-17 13-15M321 182q5-15 13-13M310 182v-22M316 176l3-30"/>
+<circle cx="310" cy="156" r="4"/></g>
+      <g transform="translate(270 0)"><path d="M996 318v-26l16-12 16 12 16-12 16 12 16-12 16 12 16-12 16 12v26"/>
+<path d="M1054 292l2-148M1066 292l-2-148"/>
+<circle cx="1060" cy="120" r="24"/>
+<path d="M1037 114h46M1038 126h44M1044 104h32M1057 96V58M1063 96V58M1055 58h10M1060 58V6M1056 44h8M1057 30h6M1058 18h4"/></g>
+      </g>
+      <g class="labels"><text x="1004" y="140">BRANDENBURGER TOR · 1791</text><text x="1150" y="40">FERNSEHTURM · 368 M</text>
+        <text x="202" y="180">REICHSTAG</text><text x="560" y="200">BERLINER DOM</text></g>
+    </svg>
     <div class="hero-left">
     <p class="hero-kicker"><span class="live-dot" aria-hidden="true"></span> AI-checked job board for English speakers</p>
-    <h1 id="tagline">English-speaking jobs in Germany, <span class="grad-text">read by AI</span></h1>
+    <h1 id="tagline">English-speaking jobs in Germany</h1>
     <p class="hero-sub">Our AI agents read every posting and tell you up front whether German is required, what it pays and whether the employer sponsors visas.</p>
 
     <form id="search-form" class="search" role="search" autocomplete="off">
@@ -101,19 +131,6 @@
     </div>
     </div>
 
-    <aside class="ai-console" aria-label="Stellenly's AI agents, live">
-      <div class="console-head"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
-          <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
-          <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
-          <circle class="stelli-light" cx="32" cy="6" r="4"/>
-          <rect x="10" y="14" width="44" height="36" rx="14" fill="url(#stelli-g)"/>
-          <rect x="16" y="22" width="32" height="18" rx="9" fill="#0b1020"/>
-          <g class="stelli-eyes" fill="#7dd3fc"><circle cx="25" cy="31" r="3.4"/><circle cx="39" cy="31" r="3.4"/></g>
-          <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg>
-        <div><b>Stelli</b><small><span class="live-dot" aria-hidden="true"></span> 4 AI agents online</small></div></div>
-      <p class="bubble" id="stelli-text">Checking the latest jobs…</p>
-      <ul class="agents" id="agents"></ul>
-    </aside>
   </div>
   <div class="wrap"><div class="hero-kpis" id="stats" aria-live="polite"></div></div>
 </section>
@@ -232,13 +249,16 @@
 
   <section class="explore" aria-labelledby="explore-h">
     <div class="section-head"><p class="kicker accent">Explore</p><h2 id="explore-h">Where the jobs are</h2></div>
+    <div class="ticker hiring-strip" aria-label="Companies hiring now">
+      <span class="ticker-label"><span class="live-dot" aria-hidden="true"></span> Hiring now</span>
+      <div class="ticker-viewport"><div class="ticker-track" id="hiring-logos"></div></div>
+      <a class="ticker-all" href="companies.html">All companies →</a>
+    </div>
     <div class="explore-grid">
       <div class="explore-card"><h3>Top locations</h3><div id="loc-chips" class="chip-cloud"></div>
         <a class="more" href="jobs/index.html">All states &amp; cities →</a></div>
       <div class="explore-card"><h3>Popular fields</h3><div id="field-chips" class="chip-cloud"></div>
         <a class="more" href="jobs/index.html#fields">All fields →</a></div>
-      <div class="explore-card hiring-strip"><h3>Companies hiring now</h3><div class="hiring-logos" id="hiring-logos"></div>
-        <a class="more" href="companies.html">All companies →</a></div>
     </div>
   </section>
 
@@ -350,6 +370,19 @@
 <script src="js/config.js"></script>
 <script src="js/demo.js"></script>
 <script src="js/app.js"></script>
+  <aside class="ai-console ai-float" aria-label="Stellenly's AI agents, live">
+    <div class="console-head"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+        <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
+        <circle class="stelli-light" cx="32" cy="6" r="4"/>
+        <rect x="10" y="14" width="44" height="36" rx="14" fill="url(#stelli-g)"/>
+        <rect x="16" y="22" width="32" height="18" rx="9" fill="#0b1020"/>
+        <g class="stelli-eyes" fill="#7dd3fc"><circle cx="25" cy="31" r="3.4"/><circle cx="39" cy="31" r="3.4"/></g>
+        <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg>
+      <div><b>Stelli</b><small><span class="live-dot" aria-hidden="true"></span> 4 AI agents online</small></div></div>
+    <p class="bubble" id="stelli-text">Checking the latest jobs…</p>
+    <ul class="agents" id="agents"></ul>
+  </aside>
 <div class="float-stack">
 <div class="tg-float dc-float" data-hide="dcHidden">
   <a class="tg-float-card" href="https://discord.gg/wMqjvq6dw" target="_blank" rel="noopener" data-goatcounter-click="discord-float" aria-label="Join the Stellenly community on Discord">
