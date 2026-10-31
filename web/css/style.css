@@ -1020,11 +1020,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .hero-band.ai { color: #fff; background:
   radial-gradient(700px 380px at 88% -5%, rgba(168, 85, 247, .30), transparent 60%),
   radial-gradient(800px 420px at 0% 110%, rgba(99, 102, 241, .28), transparent 60%),
-  linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 40px 40px,
-  linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 40px 40px,
   var(--night); }
-.hero-band.ai .hero { padding: 64px 16px 44px; }
-.hero-left { max-width: 800px; }
+.hero-band.ai .hero { padding: 64px 16px 0; }
 .hero-kicker { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; padding: 6px 12px; border-radius: 999px;
   font-size: .82rem; font-weight: 600; color: #c7d2fe; background: rgba(99, 102, 241, .14); border: 1px solid rgba(129, 140, 248, .35); }
 
@@ -1227,14 +1224,17 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 
 /* Hero background: Berlin as a light architectural line drawing */
 .hero-band.ai { position: relative; }
-/* inside .hero, so its ground line sits just above the numbers band; .hero-band clips the sides */
-.hero-berlin { position: absolute; z-index: -1; left: 50%; bottom: 0; width: 100vw; height: 340px; transform: translateX(-50%); pointer-events: none;
+/* Standing on the bottom edge of the hero; hairlines (1px at any scale); faded out behind the text in the middle */
+.hero-berlin { position: absolute; left: 0; bottom: 0; width: 100%; height: 440px; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 7%, transparent 13%, transparent 58%, #000 68%);
+  mask-image: linear-gradient(90deg, #000 0, #000 7%, transparent 13%, transparent 58%, #000 68%);
   color: #c7d2fe; fill: none; stroke: currentColor; stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
-.hero-berlin .lines { opacity: .16; }
+.hero-berlin * { vector-effect: non-scaling-stroke; }
+.hero-berlin .lines { opacity: .2; }
 .hero-berlin .guides { opacity: .1; stroke-dasharray: 3 6; }
 .hero-berlin .labels { opacity: .22; fill: currentColor; stroke: none; font: 600 9px/1 var(--font); letter-spacing: .14em; }
 .hero-band.ai .hero, .hero-band.ai > .wrap { position: relative; z-index: 1; }
-@media (max-width: 760px) { .hero-berlin { height: 220px; } .hero-berlin .labels { display: none; } }
+@media (max-width: 760px) { .hero-berlin { height: 260px; -webkit-mask-image: none; mask-image: none; opacity: .6; } .hero-berlin .labels { display: none; } }
 
 /* "Hiring now" news line */
 .ticker { display: flex; align-items: center; gap: 16px; margin: 0 0 16px; padding: 12px 16px; border-radius: 18px;
