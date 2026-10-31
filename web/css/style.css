@@ -1001,12 +1001,12 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
    2026 design: AI-first, numbers first
    ===================================================================== */
 :root { --grad: linear-gradient(135deg, #6366f1, #a855f7); --night: #0a1024; }
-.btn.grad, .hero-band .search .btn.primary { background: var(--grad); border: 0; color: #fff; }
-.btn.grad:hover, .hero-band .search .btn.primary:hover { background: var(--grad); filter: brightness(1.1); }
+.btn.grad { background: var(--grad); border: 0; color: #fff; }
+.btn.grad:hover { background: var(--grad); filter: brightness(1.1); }
 /* Job page: every button and active control in the dark navy of the AI analysis */
-.jp-apply .btn.primary, .jp-bar .btn.primary, .jp-tabs button[aria-selected="true"], .steps button.done {
+.hero-band .search .btn.primary, .jp-apply .btn.primary, .jp-bar .btn.primary, .jp-tabs button[aria-selected="true"], .steps button.done {
   background: var(--night); border: 1px solid rgba(129, 140, 248, .45); color: #fff; }
-.jp-apply .btn.primary:hover, .jp-bar .btn.primary:hover { background: #1a2350; filter: none; }
+.hero-band .search .btn.primary:hover, .jp-apply .btn.primary:hover, .jp-bar .btn.primary:hover { background: #1a2350; filter: none; }
 
 /* Header: logo · 4 tabs + "More" · live pill, theme, Support. Sticky, frosted. */
 .site-header { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--surface) 84%, transparent);
@@ -1028,11 +1028,10 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   background: none; color: var(--text); font: inherit; font-size: .95rem; text-decoration: none; cursor: pointer; }
 .nav-menu a:hover, .nav-menu button:hover { background: var(--surface-2); }
 .m-only { display: none !important; }
-/* timer: centred in the space between the tabs and the buttons on the right */
+/* timer: right after the logo, its left edge on the page's content edge (where the hero text starts) when there is
+   room; 174px = header padding + logo + gap */
 .header-end { margin-left: auto; }
-.header-row > .updated-pill { margin: 0 auto; }
-.header-row > .updated-pill:not([hidden]) + .header-end { margin-left: 0; }
-@media (max-width: 760px) { .header-row > .updated-pill + .header-end { margin-left: auto; } }
+.header-row > .updated-pill { margin-left: max(12px, calc(50vw - 580px + 16px - 174px)); }
 @media (max-width: 1150px) { .updated-pill .upd { display: none; } }
 @media (max-width: 760px) { .updated-pill { display: none !important; } }
 @media (max-width: 760px) {
