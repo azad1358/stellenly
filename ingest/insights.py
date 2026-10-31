@@ -66,6 +66,21 @@ def rest(path: str, params: dict, headers: dict | None = None) -> list[dict]:
     return r.json()
 
 
+WRITE_BATCH = 100  # insights are ~1 KB per job; 500 per statement could pass the API's 8 s statement timeout
+
+
+def write_insights(rows: list[dict]) -> int:
+    """set_job_insights for one batch; on a statement timeout, halve the batch and try again."""
+    try:
+        return int(rpc("set_job_insights", {"payload": rows}) or 0)
+    except RuntimeError as err:
+        if "57014" not in str(err) or len(rows) == 1:
+            raise
+        half = len(rows) // 2
+        print(f"  timeout writing {len(rows)} jobs, retrying as {half} + {len(rows) - half}")
+        return write_insights(rows[:half]) + write_insights(rows[half:])
+
+
 def rpc(name: str, body: dict) -> str:
     key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     r = requests.post(f"{_env('SUPABASE_URL')}/rest/v1/rpc/{name}", data=json.dumps(body), timeout=120,
@@ -518,10 +533,8 @@ def main() -> None:
         print(f"Preview written to {out}")
         return
     rows = [{"id": i, "insights": v} for i, v in insights.items()]
-    written = 0
-    for i in range(0, len(rows), BATCH):
-        written += int(rpc("set_job_insights", {"payload": rows[i:i + BATCH]}) or 0)
-    print(f"Wrote insights for {written} jobs")
+    written = sum(write_insights(rows[i:i + WRITE_BATCH]) for i in range(0, len(rows), WRITE_BATCH))
+    print(f"Wrote insights for {written} jobs (unchanged ones are skipped)")
     if corrections:
         fixed = sum(int(rpc("set_job_facts", {"payload": corrections[i:i + BATCH]}) or 0)
                     for i in range(0, len(corrections), BATCH))
