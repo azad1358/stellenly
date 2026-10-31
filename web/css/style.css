@@ -1262,8 +1262,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .hero-band.ai { position: relative; }
 /* Standing on the bottom edge of the hero; hairlines (1px at any scale); faded out behind the text in the middle */
 .hero-berlin { position: absolute; left: 0; bottom: 0; width: 100%; height: 440px; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 38%, transparent 47%, transparent 56%, #000 66%);
-  mask-image: linear-gradient(90deg, #000 0, #000 38%, transparent 47%, transparent 56%, #000 66%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 21%, rgba(0, 0, 0, .3) 26%, transparent 33%, transparent 56%, #000 66%);
+  mask-image: linear-gradient(90deg, #000 0, #000 21%, rgba(0, 0, 0, .3) 26%, transparent 33%, transparent 56%, #000 66%);
   color: #c7d2fe; fill: none; stroke: currentColor; stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
 .hero-berlin * { vector-effect: non-scaling-stroke; }
 .hero-berlin .lines { opacity: .2; }
