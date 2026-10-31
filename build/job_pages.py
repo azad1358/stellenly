@@ -157,7 +157,8 @@ def job_html(j: dict, co: dict, by_id: dict) -> str:
     # Google's job search needs the full description: a title-only page stays out of the index.
     ld = json.dumps(job_posting(j, desc, co), ensure_ascii=False).replace("</", "<\\/")
     head = '<meta name="robots" content="noindex">' if title_only else f'<script type="application/ld+json">{ld}</script>'
-    body = f"""<nav class="crumbs"><a href="../index.html">Jobs</a> › {company}</nav>
+    body = f"""<div id="jd" class="jp" data-id="{e(j['id'])}">
+<nav class="crumbs"><a href="../index.html">Jobs</a> › {company}</nav>
 <article class="job-page">
   <header class="job-page-head">
     {f'<img class="logo-md" src="../{e(co["l"])}" alt="" width="48" height="48">' if co.get("l") else ""}
@@ -173,11 +174,14 @@ def job_html(j: dict, co: dict, by_id: dict) -> str:
   <p class="muted small">We show this posting as published by the employer. Always check the details on the original posting
   before you apply. <a href="../how-it-works.html">How we read job postings</a>.</p>
   {f'<section class="jd-card similar"><h2>Similar jobs</h2><ul class="link-list">{sim_html}</ul></section>' if sim_html else ""}
-</article>"""
+</article>
+</div>
+<script src="../js/config.js"></script>
+<script src="../js/app.js"></script>"""
     desc_meta = (f"{j['company']} is hiring in {place}. {label}"
                  + (f", {euro(j['salary_min'])}+ a year" if j.get("salary_min") else "") + ". Apply in English.")
     return page(f"{j['title']} at {j['company']}", desc_meta, body, f"job/{j['id']}.html", 1,
-                extra_head=head, main_class="content-page")
+                extra_head=head, main_class="jp-wrap")
 
 
 def indexnow(urls: list[str]) -> None:

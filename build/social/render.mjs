@@ -14,12 +14,19 @@ if (!browser) throw new Error("no Chrome / Edge found: set CHROME");
 const port = 9400 + Math.floor(Math.random() * 400);
 const proc = spawn(browser, ["--headless=new", "--disable-gpu", "--no-sandbox", "--allow-file-access-from-files",
   `--remote-debugging-port=${port}`, `--user-data-dir=${fs.mkdtempSync(path.join(os.tmpdir(), "social-"))}`, "about:blank"]);
+let log = "";
+proc.stderr.on("data", (d) => { log += d; });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let target;
-for (let i = 0; i < 40 && !target; i++) {
+for (let i = 0; i < 120 && !target; i++) { // up to 30 s: a fresh CI machine starts Chrome slowly
   await sleep(250);
-  try { target = (await (await fetch(`http://127.0.0.1:${port}/json`)).json()).find((t) => t.type === "page"); } catch { /* starting */ }
+  try {
+    const list = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
+    target = list.find((t) => t.type === "page")
+      || await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: "PUT" })).json(); // no tab yet: open one
+  } catch { /* still starting */ }
 }
+if (!target) throw new Error(`${browser} did not start:\n${log.slice(-2000)}`);
 const ws = new WebSocket(target.webSocketDebuggerUrl);
 await new Promise((r) => ws.addEventListener("open", r));
 let id = 0;

@@ -145,7 +145,7 @@ w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden
 def page(title: str, description: str, body: str, path: str, depth: int, extra_head: str = "",
          affiliate_note: bool = False, main_class: str = "content-page") -> str:
     up = "../" * depth
-    skill_link = f'    <a class="btn ghost" href="{up}skill-check.html">Skill check</a>\n' if SKILL_CHECK else ""
+    skill_link = f'<a href="{up}skill-check.html">Skill check</a>' if SKILL_CHECK else ""
     canonical = f"{SITE_URL}/{path}".replace("/index.html", "/")
     note = ('<p class="affiliate-note">Some links on this page are partner links: if you sign up, we may earn a small '
             'commission at no extra cost to you. It keeps this site free. We only list services we would recommend anyway.</p>'
@@ -179,14 +179,20 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <body>
 <header class="site-header"><div class="wrap header-row">
   <a class="brand" href="{up}index.html"><img class="brand-logo" src="{up}img/logo.svg" alt="" width="32" height="32"><span>{e(SITE['site_name'])}</span></a>
-  <nav class="header-actions">
-    <a class="btn ghost" href="{up}index.html">Search jobs</a>
-    <a class="btn ghost" href="{up}companies.html">Companies</a>
-    <a class="btn ghost" href="{up}resources.html">Resources</a>
-    <a class="btn ghost" href="{up}blog/index.html">Guides</a>
-{skill_link}    <a class="btn ghost" href="{up}how-it-works.html">How it works</a>
+  <nav class="header-actions" aria-label="Main">
+    <a class="btn ghost nav-link" href="{up}index.html">Jobs</a>
+    <a class="btn ghost nav-link" href="{up}companies.html">Companies</a>
+    <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
+    <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
+    <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
+      <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}blog/index.html">Guides</a>
+      <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
+      <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
-  <div class="header-end"><a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
+  <div class="header-end"><a class="btn ghost icon social ig" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Instagram" title="Instagram"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a><a class="btn ghost icon social fb" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Facebook" title="Facebook"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg></a>
+    <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
+    <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
 <main class="wrap {main_class}">
 {body}
@@ -194,7 +200,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 </main>
 <footer class="site-footer"><div class="wrap footer-row">
   <span>Updated {TODAY.isoformat()} · Jobs from public job APIs and company career pages.</span>
-  <nav><a class="footer-discord" href="{e(SITE['discord_url'])}" target="_blank" rel="noopener"><svg class="footer-logo" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>Discord</a><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}jobs/index.html">Jobs by location</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
+  <nav><a class="footer-discord" href="{e(SITE['discord_url'])}" target="_blank" rel="noopener"><svg class="footer-logo" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>Discord</a><a class="footer-discord" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg>Instagram</a><a class="footer-discord" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg>Facebook</a><a href="{e(SITE['telegram_url'])}" target="_blank" rel="noopener">Telegram</a><a href="{up}jobs/index.html">Jobs by location</a><a href="{up}impressum.html">Impressum</a><a href="{up}privacy.html">Privacy</a><a href="{up}resources.html">Resources</a></nav>
 </div></footer>
 {TG_FLOAT}
 </body>
@@ -604,8 +610,7 @@ def job_cards_html(jobs: list[dict], up: str, logos: dict[str, str]) -> str:
 
 
 # The job popup of the home page (app.js openJob), on the location and field pages: a card opens it in place.
-JOB_POPUP = """<dialog id="job-dialog" class="job-dialog" aria-labelledby="jd-title"><div id="jd" class="jd"></div></dialog>
-<script src="../js/config.js"></script>
+CARD_SCRIPTS = """<script src="../js/config.js"></script>
 <script src="../js/app.js"></script>"""
 
 
@@ -620,6 +625,128 @@ def place_tiles_html(items: list[tuple[int, str | None, str, str | None]], up: s
         tiles.append(f'<li><a class="place-tile" href="{e(href)}">{inner}</a></li>' if href
                      else f'<li><span class="place-tile here" aria-current="page">{inner}</span></li>')
     return f'<ul class="place-tiles">{"".join(tiles)}</ul>'
+
+
+def faq_html(items: list[tuple[str, str]], title: str = "Frequently asked questions", intro: str = "") -> str:
+    """[(question, answer HTML)] as numbered foldable questions, plus schema.org FAQPage data so Google can show the
+    answers. With `intro` (home page) the title and intro sit in a column next to the questions."""
+    plain = lambda h: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", h))).strip()  # noqa: E731
+    ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in items]}
+    qa = "".join(f'<details><summary><span class="faq-n">{i:02d}</span><span>{e(q)}</span></summary><div class="faq-a">{a}</div></details>'
+                 for i, (q, a) in enumerate(items, 1))
+    head = f'<div class="faq-intro"><p class="kicker accent">FAQ</p><h2 id="faq-h">{e(title)}</h2>{intro}</div>' if intro \
+        else f'<h2 id="faq-h">{e(title)}</h2>'
+    return (f'<section class="faq{" faq-split" if intro else ""}" aria-labelledby="faq-h">{head}<div class="faq-list">{qa}</div></section>'
+            f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")}</script>')
+
+
+def required_pct(jobs: list[dict]) -> int:
+    """Share of jobs that require German ("not mentioned" doesn't count: most such teams work in English)."""
+    return round(100 * sum(j["german_level"] == "required" for j in jobs) / max(len(jobs), 1))
+
+
+def blue_card() -> dict:
+    """{year, standard, reduced} from web/js/config.js, the site's one place for the Blue Card minimums."""
+    return {k: int(v) for k, v in re.findall(
+        r"(\w+): (\d+)", re.search(r"BLUE_CARD: \{([^}]*)\}", (WEB / "js" / "config.js").read_text(encoding="utf-8")).group(1))}
+
+
+def agent_facts(jobs: list[dict], stats: dict, by_city: dict[str, list[dict]], cities: list[str], index: dict) -> list[str]:
+    """Short reports from today's jobs for Stelli's speech bubble on the home page (app.js stelliLines): cities,
+    fields, salaries, remote, entry level, Blue Card, agencies, employers. Each one only when the numbers carry it."""
+    n = len(jobs) or 1
+    pct = lambda part, whole: round(100 * part / max(whole, 1))  # noqa: E731
+    mid = lambda j: (j["salary_min"] + (j.get("salary_max") or j["salary_min"])) / 2  # noqa: E731
+    name = lambda c: index.get(co_key(c), {}).get("n") or c  # noqa: E731
+    paid = lambda sel: [mid(j) for j in sel if j.get("salary_min") and j["salary_min"] <= 300000]  # noqa: E731
+    out = []
+    for city in cities[:6]:
+        sel = by_city[city]
+        k = len(sel)
+        visa = sum(bool(j.get("visa_sponsorship")) for j in sel)
+        out.append(f"📍 {city}: {k:,} open jobs. Only {pct(sum(j['german_level'] == 'required' for j in sel), k)}% require German"
+                   + (f", and {visa} mention visa sponsorship." if visa else "."))
+        top = Counter(name(j["company"]) for j in sel if not j.get("is_agency")).most_common(1)
+        if top and top[0][1] >= 0.8 * k:
+            out.append(f"🏢 {'All' if top[0][1] == k else f'{top[0][1]} of the'} {k} jobs in {city} are at {top[0][0]}.")
+        elif top and top[0][1] >= 5:
+            out.append(f"🏢 The busiest English-speaking employer in {city} right now: {top[0][0]}, with {top[0][1]} open jobs.")
+        sal = paid(sel)
+        if len(sal) >= 8:
+            out.append(f"💶 Median listed salary in {city}: {euro(statistics.median(sal))} a year, from {len(sal)} jobs that show one.")
+        remote = pct(sum(j["remote_type"] in ("remote_de", "remote_eu", "hybrid") for j in sel), k)
+        if k >= 50 and remote >= 20:
+            out.append(f"🏠 {remote}% of the jobs in {city} are remote or hybrid.")
+    fields = [(t, c) for t, c in stats["tags"] if t not in META_TAGS][:3]
+    if len(fields) == 3:
+        out.append("🧭 Biggest fields today: " + ", ".join(f"{t} ({c:,})" for t, c in fields) + ".")
+    for t, m, c in [x for x in stats["salary_by_tag"] if x[2] >= 10][:3]:  # 10+ salaries, not a lucky handful
+        out.append(f"💶 #{t} jobs pay a median of {euro(m)} a year ({c} jobs list a salary).")
+    if stats["new_7d"] < n * 0.4:  # right after a full re-import every job is "new"
+        out.append(f"🆕 {stats['new_7d']:,} new English-speaking jobs came in during the last 7 days.")
+    out.append(f"🌍 {stats['remote_pct']}% of all jobs are fully remote, in Germany or anywhere in the EU.")
+    entry = sum(j.get("seniority") in ("intern", "junior") for j in jobs)
+    if entry:
+        out.append(f"🎓 {entry:,} jobs are entry level (intern, working student or junior). Tick “Entry level” to see them.")
+    bc = blue_card()
+    over = sum(bool(j.get("salary_min")) and j["salary_min"] >= bc["standard"] for j in jobs)
+    if over:
+        out.append(f"🪪 {over:,} jobs list a salary above the {bc['year']} Blue Card minimum of {euro(bc['standard'])}.")
+    agency = pct(sum(bool(j.get("is_agency")) for j in jobs), n)
+    if agency >= 5:
+        out.append(f"🔎 {agency}% of the jobs come from recruiting agencies. Tick “Direct employers only” to hide them.")
+    top = [(name(c), k) for c, k in stats["companies"][:3]]
+    if len(top) == 3:
+        out.append("🏢 Most open jobs right now: " + ", ".join(f"{c} ({k})" for c, k in top) + ".")
+    return out
+
+
+def write_home_faq(jobs: list[dict], stats: dict, cities: list[tuple[str, int, str]]) -> None:
+    """The FAQ on the hand-written home page, with today's numbers, between <!-- faq:start --> and <!-- faq:end -->."""
+    req, visa, n = required_pct(jobs), stats["visa"], len(jobs)
+    plus = round(100 * (stats["german"].get("not_required", 0) + stats["german"].get("nice_to_have", 0)) / max(n, 1))
+    bc = blue_card()
+    city_links = ", ".join(f'<a href="{e(u)}">{e(c)}</a> ({k:,})' for c, k, u in cities[:5])
+    items = [
+        ("Can I get a job in Germany without speaking German?",
+         f"Yes. Only {req}% of the {n:,} English-speaking jobs on Stellenly require German; {plus}% say it's not needed "
+         f"or just a plus, and most of the rest don't mention it, which usually means the team works in English. "
+         f'Tick <b>No German needed</b> above to see only those jobs.'),
+        ("How do you know whether a job needs German?",
+         "We read every posting and show its German level on the card: not required, nice to have, not mentioned or "
+         "required, with the exact sentence from the posting in the job details. We don't hide jobs that need German, so "
+         'you can decide yourself. <a href="how-it-works.html">How we read job postings</a>.'),
+        ("Which jobs offer visa sponsorship?",
+         f"Right now {visa:,} jobs mention visa sponsorship or work-permit support. Tick <b>Visa sponsorship</b> above. "
+         f"Most non-EU candidates need a work permit, usually the EU Blue Card."),
+        (f"How much do I need to earn for an EU Blue Card in {bc['year']}?",
+         f"At least {euro(bc['standard'])} gross a year, or {euro(bc['reduced'])} for IT and other shortage jobs, health "
+         f"care and recent graduates. Jobs whose listed salary reaches it are marked <b>Blue Card ✓</b>. "
+         f'<a href="blog/eu-blue-card-salary-{bc["year"]}.html">Read the Blue Card guide</a>.'),
+        ("Which German cities have the most English-speaking jobs?",
+         f'{city_links}. <a href="jobs/index.html">All states and cities</a>.'),
+        ("Is Stellenly free? Do I need an account?",
+         "It's free, and there is no sign-up: we store no personal data and set no cookies. Saved jobs stay in your "
+         "browser. You apply directly on the employer's site."),
+        ("Where do the jobs come from, and how fresh are they?",
+         "From company career pages and public job APIs, updated every 6 hours. Jobs that disappear from their source "
+         "are removed automatically, and visitors can report a closed job with 🚩."),
+        ("Can I get new jobs sent to me?",
+         'Yes, without an email address: follow our <a href="https://t.me/StellenlyJobs" rel="noopener">Telegram channel</a> '
+         'for new jobs every day, or join the community on <a href="https://discord.gg/wMqjvq6dw" rel="noopener">Discord</a>.'),
+    ]
+    home = WEB / "index.html"
+    text = home.read_text(encoding="utf-8")
+    start, end = "<!-- faq:start", "<!-- faq:end -->"
+    if start in text and end in text:
+        a = text.index("-->", text.index(start)) + 3
+        intro = (f'<p class="faq-lead">The answers use today\'s numbers from {n:,} open jobs and update every day.</p>'
+                 '<div class="faq-ask"><b>Still have a question?</b><span>Ask the community or write to us.</span>'
+                 f'<span class="faq-links"><a href="{e(SITE["discord_url"])}" rel="noopener">Ask on Discord →</a>'
+                 '<a href="mailto:info@stellenly.com">info@stellenly.com</a></span></div>')
+        text = text[:a] + "\n  " + faq_html(items, "Questions, answered with live numbers", intro) + "\n  " + text[text.index(end):]
+        home.write_text(text, encoding="utf-8", newline="\n")
 
 
 def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
@@ -656,6 +783,20 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
             items.append((euro(s["median_salary"]), f"median listed salary ({s['salary_pct']}% list one)"))
         return '<div class="kpis loc-kpis">' + "".join(f"<div><b>{v}</b><span>{k}</span></div>" for v, k in items) + "</div>"
 
+    def place_faq(name: str, sel: list[dict], s: dict) -> str:
+        top = Counter(index.get(co_key(j["company"]), {}).get("n") or j["company"] for j in sel if not j.get("is_agency"))
+        req = required_pct(sel)
+        return faq_html([
+            (f"Do I need German for a job in {name}?",
+             f"Only {req}% of the {len(sel):,} English-speaking jobs in {e(name)} require German. Each job shows its German "
+             f"level, with the exact sentence from the posting."),
+            (f"Which companies hire English speakers in {name}?",
+             f"Right now the most open English-speaking jobs are at {e(', '.join(c for c, _ in top.most_common(5)))}."),
+            (f"Are there jobs with visa sponsorship in {name}?",
+             f"{s['visa']:,} of them mention visa sponsorship or work-permit support"
+             + (f", and the median listed salary is {euro(s['median_salary'])} a year." if s["median_salary"] else ".")),
+        ], f"English-speaking jobs in {name}: questions")
+
     def location(kind: str, val: str, sel: list[dict], state: str | None) -> str:
         name = STATES[val] if kind == "state" else val
         sel = sorted(sel, key=lambda j: j.get("posted_at") or "", reverse=True)
@@ -690,8 +831,9 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
       {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities], "../", len(state_jobs.get(state, sel)))}</section>
   </aside>
 </div>
+{place_faq(name, sel, s)}
 <p class="muted small">Always apply on the original posting.</p>
-{JOB_POPUP}"""
+{CARD_SCRIPTS}"""
         title = f"{s['active']:,} English-speaking jobs in {name}"
         (out / url(kind, val)).write_text(page(title, f"{title}: German requirement, salary and visa sponsorship shown for every job.",
                                                body, f"jobs/{url(kind, val)}", 1, main_class="content-page loc-page"), encoding="utf-8")
@@ -714,7 +856,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
 {kpis(s)}
 <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}</div>
 <p class="muted small">Always apply on the original posting.</p>
-{JOB_POPUP}"""
+{CARD_SCRIPTS}"""
         (out / f"tag-{slugify(t)}.html").write_text(page(title, f"{title}: German requirement, salary and visa sponsorship "
                                                           f"shown for every job.", body, f"jobs/tag-{slugify(t)}.html", 1,
                                                           main_class="content-page loc-page"), encoding="utf-8")
@@ -736,7 +878,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
   <section><h2>States</h2>{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
 </div>
 <h2>Cities</h2>{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}
-<h2>Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
+<h2 id="fields">Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
         main_class="content-page loc-page"), encoding="utf-8")
 
     # Home page "Browse by location" row (app.js): the biggest states, then the biggest other cities.
@@ -744,7 +886,14 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
            for st in states_sorted[:4]]
     top += [{"n": c, "k": len(by_city[c]), "u": f"jobs/{url('city', c)}", "i": coa("city", c)}
             for c in cities_sorted if c not in {t["n"] for t in top}][:6]
-    (WEB / "data" / "locations.json").write_text(json.dumps(top, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    # Seniority, remote, visa etc. are filters, not fields.
+    fields = [{"n": t, "k": n, "u": f"jobs/tag-{slugify(t)}.html"} for t, n in stats["tags"] if n >= MIN_JOBS and t not in META_TAGS][:8]
+    kpi = {"req": stats["german_required_pct"], "visa": stats["visa"], "median": stats["median_salary"],
+           "salary_pct": stats["salary_pct"]}
+    facts = agent_facts(jobs, stats, by_city, cities_sorted, index)
+    (WEB / "data" / "locations.json").write_text(json.dumps({"places": top, "fields": fields, "kpi": kpi, "facts": facts},
+                                                            ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    write_home_faq(jobs, stats, [(c, len(by_city[c]), f"jobs/{url('city', c)}") for c in cities_sorted])
     return paths + ["jobs/index.html"]
 
 
