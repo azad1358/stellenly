@@ -1049,9 +1049,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   radial-gradient(700px 380px at 88% -5%, rgba(168, 85, 247, .30), transparent 60%),
   radial-gradient(800px 420px at 0% 110%, rgba(99, 102, 241, .28), transparent 60%),
   var(--night); }
-.hero-band.ai .hero { padding: 64px 16px 0; }
-.hero-kicker { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; padding: 6px 12px; border-radius: 999px;
-  font-size: .82rem; font-weight: 600; color: #c7d2fe; background: rgba(99, 102, 241, .14); border: 1px solid rgba(129, 140, 248, .35); }
+.hero-band.ai .hero { padding: 44px 16px 0; }
 
 .ai-console { padding: 20px; border-radius: 22px; color: #e6e9f5;
   background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03)); border: 1px solid rgba(255, 255, 255, .12);
@@ -1082,7 +1080,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @keyframes stelli-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 
 /* The numbers band under the hero */
-.hero-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 980px; margin: 0; padding: 26px 0 36px; }
+.hero-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 980px; margin: 0; padding: 40px 0 94px; }
 .hero-kpis:empty { display: none; }
 .kpi { display: flex; flex-direction: column; gap: 3px; padding: 11px 14px; border-radius: 14px;
   background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); color: #fff; }
@@ -1261,13 +1259,18 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 /* Hero background: Berlin as a light architectural line drawing */
 .hero-band.ai { position: relative; }
 /* Standing on the bottom edge of the hero; hairlines (1px at any scale); faded out behind the text in the middle */
-.hero-berlin { position: absolute; left: 0; bottom: 0; width: 100%; height: 440px; pointer-events: none;
+.hero-berlin { position: absolute; left: 0; bottom: 0; width: 100%; height: max(440px, 30.56vw); pointer-events: none;
   -webkit-mask-image: linear-gradient(90deg, #000 0, #000 21%, rgba(0, 0, 0, .3) 26%, transparent 33%, transparent 56%, #000 66%);
   mask-image: linear-gradient(90deg, #000 0, #000 21%, rgba(0, 0, 0, .3) 26%, transparent 33%, transparent 56%, #000 66%);
   color: #c7d2fe; fill: none; stroke: currentColor; stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
 .hero-berlin * { vector-effect: non-scaling-stroke; }
 .hero-berlin .lines { opacity: .2; }
 .hero-berlin .guides { opacity: .1; stroke-dasharray: 3 6; }
+/* the Fernsehturm's red aviation light (antenna tip: x 1060 + the tower's 270 shift) */
+.hero-berlin .tv-light { fill: #ff3b3b; stroke: none; filter: drop-shadow(0 0 4px #ff3b3b) drop-shadow(0 0 10px #ff3b3b);
+  animation: tv-blink 2s ease-in-out infinite; }
+@keyframes tv-blink { 0%, 55%, 100% { opacity: .15; } 65%, 85% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-berlin .tv-light { animation: none; opacity: .8; } }
 .hero-berlin .labels { opacity: .22; fill: currentColor; stroke: none; font: 600 9px/1 var(--font); letter-spacing: .14em; }
 .hero-band.ai .hero, .hero-band.ai > .wrap { position: relative; z-index: 1; }
 @media (max-width: 760px) { .hero-berlin { height: 260px; -webkit-mask-image: none; mask-image: none; opacity: .6; } .hero-berlin .labels { display: none; } }
