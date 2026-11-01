@@ -1198,8 +1198,6 @@ def build_companies(jobs: list[dict]) -> list[str]:
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
-    dots = [{"n": city, "lat": xy[0], "lon": xy[1], "k": sum(n for _, n in by_city[city]), "u": f"#city-{slugify(city)}"}
-            for city in order if city not in (REMOTE, NO_CITY) and (xy := geo.city_coords(city))]
     body = f"""<section class="co-hero">
   <div><p class="kicker">Companies</p><h1>Companies hiring in English across Germany</h1>
     <p class="co-hero-sub">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.</p>
@@ -1207,7 +1205,15 @@ def build_companies(jobs: list[dict]) -> list[str]:
       <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
       <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
     </div></div>
-  <div class="co-hero-map">{germany_map.svg(None, {}, STATES, dots)}<p>Click a city to see its employers.</p></div>
+  <div id="co-map" class="co-map" aria-label="Map of companies">
+    <div class="map-consent">
+      <p class="map-consent-title">Interactive company map</p>
+      <p class="muted">See where each company is hiring. Hover a pin for its open positions.</p>
+      <button type="button" class="btn primary" id="map-load">Show map</button>
+      <p class="muted small">The map loads tiles from OpenStreetMap, which receives your IP address.
+        <label><input type="checkbox" id="map-remember" checked> Remember my choice</label> · <a href="privacy.html#map">Privacy</a></p>
+    </div>
+  </div>
 </section>
 <div class="co-layout">
 <aside class="co-side" aria-labelledby="co-side-h">
@@ -1216,15 +1222,6 @@ def build_companies(jobs: list[dict]) -> list[str]:
   {side}
 </aside>
 <div class="co-main">
-<div id="co-map" class="co-map" aria-label="Map of companies">
-  <div class="map-consent">
-    <p class="map-consent-title">Interactive company map</p>
-    <p class="muted">See where each company is hiring. Hover a pin for its open positions.</p>
-    <button type="button" class="btn primary" id="map-load">Show map</button>
-    <p class="muted small">The map loads tiles from OpenStreetMap, which receives your IP address.
-      <label><input type="checkbox" id="map-remember" checked> Remember my choice</label> · <a href="privacy.html#map">Privacy</a></p>
-  </div>
-</div>
 <p id="co-empty" class="empty" hidden>No company matches your filter.</p>
 {"".join(sections)}
 <p class="muted small">Company facts (founding year, size, HQ) are approximate. <b>Startup</b> = independent, venture-backed,
