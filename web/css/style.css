@@ -783,7 +783,7 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
   max-width: none; padding: 10px 14px 10px 52px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
 .flow li::before { content: counter(flow); position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 26px; height: 26px;
   border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 700; color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  background: var(--night); }
 .flow li:not(:last-child)::after { content: ""; position: absolute; left: 26px; bottom: -9px; width: 2px; height: 10px; background: var(--border); }
 .flow span { color: var(--muted); font-size: .92rem; }
 @media (max-width: 600px) { .flow li { grid-template-columns: 1fr; gap: 2px; } }
@@ -1481,3 +1481,8 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .res-head { gap: 18px; }
 .res-photo { flex: none; width: 168px; height: 100px; object-fit: cover; border-radius: 14px; }
 @media (max-width: 560px) { .res-photo { width: 100px; height: 70px; border-radius: 10px; } }
+/* How it works: the live numbers inside the navy hero */
+.hiw-hero .wiki-stats { margin: 20px 0 0; }
+.hiw-hero .wiki-stats div { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); }
+.hiw-hero .wiki-stats b { color: #fff; }
+.hiw-hero .wiki-stats span { color: #b8c2da; }

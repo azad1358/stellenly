@@ -85,7 +85,8 @@ def _toc(sections: list[tuple[str, str]]) -> str:
             + "".join(f'<li><a href="#{i}">{e(t)}</a></li>' for i, t in sections) + "</ol></nav>")
 
 
-def body(num: dict, weights: dict, today: str) -> str:
+def body(num: dict, weights: dict, today: str, photo: str = "", credits: str = "") -> str:
+    """The page; `photo` and `credits` are the hero photo and its credit line (build_site.hero_photo / photo_credits)."""
     src_rows = "".join(f"<tr><td>{e(SOURCE_NAMES.get(s, s.title()))}</td><td>{n:,}</td></tr>" for s, n in num["by_source"])
     sections = [
         ("overview", "1. Overview"), ("sources", "2. Where jobs come from"), ("filter", "3. Germany & English only"),
@@ -94,11 +95,10 @@ def body(num: dict, weights: dict, today: str) -> str:
         ("views", "10. Views & popularity"), ("privacy", "11. Privacy"),
     ]
     w = weights
-    return f"""<div class="post-layout wiki">
-<article class="post">
+    return f"""<section class="page-hero hiw-hero"><div>
 <nav class="crumbs"><a href="index.html">Stellenly</a> › How it works</nav>
 <h1>How Stellenly works</h1>
-<p class="post-lead">How every job on this site is found, cleaned, read, double-checked by AI and scored, with all the rules
+<p class="lead">How every job on this site is found, cleaned, read, double-checked by AI and scored, with all the rules
 we use to filter out noise. Job counts are live; the other figures are updated with every daily build (last: {e(today)}).</p>
 
 <div class="wiki-stats">
@@ -107,8 +107,11 @@ we use to filter out noise. Job counts are live; the other figures are updated w
   <div><b data-live="direct_pct">{num['direct_pct']}%</b><span>straight from the employer</span></div>
   <div><b>{num['facts']:,}</b><span>postings checked by AI</span></div>
   <div><b>{num['scored']:,}</b><span>companies with a Hiring Score</span></div>
-</div>
-
+</div></div>
+{photo}
+</section>
+<div class="post-layout wiki">
+<article class="post">
 <div class="article post-body">
 
 <h2 id="overview">1. Overview</h2>
@@ -330,5 +333,6 @@ visitor is stored: no IP address, no cookie, no ID.</li>
 </article>
 {_toc(sections)}
 </div>
+{credits}
 <script src="js/config.js"></script>
 <script>{LIVE_JS}</script>"""

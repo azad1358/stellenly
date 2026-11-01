@@ -1440,7 +1440,8 @@ def write_title_suggestions(jobs: list[dict]) -> None:
 
 def build_how_it_works(jobs: list[dict]) -> str:
     index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
-    body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()))
+    body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()),
+                             hero_photo("elbphilharmonie", ""), photo_credits(["elbphilharmonie"]))
     (WEB / "how-it-works.html").write_text(page(
         "How it works", "How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: "
         "every rule we use to filter out noise.", body, "how-it-works.html", 0, main_class="post-page wiki-page"),
