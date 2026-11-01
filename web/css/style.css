@@ -1326,3 +1326,16 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .odo-strip span { height: 18px; text-align: center; font: 700 13px/18px ui-monospace, "SFMono-Regular", Consolas, monospace; color: #15171a; }
 @media (max-width: 1100px) { .odo { display: none !important; } }
 @media (prefers-reduced-motion: reduce) { .odo-strip { transition: none; } }
+
+/* jobs/index.html: the map + states block in the home page's navy, with a bigger map */
+.loc-index { grid-template-columns: 400px minmax(0, 1fr); padding: 26px; border-radius: 24px; color: #fff;
+  background: radial-gradient(600px 320px at 0% 0%, rgba(168, 85, 247, .26), transparent 60%), var(--night); }
+.loc-index h2 { color: #fff; }
+.loc-index .loc-map-card { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .1); }
+.loc-index .loc-map-card h3 { color: #fff; }
+.loc-index .loc-map-card .muted { color: #8f9bb8; }
+.loc-index .de-map { max-width: 360px; }
+.loc-index .de-map .st { fill: rgba(255, 255, 255, .07); stroke: rgba(199, 210, 254, .3); }
+.loc-index .de-map a .st:hover { fill: rgba(129, 140, 248, .35); }
+.loc-index .de-map .dot { fill: #a5b4fc; fill-opacity: .85; stroke: none; filter: drop-shadow(0 0 4px rgba(165, 180, 252, .8)); }
+@media (max-width: 960px) { .loc-index { grid-template-columns: minmax(0, 1fr); padding: 18px; } }
