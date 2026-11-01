@@ -3,6 +3,7 @@
   "categories": [
     {
       "id": "visa",
+      "photo": "reichstag",
       "title": "Visa, Blue Card & recognition",
       "intro": "Official sources first. Rules change every year, so always check here before you sign.",
       "items": [
@@ -14,6 +15,7 @@
     },
     {
       "id": "banking",
+      "photo": "frankfurt-skyline",
       "title": "Bank account & money transfer",
       "intro": "You need a German (or SEPA) account for your salary. Online banks can be opened from abroad in minutes.",
       "items": [
@@ -23,6 +25,7 @@
     },
     {
       "id": "insurance",
+      "photo": "munich",
       "title": "Health insurance & other insurance",
       "intro": "Health insurance is mandatory in Germany. Most employees join a public insurer; high earners and freelancers can choose private.",
       "items": [
@@ -33,6 +36,7 @@
     },
     {
       "id": "german",
+      "photo": "heidelberg",
       "title": "Learn German",
       "intro": "Even for English-speaking jobs, B1 German makes daily life (and the next job search) much easier.",
       "items": [
@@ -43,6 +47,7 @@
     },
     {
       "id": "salary",
+      "photo": "frankfurt-night",
       "title": "Salary & tax",
       "intro": "German salaries are quoted gross per year. Check what lands in your account before you negotiate.",
       "items": [
@@ -52,6 +57,7 @@
     },
     {
       "id": "housing",
+      "photo": "berlin-street",
       "title": "Housing",
       "intro": "Finding a flat is often harder than finding the job. Start with a furnished place, then search locally.",
       "items": [
@@ -61,6 +67,7 @@
     },
     {
       "id": "jobs",
+      "photo": "potsdamer-platz",
       "title": "More official job sources",
       "intro": "Public job databases worth checking alongside this site.",
       "items": [

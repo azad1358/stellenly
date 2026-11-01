@@ -318,21 +318,17 @@ def post_card(p: dict, up: str = "", featured: bool = False) -> str:
 def build_resources(resources: dict, posts: list[dict]) -> None:
     parts, any_aff = [], False
     by_cat = {cid: s for s in SECTIONS.values() for cid in s["resources"]}
-    looks = {"visa": (248, "passport"), "banking": (205, "bank"), "insurance": (168, "shield"), "german": (330, "chat"),
-             "salary": (152, "euro"), "housing": (18, "home"), "jobs": (225, "briefcase")}
     nav = "".join(f'<a href="#{c["id"]}">{e(c["title"])}</a>' for c in resources["categories"])
     for c in resources["categories"]:
         cards, aff = resource_cards(c)
         any_aff |= aff
         sec = by_cat.get(c["id"], OTHER_SECTION)
-        hue, icon = looks.get(c["id"], (sec["hue"], sec["icon"]))
         guides = [p for p in posts if section_of(p)["id"] == sec["id"]][:3]
         related = ("<p class='res-guides'><b>Guides on this topic:</b> "
                    + " · ".join(f'<a href="blog/{e(p["href"])}">{e(p["title"])}</a>' for p in guides) + "</p>") if guides else ""
         parts.append(f"""<section class="res-section" id="{c['id']}">
-  <header class="res-head" style="--h:{hue}">
-    <span class="res-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-      stroke-linecap="round" stroke-linejoin="round">{ICONS[icon]}</svg></span>
+  <header class="res-head">
+    {f'<img class="res-photo" src="{photo_src(c["photo"], "", small=True)}" alt="{e(PHOTOS[c["photo"]]["place"])}" width="800" height="450" loading="lazy">' if c.get("photo") in PHOTOS else ""}
     <div><h2>{e(c['title'])}</h2><p>{e(c['intro'])}</p></div>
   </header>
   {cards}{related}
@@ -347,7 +343,7 @@ def build_resources(resources: dict, posts: list[dict]) -> None:
   <nav class="res-side" aria-label="Resource categories"><p>On this page</p>{nav}</nav>
   <div class="res-main">{"".join(parts)}</div>
 </div>
-{photo_credits(["dresden"])}"""
+{photo_credits(["dresden"] + [c.get("photo") for c in resources["categories"]])}"""
     (WEB / "resources.html").write_text(page(
         "Resources for working in Germany", "Visa, Blue Card, bank account, health insurance, learning German, "
         "salary and housing: the English-friendly services and official sources internationals need.",

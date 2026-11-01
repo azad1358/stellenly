@@ -1477,3 +1477,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   .res-side p { width: 100%; }
 }
 @media (max-width: 560px) { .guide-path > ol { grid-template-columns: minmax(0, 1fr); } }
+/* Resources: each category opens with its photo, like the guides */
+.res-head { gap: 18px; }
+.res-photo { flex: none; width: 168px; height: 100px; object-fit: cover; border-radius: 14px; }
+@media (max-width: 560px) { .res-photo { width: 100px; height: 70px; border-radius: 10px; } }
