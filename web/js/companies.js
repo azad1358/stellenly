@@ -43,15 +43,6 @@
   search.addEventListener("input", applyFilter);
   startups.addEventListener("change", applyFilter);
 
-  // City chips: jump to the section and, if the map is open, zoom to that city.
-  for (const chip of $$(".co-chips [data-city]")) {
-    chip.addEventListener("click", () => {
-      if (!map) return;
-      const pts = markers.filter((m) => m.options.data.c === chip.dataset.city).map((m) => m.getLatLng());
-      if (pts.length) map.flyToBounds(L.latLngBounds(pts).pad(0.4), { maxZoom: 13, duration: 0.6 });
-    });
-  }
-
   // ------------------------------------------------------------ map
   const box = $("#co-map");
   const isDark = () => {

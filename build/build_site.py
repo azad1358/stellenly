@@ -1131,18 +1131,20 @@ def build_companies(jobs: list[dict]) -> list[str]:
             by_city.setdefault(city, []).append((c, n))
     order = sorted(by_city, key=lambda k: (k in (REMOTE, NO_CITY), -len(by_city[k]), k))
 
+    card_id = lambda c, city: f"co-{c['slug']}-{slugify(city)}"  # noqa: E731
+
     def card(c: dict, city: str, n: int) -> str:
         m = c["meta"]
         href = f"companies/{c['slug']}.html" if c["page"] else f"index.html?q={e(requests.utils.quote(c['name']))}"
         search = e(f"{c['name']} {(m or {}).get('industry', '')} {city}".lower())
         if not m:
             agency = ' <span class="badge warn">Recruiting agency</span>' if c.get("agency") else ""
-            return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>{agency}'
+            return (f'<li class="co-mini" id="{card_id(c, city)}" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>{agency}'
                     f' <span class="muted">{jobs_word(n)}</span></li>')
         roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(c["name"])}">{e(j["title"])}</a></li>'
                         for j in [j for j in c["jobs"] if place(j) == city][:3])
         hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
-        return f"""<li class="co-card" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
+        return f"""<li class="co-card" id="{card_id(c, city)}" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
   <div class="co-head"><h3><a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
   {f'<p class="score-chip" title="Stellenly Hiring Score: {c["score"]["t"]}/100">★ {c["score"]["t"] / 20:.1f} <span>Hiring Score</span></p>' if c.get("score") else ""}
   <div class="badges">{co_badges(c)}</div>
@@ -1162,8 +1164,16 @@ def build_companies(jobs: list[dict]) -> list[str]:
   {f'<ul class="co-grid">{cards}</ul>' if cards else ""}
   {f'<details class="co-more"{" open" if not cards else ""}><summary>More employers hiring in {e(city)} ({minis.count("<li")})</summary><ul class="co-minis">{minis}</ul></details>' if minis else ""}
 </section>""")
-    chips = "".join(f'<a class="tag" href="#city-{slugify(c)}" data-city="{e(c)}">{e(c)} <span class="n">{len(by_city[c])}</span></a>'
-                    for c in order[:16])
+    # Sidebar: per city, its companies ranked by Hiring Score (the best first)
+    def ranked(city: str) -> str:
+        scored = sorted((c for c, _ in by_city[city] if c.get("score")), key=lambda c: (-c["score"]["t"], c["name"].lower()))
+        rows = "".join(f'<li><a href="#{card_id(c, city)}"><span class="co-rk-name">{e(c["name"])}</span>'
+                       f'<span class="co-rk-star">★ {c["score"]["t"] / 20:.1f}</span></a></li>' for c in scored[:10])
+        return (f'<details class="co-rank"{" open" if city == order[0] else ""}><summary><span>{e(city)}</span>'
+                f'<b>{len(by_city[city])}</b></summary>'
+                + (f'<ol>{rows}</ol>' if rows else '<p class="muted small">No Hiring Scores here yet.</p>')
+                + f'<a class="co-rk-all" href="#city-{slugify(city)}">All {len(by_city[city])} in {e(city)} →</a></details>')
+    side = "".join(ranked(c) for c in [c for c in order if c not in (REMOTE, NO_CITY)][:20])  # the rest: search or map
 
     # --- map markers: one per company and city, jittered around the city centre
     markers = []
@@ -1188,14 +1198,24 @@ def build_companies(jobs: list[dict]) -> list[str]:
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
-    body = f"""<h1>Companies hiring in English across Germany</h1>
-<p class="lead">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.
-Hover a pin on the map to see who is hiring and for what.</p>
-<div class="co-toolbar">
-  <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
-  <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
-</div>
-<div class="tag-cloud co-chips">{chips}</div>
+    dots = [{"n": city, "lat": xy[0], "lon": xy[1], "k": sum(n for _, n in by_city[city]), "u": f"#city-{slugify(city)}"}
+            for city in order if city not in (REMOTE, NO_CITY) and (xy := geo.city_coords(city))]
+    body = f"""<section class="co-hero">
+  <div><p class="kicker">Companies</p><h1>Companies hiring in English across Germany</h1>
+    <p class="co-hero-sub">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.</p>
+    <div class="co-toolbar">
+      <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
+      <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
+    </div></div>
+  <div class="co-hero-map">{germany_map.svg(None, {}, STATES, dots)}<p>Click a city to see its employers.</p></div>
+</section>
+<div class="co-layout">
+<aside class="co-side" aria-labelledby="co-side-h">
+  <h2 id="co-side-h">Top-rated by city</h2>
+  <p class="muted small">Ranked by the <a href="how-it-works.html#score">Stellenly Hiring Score</a></p>
+  {side}
+</aside>
+<div class="co-main">
 <div id="co-map" class="co-map" aria-label="Map of companies">
   <div class="map-consent">
     <p class="map-consent-title">Interactive company map</p>
@@ -1208,14 +1228,17 @@ Hover a pin on the map to see who is hiring and for what.</p>
 <p id="co-empty" class="empty" hidden>No company matches your filter.</p>
 {"".join(sections)}
 <p class="muted small">Company facts (founding year, size, HQ) are approximate. <b>Startup</b> = independent, venture-backed,
-founded 2009 or later, fewer than 5,000 people. Missing a company? It appears here automatically once it has open jobs on our sources.</p>"""
+founded 2009 or later, fewer than 5,000 people. Missing a company? It appears here automatically once it has open jobs on our sources.</p>
+</div>
+</div>"""
     ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Companies hiring in English across Germany",
           "url": f"{SITE_URL}/companies.html"}
     (WEB / "companies.html").write_text(page(
         "Companies hiring in English in Germany", f"{len(cos):,} employers in {n_cities} German cities with English-speaking "
         "jobs — startups and global companies, with size, founding year and open positions on a map.", body,
         "companies.html", 0, extra_head=f'<script type="application/ld+json">{json.dumps(ld)}</script>'
-                                         '<script src="js/companies.js" defer></script>'), encoding="utf-8")
+                                         '<script src="js/companies.js" defer></script>', main_class="content-page co-page"),
+        encoding="utf-8")
     return ["companies.html"] + [f"companies/{c['slug']}.html" for c in cos if c["page"]]
 
 

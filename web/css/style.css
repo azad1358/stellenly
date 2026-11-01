@@ -254,8 +254,6 @@ table.data td:not(:first-child), table.data th:not(:first-child) { text-align: r
 .co-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 16px 0 10px; }
 .co-toolbar input[type="search"] { flex: 1 1 320px; min-width: 0; font: inherit; padding: 10px 12px; border: 1px solid var(--border);
   border-radius: 8px; background: var(--surface); color: var(--text); }
-.co-chips { margin-bottom: 16px; }
-.co-chips .tag { text-decoration: none; }
 .co-map { position: relative; height: min(70vh, 560px); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
   background: radial-gradient(ellipse at 30% 20%, var(--accent-soft), transparent 60%), var(--surface-2); margin-bottom: 28px; }
 .co-map.ready { background: var(--surface-2); }
@@ -1339,3 +1337,51 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .loc-index .de-map a .st:hover { fill: rgba(129, 140, 248, .35); }
 .loc-index .de-map .dot { fill: #a5b4fc; fill-opacity: .85; stroke: none; filter: drop-shadow(0 0 4px rgba(165, 180, 252, .8)); }
 @media (max-width: 960px) { .loc-index { grid-template-columns: minmax(0, 1fr); padding: 18px; } }
+
+/* companies.html: navy hero with search and map, sidebar of top-rated companies per city */
+.co-page { max-width: 1160px; }
+.co-hero { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: center; margin: -28px 0 28px;
+  padding: 44px 0 48px; color: #fff; background: radial-gradient(600px 320px at 85% 10%, rgba(168, 85, 247, .28), transparent 65%), var(--night);
+  box-shadow: 0 0 0 100vmax var(--night); clip-path: inset(0 -100vmax); }
+.co-hero h1 { margin: 0 0 10px; font-size: clamp(1.8rem, 3.6vw, 2.7rem); letter-spacing: -.03em; line-height: 1.1; color: #fff; }
+.co-hero .kicker { color: #a5b4fc; }
+.co-hero-sub { margin: 0 0 22px; color: #b8c2da; font-size: 1.05rem; }
+.co-hero .co-toolbar { margin: 0; }
+.co-hero .co-toolbar input[type="search"] { padding: 14px 16px; border: 0; border-radius: 12px; background: #fff; color: #101828;
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, .6); }
+.co-hero .chip { background: transparent; color: #dfe5f3; border-color: rgba(255, 255, 255, .25); }
+.co-hero .chip:has(input:checked) { background: #fff; color: var(--night); }
+.co-hero-map { padding: 16px; border-radius: 22px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .1); text-align: center; }
+.co-hero-map p { margin: 6px 0 0; color: #8f9bb8; font-size: .85rem; }
+.co-hero .de-map { max-width: 320px; }
+.co-hero .de-map .st { fill: rgba(255, 255, 255, .07); stroke: rgba(199, 210, 254, .3); }
+.co-hero .de-map .dot { fill: #a5b4fc; fill-opacity: .85; stroke: none; filter: drop-shadow(0 0 4px rgba(165, 180, 252, .8)); }
+.co-hero .de-map a:hover .dot { fill: #fff; }
+.co-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; align-items: start; }
+.co-side { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; padding: 18px; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--border); scrollbar-width: thin; }
+.co-side h2 { margin: 0 0 2px; font-size: 1.05rem; }
+.co-side > p { margin: 0 0 12px; }
+.co-rank { border-top: 1px solid var(--border); }
+.co-rank summary { display: flex; justify-content: space-between; align-items: center; padding: 10px 2px; font-weight: 600; cursor: pointer; list-style: none; }
+.co-rank summary::-webkit-details-marker { display: none; }
+.co-rank summary b { padding: 1px 8px; border-radius: 999px; font-size: .78rem; background: var(--accent-soft); color: var(--accent); }
+.co-rank[open] summary { color: var(--accent); }
+.co-rank ol { margin: 0 0 6px; padding: 0 0 0 22px; font-size: .9rem; }
+.co-rank li { padding: 3px 0; color: var(--muted); }
+.co-rank li a { display: flex; justify-content: space-between; gap: 8px; color: var(--text); text-decoration: none; }
+.co-rank li a:hover .co-rk-name { color: var(--accent); }
+.co-rk-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.co-rk-star { flex: none; color: #d97706; font-weight: 600; font-variant-numeric: tabular-nums; }
+.co-rk-all { display: inline-block; margin: 0 0 10px; font-size: .85rem; font-weight: 600; text-decoration: none; }
+.co-page .co-city, .co-page .co-card, .co-page .co-mini { scroll-margin-top: 84px; }
+.co-card:target, .co-mini:target { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 960px) {
+  .co-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 32px 0 36px; }
+  .co-hero-map { max-width: 360px; }
+  .co-layout { grid-template-columns: minmax(0, 1fr); }
+  .co-side { position: static; max-height: none; }
+}
+/* phones: a card may shrink below its longest job title (titles are cut with "…") */
+.co-grid { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
+.co-grid > li { min-width: 0; }
