@@ -1352,7 +1352,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .co-hero .chip { background: transparent; color: #dfe5f3; border-color: rgba(255, 255, 255, .25); }
 .co-hero .chip:has(input:checked) { background: #fff; color: var(--night); }
 /* under the title and search, as wide as the search row */
-.co-hero .co-map { height: 460px; border-color: rgba(255, 255, 255, .14); }
+.co-hero .co-map { height: 340px; border-color: rgba(255, 255, 255, .14); }
 .co-hero .map-consent { color: var(--text); }  /* the light consent box inside the navy hero */
 .co-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; align-items: start; }
 .co-side { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; padding: 18px; border-radius: 18px;
@@ -1375,7 +1375,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .co-card:target, .co-mini:target { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (max-width: 960px) {
   .co-hero { padding: 32px 0 36px; }
-  .co-hero .co-map { height: 360px; }
+  .co-hero .co-map { height: 300px; }
   .co-layout { grid-template-columns: minmax(0, 1fr); }
   .co-side { position: static; max-height: none; }
 }
