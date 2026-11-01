@@ -1236,6 +1236,10 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @media (prefers-reduced-motion: reduce) { .hero-berlin .tv-light { animation: none; opacity: .8; } }
 .hero-berlin .labels { opacity: .22; fill: currentColor; stroke: none; font: 600 9px/1 var(--font); letter-spacing: .14em; }
 .hero-band.ai .hero, .hero-band.ai > .wrap { position: relative; z-index: 1; }
+.hero-band.ai .hero { z-index: 2; }  /* the search suggestions open over the numbers band below */
+/* the suggestions may reach below the hero; only the Berlin drawing stays inside it */
+.hero-band.ai { overflow: visible; }
+.hero-berlin { max-height: 100%; }
 @media (max-width: 760px) { .hero-berlin { height: 260px; -webkit-mask-image: none; mask-image: none; opacity: .6; } .hero-berlin .labels { display: none; } }
 
 /* "Hiring now" news line */
