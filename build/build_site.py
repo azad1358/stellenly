@@ -1144,8 +1144,9 @@ def build_companies(jobs: list[dict]) -> list[str]:
         roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(c["name"])}">{e(j["title"])}</a></li>'
                         for j in [j for j in c["jobs"] if place(j) == city][:3])
         hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
+        logo = f"logos/{c['slug']}.png" if (WEB / "logos" / f"{c['slug']}.png").exists() else None  # fetched by write_company_index
         return f"""<li class="co-card" id="{card_id(c, city)}" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
-  <div class="co-head"><h3><a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
+  <div class="co-head"><h3>{logo_html(c['name'], logo, "", "logo-sm")}<a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
   {f'<p class="score-chip" title="Stellenly Hiring Score: {c["score"]["t"]}/100">★ {c["score"]["t"] / 20:.1f} <span>Hiring Score</span></p>' if c.get("score") else ""}
   <div class="badges">{co_badges(c)}</div>
   <p class="co-desc">{e(m['description'])}</p>
