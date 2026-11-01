@@ -932,7 +932,10 @@
     try {
       const term = (f.q || "").trim().toLowerCase().slice(0, 60);
       if (page === 1 && term && term !== lastTrackedQuery) { lastTrackedQuery = term; track(`search/${term}`, "Search"); }
-      const data = await rpc("search_jobs", rpcParams(f, offset));
+      // The free database answers the first search after a quiet spell slowly (its data comes back from disk) and can
+      // pass the 3 s limit; that attempt has warmed it up, so one retry takes a fraction of a second.
+      const call = () => rpc("search_jobs", rpcParams(f, offset));
+      const data = await call().catch((err) => { if (my !== reqId) throw err; return call(); });
       if (my !== reqId) return; // a newer search started
       total = data.total;
       const pages = Math.max(1, Math.ceil(total / PAGE));
