@@ -1161,8 +1161,7 @@
     renderCounter();
   }
 
-  // Header counter: every job collected since launch (site_stats.total) on number drums that roll up from 0, with a
-  // crank that swings while they turn.
+  // Header counter: every job collected since launch (site_stats.total) on number drums that roll up from 0.
   function renderCounter() {
     const box = $("#job-counter");
     if (!box || !siteStats || !siteStats.total) return;
@@ -1177,7 +1176,6 @@
         s.style.transitionDelay = `${i * 90}ms`;
         s.style.transform = `translateY(-${(10 + Number(digits[i])) * 5}%)`; // one full turn, then the digit (20 rows = 5% each)
       });
-      box.classList.add("cranking");
     }));
   }
 

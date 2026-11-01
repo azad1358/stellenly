@@ -1315,20 +1315,14 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @media print { .ai-float { display: none; } }
 
 /* Header: mechanical counter of all jobs collected (app.js renderCounter) */
-.odo { display: inline-flex; align-items: center; gap: 2px; margin-right: 6px; padding: 4px 2px 4px 6px; border-radius: 7px;
-  background: linear-gradient(180deg, #34373d, #121417 55%, #1d2024); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 2px 6px rgba(0, 0, 0, .3); }
-.odo-window { display: flex; gap: 2px; padding: 3px; border-radius: 4px; background: #050607; box-shadow: inset 0 2px 4px rgba(0, 0, 0, .9); }
-.odo-digit { position: relative; width: 13px; height: 21px; overflow: hidden; border-radius: 2px;
+.odo { display: inline-flex; margin-right: 6px; padding: 2px; border-radius: 5px; background: #1d2024;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .2); }
+.odo-window { display: flex; gap: 1px; }
+.odo-digit { position: relative; width: 11px; height: 18px; overflow: hidden; border-radius: 2px;
   background: linear-gradient(180deg, #9aa0a8, #f4f5f7 30%, #fff 50%, #f4f5f7 70%, #9aa0a8); }
 .odo-digit::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(0, 0, 0, .35), transparent 30%, transparent 70%, rgba(0, 0, 0, .35)); }
+  background: linear-gradient(180deg, rgba(0, 0, 0, .3), transparent 30%, transparent 70%, rgba(0, 0, 0, .3)); }
 .odo-strip { display: flex; flex-direction: column; transition: transform 1.8s cubic-bezier(.2, .7, .2, 1); }
-.odo-strip span { height: 21px; line-height: 21px; text-align: center; font: 700 15px/21px ui-monospace, "SFMono-Regular", Consolas, monospace; color: #15171a; }
-.odo-crank { width: 28px; height: 32px; margin: 0 2px 0 1px; overflow: visible; }
-.odo-arm { fill: #c3c8cf; stroke: #8a9099; stroke-width: .8; transform-origin: 5px 20px; transform: rotate(-35deg); }
-.odo-bolt { fill: #e6e9ed; }
-.odo-spring { fill: none; stroke: #9aa1aa; stroke-width: 1.4; }
-.odo.cranking .odo-arm { animation: odo-crank .45s ease-in-out 4; }
-@keyframes odo-crank { 50% { transform: rotate(10deg); } }
+.odo-strip span { height: 18px; text-align: center; font: 700 13px/18px ui-monospace, "SFMono-Regular", Consolas, monospace; color: #15171a; }
 @media (max-width: 1100px) { .odo { display: none !important; } }
-@media (prefers-reduced-motion: reduce) { .odo-strip { transition: none; } .odo.cranking .odo-arm { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .odo-strip { transition: none; } }
