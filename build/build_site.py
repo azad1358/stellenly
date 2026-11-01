@@ -1084,24 +1084,33 @@ def write_company_index(cos: list[dict]) -> None:
                                               encoding="utf-8")
 
 
-def silhouette_logos(slugs: list[str], limit: int = 28) -> list[str]:
-    """Logos with a transparent background, in the given order: their shape works as a one-colour silhouette, which
-    the companies hero draws faintly in its side margins (like the Berlin drawing on the home page). A logo on a
-    solid background would only be a square, so it's left out. Without Pillow there are simply none."""
+def outline_logos(slugs: list[str], limit: int = 40) -> list[str]:
+    """Line drawings of company logos for the companies hero (like the Berlin drawing on the home page): the edge of
+    each logo's shape, empty inside, saved as web/logos/outline/<slug>.png. Only logos with a transparent background
+    have a real shape (one on a solid background would be a square), so the others are left out. Returns the slugs,
+    in the given order; without Pillow there are simply none."""
     try:
-        from PIL import Image
+        from PIL import Image, ImageChops, ImageFilter
     except ImportError:
         return []
+    out_dir = WEB / "logos" / "outline"
+    out_dir.mkdir(exist_ok=True)
     out = []
     for slug in slugs:
-        f = WEB / "logos" / f"{slug}.png"
-        if not f.exists():
+        src, dst = WEB / "logos" / f"{slug}.png", out_dir / f"{slug}.png"
+        if not src.exists():
             continue
-        alpha = Image.open(f).convert("RGBA").getchannel("A")
-        w, h = alpha.size
-        filled = sum(alpha.histogram()[129:]) / (w * h)
-        if max(alpha.getpixel(p) for p in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))) < 20 and 0.08 < filled < 0.75:
-            out.append(slug)
+        alpha = Image.open(src).convert("RGBA").getchannel("A").resize((96, 96))
+        filled = sum(alpha.histogram()[129:]) / 96 ** 2
+        if max(alpha.getpixel(p) for p in ((0, 0), (95, 0), (0, 95), (95, 95))) >= 20 or not 0.08 < filled < 0.75:
+            continue
+        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+            shape = alpha.point(lambda v: 255 if v > 128 else 0)
+            edge = ImageChops.subtract(shape, shape.filter(ImageFilter.MinFilter(5)))  # a ~2 px line along the edge
+            line = Image.new("LA", shape.size, (255, 0))
+            line.putalpha(edge)
+            line.save(dst, optimize=True)
+        out.append(slug)
         if len(out) == limit:
             break
     return out
@@ -1222,12 +1231,12 @@ def build_companies(jobs: list[dict]) -> list[str]:
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
-    # Logo silhouettes in the hero's side margins: two columns left, two right, staggered; never behind search or map
-    marks = silhouette_logos([c["slug"] for c in sorted(cos, key=lambda c: -len(c["jobs"]))])
+    # Hero background: company logos as line drawings with their names, repeated across the whole band
+    by_slug = {c["slug"]: c["name"] for c in cos}
+    marks = outline_logos([c["slug"] for c in sorted(cos, key=lambda c: -len(c["jobs"]))])
     logos_bg = "".join(
-        f'<span class="co-logo" style="{"left" if i % 4 < 2 else "right"}:{-118 if i % 2 == 0 else -62}px;'
-        f'top:{6 + (i // 4) * 13 + (7 if i % 2 else 0)}%;-webkit-mask-image:url(logos/{s}.png);mask-image:url(logos/{s}.png)"></span>'
-        for i, s in enumerate(marks))
+        f'<span class="co-logo"><i style="-webkit-mask-image:url(logos/outline/{s}.png);mask-image:url(logos/outline/{s}.png)"></i>'
+        f'{e(by_slug[s])}</span>' for s in (marks * 4)[:130]) if marks else ""
     body = f"""<section class="co-hero">
   {f'<div class="co-logos" aria-hidden="true">{logos_bg}</div>' if logos_bg else ""}
   <div><p class="kicker">Companies</p><h1>Companies hiring in English across Germany</h1>

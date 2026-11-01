@@ -1383,12 +1383,20 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .co-grid { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
 .co-grid > li { min-width: 0; }
 
-/* companies.html: company logos as faint one-colour silhouettes in the hero's side margins (wide screens only,
-   so they never sit behind the search box or the map) */
+/* companies.html: company logos as line drawings with their names across the whole hero, like the Berlin
+   drawing on the home page (the search box and the map are solid, so nothing shows through them) */
+:root:has(.co-logos) { overflow-x: clip; }  /* the 100vw-wide layer must not add a sideways scrollbar */
 .co-hero { position: relative; }
 .co-hero > :not(.co-logos) { position: relative; z-index: 1; }
-.co-logos { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.co-logo { position: absolute; width: 30px; height: 30px; background: #c7d2fe; opacity: .16;
+.co-logos { position: absolute; top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw; z-index: 0; overflow: hidden; pointer-events: none;
+  display: grid; grid-template-columns: repeat(auto-fill, 128px); grid-auto-rows: 116px; justify-content: center; align-items: center;
+  opacity: .2;
+  /* fainter behind the title, search and map (the middle 1,160 px), full strength at the sides */
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(50% - 620px), rgba(0, 0, 0, .3) calc(50% - 540px), rgba(0, 0, 0, .3) calc(50% + 540px), #000 calc(50% + 620px));
+  mask-image: linear-gradient(90deg, #000 calc(50% - 620px), rgba(0, 0, 0, .3) calc(50% - 540px), rgba(0, 0, 0, .3) calc(50% + 540px), #000 calc(50% + 620px)); }
+.co-logo { display: flex; flex-direction: column; align-items: center; gap: 7px; color: #c7d2fe; font-size: .62rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.co-logo:nth-child(2n) { transform: translateY(40px); }
+.co-logo i { width: 44px; height: 44px; background: #c7d2fe;
   -webkit-mask-position: center; mask-position: center; -webkit-mask-size: contain; mask-size: contain;
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-@media (max-width: 1399px) { .co-logos { display: none; } }
