@@ -5,6 +5,7 @@ date: 2026-10-27
 reviewed: 2026-10-27
 review_months: 6
 section: living
+photo: berlin-street
 tags: relocation, bureaucracy
 ---
 

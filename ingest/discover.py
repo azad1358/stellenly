@@ -81,6 +81,9 @@ def _api_ok(entry: dict) -> bool:
         return False
 
 
+_ID_LIKE = re.compile(r"^(?=.*\d)(?=.*[a-z])[a-z0-9]{10,}$")  # lower-case letters and digits only, no spaces
+
+
 def _company_key(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", (name or "").lower())
 
@@ -114,8 +117,8 @@ def update(jobs: list[dict], known: set[tuple[str, str]], max_new: int = 120, pa
             first_url[key] = (j["company"], j["url"])
     todo = []
     for key, (company, url) in first_url.items():
-        if key in data["boards"]:
-            continue
+        if key in data["boards"] or _ID_LIKE.match(company or ""):
+            continue  # known, or a board ID instead of a company name ("4lu44n1n37w012k")
         checked = data["none"].get(key)
         if checked and (today - dt.date.fromisoformat(checked)).days < RECHECK_DAYS:
             continue

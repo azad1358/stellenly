@@ -121,24 +121,17 @@ def compute_stats(jobs: list[dict]) -> dict:
 # ---------------------------------------------------------------- html helpers
 # Discord and Telegram cards, fixed in the bottom-right corner (same markup in web/index.html). Each has its own ×,
 # remembered per browser (ejg.dcHidden / ejg.tgHidden).
-TG_FLOAT = """<div class="float-stack">
-<div class="tg-float dc-float" data-hide="dcHidden">
-  <a class="tg-float-card" href="{dc}" target="_blank" rel="noopener" data-goatcounter-click="discord-float" aria-label="Join the Stellenly community on Discord">
-    <svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5865F2"/><path fill="#fff" transform="translate(5.5 5.5) scale(.54)" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-    <span class="tg-float-text"><b>Join our Discord</b><small>Report bugs, share ideas, get news</small></span>
-  </a>
-  <button type="button" class="tg-float-close" aria-label="Hide the Discord card">×</button>
-</div>
-<div class="tg-float" id="tg-float" data-hide="tgHidden">
-  <a class="tg-float-card" href="{tg}" target="_blank" rel="noopener" data-goatcounter-click="telegram-float" aria-label="Join the Stellenly Jobs channel on Telegram">
-    <svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M5.4 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1l-6.9 4.4-3-.9c-.6-.2-.6-.6.2-.9z"/></svg>
-    <span class="tg-float-text"><b>Join us on Telegram</b><small>New English-speaking jobs every day</small></span>
-  </a>
-  <button type="button" class="tg-float-close" aria-label="Hide the Telegram card">×</button>
-</div>
-</div>
-<script>document.querySelectorAll(".tg-float").forEach(function(w){{var k="ejg."+w.dataset.hide;try{{if(localStorage.getItem(k))w.hidden=true;}}catch(e){{}}
-w.querySelector(".tg-float-close").addEventListener("click",function(){{w.hidden=true;try{{localStorage.setItem(k,"1");}}catch(e){{}}}});}});</script>
+TG_FLOAT = """<details class="fab">
+  <summary aria-label="Stelli: get new jobs on Telegram and Discord"><span class="fab-teaser"><span>New jobs every day on Telegram &amp; Discord</span></span><span class="fab-avatar"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+        <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
+        <circle class="stelli-light" cx="32" cy="6" r="4"/>
+        <rect x="10" y="14" width="44" height="36" rx="14" fill="url(#stelli-g)"/>
+        <rect x="16" y="22" width="32" height="18" rx="9" fill="#0b1020"/>
+        <g class="stelli-eyes" fill="#7dd3fc"><circle cx="25" cy="31" r="3.4"/><circle cx="39" cy="31" r="3.4"/></g>
+        <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg></span></summary>
+  <div class="fab-panel"><div class="fab-head"><b>Stelli</b><small>Stellenly's AI assistant</small></div><p class="fab-label">Get new jobs</p><a class="fab-link" href="{tg}" target="_blank" rel="noopener" data-goatcounter-click="telegram-fab"><svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M5.4 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1l-6.9 4.4-3-.9c-.6-.2-.6-.6.2-.9z"/></svg><span><b>Telegram</b><small>New English-speaking jobs every day</small></span></a><a class="fab-link" href="{dc}" target="_blank" rel="noopener" data-goatcounter-click="discord-fab"><svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5865F2"/><path fill="#fff" transform="translate(5.5 5.5) scale(.54)" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg><span><b>Discord</b><small>Report bugs, share ideas, get news</small></span></a></div>
+</details>
 """.format(tg=html.escape(SITE["telegram_url"]), dc=html.escape(SITE["discord_url"]))
 
 
@@ -174,6 +167,8 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <link rel="stylesheet" href="{up}css/style.css">
 {ANALYTICS}
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
+<script src="{up}js/config.js" defer></script>
+<script src="{up}js/counter.js" defer></script>
 {extra_head}
 </head>
 <body>
@@ -190,7 +185,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
-  <div class="header-end"><a class="btn ghost icon social ig" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Instagram" title="Instagram"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a><a class="btn ghost icon social fb" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Facebook" title="Facebook"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg></a>
+  <div class="header-end"><span class="odo" id="job-counter" role="img" aria-label="Jobs collected since launch" hidden><span class="odo-window"></span></span><a class="btn ghost icon social ig" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Instagram" title="Instagram"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a><a class="btn ghost icon social fb" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Facebook" title="Facebook"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg></a>
     <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
     <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
@@ -268,6 +263,22 @@ def resource_cards(cat: dict, up: str = "") -> tuple[str, bool]:
 # ---------------------------------------------------------------- guides: sections, covers, dates
 SECTIONS = {s["id"]: s for s in json.loads((CONTENT / "sections.json").read_text(encoding="utf-8"))["sections"]}
 OTHER_SECTION = {"id": "guides", "title": "Guides", "hue": 222, "icon": "book", "resources": [], "intro": ""}
+PHOTOS = json.loads((CONTENT / "photos.json").read_text(encoding="utf-8"))["photos"]  # web/img/photos/, with credits
+
+
+def photo_src(key: str, up: str, small: bool = False) -> str:
+    """A guide photo (web/img/photos/<key>.jpg, 1600 px; <key>-800.jpg for cards)."""
+    return f"{up}img/photos/{key}{'-800' if small else ''}.jpg"
+
+
+def photo_credits(keys: list[str]) -> str:
+    """The credit line the photos' CC BY-SA licences ask for: place, author, licence, link to the original."""
+    seen = list(dict.fromkeys(k for k in keys if k in PHOTOS))
+    if not seen:
+        return ""
+    items = [f'{e(PHOTOS[k]["place"])}: {e(PHOTOS[k]["author"])}, <a href="{e(PHOTOS[k]["source"])}" rel="noopener">'
+             f'{e(PHOTOS[k]["license"])}</a>' for k in seen]
+    return f'<p class="photo-credits">Photos (Wikimedia Commons): {" · ".join(items)}</p>'
 
 
 def section_of(meta: dict) -> dict:
@@ -307,36 +318,36 @@ def post_card(p: dict, up: str = "", featured: bool = False) -> str:
 def build_resources(resources: dict, posts: list[dict]) -> None:
     parts, any_aff = [], False
     by_cat = {cid: s for s in SECTIONS.values() for cid in s["resources"]}
-    looks = {"visa": (248, "passport"), "banking": (205, "bank"), "insurance": (168, "shield"), "german": (330, "chat"),
-             "salary": (152, "euro"), "housing": (18, "home"), "jobs": (225, "briefcase")}
-    nav = "".join(f'<a class="tag" href="#{c["id"]}">{e(c["title"])}</a>' for c in resources["categories"])
+    nav = "".join(f'<a href="#{c["id"]}">{e(c["title"])}</a>' for c in resources["categories"])
     for c in resources["categories"]:
         cards, aff = resource_cards(c)
         any_aff |= aff
         sec = by_cat.get(c["id"], OTHER_SECTION)
-        hue, icon = looks.get(c["id"], (sec["hue"], sec["icon"]))
         guides = [p for p in posts if section_of(p)["id"] == sec["id"]][:3]
         related = ("<p class='res-guides'><b>Guides on this topic:</b> "
                    + " · ".join(f'<a href="blog/{e(p["href"])}">{e(p["title"])}</a>' for p in guides) + "</p>") if guides else ""
         parts.append(f"""<section class="res-section" id="{c['id']}">
-  <header class="res-head" style="--h:{hue}">
-    <span class="res-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-      stroke-linecap="round" stroke-linejoin="round">{ICONS[icon]}</svg></span>
+  <header class="res-head">
+    {f'<img class="res-photo" src="{photo_src(c["photo"], "", small=True)}" alt="{e(PHOTOS[c["photo"]]["place"])}" width="800" height="450" loading="lazy">' if c.get("photo") in PHOTOS else ""}
     <div><h2>{e(c['title'])}</h2><p>{e(c['intro'])}</p></div>
   </header>
   {cards}{related}
 </section>""")
-    body = f"""<section class="page-hero">
+    body = f"""<section class="page-hero"><div>
   <p class="eyebrow">Resources</p>
   <h1>Everything you need to move to and work in Germany</h1>
-  <p class="lead">Hand-picked, English-friendly services and the official sources we trust — checked {fmt_date(TODAY.isoformat())}.</p>
-  <nav class="tag-cloud res-nav" aria-label="Resource categories">{nav}</nav>
+  <p class="lead">Hand-picked, English-friendly services and the official sources we trust, checked {fmt_date(TODAY.isoformat())}.</p></div>
+  {hero_photo("dresden", "")}
 </section>
-{"".join(parts)}"""
+<div class="res-layout">
+  <nav class="res-side" aria-label="Resource categories"><p>On this page</p>{nav}</nav>
+  <div class="res-main">{"".join(parts)}</div>
+</div>
+{photo_credits(["dresden"] + [c.get("photo") for c in resources["categories"]])}"""
     (WEB / "resources.html").write_text(page(
         "Resources for working in Germany", "Visa, Blue Card, bank account, health insurance, learning German, "
         "salary and housing: the English-friendly services and official sources internationals need.",
-        body, "resources.html", 0, affiliate_note=any_aff), encoding="utf-8")
+        body, "resources.html", 0, affiliate_note=any_aff, main_class="content-page res-page"), encoding="utf-8")
 
 
 def render_shortcodes(md: str, jobs: list[dict], stats: dict, resources: dict, up: str) -> tuple[str, bool]:
@@ -423,7 +434,12 @@ def article_html(meta: dict, body_html: str, toc: list[dict], related: list[dict
     initials = "".join(w[0] for w in SITE["author"].split()[:2]).upper()
     rel = (f'<section class="related"><h2>More in {e(sec["title"])}</h2><div class="post-grid">'
            + "".join(post_card(p) for p in related) + "</div></section>") if related else ""
-    return f"""<div class="post-cover" style="--h:{sec['hue']}"><img src="{e(meta['cover'])}" alt="" width="1200" height="560"></div>
+    ph = PHOTOS.get(meta.get("photo") or "")
+    cover = (f'<figure class="post-photo"><img src="{photo_src(meta["photo"], "../")}" alt="{e(ph["place"])}" width="1600" height="900">'
+             f'<figcaption>{e(ph["place"])} · Photo: {e(ph["author"])}, <a href="{e(ph["source"])}" rel="noopener">'
+             f'{e(ph["license"])}</a> (Wikimedia Commons)</figcaption></figure>' if ph else
+             f'<div class="post-cover" style="--h:{sec["hue"]}"><img src="{e(meta["cover"])}" alt="" width="1200" height="560"></div>')
+    return f"""{cover}
 <div class="post-layout">
   <article class="post">
     <nav class="crumbs"><a href="index.html">Guides</a> › {sec_link}</nav>
@@ -454,9 +470,10 @@ def build_blog(jobs: list[dict], stats: dict, resources: dict) -> list[dict]:
         meta, body = read_post(p)
         if meta.get("draft") == "true":
             continue
-        meta.update(body=body, live=bool(re.search(r"\{\{(jobs|stat):", body)), minutes=reading_minutes(body),
-                    cover=write_cover(meta["slug"], section_of(meta)), href=f"{meta['slug']}.html",
-                    path=f"blog/{meta['slug']}.html")
+        photo = meta.get("photo") or section_of(meta).get("photo")
+        meta.update(body=body, live=bool(re.search(r"\{\{(jobs|stat):", body)), minutes=reading_minutes(body), photo=photo,
+                    cover=photo_src(photo, "../", small=True) if photo else write_cover(meta["slug"], section_of(meta)),
+                    href=f"{meta['slug']}.html", path=f"blog/{meta['slug']}.html")
         meta["updated"] = TODAY.isoformat() if meta["live"] else max(meta.get("reviewed", ""), meta.get("date", ""))
         posts.append(meta)
     posts.sort(key=lambda p: p.get("date", ""), reverse=True)
@@ -477,7 +494,8 @@ def build_blog(jobs: list[dict], stats: dict, resources: dict) -> list[dict]:
         related = [p for p in posts if p is not meta and section_of(p)["id"] == sec["id"]][:3]
         related += [p for p in posts if p is not meta and p not in related][:3 - len(related)]
         ld = json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": meta["title"],
-                         "description": meta.get("description"), "image": f"{SITE_URL}/blog/{meta['cover']}",
+                         "description": meta.get("description"),
+                         "image": f"{SITE_URL}/{photo_src(meta['photo'], '')}" if meta.get("photo") else f"{SITE_URL}/blog/{meta['cover']}",
                          "datePublished": meta.get("date"), "dateModified": meta["updated"],
                          "articleSection": sec["title"], "author": {"@type": "Person", "name": SITE["author"]},
                          "publisher": {"@type": "Organization", "name": SITE["site_name"], "url": SITE_URL}})
@@ -545,7 +563,8 @@ def build_report(jobs: list[dict], stats: dict) -> dict:
                            f"median listed salary {euro(stats['median_salary'])}, top cities and companies hiring.",
             "date": TODAY.isoformat(), "slug": slug, "section": "reports", "live": True,
             "updated": TODAY.isoformat(), "minutes": 3, "href": f"{slug}.html", "path": f"blog/{slug}.html"}
-    meta["cover"] = write_cover(slug, section_of(meta))
+    meta["photo"] = SECTIONS["reports"].get("photo")
+    meta["cover"] = photo_src(meta["photo"], "../", small=True) if meta["photo"] else write_cover(slug, section_of(meta))
     SECTIONS["reports"]["href"] = "section-reports.html"
     (WEB / "blog" / f"{slug}.html").write_text(page(
         meta["title"], meta["description"], article_html(meta, body, [], []), f"blog/{slug}.html", 1,
@@ -604,7 +623,7 @@ def job_cards_html(jobs: list[dict], up: str, logos: dict[str, str]) -> str:
     {f'<p class="job-sum">{e(summary)}</p>' if summary else ""}
     <div class="badges">{"".join(badges)}</div>
   </div>
-  <div class="job-side">{f'<div class="job-salary">{sal}<small>/ year</small></div>' if sal else '<div class="job-salary none">Salary not listed</div>'}</div>
+  {f'<div class="job-side"><div class="job-salary">{sal}<small>/ year</small></div></div>' if sal else ""}
 </li>""")
     return f'<ol class="results static-cards">{"".join(cards)}</ol>'
 
@@ -813,14 +832,14 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
                   f"Filter by German level, salary &amp; visa →</a>" if kind == "city" else "")
         more = (f'<p class="muted small">The 30 newest of {len(sel):,} jobs.'
                 f'{" The search shows all of them." if kind == "city" else ""}</p>' if len(sel) > 30 else "")
-        body = f"""<nav class="crumbs">{" › ".join(crumbs)}</nav>
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs">{" › ".join(crumbs)}</nav>
 <header class="loc-head">
   {logo_html(name, coa(kind, val), "../", "logo-lg coa")}
   <div><h1>English-speaking jobs in {e(name)}</h1>
   <p class="muted">{"State" if kind == "state" else "City"}{f" in {e(STATES[state])}" if kind == "city" and state in STATES else ""}{f" · {e(de_name)}" if kind == "state" and de_name != name else ""} · updated every 6 hours</p></div>
   {search}
 </header>
-{kpis(s)}
+{kpis(s)}</section>
 <div class="loc-layout">
   <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}{more}</div>
   <aside class="loc-side">
@@ -828,7 +847,8 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
       {germany_map.svg(state, state_urls, STATES, dots)}
       <p class="muted small">Circles: cities with jobs, by size. Click a city or another state.</p></section>
     <section class="jd-card"><h3>Cities in {e(region)}</h3>
-      {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities], "../", len(state_jobs.get(state, sel)))}</section>
+      {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities
+                         if c in city_pages or c == val], "../", len(state_jobs.get(state, sel)))}</section>
   </aside>
 </div>
 {place_faq(name, sel, s)}
@@ -850,10 +870,10 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
         s = compute_stats(sel)
         label = "AI / ML" if t == "ai-ml" else t.replace("-", " ")
         title = f"{s['active']:,} English-speaking {label} jobs in Germany"
-        body = f"""<nav class="crumbs"><a href="index.html">Jobs by location and field</a></nav>
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs"><a href="index.html">Jobs by location and field</a></nav>
 <header class="loc-head"><div><h1>English-speaking {e(label)} jobs in Germany</h1><p class="muted">Updated every 6 hours</p></div>
   <a class="btn primary" href="../index.html?tags={e(t)}">Filter by German level, salary &amp; visa →</a></header>
-{kpis(s)}
+{kpis(s)}</section>
 <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}</div>
 <p class="muted small">Always apply on the original posting.</p>
 {CARD_SCRIPTS}"""
@@ -864,19 +884,24 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
         tag_chips.append(f'<a class="tag" href="tag-{slugify(t)}.html">#{e(t)}<span class="n">{n:,}</span></a>')
 
     states_sorted = sorted(state_pages, key=lambda x: -len(state_jobs[x]))
+    # Hero background: the states' coats of arms as line drawings, repeated across the band (like companies.html)
+    coats = outline_coats()
+    coats_bg = ('<div class="co-logos coa-lines" aria-hidden="true">' + "".join(
+        f'<span class="co-logo"><i style="-webkit-mask-image:url(../{p});mask-image:url(../{p})"></i></span>'
+        for p in (coats * 8)[:130]) + "</div>") if coats else ""
     cities_sorted = sorted(city_pages, key=lambda x: -len(by_city[x]))
     (out / "index.html").write_text(page(
         "English-speaking jobs in Germany by state, city and field",
         f"{len(jobs):,} English-speaking jobs in Germany, by state, city and field.",
-        f"""<header class="loc-head"><div><h1>English-speaking jobs by location</h1>
-<p class="muted">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div></header>
+        f"""<section class="co-hero loc-hero">{coats_bg}<div><p class="kicker">Cities</p><h1>English-speaking jobs by location</h1>
+<p class="co-hero-sub">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div>
 <div class="loc-index">
   <section class="jd-card loc-map-card"><h3>Germany</h3>
     {germany_map.svg(None, state_urls, STATES, [{"n": c, "lat": xy[0], "lon": xy[1], "k": len(by_city[c]), "u": url("city", c)}
                                                 for c in cities_sorted if (xy := geo.city_coords(c))])}
     <p class="muted small">Click a state or a city.</p></section>
   <section><h2>States</h2>{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
-</div>
+</div></section>
 <h2>Cities</h2>{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}
 <h2 id="fields">Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
         main_class="content-page loc-page"), encoding="utf-8")
@@ -1082,6 +1107,65 @@ def write_company_index(cos: list[dict]) -> None:
                                               encoding="utf-8")
 
 
+def outline_coats() -> list[str]:
+    """Line drawings of the states' coats of arms for the Cities hero (no names): the drawing's own lines (eagle,
+    lion, stripes) plus the shield's rim, saved as web/img/coa/outline/state-*.png. Returns the paths relative to
+    web/; without Pillow there are none."""
+    try:
+        from PIL import Image, ImageChops, ImageFilter
+    except ImportError:
+        return []
+    out_dir = WEB / "img" / "coa" / "outline"
+    out_dir.mkdir(exist_ok=True)
+    out = []
+    for src in sorted((WEB / "img" / "coa").glob("state-*.png")):
+        dst = out_dir / src.name
+        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+            im = Image.open(src).convert("RGBA").resize((112, 112))
+            on_white = Image.new("RGBA", im.size, (255, 255, 255, 255))
+            on_white.alpha_composite(im)
+            shape = im.getchannel("A").point(lambda v: 255 if v > 128 else 0)
+            inner = on_white.convert("L").filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 60 else 0)
+            rim = ImageChops.subtract(shape, shape.filter(ImageFilter.MinFilter(3)))
+            line = Image.new("LA", im.size, (255, 0))
+            line.putalpha(ImageChops.multiply(ImageChops.lighter(inner, rim), shape))
+            line.save(dst, optimize=True)
+        out.append(f"img/coa/outline/{src.name}")
+    return out
+
+
+def outline_logos(slugs: list[str], limit: int = 40) -> list[str]:
+    """Line drawings of company logos for the companies hero (like the Berlin drawing on the home page): the edge of
+    each logo's shape, empty inside, saved as web/logos/outline/<slug>.png. Only logos with a transparent background
+    have a real shape (one on a solid background would be a square), so the others are left out. Returns the slugs,
+    in the given order; without Pillow there are simply none."""
+    try:
+        from PIL import Image, ImageChops, ImageFilter
+    except ImportError:
+        return []
+    out_dir = WEB / "logos" / "outline"
+    out_dir.mkdir(exist_ok=True)
+    out = []
+    for slug in slugs:
+        src, dst = WEB / "logos" / f"{slug}.png", out_dir / f"{slug}.png"
+        if not src.exists():
+            continue
+        alpha = Image.open(src).convert("RGBA").getchannel("A").resize((96, 96))
+        filled = sum(alpha.histogram()[129:]) / 96 ** 2
+        if max(alpha.getpixel(p) for p in ((0, 0), (95, 0), (0, 95), (95, 95))) >= 20 or not 0.08 < filled < 0.75:
+            continue
+        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+            shape = alpha.point(lambda v: 255 if v > 128 else 0)
+            edge = ImageChops.subtract(shape, shape.filter(ImageFilter.MinFilter(5)))  # a ~2 px line along the edge
+            line = Image.new("LA", shape.size, (255, 0))
+            line.putalpha(edge)
+            line.save(dst, optimize=True)
+        out.append(slug)
+        if len(out) == limit:
+            break
+    return out
+
+
 def build_companies(jobs: list[dict]) -> list[str]:
     cos = load_companies(jobs)
     write_company_index(cos)
@@ -1129,19 +1213,22 @@ def build_companies(jobs: list[dict]) -> list[str]:
             by_city.setdefault(city, []).append((c, n))
     order = sorted(by_city, key=lambda k: (k in (REMOTE, NO_CITY), -len(by_city[k]), k))
 
+    card_id = lambda c, city: f"co-{c['slug']}-{slugify(city)}"  # noqa: E731
+
     def card(c: dict, city: str, n: int) -> str:
         m = c["meta"]
         href = f"companies/{c['slug']}.html" if c["page"] else f"index.html?q={e(requests.utils.quote(c['name']))}"
         search = e(f"{c['name']} {(m or {}).get('industry', '')} {city}".lower())
         if not m:
             agency = ' <span class="badge warn">Recruiting agency</span>' if c.get("agency") else ""
-            return (f'<li class="co-mini" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>{agency}'
+            return (f'<li class="co-mini" id="{card_id(c, city)}" data-search="{search}" data-startup="0"><a href="{href}">{e(c["name"])}</a>{agency}'
                     f' <span class="muted">{jobs_word(n)}</span></li>')
         roles = "".join(f'<li><a href="{e(j["url"])}" target="_blank" rel="noopener nofollow" data-goatcounter-click="apply" data-goatcounter-title="{e(c["name"])}">{e(j["title"])}</a></li>'
                         for j in [j for j in c["jobs"] if place(j) == city][:3])
         hq = ' <span class="badge">HQ</span>' if c["hq_city"] == city else ""
-        return f"""<li class="co-card" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
-  <div class="co-head"><h3><a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
+        logo = f"logos/{c['slug']}.png" if (WEB / "logos" / f"{c['slug']}.png").exists() else None  # fetched by write_company_index
+        return f"""<li class="co-card" id="{card_id(c, city)}" data-search="{search}" data-startup="{int(bool(m.get('startup')))}">
+  <div class="co-head"><h3>{logo_html(c['name'], logo, "", "logo-sm")}<a href="{href}">{e(c['name'])}</a>{hq}</h3><span class="co-count">{jobs_word(n)}</span></div>
   {f'<p class="score-chip" title="Stellenly Hiring Score: {c["score"]["t"]}/100">★ {c["score"]["t"] / 20:.1f} <span>Hiring Score</span></p>' if c.get("score") else ""}
   <div class="badges">{co_badges(c)}</div>
   <p class="co-desc">{e(m['description'])}</p>
@@ -1160,8 +1247,16 @@ def build_companies(jobs: list[dict]) -> list[str]:
   {f'<ul class="co-grid">{cards}</ul>' if cards else ""}
   {f'<details class="co-more"{" open" if not cards else ""}><summary>More employers hiring in {e(city)} ({minis.count("<li")})</summary><ul class="co-minis">{minis}</ul></details>' if minis else ""}
 </section>""")
-    chips = "".join(f'<a class="tag" href="#city-{slugify(c)}" data-city="{e(c)}">{e(c)} <span class="n">{len(by_city[c])}</span></a>'
-                    for c in order[:16])
+    # Sidebar: per city, its companies ranked by Hiring Score (the best first)
+    def ranked(city: str) -> str:
+        scored = sorted((c for c, _ in by_city[city] if c.get("score")), key=lambda c: (-c["score"]["t"], c["name"].lower()))
+        rows = "".join(f'<li><a href="#{card_id(c, city)}"><span class="co-rk-name">{e(c["name"])}</span>'
+                       f'<span class="co-rk-star">★ {c["score"]["t"] / 20:.1f}</span></a></li>' for c in scored[:10])
+        return (f'<details class="co-rank"{" open" if city == order[0] else ""}><summary><span>{e(city)}</span>'
+                f'<b>{len(by_city[city])}</b></summary>'
+                + (f'<ol>{rows}</ol>' if rows else '<p class="muted small">No Hiring Scores here yet.</p>')
+                + f'<a class="co-rk-all" href="#city-{slugify(city)}">All {len(by_city[city])} in {e(city)} →</a></details>')
+    side = "".join(ranked(c) for c in [c for c in order if c not in (REMOTE, NO_CITY)][:20])  # the rest: search or map
 
     # --- map markers: one per company and city, jittered around the city centre
     markers = []
@@ -1186,44 +1281,64 @@ def build_companies(jobs: list[dict]) -> list[str]:
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
-    body = f"""<h1>Companies hiring in English across Germany</h1>
-<p class="lead">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.
-Hover a pin on the map to see who is hiring and for what.</p>
-<div class="co-toolbar">
-  <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
-  <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
-</div>
-<div class="tag-cloud co-chips">{chips}</div>
-<div id="co-map" class="co-map" aria-label="Map of companies">
-  <div class="map-consent">
-    <p class="map-consent-title">Interactive company map</p>
-    <p class="muted">See where each company is hiring. Hover a pin for its open positions.</p>
-    <button type="button" class="btn primary" id="map-load">Show map</button>
-    <p class="muted small">The map loads tiles from OpenStreetMap, which receives your IP address.
-      <label><input type="checkbox" id="map-remember" checked> Remember my choice</label> · <a href="privacy.html#map">Privacy</a></p>
+    # Hero background: company logos as line drawings with their names, repeated across the whole band
+    by_slug = {c["slug"]: c["name"] for c in cos}
+    marks = outline_logos([c["slug"] for c in sorted(cos, key=lambda c: -len(c["jobs"]))])
+    logos_bg = "".join(
+        f'<span class="co-logo"><i style="-webkit-mask-image:url(logos/outline/{s}.png);mask-image:url(logos/outline/{s}.png)"></i>'
+        f'{e(by_slug[s])}</span>' for s in (marks * 4)[:130]) if marks else ""
+    body = f"""<section class="co-hero">
+  {f'<div class="co-logos" aria-hidden="true">{logos_bg}</div>' if logos_bg else ""}
+  <div><p class="kicker">Companies</p><h1>Companies hiring in English across Germany</h1>
+    <p class="co-hero-sub">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.</p>
+    <div class="co-toolbar">
+      <input id="co-search" type="search" placeholder="Filter by company, industry or city — e.g. fintech, Munich" aria-label="Filter companies">
+      <label class="chip"><input type="checkbox" id="co-startups"> 🚀 Startups only</label>
+    </div></div>
+  <div id="co-map" class="co-map" aria-label="Map of companies">
+    <div class="map-consent">
+      <p class="map-consent-title">Interactive company map</p>
+      <p class="muted">See where each company is hiring. Hover a pin for its open positions.</p>
+      <button type="button" class="btn primary" id="map-load">Show map</button>
+      <p class="muted small">The map loads tiles from OpenStreetMap, which receives your IP address.
+        <label><input type="checkbox" id="map-remember" checked> Remember my choice</label> · <a href="privacy.html#map">Privacy</a></p>
+    </div>
   </div>
-</div>
+</section>
+<div class="co-layout">
+<aside class="co-side" aria-labelledby="co-side-h">
+  <h2 id="co-side-h">Top-rated by city</h2>
+  <p class="muted small">Ranked by the <a href="how-it-works.html#score">Stellenly Hiring Score</a></p>
+  {side}
+</aside>
+<div class="co-main">
 <p id="co-empty" class="empty" hidden>No company matches your filter.</p>
 {"".join(sections)}
 <p class="muted small">Company facts (founding year, size, HQ) are approximate. <b>Startup</b> = independent, venture-backed,
-founded 2009 or later, fewer than 5,000 people. Missing a company? It appears here automatically once it has open jobs on our sources.</p>"""
+founded 2009 or later, fewer than 5,000 people. Missing a company? It appears here automatically once it has open jobs on our sources.</p>
+</div>
+</div>"""
     ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Companies hiring in English across Germany",
           "url": f"{SITE_URL}/companies.html"}
     (WEB / "companies.html").write_text(page(
         "Companies hiring in English in Germany", f"{len(cos):,} employers in {n_cities} German cities with English-speaking "
         "jobs — startups and global companies, with size, founding year and open positions on a map.", body,
         "companies.html", 0, extra_head=f'<script type="application/ld+json">{json.dumps(ld)}</script>'
-                                         '<script src="js/companies.js" defer></script>'), encoding="utf-8")
+                                         '<script src="js/companies.js" defer></script>', main_class="content-page co-page"),
+        encoding="utf-8")
     return ["companies.html"] + [f"companies/{c['slug']}.html" for c in cos if c["page"]]
 
 
-def section_banner(sec: dict, n: int, tag: str = "h2", link: bool = True) -> str:
-    cover = write_cover(f"section-{sec['id']}", sec, banner=True)
-    inner = f"""<img src="{e(cover)}" alt="" loading="lazy" width="1200" height="560">
-  <span class="sec-banner-text"><{tag}>{e(sec['title'])}</{tag}><span>{e(sec['intro'])}</span>
-  <small>{n} article{'s' if n != 1 else ''}{' · updated daily' if sec['id'] == 'reports' else ''}</small></span>"""
-    return (f'<a class="sec-banner" href="{e(sec["href"])}" style="--h:{sec["hue"]}">{inner}</a>' if link
-            else f'<div class="sec-banner big" style="--h:{sec["hue"]}">{inner}</div>')
+def sec_head(sec: dict, n: int, up: str = "") -> str:
+    """A topic's heading on the guides overview: title, one line, "All n →"."""
+    more = f'<a class="sec-more" href="{up}{e(sec["href"])}">All {n} →</a>' if n > 3 else ""
+    return (f'<div class="sec-head"><div><h2><a href="{up}{e(sec["href"])}">{e(sec["title"])}</a></h2>'
+            f'<p>{e(sec["intro"])}</p></div>{more}</div>')
+
+
+def hero_photo(key: str | None, up: str) -> str:
+    return (f'<figure class="hero-photo"><img src="{photo_src(key, up, small=True)}" alt="{e(PHOTOS[key]["place"])}" '
+            f'width="800" height="450"></figure>') if key in PHOTOS else ""
 
 
 def report_posts(report: dict) -> list[dict]:
@@ -1239,7 +1354,9 @@ def report_posts(report: dict) -> list[dict]:
         out.append({"title": f"English-speaking job market in Germany — week {int(m.group(2))}, {m.group(1)}",
                     "description": "Weekly numbers on English-speaking jobs in Germany.", "section": "reports",
                     "date": monday.isoformat(), "updated": (monday + dt.timedelta(days=6)).isoformat(),
-                    "minutes": 3, "href": f.name, "cover": write_cover(f.stem, SECTIONS["reports"])})
+                    "minutes": 3, "href": f.name, "photo": SECTIONS["reports"].get("photo"),
+                    "cover": photo_src(SECTIONS["reports"]["photo"], "../", small=True) if SECTIONS["reports"].get("photo")
+                    else write_cover(f.stem, SECTIONS["reports"])})
     return out[:12]
 
 
@@ -1250,11 +1367,14 @@ def build_section_pages(posts: list[dict], report: dict, resources: dict) -> lis
         items = report_posts(report) if sec["id"] == "reports" else [p for p in posts if section_of(p)["id"] == sec["id"]]
         sources = "".join(resource_cards(cats[c], "../")[0] for c in sec["resources"] if c in cats)
         others = "".join(f'<a class="tag" href="{e(s["href"])}">{e(s["title"])}</a>' for s in SECTIONS.values() if s is not sec)
-        body = f"""<p class="crumbs"><a href="index.html">Guides</a> › {e(sec['title'])}</p>
-{section_banner(sec, len(items), tag="h1", link=False)}
+        body = f"""<section class="page-hero"><div><nav class="crumbs"><a href="index.html">Guides</a> › {e(sec['title'])}</nav>
+  <h1>{e(sec['title'])}</h1><p class="lead">{e(sec['intro'])}</p>
+  <p class="hero-meta">{len(items)} article{'s' if len(items) != 1 else ''}{' · updated daily' if sec['id'] == 'reports' else ''}</p></div>
+  {hero_photo(sec.get('photo'), '../')}</section>
 <div class="post-grid">{"".join(post_card(p) for p in items) or '<p class="muted">New articles are on the way.</p>'}</div>
 {f'<section class="post-sources"><h2>Official sources &amp; tools</h2>{sources}</section>' if sources else ""}
-<nav class="other-sections"><p><b>More topics</b></p><div class="tag-cloud">{others}</div></nav>"""
+<nav class="other-sections"><p><b>More topics</b></p><div class="tag-cloud">{others}</div></nav>
+{photo_credits([sec.get('photo')] + [p.get('photo') for p in items])}"""
         (WEB / "blog" / sec["href"]).write_text(page(
             f"{sec['title']} — guides for working in Germany", sec["intro"], body, f"blog/{sec['href']}", 1,
             main_class="guides-page"), encoding="utf-8")
@@ -1270,23 +1390,28 @@ def build_blog_index(posts: list[dict], report: dict) -> None:
         items = report_posts(report) if sec["id"] == "reports" else [p for p in guides if section_of(p)["id"] == sec["id"]]
         if not items:
             continue
-        more = (f'<a class="sec-more" href="{e(sec["href"])}">All {len(items)} in {e(sec["title"])} →</a>'
-                if len(items) > 3 else "")
         blocks.append(f"""<section class="sec-block">
-  {section_banner(sec, len(items))}
-  <div class="post-grid">{"".join(post_card(p) for p in items[:3])}</div>{more}
+  {sec_head(sec, len(items))}
+  <div class="post-grid">{"".join(post_card(p) for p in items[:3])}</div>
 </section>""")
-    chips = "".join(f'<a class="tag" href="{e(s["href"])}">{e(s["title"])}</a>' for s in SECTIONS.values())
-    body = f"""<section class="page-hero">
+    # "Your path": the topics in the order you need them, each with its guides
+    steps = "".join(
+        f'<li><span class="path-n">{i}</span><a class="path-title" href="{e(s["href"])}">{e(s["title"])}</a><ul>'
+        + "".join(f'<li><a href="{e(p["href"])}">{e(p["title"].split(":")[0])}</a></li>'
+                  for p in guides if section_of(p)["id"] == s["id"])
+        + "</ul></li>" for i, s in enumerate((s for s in SECTIONS.values() if s["id"] != "reports"), 1))
+    body = f"""<section class="page-hero"><div>
   <p class="eyebrow">Guides · updated {fmt_date(TODAY.isoformat())}</p>
   <h1>Guides for working in Germany</h1>
-  <p class="lead">Practical, fact-checked guides for internationals — visas, contracts, salary and settling in — plus a
-  job-market report that updates every day.</p>
-  <nav class="tag-cloud" aria-label="Topics">{chips}</nav>
+  <p class="lead">Practical, fact-checked guides for internationals: visas, contracts, salary and settling in, plus a
+  job-market report that updates every day.</p></div>
+  {hero_photo("cologne", "../")}
 </section>
-{f'<div class="featured-wrap"><p class="kicker">Latest</p>{post_card(featured, featured=True)}</div>' if featured else ""}
+<section class="guide-path" aria-labelledby="path-h"><h2 id="path-h">Your path to a job in Germany</h2><ol>{steps}</ol></section>
+{f'<div class="featured-wrap"><p class="kicker accent">Latest</p>{post_card(featured, featured=True)}</div>' if featured else ""}
 <aside class="cta"><b>This week's numbers:</b> <a href="{e(report['href'])}">{e(report['title'])}</a></aside>
-{"".join(blocks)}"""
+{"".join(blocks)}
+{photo_credits(["cologne"] + [p.get("photo") for p in guides] + [report.get("photo")])}"""
     (WEB / "blog" / "index.html").write_text(page("Guides & job-market reports", "Guides about the Blue Card, German "
                                                    "requirements, salaries and your first weeks in Germany.", body,
                                                    "blog/index.html", 1, main_class="guides-page"), encoding="utf-8")
@@ -1315,7 +1440,8 @@ def write_title_suggestions(jobs: list[dict]) -> None:
 
 def build_how_it_works(jobs: list[dict]) -> str:
     index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
-    body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()))
+    body = how_it_works.body(how_it_works.numbers(jobs, index), SCORE_WEIGHTS, fmt_date(TODAY.isoformat()),
+                             hero_photo("elbphilharmonie", ""), photo_credits(["elbphilharmonie"]))
     (WEB / "how-it-works.html").write_text(page(
         "How it works", "How Stellenly collects, cleans, AI-checks and scores English-speaking jobs in Germany: "
         "every rule we use to filter out noise.", body, "how-it-works.html", 0, main_class="post-page wiki-page"),
