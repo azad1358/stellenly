@@ -1391,8 +1391,11 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .job .badges { margin-top: 10px; gap: 6px; }
 .job .badges .skill { font-size: .78rem; }
 .job-side { gap: 10px; }
-.job-actions .btn.icon { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 1rem; color: var(--muted); }
-.job-actions .btn.icon[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.job-actions { gap: 6px; }
+.job-actions .btn.icon { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 1rem; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.job-actions .btn.icon:hover { border-color: var(--accent); color: var(--accent); }
+.job-actions .btn.icon[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
 .job-actions .btn.icon[data-act="hide"] { font-size: .85rem; }
 
 /* City, state and field pages: crumbs, title and numbers in the navy hero (like companies and cities) */
