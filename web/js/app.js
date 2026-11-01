@@ -848,7 +848,6 @@
     track("job-open", j.company);
     box.innerHTML = jobPageHtml(j);
     box.classList.add("ready");
-    renderCounter();
     loadSimilar(box);
     // The compact apply bar appears once the big Apply button scrolls out of view.
     const bar = $(".jp-bar", box), apply = $(".jp-apply .btn.primary", box);
@@ -1158,25 +1157,6 @@
         ${bar != null ? `<span class="kpi-bar" aria-hidden="true"><span style="width:${bar}%"></span></span>` : ""}<span class="kpi-sub">${sub}</span></div>`).join("");
     renderAgents();
     runStelli();
-    renderCounter();
-  }
-
-  // Header counter: every job collected since launch (site_stats.total) on number drums that roll up from 0.
-  function renderCounter() {
-    const box = $("#job-counter");
-    if (!box || !siteStats || !siteStats.total) return;
-    const digits = String(siteStats.total).padStart(6, "0").split("");
-    box.title = `${num(siteStats.total)} jobs collected since launch`;
-    box.setAttribute("aria-label", box.title);
-    const strip = "01234567890123456789".split("").map((d) => `<span>${d}</span>`).join(""); // two turns of the drum
-    $(".odo-window", box).innerHTML = digits.map(() => `<span class="odo-digit"><span class="odo-strip">${strip}</span></span>`).join("");
-    box.hidden = false;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      $$(".odo-strip", box).forEach((s, i) => {
-        s.style.transitionDelay = `${i * 90}ms`;
-        s.style.transform = `translateY(-${(10 + Number(digits[i])) * 5}%)`; // one full turn, then the digit (20 rows = 5% each)
-      });
-    }));
   }
 
   // The pipeline behind the site, shown as four agents with a status light each (green: idle and fine, pulsing

@@ -174,6 +174,8 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
 <link rel="stylesheet" href="{up}css/style.css">
 {ANALYTICS}
 <script>try{{var t=localStorage.getItem("ejg.theme");if(t)document.documentElement.dataset.theme=t;}}catch(e){{}}</script>
+<script src="{up}js/config.js" defer></script>
+<script src="{up}js/counter.js" defer></script>
 {extra_head}
 </head>
 <body>
@@ -190,7 +192,7 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
-  <div class="header-end"><a class="btn ghost icon social ig" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Instagram" title="Instagram"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a><a class="btn ghost icon social fb" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Facebook" title="Facebook"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg></a>
+  <div class="header-end"><span class="odo" id="job-counter" role="img" aria-label="Jobs collected since launch" hidden><span class="odo-window"></span></span><a class="btn ghost icon social ig" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Instagram" title="Instagram"><svg class="footer-logo ig" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a><a class="btn ghost icon social fb" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener" aria-label="Stellenly on Facebook" title="Facebook"><svg class="footer-logo fb" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.7c0-.9.3-1.5 1.6-1.5h1.6V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21z"/></svg></a>
     <button type="button" class="btn ghost icon" id="theme-toggle" aria-label="Toggle dark mode" title="Light / dark">🌓</button>
     <a class="btn support" href="{e(SITE['kofi_url'])}" target="_blank" rel="noopener">Support us</a></div>
 </div></header>
