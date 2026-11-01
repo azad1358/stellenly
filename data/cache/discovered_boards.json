@@ -494,6 +494,11 @@
    "region": "https://jobs.idealo.com",
    "company": "idealo internet GmbH"
   },
+  "illumio": {
+   "ats": "ashby",
+   "board": "illumio",
+   "company": "Illumio"
+  },
   "imnooag": {
    "ats": "recruitee",
    "board": "imnoo",
@@ -1249,6 +1254,7 @@
   "celonis": "2026-10-27",
   "cesiumastro": "2026-10-27",
   "cherryventures": "2026-10-27",
+  "cision": "2026-11-01",
   "cityscience": "2026-10-27",
   "clarinessgmbh": "2026-10-27",
   "codat": "2026-10-28",
@@ -1270,6 +1276,7 @@
   "ecopals": "2026-10-27",
   "ecosio": "2026-10-31",
   "elevenlabs": "2026-10-27",
+  "emailmarketingagentur": "2026-11-01",
   "emnify": "2026-10-29",
   "engcmbluenergyag": "2026-10-27",
   "ennovationhub": "2026-10-27",
@@ -1294,6 +1301,7 @@
   "globalreportinginitiative": "2026-10-29",
   "glsnxt": "2026-10-27",
   "grip": "2026-10-27",
+  "hacoy": "2026-11-01",
   "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
   "hopnug": "2026-10-27",
@@ -1318,6 +1326,7 @@
   "logicmonitor": "2026-10-27",
   "luscii": "2026-10-29",
   "magazinogmbh": "2026-10-27",
+  "maia": "2026-11-01",
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
   "maomaotechnologies": "2026-10-28",
