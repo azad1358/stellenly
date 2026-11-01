@@ -453,6 +453,11 @@
    "board": "haut-ai",
    "company": "Haut Ai"
   },
+  "hawk": {
+   "ats": "ashby",
+   "board": "hawk",
+   "company": "Hawk"
+  },
   "hilobyaktiia": {
    "ats": "workable",
    "board": "hilobyaktiia",
@@ -1099,6 +1104,11 @@
    "board": "urbansportsclub",
    "company": "Urban Sports Club"
   },
+  "vendavo": {
+   "ats": "lever",
+   "board": "vendavo",
+   "company": "Vendavo"
+  },
   "vestiairecollective": {
    "ats": "lever",
    "board": "vestiairecollective",
@@ -1350,6 +1360,7 @@
   "relex": "2026-10-30",
   "remotewoman": "2026-10-28",
   "replug": "2026-10-27",
+  "researchgate": "2026-11-01",
   "retoriogmbh": "2026-10-27",
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
@@ -1391,6 +1402,7 @@
   "thoughtworks": "2026-10-27",
   "tiens": "2026-10-30",
   "traciumgmbh": "2026-10-27",
+  "trustedhousesitterscom": "2026-11-01",
   "tulipinterfaces": "2026-10-30",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
