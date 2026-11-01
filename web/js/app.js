@@ -520,18 +520,6 @@
       </section>`;
   }
 
-  // "23 views · 5 applied" — anonymous all-time counts from record_job_event (no visitor data).
-  function clicksBadge(j) {
-    const views = j.views || 0, applies = j.apply_clicks || 0;
-    if (!views && !applies) return "";
-    const n = (x) => x.toLocaleString("en");
-    const parts = [`${n(views)} view${views === 1 ? "" : "s"}`];
-    if (applies) parts.push(`${n(applies)} applied`);
-    return `<span class="clicks-badge" title="How often people opened this job and clicked Apply on Stellenly">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-        ${parts.join(" · ")}</span>`;
-  }
-
   // Every job has its own page. job.html works for every open job, also one imported an hour ago; job/<id>.html (built
   // at deploy time, for search engines) shows the same page.
   const jobUrl = (id) => `${BASE}job.html?id=${encodeURIComponent(id)}`;
@@ -540,27 +528,38 @@
   const titleOnly = (j) => /^https:\/\/www\.amazon\.jobs\//.test(j.url || "");
   const TITLE_ONLY_NOTE = "We can't show more information for this job right now. The full posting is on Amazon's site.";
 
+  // A card shows what decides the click: German level, visa, work setup, and warnings (reported closed, agency).
+  // Everything else (Blue Card, job type, hints, glossary) is on the job page.
+  function cardBadges(j) {
+    const out = [];
+    if (flagged(j)) out.push(`<span class="badge bad" title="Visitors reported that this job is no longer open">🚩 Reported closed</span>`);
+    if (isNew(j)) out.push(`<span class="badge new">NEW</span>`);
+    const [gc, gl] = germanBadge(j);
+    out.push(`<span class="badge ${gc}">${gl}</span>`);
+    if (j.visa_sponsorship) out.push(`<span class="badge ok">Visa sponsorship</span>`);
+    if (REMOTE_LABEL[j.remote_type] && j.remote_type !== "onsite") out.push(`<span class="badge">${REMOTE_LABEL[j.remote_type]}</span>`);
+    if (j.is_agency) out.push(`<span class="badge warn" title="Posted by a recruiting agency, not the employer">Agency</span>`);
+    return out.slice(0, 4).join("");
+  }
+
   function jobHtml(j) {
     const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
     const sal = salaryText(j);
-    const skills = skillsOf(j).slice(0, 4).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
+    const skills = skillsOf(j).slice(0, 2).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
     return `
     <li class="job${seen.has(j.id) ? " seen" : ""}${flagged(j) ? " reported" : ""}" data-id="${esc(j.id)}">
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}">${esc(j.title)}</a></h3>
         <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
-        <div class="badges">${badges(j)}</div>
-        ${skills ? `<div class="skills-row">${skills}</div>` : ""}
-        ${titleOnly(j) ? `<p class="title-only-note">ℹ️ ${TITLE_ONLY_NOTE}</p>` : ""}
+        <div class="badges">${cardBadges(j)}${skills}</div>
       </div>
       <div class="job-side">
-        ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : `<div class="job-salary none">Salary not listed</div>`}
-        ${clicksBadge(j)}
+        ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : ""}
         <div class="job-actions">
-          <button type="button" class="btn ghost" data-act="save" aria-pressed="${isSaved}" title="Save for later">${isSaved ? "★ Saved" : "☆ Save"}</button>
-          <button type="button" class="btn ghost" data-act="applied" aria-pressed="${isApplied}" title="Mark as applied">${isApplied ? "✓ Applied" : "Applied?"}</button>
-          <button type="button" class="btn ghost" data-act="hide" title="Hide all jobs from this company" aria-label="Hide this company">🚫</button>
+          <button type="button" class="btn ghost icon" data-act="save" aria-pressed="${isSaved}" title="Save for later" aria-label="Save for later">${isSaved ? "★" : "☆"}</button>
+          <button type="button" class="btn ghost icon" data-act="applied" aria-pressed="${isApplied}" title="Mark as applied" aria-label="Mark as applied">✓</button>
+          <button type="button" class="btn ghost icon" data-act="hide" title="Hide all jobs from this company" aria-label="Hide this company">🚫</button>
         </div>
       </div>
     </li>`;
@@ -1063,12 +1062,11 @@
       toggleList("save", j);
       if (saved[j.id]) track("save", j.company);
       btn.setAttribute("aria-pressed", String(!!saved[j.id]));
-      btn.textContent = saved[j.id] ? "★ Saved" : "☆ Save";
+      btn.textContent = saved[j.id] ? "★" : "☆";
     } else if (act === "applied") {
       toggleList("applied", j);
       if (applied[j.id]) track("mark-applied", j.company);
       btn.setAttribute("aria-pressed", String(!!applied[j.id]));
-      btn.textContent = applied[j.id] ? "✓ Applied" : "Applied?";
       li.classList.add("seen");
     } else if (act === "hide") {
       track("hide-company", j.company);

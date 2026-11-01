@@ -735,9 +735,6 @@ main.wrap > .layout { margin-top: 28px; }
   .about-card { grid-template-columns: 1fr; padding: 22px; gap: 22px; }
 }
 .badge.popular { background: var(--support); color: #fff; font-weight: 700; }
-.clicks-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.76rem; font-weight: 600; color: var(--muted);
-  background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.clicks-badge svg { width: 13px; height: 13px; }
 .pending-card { border-style: dashed; }
 .pending-card p { margin: 0; }
 
@@ -825,27 +822,6 @@ dl.facts + .score-card { margin: 22px 0; max-width: 640px; }
 .job-page .similar { margin-top: 26px; }
 
 /* ---------------------------------------------------------------- Discord + Telegram cards, fixed bottom-right like a chat box */
-.float-stack { position: fixed; right: 20px; bottom: 20px; z-index: 30; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
-.tg-float { position: relative; }
-.tg-float[hidden] { display: none; }
-.tg-float-card { display: flex; align-items: center; gap: 12px; padding: 12px 34px 12px 12px; border-radius: 16px;
-  background: var(--surface); color: var(--text); text-decoration: none; border: 1px solid var(--border);
-  box-shadow: 0 12px 32px -12px rgba(16,24,40,.35), 0 2px 6px rgba(16,24,40,.08); transition: transform .15s, box-shadow .15s; }
-.tg-float-card:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -12px rgba(34,158,217,.45), 0 2px 6px rgba(16,24,40,.08); }
-.dc-float .tg-float-card:hover { box-shadow: 0 16px 36px -12px rgba(88,101,242,.45), 0 2px 6px rgba(16,24,40,.08); }
-.tg-logo { flex: none; display: block; }
-.tg-float-text { display: flex; flex-direction: column; line-height: 1.25; }
-.tg-float-text b { font-size: .92rem; }
-.tg-float-text small { font-size: .78rem; color: var(--muted); }
-.tg-float-close { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border: 0; border-radius: 50%;
-  background: transparent; color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; }
-.tg-float-close:hover { background: var(--surface-2); color: var(--text); }
-@media (max-width: 640px) {
-  .float-stack { right: 14px; bottom: 14px; }
-  .tg-float-card { padding: 8px; border-radius: 50%; }
-  .tg-float-text, .tg-float-close { display: none; }
-}
-@media print { .float-stack { display: none; } }
 .footer-discord { display: inline-flex; align-items: center; gap: 5px; }
 .footer-logo { flex: none; color: #5865F2; }
 .footer-logo.ig { color: #E1306C; }
@@ -1293,25 +1269,40 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @media (max-width: 760px) { .ticker { flex-wrap: wrap; } .ticker-viewport { order: 3; flex-basis: 100%; } }
 @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .ticker-viewport { overflow-x: auto; } }
 
-/* The AI console floats bottom-right on the home page (always there); Telegram and Discord sit bottom-left */
-.float-stack:has(.ai-float) { width: 340px; }
-.ai-float { width: 340px; padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(24, 30, 62, .97), rgba(10, 16, 36, .97)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.ai-float .stelli { width: 40px; height: 40px; }
-.ai-float .bubble { min-height: 4.7em; margin: 10px 0 12px; padding: 10px 12px; font-size: .86rem; }
-.ai-float .agents { grid-template-columns: 1fr 1fr; gap: 6px; }
-.ai-float .agents li { grid-template-columns: auto minmax(0, 1fr); gap: 2px 8px; padding: 7px 9px; }
-.ai-float .agent-name small { display: none; }
-.ai-float .agent-stat { grid-column: 2; text-align: left; font-size: .72rem; }
+/* One floating Stelli button (home: the live report line next to it); the panel: AI agents, Telegram, Discord */
+.fab { position: fixed; right: 20px; bottom: 20px; z-index: 30; display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 10px; }
+.fab > summary { display: flex; align-items: center; gap: 10px; list-style: none; cursor: pointer; }
+.fab > summary::-webkit-details-marker { display: none; }
+.fab-avatar { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--night);
+  box-shadow: 0 12px 30px -10px rgba(79, 70, 229, .7), 0 0 0 1px rgba(129, 140, 248, .45); transition: transform .15s; }
+.fab > summary:hover .fab-avatar { transform: translateY(-2px); }
+.fab-avatar .stelli { width: 36px; height: 36px; }
+.fab-teaser { max-width: 290px; padding: 8px 12px; border-radius: 14px 14px 4px 14px; background: var(--night); color: #eef0ff;
+  font-size: .84rem; line-height: 1.35; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .5);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fab-panel { width: 330px; padding: 16px; border-radius: 18px; color: #e6e9f5; border: 1px solid rgba(255, 255, 255, .12);
+  background: linear-gradient(180deg, #181e3e, var(--night)); box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .6); }
+.fab-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.fab-head b { color: #fff; font-size: 1.05rem; }
+.fab-head small { display: inline-flex; align-items: center; gap: 6px; color: #a5b4fc; font-size: .8rem; }
+.fab-panel .agents { grid-template-columns: 1fr 1fr; gap: 6px; }
+.fab-panel .agents li { grid-template-columns: auto minmax(0, 1fr); gap: 2px 8px; padding: 7px 9px; }
+.fab-panel .agent-name small { display: none; }
+.fab-panel .agent-stat { grid-column: 2; text-align: left; font-size: .74rem; }
+.fab-label { margin: 14px 0 6px; font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #a5b4fc; }
+.fab-link { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding: 8px 10px; border-radius: 12px; color: #fff;
+  text-decoration: none; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .08); }
+.fab-link:hover { background: rgba(255, 255, 255, .1); }
+.fab-link svg { width: 32px; height: 32px; flex: none; }
+.fab-link span { display: flex; flex-direction: column; line-height: 1.25; }
+.fab-link small { color: #a5b4fc; font-size: .78rem; }
 @media (max-width: 640px) {
-  .float-stack:has(.ai-float) { width: auto; right: 12px; bottom: 12px; align-items: flex-end; }
-  .ai-float { width: min(320px, calc(100vw - 24px)); display: flex; align-items: center; gap: 10px; padding: 8px 10px; }
-  .ai-float .console-head div, .ai-float .agents { display: none; }
-  .ai-float .stelli { width: 34px; height: 34px; }
-  .ai-float .bubble { flex: 1; min-height: 0; margin: 0; padding: 6px 9px; font-size: .78rem; }
-  body:has(.ai-float) .site-footer { padding-bottom: 96px; }
+  .fab { right: 14px; bottom: 14px; }
+  .fab-teaser { display: none; }
+  .fab-avatar { width: 52px; height: 52px; }
+  .fab-panel { width: min(330px, calc(100vw - 28px)); }
 }
-@media print { .ai-float { display: none; } }
+@media print { .fab { display: none; } }
 
 /* Header: mechanical counter of all jobs collected (app.js renderCounter) */
 .odo { display: inline-flex; margin-right: 6px; padding: 2px; border-radius: 5px; background: #1d2024;
@@ -1403,3 +1394,12 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 /* jobs/index.html: the states' coats of arms as line drawings, no names, a bit larger */
 .coa-lines { grid-template-columns: repeat(auto-fill, 120px); grid-auto-rows: 120px; }
 .coa-lines .co-logo i { width: 60px; height: 60px; }
+
+/* Job cards: fewer, clearer elements (title, company, place, 4 badges + 2 skills, salary, three small icons) */
+.job { padding: 16px 18px; }
+.job .badges { margin-top: 10px; gap: 6px; }
+.job .badges .skill { font-size: .78rem; }
+.job-side { gap: 10px; }
+.job-actions .btn.icon { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 1rem; color: var(--muted); }
+.job-actions .btn.icon[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.job-actions .btn.icon[data-act="hide"] { font-size: .85rem; }
