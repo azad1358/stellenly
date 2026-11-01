@@ -1,0 +1,109 @@
+{
+ "_comment": "Photos for the guides (Wikimedia Commons, free licences; credited on every page that shows them).",
+ "photos": {
+  "brandenburg-gate": {
+   "file": "img/photos/brandenburg-gate.jpg",
+   "place": "Brandenburger Tor, Berlin",
+   "author": "Thomas Wolf, www.foto-tw.de",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Brandenburger_Tor_morgens.jpg"
+  },
+  "reichstag": {
+   "file": "img/photos/reichstag.jpg",
+   "place": "Reichstag, Berlin",
+   "author": "Daniel Schwen",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Reichstag_pano.jpg"
+  },
+  "speicherstadt": {
+   "file": "img/photos/speicherstadt.jpg",
+   "place": "Speicherstadt, Hamburg",
+   "author": "Thomas Wolf, www.foto-tw.de",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Speicherstadt_abends.jpg"
+  },
+  "frankfurt-skyline": {
+   "file": "img/photos/frankfurt-skyline.jpg",
+   "place": "Frankfurt am Main skyline",
+   "author": "Christian Wolf (www.c-w-design.de)",
+   "license": "CC BY-SA 3.0 de",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+   "source": "https://commons.wikimedia.org/wiki/File:Skyline_Frankfurt_am_Main_2015.jpg"
+  },
+  "frankfurt-night": {
+   "file": "img/photos/frankfurt-night.jpg",
+   "place": "Frankfurt am Main at night",
+   "author": "Thomas Wolf (Der Wolf im Wald)",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Skyline_Frankfurt_2011-01.jpg"
+  },
+  "cologne": {
+   "file": "img/photos/cologne.jpg",
+   "place": "Cologne Cathedral and Hohenzollern Bridge",
+   "author": "Dietmar Rabich",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:K%C3%B6ln,_Hohenzollernbr%C3%BCcke_--_2014_--_1873.jpg"
+  },
+  "heidelberg": {
+   "file": "img/photos/heidelberg.jpg",
+   "place": "Heidelberg old town",
+   "author": "Jörg Braukmann",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:K%C3%B6nigstuhl,_Heidelberg,_U-17.jpg"
+  },
+  "berlin-street": {
+   "file": "img/photos/berlin-street.jpg",
+   "place": "Berlin street",
+   "author": "MrPanyGoff",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Danziger_Stra%C3%9Fe_-_Berlin.jpg"
+  },
+  "munich": {
+   "file": "img/photos/munich.jpg",
+   "place": "Munich, Frauenkirche and Marienplatz",
+   "author": "Thomas Wolf, www.foto-tw.de",
+   "license": "CC BY-SA 3.0 de",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+   "source": "https://commons.wikimedia.org/wiki/File:Stadtbild_M%C3%BCnchen.jpg"
+  },
+  "elbphilharmonie": {
+   "file": "img/photos/elbphilharmonie.jpg",
+   "place": "Elbphilharmonie, Hamburg",
+   "author": "JoachimKohler-HB",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:%22Cap_San_Diego%22_%26_Elbphilharmonie_(Hamburg,_2019).jpg"
+  },
+  "potsdamer-platz": {
+   "file": "img/photos/potsdamer-platz.jpg",
+   "place": "Potsdamer Platz, Berlin",
+   "author": "Ansgar Koreng",
+   "license": "CC BY-SA 3.0 de",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+   "source": "https://commons.wikimedia.org/wiki/File:Potsdamer_Platz,_Berlin,_151024,_ako.jpg"
+  },
+  "leipzig": {
+   "file": "img/photos/leipzig.jpg",
+   "place": "Augustusplatz, Leipzig",
+   "author": "Michielverbeek",
+   "license": "CC BY-SA 3.0 de",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+   "source": "https://commons.wikimedia.org/wiki/File:Leipzig,_Agyptisches_Museum_der_Universitat_Leipzig_Dm_IMG_6859_2025-05-11_09.58.jpg"
+  },
+  "dresden": {
+   "file": "img/photos/dresden.jpg",
+   "place": "Frauenkirche, Dresden",
+   "author": "CEphoto, Uwe Aranas",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Dresden_Germany_Exterior-of-Frauenkirche-01.jpg"
+  }
+ }
+}

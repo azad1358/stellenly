@@ -263,6 +263,22 @@ def resource_cards(cat: dict, up: str = "") -> tuple[str, bool]:
 # ---------------------------------------------------------------- guides: sections, covers, dates
 SECTIONS = {s["id"]: s for s in json.loads((CONTENT / "sections.json").read_text(encoding="utf-8"))["sections"]}
 OTHER_SECTION = {"id": "guides", "title": "Guides", "hue": 222, "icon": "book", "resources": [], "intro": ""}
+PHOTOS = json.loads((CONTENT / "photos.json").read_text(encoding="utf-8"))["photos"]  # web/img/photos/, with credits
+
+
+def photo_src(key: str, up: str, small: bool = False) -> str:
+    """A guide photo (web/img/photos/<key>.jpg, 1600 px; <key>-800.jpg for cards)."""
+    return f"{up}img/photos/{key}{'-800' if small else ''}.jpg"
+
+
+def photo_credits(keys: list[str]) -> str:
+    """The credit line the photos' CC BY-SA licences ask for: place, author, licence, link to the original."""
+    seen = list(dict.fromkeys(k for k in keys if k in PHOTOS))
+    if not seen:
+        return ""
+    items = [f'{e(PHOTOS[k]["place"])}: {e(PHOTOS[k]["author"])}, <a href="{e(PHOTOS[k]["source"])}" rel="noopener">'
+             f'{e(PHOTOS[k]["license"])}</a>' for k in seen]
+    return f'<p class="photo-credits">Photos (Wikimedia Commons): {" · ".join(items)}</p>'
 
 
 def section_of(meta: dict) -> dict:
@@ -304,7 +320,7 @@ def build_resources(resources: dict, posts: list[dict]) -> None:
     by_cat = {cid: s for s in SECTIONS.values() for cid in s["resources"]}
     looks = {"visa": (248, "passport"), "banking": (205, "bank"), "insurance": (168, "shield"), "german": (330, "chat"),
              "salary": (152, "euro"), "housing": (18, "home"), "jobs": (225, "briefcase")}
-    nav = "".join(f'<a class="tag" href="#{c["id"]}">{e(c["title"])}</a>' for c in resources["categories"])
+    nav = "".join(f'<a href="#{c["id"]}">{e(c["title"])}</a>' for c in resources["categories"])
     for c in resources["categories"]:
         cards, aff = resource_cards(c)
         any_aff |= aff
@@ -321,17 +337,21 @@ def build_resources(resources: dict, posts: list[dict]) -> None:
   </header>
   {cards}{related}
 </section>""")
-    body = f"""<section class="page-hero">
+    body = f"""<section class="page-hero"><div>
   <p class="eyebrow">Resources</p>
   <h1>Everything you need to move to and work in Germany</h1>
-  <p class="lead">Hand-picked, English-friendly services and the official sources we trust — checked {fmt_date(TODAY.isoformat())}.</p>
-  <nav class="tag-cloud res-nav" aria-label="Resource categories">{nav}</nav>
+  <p class="lead">Hand-picked, English-friendly services and the official sources we trust, checked {fmt_date(TODAY.isoformat())}.</p></div>
+  {hero_photo("dresden", "")}
 </section>
-{"".join(parts)}"""
+<div class="res-layout">
+  <nav class="res-side" aria-label="Resource categories"><p>On this page</p>{nav}</nav>
+  <div class="res-main">{"".join(parts)}</div>
+</div>
+{photo_credits(["dresden"])}"""
     (WEB / "resources.html").write_text(page(
         "Resources for working in Germany", "Visa, Blue Card, bank account, health insurance, learning German, "
         "salary and housing: the English-friendly services and official sources internationals need.",
-        body, "resources.html", 0, affiliate_note=any_aff), encoding="utf-8")
+        body, "resources.html", 0, affiliate_note=any_aff, main_class="content-page res-page"), encoding="utf-8")
 
 
 def render_shortcodes(md: str, jobs: list[dict], stats: dict, resources: dict, up: str) -> tuple[str, bool]:
@@ -418,7 +438,12 @@ def article_html(meta: dict, body_html: str, toc: list[dict], related: list[dict
     initials = "".join(w[0] for w in SITE["author"].split()[:2]).upper()
     rel = (f'<section class="related"><h2>More in {e(sec["title"])}</h2><div class="post-grid">'
            + "".join(post_card(p) for p in related) + "</div></section>") if related else ""
-    return f"""<div class="post-cover" style="--h:{sec['hue']}"><img src="{e(meta['cover'])}" alt="" width="1200" height="560"></div>
+    ph = PHOTOS.get(meta.get("photo") or "")
+    cover = (f'<figure class="post-photo"><img src="{photo_src(meta["photo"], "../")}" alt="{e(ph["place"])}" width="1600" height="900">'
+             f'<figcaption>{e(ph["place"])} · Photo: {e(ph["author"])}, <a href="{e(ph["source"])}" rel="noopener">'
+             f'{e(ph["license"])}</a> (Wikimedia Commons)</figcaption></figure>' if ph else
+             f'<div class="post-cover" style="--h:{sec["hue"]}"><img src="{e(meta["cover"])}" alt="" width="1200" height="560"></div>')
+    return f"""{cover}
 <div class="post-layout">
   <article class="post">
     <nav class="crumbs"><a href="index.html">Guides</a> › {sec_link}</nav>
@@ -449,9 +474,10 @@ def build_blog(jobs: list[dict], stats: dict, resources: dict) -> list[dict]:
         meta, body = read_post(p)
         if meta.get("draft") == "true":
             continue
-        meta.update(body=body, live=bool(re.search(r"\{\{(jobs|stat):", body)), minutes=reading_minutes(body),
-                    cover=write_cover(meta["slug"], section_of(meta)), href=f"{meta['slug']}.html",
-                    path=f"blog/{meta['slug']}.html")
+        photo = meta.get("photo") or section_of(meta).get("photo")
+        meta.update(body=body, live=bool(re.search(r"\{\{(jobs|stat):", body)), minutes=reading_minutes(body), photo=photo,
+                    cover=photo_src(photo, "../", small=True) if photo else write_cover(meta["slug"], section_of(meta)),
+                    href=f"{meta['slug']}.html", path=f"blog/{meta['slug']}.html")
         meta["updated"] = TODAY.isoformat() if meta["live"] else max(meta.get("reviewed", ""), meta.get("date", ""))
         posts.append(meta)
     posts.sort(key=lambda p: p.get("date", ""), reverse=True)
@@ -472,7 +498,8 @@ def build_blog(jobs: list[dict], stats: dict, resources: dict) -> list[dict]:
         related = [p for p in posts if p is not meta and section_of(p)["id"] == sec["id"]][:3]
         related += [p for p in posts if p is not meta and p not in related][:3 - len(related)]
         ld = json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": meta["title"],
-                         "description": meta.get("description"), "image": f"{SITE_URL}/blog/{meta['cover']}",
+                         "description": meta.get("description"),
+                         "image": f"{SITE_URL}/{photo_src(meta['photo'], '')}" if meta.get("photo") else f"{SITE_URL}/blog/{meta['cover']}",
                          "datePublished": meta.get("date"), "dateModified": meta["updated"],
                          "articleSection": sec["title"], "author": {"@type": "Person", "name": SITE["author"]},
                          "publisher": {"@type": "Organization", "name": SITE["site_name"], "url": SITE_URL}})
@@ -540,7 +567,8 @@ def build_report(jobs: list[dict], stats: dict) -> dict:
                            f"median listed salary {euro(stats['median_salary'])}, top cities and companies hiring.",
             "date": TODAY.isoformat(), "slug": slug, "section": "reports", "live": True,
             "updated": TODAY.isoformat(), "minutes": 3, "href": f"{slug}.html", "path": f"blog/{slug}.html"}
-    meta["cover"] = write_cover(slug, section_of(meta))
+    meta["photo"] = SECTIONS["reports"].get("photo")
+    meta["cover"] = photo_src(meta["photo"], "../", small=True) if meta["photo"] else write_cover(slug, section_of(meta))
     SECTIONS["reports"]["href"] = "section-reports.html"
     (WEB / "blog" / f"{slug}.html").write_text(page(
         meta["title"], meta["description"], article_html(meta, body, [], []), f"blog/{slug}.html", 1,
@@ -1305,13 +1333,16 @@ founded 2009 or later, fewer than 5,000 people. Missing a company? It appears he
     return ["companies.html"] + [f"companies/{c['slug']}.html" for c in cos if c["page"]]
 
 
-def section_banner(sec: dict, n: int, tag: str = "h2", link: bool = True) -> str:
-    cover = write_cover(f"section-{sec['id']}", sec, banner=True)
-    inner = f"""<img src="{e(cover)}" alt="" loading="lazy" width="1200" height="560">
-  <span class="sec-banner-text"><{tag}>{e(sec['title'])}</{tag}><span>{e(sec['intro'])}</span>
-  <small>{n} article{'s' if n != 1 else ''}{' · updated daily' if sec['id'] == 'reports' else ''}</small></span>"""
-    return (f'<a class="sec-banner" href="{e(sec["href"])}" style="--h:{sec["hue"]}">{inner}</a>' if link
-            else f'<div class="sec-banner big" style="--h:{sec["hue"]}">{inner}</div>')
+def sec_head(sec: dict, n: int, up: str = "") -> str:
+    """A topic's heading on the guides overview: title, one line, "All n →"."""
+    more = f'<a class="sec-more" href="{up}{e(sec["href"])}">All {n} →</a>' if n > 3 else ""
+    return (f'<div class="sec-head"><div><h2><a href="{up}{e(sec["href"])}">{e(sec["title"])}</a></h2>'
+            f'<p>{e(sec["intro"])}</p></div>{more}</div>')
+
+
+def hero_photo(key: str | None, up: str) -> str:
+    return (f'<figure class="hero-photo"><img src="{photo_src(key, up, small=True)}" alt="{e(PHOTOS[key]["place"])}" '
+            f'width="800" height="450"></figure>') if key in PHOTOS else ""
 
 
 def report_posts(report: dict) -> list[dict]:
@@ -1327,7 +1358,9 @@ def report_posts(report: dict) -> list[dict]:
         out.append({"title": f"English-speaking job market in Germany — week {int(m.group(2))}, {m.group(1)}",
                     "description": "Weekly numbers on English-speaking jobs in Germany.", "section": "reports",
                     "date": monday.isoformat(), "updated": (monday + dt.timedelta(days=6)).isoformat(),
-                    "minutes": 3, "href": f.name, "cover": write_cover(f.stem, SECTIONS["reports"])})
+                    "minutes": 3, "href": f.name, "photo": SECTIONS["reports"].get("photo"),
+                    "cover": photo_src(SECTIONS["reports"]["photo"], "../", small=True) if SECTIONS["reports"].get("photo")
+                    else write_cover(f.stem, SECTIONS["reports"])})
     return out[:12]
 
 
@@ -1338,11 +1371,14 @@ def build_section_pages(posts: list[dict], report: dict, resources: dict) -> lis
         items = report_posts(report) if sec["id"] == "reports" else [p for p in posts if section_of(p)["id"] == sec["id"]]
         sources = "".join(resource_cards(cats[c], "../")[0] for c in sec["resources"] if c in cats)
         others = "".join(f'<a class="tag" href="{e(s["href"])}">{e(s["title"])}</a>' for s in SECTIONS.values() if s is not sec)
-        body = f"""<p class="crumbs"><a href="index.html">Guides</a> › {e(sec['title'])}</p>
-{section_banner(sec, len(items), tag="h1", link=False)}
+        body = f"""<section class="page-hero"><div><nav class="crumbs"><a href="index.html">Guides</a> › {e(sec['title'])}</nav>
+  <h1>{e(sec['title'])}</h1><p class="lead">{e(sec['intro'])}</p>
+  <p class="hero-meta">{len(items)} article{'s' if len(items) != 1 else ''}{' · updated daily' if sec['id'] == 'reports' else ''}</p></div>
+  {hero_photo(sec.get('photo'), '../')}</section>
 <div class="post-grid">{"".join(post_card(p) for p in items) or '<p class="muted">New articles are on the way.</p>'}</div>
 {f'<section class="post-sources"><h2>Official sources &amp; tools</h2>{sources}</section>' if sources else ""}
-<nav class="other-sections"><p><b>More topics</b></p><div class="tag-cloud">{others}</div></nav>"""
+<nav class="other-sections"><p><b>More topics</b></p><div class="tag-cloud">{others}</div></nav>
+{photo_credits([sec.get('photo')] + [p.get('photo') for p in items])}"""
         (WEB / "blog" / sec["href"]).write_text(page(
             f"{sec['title']} — guides for working in Germany", sec["intro"], body, f"blog/{sec['href']}", 1,
             main_class="guides-page"), encoding="utf-8")
@@ -1358,23 +1394,28 @@ def build_blog_index(posts: list[dict], report: dict) -> None:
         items = report_posts(report) if sec["id"] == "reports" else [p for p in guides if section_of(p)["id"] == sec["id"]]
         if not items:
             continue
-        more = (f'<a class="sec-more" href="{e(sec["href"])}">All {len(items)} in {e(sec["title"])} →</a>'
-                if len(items) > 3 else "")
         blocks.append(f"""<section class="sec-block">
-  {section_banner(sec, len(items))}
-  <div class="post-grid">{"".join(post_card(p) for p in items[:3])}</div>{more}
+  {sec_head(sec, len(items))}
+  <div class="post-grid">{"".join(post_card(p) for p in items[:3])}</div>
 </section>""")
-    chips = "".join(f'<a class="tag" href="{e(s["href"])}">{e(s["title"])}</a>' for s in SECTIONS.values())
-    body = f"""<section class="page-hero">
+    # "Your path": the topics in the order you need them, each with its guides
+    steps = "".join(
+        f'<li><span class="path-n">{i}</span><a class="path-title" href="{e(s["href"])}">{e(s["title"])}</a><ul>'
+        + "".join(f'<li><a href="{e(p["href"])}">{e(p["title"].split(":")[0])}</a></li>'
+                  for p in guides if section_of(p)["id"] == s["id"])
+        + "</ul></li>" for i, s in enumerate((s for s in SECTIONS.values() if s["id"] != "reports"), 1))
+    body = f"""<section class="page-hero"><div>
   <p class="eyebrow">Guides · updated {fmt_date(TODAY.isoformat())}</p>
   <h1>Guides for working in Germany</h1>
-  <p class="lead">Practical, fact-checked guides for internationals — visas, contracts, salary and settling in — plus a
-  job-market report that updates every day.</p>
-  <nav class="tag-cloud" aria-label="Topics">{chips}</nav>
+  <p class="lead">Practical, fact-checked guides for internationals: visas, contracts, salary and settling in, plus a
+  job-market report that updates every day.</p></div>
+  {hero_photo("cologne", "../")}
 </section>
-{f'<div class="featured-wrap"><p class="kicker">Latest</p>{post_card(featured, featured=True)}</div>' if featured else ""}
+<section class="guide-path" aria-labelledby="path-h"><h2 id="path-h">Your path to a job in Germany</h2><ol>{steps}</ol></section>
+{f'<div class="featured-wrap"><p class="kicker accent">Latest</p>{post_card(featured, featured=True)}</div>' if featured else ""}
 <aside class="cta"><b>This week's numbers:</b> <a href="{e(report['href'])}">{e(report['title'])}</a></aside>
-{"".join(blocks)}"""
+{"".join(blocks)}
+{photo_credits(["cologne"] + [p.get("photo") for p in guides] + [report.get("photo")])}"""
     (WEB / "blog" / "index.html").write_text(page("Guides & job-market reports", "Guides about the Blue Card, German "
                                                    "requirements, salaries and your first weeks in Germany.", body,
                                                    "blog/index.html", 1, main_class="guides-page"), encoding="utf-8")

@@ -5,6 +5,7 @@ date: 2026-10-27
 reviewed: 2026-10-27
 review_months: 6
 section: job-search
+photo: potsdamer-platz
 tags: cv, applications
 ---
 

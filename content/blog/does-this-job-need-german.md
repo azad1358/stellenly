@@ -5,6 +5,7 @@ date: 2026-10-26
 reviewed: 2026-10-26
 review_months: 6
 section: job-search
+photo: leipzig
 tags: german, job-search
 ---
 

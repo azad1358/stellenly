@@ -5,6 +5,7 @@ date: 2026-10-27
 reviewed: 2026-10-27
 review_months: 12
 section: salary
+photo: frankfurt-night
 tags: contract, salary
 ---
 
