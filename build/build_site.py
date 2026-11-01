@@ -870,15 +870,15 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     (out / "index.html").write_text(page(
         "English-speaking jobs in Germany by state, city and field",
         f"{len(jobs):,} English-speaking jobs in Germany, by state, city and field.",
-        f"""<header class="loc-head"><div><h1>English-speaking jobs by location</h1>
-<p class="muted">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div></header>
+        f"""<section class="co-hero loc-hero"><div><p class="kicker">Cities</p><h1>English-speaking jobs by location</h1>
+<p class="co-hero-sub">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div>
 <div class="loc-index">
   <section class="jd-card loc-map-card"><h3>Germany</h3>
     {germany_map.svg(None, state_urls, STATES, [{"n": c, "lat": xy[0], "lon": xy[1], "k": len(by_city[c]), "u": url("city", c)}
                                                 for c in cities_sorted if (xy := geo.city_coords(c))])}
     <p class="muted small">Click a state or a city.</p></section>
   <section><h2>States</h2>{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
-</div>
+</div></section>
 <h2>Cities</h2>{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}
 <h2 id="fields">Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
         main_class="content-page loc-page"), encoding="utf-8")
