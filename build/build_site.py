@@ -85,7 +85,6 @@ def parse_ts(s: str | None) -> dt.datetime:
     return dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
 
 
-FIELD_NAMES = {"ai-ml": "AI & machine learning", "it": "IT", "hr": "HR", "qa": "QA", "devops": "DevOps"}  # as in app.js
 META_TAGS = {"intern", "junior", "mid", "senior", "lead", "no-german", "visa-sponsorship", "remote", "relocation"}
 
 
@@ -843,7 +842,7 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
     paths = [location("state", st, state_jobs[st], st) for st in sorted(state_pages)]
     paths += [location("city", c, by_city[c], geo.city_state(c)) for c in sorted(city_pages)]
 
-    tag_counts = []  # (tag, jobs) of every tag page, for the index
+    tag_chips = []
     for t, n in stats["tags"]:
         if n < MIN_JOBS:
             continue
@@ -862,52 +861,25 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
                                                           f"shown for every job.", body, f"jobs/tag-{slugify(t)}.html", 1,
                                                           main_class="content-page loc-page"), encoding="utf-8")
         paths.append(f"jobs/tag-{slugify(t)}.html")
-        tag_counts.append((t, n))
+        tag_chips.append(f'<a class="tag" href="tag-{slugify(t)}.html">#{e(t)}<span class="n">{n:,}</span></a>')
 
     states_sorted = sorted(state_pages, key=lambda x: -len(state_jobs[x]))
     cities_sorted = sorted(city_pages, key=lambda x: -len(by_city[x]))
-    # Index: navy hero with today's numbers and the map (like the home page), then states, cities and fields.
-    top_city = cities_sorted[0] if cities_sorted else None
-    loc_kpis = "".join(
-        f'<div class="kpi"><b>{v}</b><span class="kpi-label">{label}</span><span class="kpi-sub">{sub}</span></div>' for v, label, sub in [
-            (f"{len(jobs):,}", "open English-speaking jobs", "updated every 6 hours"),
-            (f"{len(state_pages)} · {len(city_pages)}", "states · cities",
-             f"most jobs: {e(top_city)} ({len(by_city[top_city]):,})" if top_city else ""),
-            (f"{100 - stats['german_required_pct']}%", "don't require German", f"only {stats['german_required_pct']}% do"),
-            (f"{stats['remote_pct']}%", "fully remote", "in Germany or the EU")])
-    real_fields = [(t, n) for t, n in tag_counts if t not in META_TAGS]
-    rank = lambda items, start: "".join(  # noqa: E731
-        f'<li><a href="tag-{slugify(t)}.html"><span class="rk-i">{i}</span><span class="rk-ic">{e(t[0].upper())}</span>'
-        f'<span class="rk-name">{e(FIELD_NAMES.get(t) or t.replace("-", " ").capitalize())}</span>'
-        f'<span class="rk-bar" aria-hidden="true"><span style="width:{max(4, round(100 * n / real_fields[0][1]))}%"></span></span>'
-        f'<b>{n:,}</b></a></li>' for i, (t, n) in enumerate(items, start))
-    chips = lambda items: "".join(f'<a class="tag" href="tag-{slugify(t)}.html">#{e(t)}<span class="n">{n:,}</span></a>'  # noqa: E731
-                                  for t, n in items)
-    filters = [(t, n) for t, n in tag_counts if t in META_TAGS]
     (out / "index.html").write_text(page(
         "English-speaking jobs in Germany by state, city and field",
         f"{len(jobs):,} English-speaking jobs in Germany, by state, city and field.",
-        f"""<section class="loc-hero">
-  <div><p class="kicker">Explore</p><h1>English-speaking jobs by location</h1>
-    <p class="loc-hero-sub">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities, checked by AI and updated every 6 hours.</p>
-    <div class="hero-kpis">{loc_kpis}</div></div>
-  <div class="loc-hero-map">
+        f"""<header class="loc-head"><div><h1>English-speaking jobs by location</h1>
+<p class="muted">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div></header>
+<div class="loc-index">
+  <section class="jd-card loc-map-card"><h3>Germany</h3>
     {germany_map.svg(None, state_urls, STATES, [{"n": c, "lat": xy[0], "lon": xy[1], "k": len(by_city[c]), "u": url("city", c)}
                                                 for c in cities_sorted if (xy := geo.city_coords(c))])}
-    <p>Click a state or a city.</p></div>
-</section>
-<section class="loc-sec"><div class="section-head"><p class="kicker accent">States</p><h2>Jobs by state</h2></div>
-{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
-<section class="loc-sec"><div class="section-head"><p class="kicker accent">Cities</p><h2>Jobs by city</h2></div>
-{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}</section>
-<section class="loc-sec" id="fields"><div class="section-head"><p class="kicker accent">Fields</p><h2>Jobs by field</h2></div>
-  <div class="explore-grid">
-    <div class="explore-card"><ol class="rank">{rank(real_fields[:8], 1)}</ol></div>
-    <div class="explore-card"><ol class="rank">{rank(real_fields[8:16], 9)}</ol></div>
-  </div>
-  {f'<p class="loc-more"><b>More fields</b>{chips(real_fields[16:])}</p>' if real_fields[16:] else ""}
-  {f'<p class="loc-more"><b>By level and work setup</b>{chips(filters)}</p>' if filters else ""}
-</section>""", "jobs/index.html", 1, main_class="content-page loc-page"), encoding="utf-8")
+    <p class="muted small">Click a state or a city.</p></section>
+  <section><h2>States</h2>{place_tiles_html([(len(state_jobs[st]), coa("state", st), STATES[st], url("state", st)) for st in states_sorted], "../", len(jobs))}</section>
+</div>
+<h2>Cities</h2>{place_tiles_html([(len(by_city[c]), coa("city", c), c, url("city", c)) for c in cities_sorted], "../", len(jobs))}
+<h2 id="fields">Fields</h2><div class="tag-cloud loc-tags">{"".join(tag_chips)}</div>""", "jobs/index.html", 1,
+        main_class="content-page loc-page"), encoding="utf-8")
 
     # Home page "Browse by location" row (app.js): the biggest states, then the biggest other cities.
     top = [{"n": STATES[st], "k": len(state_jobs[st]), "u": f"jobs/{url('state', st)}", "i": coa("state", st)}
