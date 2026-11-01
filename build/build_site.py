@@ -866,11 +866,16 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
         tag_chips.append(f'<a class="tag" href="tag-{slugify(t)}.html">#{e(t)}<span class="n">{n:,}</span></a>')
 
     states_sorted = sorted(state_pages, key=lambda x: -len(state_jobs[x]))
+    # Hero background: the states' coats of arms as line drawings, repeated across the band (like companies.html)
+    coats = outline_coats()
+    coats_bg = ('<div class="co-logos coa-lines" aria-hidden="true">' + "".join(
+        f'<span class="co-logo"><i style="-webkit-mask-image:url(../{p});mask-image:url(../{p})"></i></span>'
+        for p in (coats * 8)[:130]) + "</div>") if coats else ""
     cities_sorted = sorted(city_pages, key=lambda x: -len(by_city[x]))
     (out / "index.html").write_text(page(
         "English-speaking jobs in Germany by state, city and field",
         f"{len(jobs):,} English-speaking jobs in Germany, by state, city and field.",
-        f"""<section class="co-hero loc-hero"><div><p class="kicker">Cities</p><h1>English-speaking jobs by location</h1>
+        f"""<section class="co-hero loc-hero">{coats_bg}<div><p class="kicker">Cities</p><h1>English-speaking jobs by location</h1>
 <p class="co-hero-sub">{len(jobs):,} open jobs in {len(state_pages)} states and {len(city_pages)} cities · updated every 6 hours</p></div>
 <div class="loc-index">
   <section class="jd-card loc-map-card"><h3>Germany</h3>
@@ -1082,6 +1087,33 @@ def write_company_index(cos: list[dict]) -> None:
             index[co_key(name)] = {k: v for k, v in entry.items() if v is not None}
     (WEB / "data" / "companies-index.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")),
                                               encoding="utf-8")
+
+
+def outline_coats() -> list[str]:
+    """Line drawings of the states' coats of arms for the Cities hero (no names): the drawing's own lines (eagle,
+    lion, stripes) plus the shield's rim, saved as web/img/coa/outline/state-*.png. Returns the paths relative to
+    web/; without Pillow there are none."""
+    try:
+        from PIL import Image, ImageChops, ImageFilter
+    except ImportError:
+        return []
+    out_dir = WEB / "img" / "coa" / "outline"
+    out_dir.mkdir(exist_ok=True)
+    out = []
+    for src in sorted((WEB / "img" / "coa").glob("state-*.png")):
+        dst = out_dir / src.name
+        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+            im = Image.open(src).convert("RGBA").resize((112, 112))
+            on_white = Image.new("RGBA", im.size, (255, 255, 255, 255))
+            on_white.alpha_composite(im)
+            shape = im.getchannel("A").point(lambda v: 255 if v > 128 else 0)
+            inner = on_white.convert("L").filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 60 else 0)
+            rim = ImageChops.subtract(shape, shape.filter(ImageFilter.MinFilter(3)))
+            line = Image.new("LA", im.size, (255, 0))
+            line.putalpha(ImageChops.multiply(ImageChops.lighter(inner, rim), shape))
+            line.save(dst, optimize=True)
+        out.append(f"img/coa/outline/{src.name}")
+    return out
 
 
 def outline_logos(slugs: list[str], limit: int = 40) -> list[str]:

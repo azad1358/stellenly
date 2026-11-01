@@ -1327,12 +1327,12 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 @media (prefers-reduced-motion: reduce) { .odo-strip { transition: none; } }
 
 /* jobs/index.html: the map + states block in the home page's navy, with a bigger map */
-.loc-index { grid-template-columns: 400px minmax(0, 1fr); color: #fff; }  /* inside the solid navy hero, like companies.html */
+.loc-index { grid-template-columns: 300px minmax(0, 1fr); color: #fff; }  /* inside the solid navy hero, like companies.html */
 .loc-index h2 { color: #fff; }
 .loc-index .loc-map-card { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .1); }
 .loc-index .loc-map-card h3 { color: #fff; }
 .loc-index .loc-map-card .muted { color: #8f9bb8; }
-.loc-index .de-map { max-width: 360px; }
+.loc-index .de-map { max-width: 250px; }
 .loc-index .de-map .st { fill: rgba(255, 255, 255, .07); stroke: rgba(199, 210, 254, .3); }
 .loc-index .de-map a .st:hover { fill: rgba(129, 140, 248, .35); }
 .loc-index .de-map .dot { fill: #a5b4fc; fill-opacity: .85; stroke: none; filter: drop-shadow(0 0 4px rgba(165, 180, 252, .8)); }
@@ -1400,3 +1400,6 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .co-logo i { width: 44px; height: 44px; background: #c7d2fe;
   -webkit-mask-position: center; mask-position: center; -webkit-mask-size: contain; mask-size: contain;
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+/* jobs/index.html: the states' coats of arms as line drawings, no names, a bit larger */
+.coa-lines { grid-template-columns: repeat(auto-fill, 120px); grid-auto-rows: 120px; }
+.coa-lines .co-logo i { width: 60px; height: 60px; }
