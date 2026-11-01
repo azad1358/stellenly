@@ -1084,6 +1084,29 @@ def write_company_index(cos: list[dict]) -> None:
                                               encoding="utf-8")
 
 
+def silhouette_logos(slugs: list[str], limit: int = 28) -> list[str]:
+    """Logos with a transparent background, in the given order: their shape works as a one-colour silhouette, which
+    the companies hero draws faintly in its side margins (like the Berlin drawing on the home page). A logo on a
+    solid background would only be a square, so it's left out. Without Pillow there are simply none."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return []
+    out = []
+    for slug in slugs:
+        f = WEB / "logos" / f"{slug}.png"
+        if not f.exists():
+            continue
+        alpha = Image.open(f).convert("RGBA").getchannel("A")
+        w, h = alpha.size
+        filled = sum(alpha.histogram()[129:]) / (w * h)
+        if max(alpha.getpixel(p) for p in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))) < 20 and 0.08 < filled < 0.75:
+            out.append(slug)
+        if len(out) == limit:
+            break
+    return out
+
+
 def build_companies(jobs: list[dict]) -> list[str]:
     cos = load_companies(jobs)
     write_company_index(cos)
@@ -1199,7 +1222,14 @@ def build_companies(jobs: list[dict]) -> list[str]:
 
     n_jobs = sum(len(c["jobs"]) for c in cos)
     n_cities = len([c for c in order if c not in (REMOTE, NO_CITY)])
+    # Logo silhouettes in the hero's side margins: two columns left, two right, staggered; never behind search or map
+    marks = silhouette_logos([c["slug"] for c in sorted(cos, key=lambda c: -len(c["jobs"]))])
+    logos_bg = "".join(
+        f'<span class="co-logo" style="{"left" if i % 4 < 2 else "right"}:{-118 if i % 2 == 0 else -62}px;'
+        f'top:{6 + (i // 4) * 13 + (7 if i % 2 else 0)}%;-webkit-mask-image:url(logos/{s}.png);mask-image:url(logos/{s}.png)"></span>'
+        for i, s in enumerate(marks))
     body = f"""<section class="co-hero">
+  {f'<div class="co-logos" aria-hidden="true">{logos_bg}</div>' if logos_bg else ""}
   <div><p class="kicker">Companies</p><h1>Companies hiring in English across Germany</h1>
     <p class="co-hero-sub">{len(cos):,} employers · {n_jobs:,} open English-speaking jobs · {n_cities} cities.</p>
     <div class="co-toolbar">
