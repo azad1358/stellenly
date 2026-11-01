@@ -155,6 +155,11 @@
    "board": "bjakcareer",
    "company": "Bjak"
   },
+  "blackduck": {
+   "ats": "greenhouse",
+   "board": "blackduck",
+   "company": "Blackduck"
+  },
   "blackforestlabs": {
    "ats": "ashby",
    "board": "black-forest-labs",
@@ -524,6 +529,11 @@
    "board": "intersnackgroupgmbhcokg",
    "company": "Intersnack Group GmbH & Co. KG"
   },
+  "jellyfish": {
+   "ats": "ashby",
+   "board": "jellyfishcareers",
+   "company": "Jellyfish"
+  },
   "jobgether": {
    "ats": "lever",
    "board": "jobgether",
@@ -636,6 +646,11 @@
    "board": "lovehoneygroup",
    "region": "eu",
    "company": "Lovehoney Group"
+  },
+  "luminovogmbh": {
+   "ats": "ashby",
+   "board": "luminovo",
+   "company": "Luminovo GmbH"
   },
   "lyceum": {
    "ats": "ashby",
@@ -1143,6 +1158,11 @@
    "ats": "ashby",
    "board": "Watershed",
    "company": "Watershed"
+  },
+  "wemolo": {
+   "ats": "ashby",
+   "board": "wemolo",
+   "company": "Wemolo"
   },
   "westernacher": {
    "ats": "lever",

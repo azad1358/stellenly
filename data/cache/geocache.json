@@ -292,6 +292,12 @@
 "lat": 53.3326,
 "lon": 6.9135
 },
+"*|den bosch": {
+"cc": "nl",
+"lat": 51.6889,
+"lon": 5.3031,
+"state": "NL-NB"
+},
 "*|den haag, zuid-holland, nederland": {
 "cc": "nl",
 "lat": 52.0749,
