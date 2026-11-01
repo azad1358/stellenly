@@ -122,7 +122,7 @@ def compute_stats(jobs: list[dict]) -> dict:
 # Discord and Telegram cards, fixed in the bottom-right corner (same markup in web/index.html). Each has its own ×,
 # remembered per browser (ejg.dcHidden / ejg.tgHidden).
 TG_FLOAT = """<details class="fab">
-  <summary aria-label="Stelli: get new jobs on Telegram and Discord"><span class="fab-teaser">New jobs every day on Telegram &amp; Discord</span><span class="fab-avatar"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
+  <summary aria-label="Stelli: get new jobs on Telegram and Discord"><span class="fab-teaser"><span>New jobs every day on Telegram &amp; Discord</span></span><span class="fab-avatar"><svg class="stelli" viewBox="0 0 64 64" aria-hidden="true">
         <defs><linearGradient id="stelli-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
         <line x1="32" y1="6" x2="32" y2="14" stroke="url(#stelli-g)" stroke-width="3" stroke-linecap="round"/>
         <circle class="stelli-light" cx="32" cy="6" r="4"/>

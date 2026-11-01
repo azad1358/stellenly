@@ -1265,9 +1265,12 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   box-shadow: 0 12px 30px -10px rgba(79, 70, 229, .7), 0 0 0 1px rgba(129, 140, 248, .45); transition: transform .15s; }
 .fab > summary:hover .fab-avatar { transform: translateY(-2px); }
 .fab-avatar .stelli { width: 36px; height: 36px; }
-.fab-teaser { max-width: 290px; padding: 8px 12px; border-radius: 14px 14px 4px 14px; background: var(--night); color: #eef0ff;
-  font-size: .84rem; line-height: 1.35; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .5);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* fixed size (room for three lines), so the bubble never grows or shrinks; the text fades between lines */
+.fab-teaser { display: flex; align-items: center; box-sizing: border-box; width: 290px; height: calc(3 * 1.35em + 18px); padding: 9px 13px;
+  border-radius: 14px 14px 4px 14px; background: var(--night); color: #eef0ff; font-size: .84rem; line-height: 1.35;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .5); }
+.fab-teaser > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: opacity .35s; }
+#stelli-text.fading { opacity: 0; }
 .fab-panel { width: 330px; padding: 16px; border-radius: 18px; color: #e6e9f5; border: 1px solid rgba(255, 255, 255, .12);
   background: linear-gradient(180deg, #181e3e, var(--night)); box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .6); }
 .fab-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }

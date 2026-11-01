@@ -1176,7 +1176,7 @@
         <span class="agent-name"><b>${name}</b><small>${what}</small></span><span class="agent-stat">${stat}</span></li>`).join("");
   }
 
-  // Stelli's speech bubble: one live fact after another, typed out.
+  // Stelli's speech bubble: one live fact after another.
   function stelliLines() {
     const s = siteStats, out = [];
     if (s) out.push(`Hi, I'm Stelli. Right now I'm watching ${num(s.active)} English-speaking jobs in Germany.`);
@@ -1191,18 +1191,15 @@
     out.slice(2).forEach((line, i) => mixed.push(...shuffled.slice(i * 2, i * 2 + 2), line));
     return mixed.concat(shuffled.slice(Math.max(0, out.length - 2) * 2));
   }
-  let stelliType = null, stelliTurn = null;
+  // The bubble keeps its size; only the text fades out and the next line fades in.
+  let stelliTurn = null;
   function runStelli() {
     const el = $("#stelli-text"), lines = stelliLines();
     if (!el || !lines.length) return;
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let i = 0;
     const show = () => {
-      const line = lines[i++ % lines.length];
-      clearInterval(stelliType);
-      if (still) { el.textContent = line; return; }
-      let c = 0;
-      stelliType = setInterval(() => { el.textContent = line.slice(0, ++c); if (c >= line.length) clearInterval(stelliType); }, 18);
+      el.classList.add("fading");
+      setTimeout(() => { el.textContent = lines[i++ % lines.length]; el.classList.remove("fading"); }, 350);
     };
     clearInterval(stelliTurn);
     show();
