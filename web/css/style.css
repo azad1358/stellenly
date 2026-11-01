@@ -135,7 +135,7 @@ h1, h2, h3 { line-height: 1.25; }
 .toolbar p { margin: 0; flex: 1 1 0; min-width: 0; line-height: 1.4; min-height: 2.8em; }
 .toolbar-right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin-left: auto; }
 @media (max-width: 1100px) { .toolbar { flex-wrap: wrap; } .toolbar p { flex-basis: 100%; } }
-@media (max-width: 480px) { .toolbar p { min-height: 5.6em; } }
+@media (max-width: 480px) { .toolbar p { min-height: 2.8em; } }
 .toolbar .link-btn { text-align: left; }
 .sort { font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
 .sort select { width: auto; padding: 6px 8px; }
@@ -1403,3 +1403,35 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .job-actions .btn.icon { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 1rem; color: var(--muted); }
 .job-actions .btn.icon[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
 .job-actions .btn.icon[data-act="hide"] { font-size: .85rem; }
+
+/* City, state and field pages: crumbs, title and numbers in the navy hero (like companies and cities) */
+.place-hero { display: block; padding: 28px 0 32px; }
+.place-hero .crumbs, .place-hero .crumbs a { color: #a5b4fc; }
+.place-hero .loc-head { margin-bottom: 18px; }
+.place-hero .loc-head h1 { margin: 0 0 4px; font-size: clamp(1.6rem, 3.2vw, 2.3rem); }
+.place-hero .loc-head .muted { color: #b8c2da; }
+.place-hero .logo.coa { background: #fff; }
+.place-hero .loc-kpis { margin: 0; }
+.place-hero .loc-kpis div { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); }
+.place-hero .loc-kpis b { color: #fff; }
+.place-hero .loc-kpis span { color: #b8c2da; }
+
+/* Guides overview and Resources: the same navy hero */
+.page-hero { max-width: none; margin: -28px 0 28px; padding: 40px 0 36px; color: #fff; background: var(--night);
+  box-shadow: 0 0 0 100vmax var(--night); clip-path: inset(0 -100vmax); }
+.page-hero h1, .page-hero .lead { max-width: 820px; }
+.page-hero h1 { color: #fff; }
+.page-hero .lead { color: #b8c2da; }
+.page-hero .eyebrow { background: rgba(99, 102, 241, .18); color: #c7d2fe; }
+.page-hero .tag-cloud .tag { color: #dfe5f3; background: transparent; border-color: rgba(255, 255, 255, .22); }
+.page-hero .tag-cloud .tag:hover { color: #fff; border-color: #fff; }
+
+/* Header: "Support us" as a quiet outline button, so Search stays the one strong call to action */
+.header-end .btn.support { background: transparent; color: var(--support); border-color: color-mix(in srgb, var(--support) 55%, transparent); }
+.header-end .btn.support:hover { background: color-mix(in srgb, var(--support) 10%, transparent); }
+
+/* Readability: the smallest texts one step larger */
+.job-meta { font-size: .9rem; }
+.badge { font-size: .8rem; }
+.kpi-sub { font-size: .78rem; }
+.agent-name small, .agent-stat { font-size: .78rem; }

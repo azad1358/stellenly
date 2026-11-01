@@ -599,7 +599,7 @@ def job_cards_html(jobs: list[dict], up: str, logos: dict[str, str]) -> str:
     {f'<p class="job-sum">{e(summary)}</p>' if summary else ""}
     <div class="badges">{"".join(badges)}</div>
   </div>
-  <div class="job-side">{f'<div class="job-salary">{sal}<small>/ year</small></div>' if sal else '<div class="job-salary none">Salary not listed</div>'}</div>
+  {f'<div class="job-side"><div class="job-salary">{sal}<small>/ year</small></div></div>' if sal else ""}
 </li>""")
     return f'<ol class="results static-cards">{"".join(cards)}</ol>'
 
@@ -808,14 +808,14 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
                   f"Filter by German level, salary &amp; visa →</a>" if kind == "city" else "")
         more = (f'<p class="muted small">The 30 newest of {len(sel):,} jobs.'
                 f'{" The search shows all of them." if kind == "city" else ""}</p>' if len(sel) > 30 else "")
-        body = f"""<nav class="crumbs">{" › ".join(crumbs)}</nav>
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs">{" › ".join(crumbs)}</nav>
 <header class="loc-head">
   {logo_html(name, coa(kind, val), "../", "logo-lg coa")}
   <div><h1>English-speaking jobs in {e(name)}</h1>
   <p class="muted">{"State" if kind == "state" else "City"}{f" in {e(STATES[state])}" if kind == "city" and state in STATES else ""}{f" · {e(de_name)}" if kind == "state" and de_name != name else ""} · updated every 6 hours</p></div>
   {search}
 </header>
-{kpis(s)}
+{kpis(s)}</section>
 <div class="loc-layout">
   <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}{more}</div>
   <aside class="loc-side">
@@ -823,7 +823,8 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
       {germany_map.svg(state, state_urls, STATES, dots)}
       <p class="muted small">Circles: cities with jobs, by size. Click a city or another state.</p></section>
     <section class="jd-card"><h3>Cities in {e(region)}</h3>
-      {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities], "../", len(state_jobs.get(state, sel)))}</section>
+      {place_tiles_html([(len(by_city[c]), coa("city", c), c, city_url(c) if c != val else None) for c in cities
+                         if c in city_pages or c == val], "../", len(state_jobs.get(state, sel)))}</section>
   </aside>
 </div>
 {place_faq(name, sel, s)}
@@ -845,10 +846,10 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
         s = compute_stats(sel)
         label = "AI / ML" if t == "ai-ml" else t.replace("-", " ")
         title = f"{s['active']:,} English-speaking {label} jobs in Germany"
-        body = f"""<nav class="crumbs"><a href="index.html">Jobs by location and field</a></nav>
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs"><a href="index.html">Jobs by location and field</a></nav>
 <header class="loc-head"><div><h1>English-speaking {e(label)} jobs in Germany</h1><p class="muted">Updated every 6 hours</p></div>
   <a class="btn primary" href="../index.html?tags={e(t)}">Filter by German level, salary &amp; visa →</a></header>
-{kpis(s)}
+{kpis(s)}</section>
 <div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}</div>
 <p class="muted small">Always apply on the original posting.</p>
 {CARD_SCRIPTS}"""
