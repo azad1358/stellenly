@@ -1,7 +1,7 @@
 """Messages to the private Discord channel #social-drafts (DISCORD_SOCIAL_WEBHOOK_URL) for the "Social posts" workflow.
 
     python build/social_discord.py draft <post.json> <base_url> <approve_url>   # preview: images + caption + approve link
-    python build/social_discord.py posted <posted.txt>                          # the links of the published post
+    python build/social_discord.py posted <posted.txt> [outcome]                # the post's links, or why there are none
 """
 from __future__ import annotations
 
@@ -29,8 +29,12 @@ if __name__ == "__main__":
         send(f"📝 **New {p['kind']} post for {p['date']}**: {len(p['slides'])} image(s)\n"
              f"✅ Approve or ❌ reject here: <{sys.argv[4]}>\n\n>>> {p['caption']}",
              [{"image": {"url": f"{base}/{s}"}, "url": sys.argv[4]} for s in p["slides"][:10]])  # same url: one gallery
-    elif sys.argv[1:2] == ["posted"] and len(sys.argv) == 3:
+    elif sys.argv[1:2] == ["posted"] and len(sys.argv) in (3, 4):
         links = Path(sys.argv[2]).read_text(encoding="utf-8").split() if Path(sys.argv[2]).exists() else []
-        send("✅ Posted:\n" + "\n".join(f"<{u}>" for u in links) if links else "ℹ️ Nothing was posted (draft too old).")
+        run = f"{os.environ.get('GITHUB_SERVER_URL')}/{os.environ.get('GITHUB_REPOSITORY')}/actions/runs/{os.environ.get('GITHUB_RUN_ID')}"
+        if sys.argv[3:4] == ["failure"]:  # the posting step itself failed (Meta API error, token, ...)
+            send(f"❌ Posting failed, nothing was published. The error is in the run log: <{run}>")
+        else:
+            send("✅ Posted:\n" + "\n".join(f"<{u}>" for u in links) if links else "ℹ️ Nothing was posted (draft too old).")
     else:
         sys.exit(__doc__)
