@@ -28,7 +28,10 @@ def call(method: str, path: str, token: str | None = None, **params) -> dict:
     data = r.json()
     if not r.ok or "error" in data:
         err = data.get("error", {})
-        raise SystemExit(f"Meta API: {r.status_code} {err.get('type', '')} {err.get('message', r.text[:300])}")
+        # code / subcode / user title and trace id say which restriction it is (Meta's docs and support use them)
+        detail = " · ".join(f"{k}={err[k]}" for k in ("code", "error_subcode", "error_user_title", "error_user_msg", "fbtrace_id")
+                            if err.get(k))
+        raise SystemExit(f"Meta API: {r.status_code} {err.get('type', '')} {err.get('message', r.text[:300])} ({detail}) [{path}]")
     return data
 
 
