@@ -40,6 +40,11 @@
    "board": "aircall",
    "company": "Aircall"
   },
+  "alimentiv": {
+   "ats": "lever",
+   "board": "alimentiv-2",
+   "company": "Alimentiv"
+  },
   "almedia": {
    "ats": "ashby",
    "board": "almedia",
@@ -79,6 +84,11 @@
    "ats": "greenhouse",
    "board": "apaleo",
    "company": "Apaleo"
+  },
+  "apexai": {
+   "ats": "lever",
+   "board": "apex-ai",
+   "company": "Apex Ai"
   },
   "applied": {
    "ats": "ashby",
@@ -302,6 +312,11 @@
    "board": "dkbcodefactory",
    "company": "dkbcodefactory"
   },
+  "dnb": {
+   "ats": "lever",
+   "board": "dnb",
+   "company": "Dnb"
+  },
   "docebo": {
    "ats": "ashby",
    "board": "docebo",
@@ -513,6 +528,11 @@
    "ats": "greenhouse",
    "board": "inmobi",
    "company": "InMobi "
+  },
+  "innocraft": {
+   "ats": "lever",
+   "board": "innocraft",
+   "company": "Innocraft"
   },
   "insiderone": {
    "ats": "lever",
@@ -1263,6 +1283,7 @@
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
   "contentful": "2026-10-28",
+  "conziagmbh": "2026-11-02",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
