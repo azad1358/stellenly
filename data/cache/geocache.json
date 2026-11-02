@@ -241,6 +241,12 @@
 "lat": 31.9669,
 "lon": -81.0626
 },
+"*|chelmsford": {
+"cc": "gb",
+"lat": 51.7345,
+"lon": 0.4731,
+"state": "GB-ENG"
+},
 "*|cheltenham": {
 "cc": "gb",
 "lat": 51.8996,
@@ -291,6 +297,12 @@
 "cc": "nl",
 "lat": 53.3326,
 "lon": 6.9135
+},
+"*|delitzsch": {
+"cc": "de",
+"lat": 51.5256,
+"lon": 12.3429,
+"state": "DE-SN"
 },
 "*|den bosch": {
 "cc": "nl",
@@ -485,6 +497,12 @@
 "cc": "gb",
 "lat": 52.06,
 "lon": -0.3475
+},
+"*|jersey": {
+"cc": "us",
+"lat": 39.0848,
+"lon": -90.3303,
+"state": "US-IL"
 },
 "*|kaiseraugst": {
 "cc": "ch",
@@ -859,6 +877,12 @@
 "cc": "de",
 "lat": 48.1705,
 "lon": 11.3526
+},
+"*|reading": {
+"cc": "gb",
+"lat": 51.4564,
+"lon": -0.9701,
+"state": "GB-ENG"
 },
 "*|regensdorf": {
 "cc": "ch",
@@ -1370,6 +1394,12 @@
 "lon": 8.4217,
 "state": "DE-HE"
 },
+"de|bielefeld": {
+"cc": "de",
+"lat": 52.0191,
+"lon": 8.531,
+"state": "DE-NW"
+},
 "de|bochum": {
 "cc": "de",
 "lat": 51.4818,
@@ -1440,6 +1470,12 @@
 "lat": 49.8728,
 "lon": 8.6512,
 "state": "DE-HE"
+},
+"de|delitzsch": {
+"cc": "de",
+"lat": 51.5256,
+"lon": 12.3429,
+"state": "DE-SN"
 },
 "de|deu": {
 "cc": "de",
@@ -2026,6 +2062,12 @@
 "cc": "de",
 "lat": 48.7084,
 "lon": 9.0035,
+"state": "DE-BW"
+},
+"de|stetten am kalten markt": {
+"cc": "de",
+"lat": 48.122,
+"lon": 9.0775,
 "state": "DE-BW"
 },
 "de|stuttgart": {
