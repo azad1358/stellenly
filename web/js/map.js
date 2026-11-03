@@ -178,6 +178,18 @@
     $("#me-skill").addEventListener("change", add);
     $("#me-chips").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (b) { skills.splice(+b.dataset.i, 1); chips(); } });
     $("#me-form").addEventListener("submit", (e) => { e.preventDefault(); add(); locate(skills); });
+    $("#me-reset").addEventListener("click", () => {   // forget the profile: form, "you" node, list, saved copy
+      skills = []; chips();
+      $("#me-field").value = ""; $("#me-level").value = ""; $("#me-remote").checked = false; $("#me-skill").value = "";
+      try { localStorage.removeItem("ejg.mapProfile"); } catch { /* private mode */ }
+      nodes = nodes.filter((n) => n.kind !== "you");
+      links = links.filter((l) => l.kind !== "you");
+      me = null;
+      G.graphData({ nodes, links });
+      light();
+      $("#me-result").hidden = true;
+      G.zoomToFit(800, 40);
+    });
     const saved = store.get("mapProfile", null);
     if (saved) {
       $("#me-field").value = saved.field || ""; $("#me-level").value = saved.level || ""; $("#me-remote").checked = !!saved.remote;

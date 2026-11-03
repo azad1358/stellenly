@@ -1569,3 +1569,5 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
 .map-slider input { width: 90px; accent-color: #7a82f2; }
 .map-canvas { cursor: grab; }
 @media (max-width: 760px) { .map-slider { display: none; } }
+.me-actions { display: flex; gap: 8px; }
+.me-actions .btn.primary { flex: 1; }
