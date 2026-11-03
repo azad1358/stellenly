@@ -34,7 +34,8 @@
   let city = "";                         // city filter ("" = all)
   const lit = new Set();                 // highlighted nodes (hover, a chosen category or "you")
   let hovered = null, me = null, picked = null, fitted = false, charge = null;
-  let spread = 6, meaning = 0.15, hubLines = true;
+  let pickOk = () => true;  // extra filter on a picked category's jobs (level / remote from the form)
+  let spread = 6, meaning = 0.15, hubLines = false;  // category lines: off at first (5,000 lines are heavy)
   let breathing = !matchMedia("(prefers-reduced-motion: reduce)").matches;  // the slow "alive" drift
 
   fetch("data/job-map.json").then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(start)
@@ -142,9 +143,11 @@
   const visible = (x) => { const n = node(x); return !n || nodeVisible(n); };
   const focused = (l) => lit.size > 0 && lit.has(id(l.source)) && lit.has(id(l.target));
   const touches = (l) => hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id);
-  // category lines always (faint) unless turned off; similar-job lines for the job under the cursor; "you" lines always
+  // category lines only while the button is on, in every state; "you" lines always; similar-job lines on hover
   const linkVisible = (l) => visible(l.source) && visible(l.target)
-    && (lit.size ? focused(l) || touches(l) : l.kind === "you" || (l.kind === "f" && hubLines));
+    && (l.kind === "s" ? touches(l)                                   // similar jobs: of the job under the cursor only
+      : l.kind === "f" ? hubLines && (!lit.size || touches(l) || lit.has(id(l.source)))  // a highlighted job's category
+      : !lit.size || focused(l) || touches(l));
   function color(n) {
     const base = n.kind === "f" ? HUB : n.kind === "you" ? YOU : GERMAN[D.jobs[n.ji][6]][1];
     return lit.size && !lit.has(n.id) ? DIM : base;
@@ -160,13 +163,23 @@
       lit.add(focus.id);
       links.forEach((l) => {
         if (l.kind === "s" && focus.kind !== "j") return;  // a category or "you": only its own lines
-        const s = id(l.source), t = id(l.target);
-        if (s === focus.id) lit.add(t); else if (t === focus.id) lit.add(s);
+        const s = id(l.source), t = id(l.target), other = s === focus.id ? t : t === focus.id ? s : null;
+        if (other && !(focus.kind === "f" && other[0] === "j" && !pickOk(D.jobs[+other.slice(1)]))) lit.add(other);
       });
     }
     G.nodeColor(color).linkColor(linkColor).linkWidth((l) => (focused(l) ? 1.2 : 0)).linkVisibility(linkVisible);
   }
   const fit = () => G.zoomToFit(800, 0, (n) => n.kind === "j" && nodeVisible(n));
+  // look at a set of nodes from far enough to see them all (most of them: the farthest 10% may fall outside)
+  function frame(pts) {
+    pts = pts.filter(Boolean);
+    if (!pts.length) return;
+    const c = { x: 0, y: 0, z: 0 };
+    pts.forEach((p) => { c.x += p.x / pts.length; c.y += p.y / pts.length; c.z += (p.z || 0) / pts.length; });
+    const d = pts.map((p) => Math.hypot(p.x - c.x, p.y - c.y, (p.z || 0) - c.z)).sort((a, b) => a - b);
+    const r = Math.max(60, d[Math.floor(0.9 * (d.length - 1))]);
+    G.cameraPosition({ x: c.x, y: c.y, z: c.z + r * 3 }, c, 1200);
+  }
   function resize() { const box = $("#map").getBoundingClientRect(); G.width(box.width).height(box.height); }
 
   // ------------------------------------------------------------------ category names, always on the map
@@ -231,21 +244,21 @@
     $("#map-cats").innerHTML = hubs.map((h, hi) => `<button type="button" class="cat" data-hub="${hi}">${esc(h.name)}<b>${h.jobs.length}</b></button>`).join("");
     $("#map-cats").addEventListener("click", (e) => { const b = e.target.closest("[data-hub]"); if (b) pick(+b.dataset.hub); });
   }
-  function pick(hi) {
-    picked = picked === hi ? null : hi;
+  function pick(hi, ok = () => true, toggle = true) {
+    picked = toggle && picked === hi ? null : hi;
+    pickOk = ok;
     $$(".cat").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.hub === picked)));
     light();
     const box = $("#cat-result");
     if (picked == null) { box.hidden = true; return; }
-    const h = hubs[hi], list = h.jobs.filter((i) => jobShown(D.jobs[i]));
+    const h = hubs[hi], list = h.jobs.filter((i) => jobShown(D.jobs[i]) && ok(D.jobs[i]));
     box.hidden = false;
     box.innerHTML = `<p class="kicker">${esc(h.name)} · ${list.length} jobs</p><ol class="me-list">${list.slice(0, 60).map((i) => {
       const j = D.jobs[i];
       return `<li><a href="job.html?id=${encodeURIComponent(j[0])}"><b>${esc(j[3])}</b><span>${esc(D.companies[j[4]][0])}${j[5] ? ` · ${esc(j[5])}` : ""}</span></a>
         <em style="--c:${GERMAN[j[6]][1]}" title="${GERMAN[j[6]][0]}">${GERMAN[j[6]][0].replace("German ", "").replace("No German needed", "no German")}</em></li>`; }).join("")}</ol>
       ${list.length > 60 ? `<p class="tiny muted">The 60 first of ${list.length}. Search them all on the jobs page.</p>` : ""}`;
-    const n = node(`f${hi}`), d = 380;
-    G.cameraPosition({ x: n.x + d, y: n.y + d / 3, z: (n.z || 0) + d }, n, 1200);
+    frame([node(`f${hi}`), ...list.map((i) => nodes[i])]);
     $("#map-side").classList.remove("open");
   }
   const $$ = (s) => [...document.querySelectorAll(s)];
@@ -320,13 +333,17 @@
     $("#me-skill").addEventListener("change", add);
     $("#me-chips").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (b) { skills.splice(+b.dataset.i, 1); chips(); } });
     $("#me-form").addEventListener("submit", (e) => { e.preventDefault(); add(); locate(skills); });
-    $("#me-reset").addEventListener("click", () => {   // forget the profile: form, "you" node, list, saved copy
+    $("#me-reset").addEventListener("click", () => {   // back to the start: form, "you", picked category, lists, saved copy
       skills = []; chips();
       $("#me-field").value = ""; $("#me-level").value = ""; $("#me-remote").checked = false; $("#me-skill").value = "";
       try { localStorage.removeItem("ejg.mapProfile"); } catch { /* private mode */ }
       nodes = nodes.filter((n) => n.kind !== "you");
       links = links.filter((l) => l.kind !== "you");
       me = null;
+      picked = null;
+      pickOk = () => true;
+      $$(".cat").forEach((b) => b.setAttribute("aria-pressed", "false"));
+      $("#cat-result").hidden = true;
       G.graphData({ nodes, links });
       light();
       matchLabels();
@@ -347,6 +364,24 @@
     const field = $("#me-field").value, level = $("#me-level").value, remote = $("#me-remote").checked;
     store.set("mapProfile", { field, level, remote, skills });
     const want = skills.map((s) => s.toLowerCase());
+    if (!want.length) {
+      // no skills: nothing to rank by, so show the whole category (with the level / remote choice), not 5 random ties
+      nodes = nodes.filter((n) => n.kind !== "you");
+      links = links.filter((l) => l.kind !== "you");
+      me = null;
+      G.graphData({ nodes, links });
+      matchLabels();
+      $("#me-result").hidden = false;
+      const hi = hubs.findIndex((h) => String(h.f) === field);
+      if (hi < 0) {
+        $("#me-result").innerHTML = `<p class="muted small">Choose a category or add your skills.</p>`;
+        light();
+        return;
+      }
+      $("#me-result").innerHTML = `<p class="muted small">Add your skills to see your 5 closest jobs with a score.</p>`;
+      pick(hi, (j) => (!level || j[8] === level) && (!remote || j[7]), false);
+      return;
+    }
     const max = want.length + (field ? 1 : 0) + (level ? 0.5 : 0);
     const scored = [];
     D.jobs.forEach((j, i) => {
@@ -391,13 +426,7 @@
     if (fly) {
       $("#map-side").classList.remove("open");
       // once the physics pulled you in: look at you and your 5 jobs, from far enough to see them all
-      setTimeout(() => {
-        const pts = [node("you"), ...best.map(([, i]) => nodes[i])];
-        const c = { x: 0, y: 0, z: 0 };
-        pts.forEach((p) => { c.x += p.x / pts.length; c.y += p.y / pts.length; c.z += (p.z || 0) / pts.length; });
-        const r = Math.max(60, ...pts.map((p) => Math.hypot(p.x - c.x, p.y - c.y, (p.z || 0) - c.z)));
-        G.cameraPosition({ x: c.x, y: c.y, z: c.z + r * 3 }, c, 1200);
-      }, 900);
+      setTimeout(() => frame([node("you"), ...best.map(([, i]) => nodes[i])]), 900);
     }
   }
 })();
