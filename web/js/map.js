@@ -33,8 +33,9 @@
   const shown = new Set([0, 1, 2, 3]);   // German levels visible
   let city = "";                         // city filter ("" = all)
   const lit = new Set();                 // highlighted nodes (hover, a chosen category or "you")
-  let hovered = null, me = null, picked = null, fitted = false;
+  let hovered = null, me = null, picked = null, fitted = false, charge = null;
   let spread = 6, meaning = 0.15, hubLines = true;
+  let breathing = !matchMedia("(prefers-reduced-motion: reduce)").matches;  // the slow "alive" drift
 
   fetch("data/job-map.json").then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(start)
     .catch((err) => { console.error(err); $("#map-loading").textContent = "The map isn't ready yet. It is built every day; please try again later."; });
@@ -90,7 +91,8 @@
         else if (n.kind === "f") pick(n.hi);
       })
       .onNodeDragEnd((n) => { n.fx = n.fy = n.fz = undefined; })   // let it flow back to its place
-      .cooldownTime(15000)
+      .cooldownTime(breathing ? Infinity : 15000)
+      .d3AlphaMin(0)
       .d3VelocityDecay(0.35)
       .onEngineStop(() => { if (!fitted) { fitted = true; fit(); } })
       .graphData({ nodes, links });
@@ -99,10 +101,27 @@
     G.d3Force("charge").strength(-spread);
     const pull = (alpha) => nodes.forEach((n) => {
       if (n.hx == null) return;
-      n.vx += (n.hx - n.x) * meaning * alpha; n.vy += (n.hy - n.y) * meaning * alpha; n.vz += (n.hz - (n.z || 0)) * meaning * alpha;
+      const a = meaning * Math.max(alpha, 0.03);  // never zero, so the breathing can't drift away
+      n.vx += (n.hx - n.x) * a; n.vy += (n.hy - n.y) * a; n.vz += (n.hz - (n.z || 0)) * a;
     });
     pull.initialize = () => {};
     G.d3Force("home", pull);
+    // breathing: each node sways slowly around its place, with its own rhythm (a few units, every few seconds)
+    const breath = () => {
+      if (!breathing) return;
+      const t = performance.now() / 1000;
+      nodes.forEach((n) => {
+        if (n.ph == null) { n.ph = Math.random() * 6.283; n.fr = 0.35 + Math.random() * 0.35; }
+        n.vx += Math.cos(t * n.fr + n.ph) * 0.03;
+        n.vy += Math.sin(t * n.fr * 1.13 + n.ph) * 0.03;
+        n.vz = (n.vz || 0) + Math.cos(t * n.fr * 0.87 + n.ph * 1.7) * 0.03;
+      });
+    };
+    breath.initialize = () => {};
+    G.d3Force("breath", breath);
+    // the engine never stops while breathing: once settled, fit the view and drop the costly node-node repulsion
+    // (the pull keeps every node at its place anyway); the Spread slider brings it back
+    if (breathing) setTimeout(() => { if (!fitted) { fitted = true; fit(); } charge = G.d3Force("charge"); G.d3Force("charge", null); }, 5000);
     resize();
     addEventListener("resize", resize);
 
@@ -250,7 +269,12 @@
       e.target.textContent = three ? "3D" : "2D";
       e.target.title = three ? "Switch to 3D" : "Switch to 2D";
     });
-    $("#map-spread").addEventListener("input", (e) => { spread = +e.target.value; G.d3Force("charge").strength(-spread); G.d3ReheatSimulation(); });
+    $("#map-spread").addEventListener("input", (e) => {
+      spread = +e.target.value;
+      if (!G.d3Force("charge") && charge) G.d3Force("charge", charge);
+      G.d3Force("charge").strength(-spread);
+      G.d3ReheatSimulation();
+    });
     $("#map-meaning").addEventListener("input", (e) => { meaning = +e.target.value / 100; G.d3ReheatSimulation(); });
     const cities = new Map();
     D.jobs.forEach((j) => j[5] && cities.set(j[5], (cities.get(j[5]) || 0) + 1));
@@ -261,6 +285,14 @@
       hubLines = !hubLines;
       e.currentTarget.setAttribute("aria-pressed", String(hubLines));
       G.linkVisibility(linkVisible);
+    });
+    const bb = $("#map-breathe");
+    bb.setAttribute("aria-pressed", String(breathing));
+    bb.addEventListener("click", () => {
+      breathing = !breathing;
+      bb.setAttribute("aria-pressed", String(breathing));
+      G.cooldownTime(breathing ? Infinity : 4000);
+      G.d3ReheatSimulation();
     });
     $("#map-shake").addEventListener("click", () => {
       nodes.forEach((n) => { n.vx = (Math.random() - 0.5) * 20; n.vy = (Math.random() - 0.5) * 20; n.vz = (Math.random() - 0.5) * 20; });
