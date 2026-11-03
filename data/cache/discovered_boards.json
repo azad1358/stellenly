@@ -498,6 +498,11 @@
    "board": "hawk",
    "company": "Hawk"
   },
+  "higgsfield": {
+   "ats": "ashby",
+   "board": "higgsfieldai",
+   "company": "Higgsfield"
+  },
   "hilobyaktiia": {
    "ats": "workable",
    "board": "hilobyaktiia",
@@ -659,6 +664,11 @@
    "board": "lemon-markets",
    "company": "Lemon Markets"
   },
+  "lightspeedhq": {
+   "ats": "ashby",
+   "board": "lightspeedhq",
+   "company": "Lightspeedhq"
+  },
   "liltproduction": {
    "ats": "ashby",
    "board": "lilt-production",
@@ -680,6 +690,12 @@
    "ats": "ashby",
    "board": "limetax",
    "company": "Limetax"
+  },
+  "linehub": {
+   "ats": "recruitee",
+   "board": "linehub",
+   "region": "https://join.linehub.com",
+   "company": "Linehub"
   },
   "lio": {
    "ats": "ashby",
@@ -781,6 +797,11 @@
    "ats": "ashby",
    "board": "netgear",
    "company": "NETGEAR"
+  },
+  "neuphonic": {
+   "ats": "ashby",
+   "board": "neuphonic",
+   "company": "Neuphonic"
   },
   "neuvergetron": {
    "ats": "ashby",
@@ -939,6 +960,11 @@
    "ats": "ashby",
    "board": "reonic",
    "company": "Reonic"
+  },
+  "resonance": {
+   "ats": "ashby",
+   "board": "Resonance",
+   "company": "Resonance"
   },
   "rillet": {
    "ats": "ashby",
@@ -1214,6 +1240,11 @@
    "board": "vestiairecollective",
    "company": "Vestiairecollective"
   },
+  "virtualidentity": {
+   "ats": "ashby",
+   "board": "virtual-identity",
+   "company": "Virtual Identity"
+  },
   "visium": {
    "ats": "workable",
    "board": "visium",
@@ -1328,6 +1359,7 @@
   "auxiliusai": "2026-10-30",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
+  "beneeringgmbh": "2026-11-03",
   "beyondservicegmbh": "2026-10-27",
   "bgprevent": "2026-11-03",
   "biahubshellocircle": "2026-10-28",
@@ -1387,11 +1419,13 @@
   "finn": "2026-10-28",
   "firesprite": "2026-10-28",
   "fivetran": "2026-10-27",
+  "flipper": "2026-11-03",
   "flix": "2026-10-27",
   "florafoodgroup": "2026-10-27",
   "focalsystems": "2026-10-28",
   "foodlabs": "2026-10-27",
   "freenow": "2026-10-27",
+  "freshcellssystemsengineeringgmbh": "2026-11-03",
   "funded": "2026-11-03",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
@@ -1405,6 +1439,7 @@
   "hellofresh": "2026-10-27",
   "hopnug": "2026-10-27",
   "hostaway": "2026-10-27",
+  "hozah": "2026-11-03",
   "htechsupports": "2026-10-29",
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
@@ -1468,6 +1503,7 @@
   "palantir": "2026-10-28",
   "pamonogmbh": "2026-11-03",
   "payflows": "2026-10-27",
+  "pennylanesas": "2026-11-03",
   "pentadocgruppe": "2026-10-30",
   "pertempserp": "2026-10-27",
   "planeta": "2026-10-27",
@@ -1518,6 +1554,7 @@
   "statista": "2026-10-27",
   "stenongmbh": "2026-10-29",
   "sumup": "2026-10-27",
+  "supabase": "2026-11-03",
   "superchat": "2026-10-27",
   "superhuman": "2026-10-27",
   "surgeaerogmbh": "2026-11-03",

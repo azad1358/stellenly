@@ -1520,6 +1520,18 @@
 "lat": 50.0172,
 "lon": 8.7843
 },
+"de|donauworth": {
+"cc": "de",
+"lat": 48.718,
+"lon": 10.7807,
+"state": "DE-BY"
+},
+"de|donauwörth": {
+"cc": "de",
+"lat": 48.718,
+"lon": 10.7807,
+"state": "DE-BY"
+},
 "de|dortmund": {
 "cc": "de",
 "lat": 51.5142,
@@ -1615,6 +1627,12 @@
 "lon": 7.8494,
 "state": "DE-BW"
 },
+"de|friedrichshafen": {
+"cc": "de",
+"lat": 47.65,
+"lon": 9.4801,
+"state": "DE-BW"
+},
 "de|fulda": {
 "cc": "de",
 "lat": 50.5515,
@@ -1656,6 +1674,12 @@
 "lat": 48.4248,
 "lon": 10.8779,
 "state": "DE-BY"
+},
+"de|gießen": {
+"cc": "de",
+"lat": 50.5862,
+"lon": 8.6742,
+"state": "DE-HE"
 },
 "de|gilching": {
 "cc": "de",
@@ -1753,6 +1777,18 @@
 "lat": 51.8801,
 "lon": 8.9732,
 "state": "DE-NW"
+},
+"de|ingolstadt": {
+"cc": "de",
+"lat": 48.763,
+"lon": 11.425,
+"state": "DE-BY"
+},
+"de|jena": {
+"cc": "de",
+"lat": 50.9282,
+"lon": 11.5879,
+"state": "DE-TH"
 },
 "de|kabelsketal": {
 "cc": "de",
@@ -1880,6 +1916,12 @@
 "lon": 13.261,
 "state": "DE-BB"
 },
+"de|manching": {
+"cc": "de",
+"lat": 48.7171,
+"lon": 11.4941,
+"state": "DE-BY"
+},
 "de|mannheim": {
 "cc": "de",
 "lat": 49.4893,
@@ -1941,6 +1983,12 @@
 "lon": 11.246,
 "state": "DE-TH"
 },
+"de|neuss": {
+"cc": "de",
+"lat": 51.1982,
+"lon": 6.6916,
+"state": "DE-NW"
+},
 "de|neuwied": {
 "cc": "de",
 "lat": 50.4302,
@@ -1970,6 +2018,12 @@
 "lat": 50.827,
 "lon": 10.7319,
 "state": "DE-TH"
+},
+"de|oldenburg": {
+"cc": "de",
+"lat": 53.139,
+"lon": 8.2146,
+"state": "DE-NI"
 },
 "de|osnabrück": {
 "cc": "de",
@@ -2114,6 +2168,12 @@
 "lon": 9.0035,
 "state": "DE-BW"
 },
+"de|solingen": {
+"cc": "de",
+"lat": 51.1722,
+"lon": 7.0846,
+"state": "DE-NW"
+},
 "de|stetten am kalten markt": {
 "cc": "de",
 "lat": 48.122,
@@ -2144,11 +2204,23 @@
 "lon": 9.9912,
 "state": "DE-BW"
 },
+"de|unterföhring": {
+"cc": "de",
+"lat": 48.1921,
+"lon": 11.6402,
+"state": "DE-BY"
+},
 "de|verden": {
 "cc": "de",
 "lat": 52.976,
 "lon": 9.1808,
 "state": "DE-NI"
+},
+"de|waldkirch": {
+"cc": "de",
+"lat": 48.0939,
+"lon": 7.961,
+"state": "DE-BW"
 },
 "de|walldorf": {
 "cc": "de",
