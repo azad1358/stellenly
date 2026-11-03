@@ -65,7 +65,7 @@ def load_jobs(jobs_file: str | None) -> list[dict]:
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     cols = ("id,url,title,company,city,remote_type,german_level,visa_sponsorship,relocation,"
             "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at,repost_count,source,"
-            "ai_summary:insights->ai->>summary")
+            "ai_summary:insights->ai->>summary,skills:insights->skills")
     out, start, step = [], 0, 1000
     while True:
         r = requests.get(url, params={"select": cols, "is_active": "eq.true", "order": "posted_at.desc"},
@@ -178,10 +178,11 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost nav-link" href="{up}index.html">Jobs</a>
     <a class="btn ghost nav-link" href="{up}companies.html">Companies</a>
     <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
+    <a class="btn ghost nav-link" href="{up}map.html">Match</a>
     <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
     <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
       <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
-      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}blog/index.html">Guides</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a>
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
@@ -1166,6 +1167,66 @@ def outline_logos(slugs: list[str], limit: int = 40) -> list[str]:
     return out
 
 
+def load_job_map() -> dict[str, dict]:
+    """job id -> {x, y, z, nn} from the job_map table (insights.py map_layout); locally the dry-run file of insights.py."""
+    try:
+        url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/job_map"
+        key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+        out, start = {}, 0
+        while True:
+            r = requests.get(url, params={"select": "job_id,x,y,z,nn"}, timeout=60,
+                             headers={"apikey": key, "Authorization": f"Bearer {key}", "Range": f"{start}-{start + 999}"})
+            r.raise_for_status()
+            batch = r.json()
+            out.update({b["job_id"]: b for b in batch})
+            if len(batch) < 1000:
+                break
+            start += 1000
+        if out:
+            return out
+    except (KeyError, requests.RequestException) as err:
+        print(f"Job map: no positions from the database ({err})")
+    local = ROOT / "ingest" / ".cache" / "job_map.json"
+    return {p["id"]: p for p in json.loads(local.read_text(encoding="utf-8"))} if local.exists() else {}
+
+
+def build_job_map(jobs: list[dict]) -> None:
+    """web/data/job-map.json for map.html: every open job with a 3D position and its nearest jobs (cosine similarity),
+    compact (lists, shared tables of companies, skills and fields; positions scaled to about 0-1000)."""
+    pos = load_job_map()
+    jobs = [j for j in jobs if j["id"] in pos]
+    if not jobs:
+        print("Job map: no positions yet, skipped")
+        return
+    # scale by the middle 96% of jobs, and keep the few far-away ones at the edge, so they don't squeeze the rest
+    axes = [sorted(pos[j["id"]].get(a) or 0 for j in jobs) for a in "xyz"]
+    q = lambda v, f: v[min(len(v) - 1, int(f * len(v)))]  # noqa: E731
+    lo = [q(v, 0.02) for v in axes]
+    span = max(q(v, 0.98) - q(v, 0.02) for v in axes) or 1
+    scale = lambda p, a: round(min(1060, max(-60, 1000 * ((p.get("xyz"[a]) or 0) - lo[a]) / span)), 1)  # noqa: E731
+    index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
+    companies, skills, fields = {}, {}, {}
+    ref = lambda table, key: table.setdefault(key, len(table))  # noqa: E731
+    order = {j["id"]: i for i, j in enumerate(jobs)}
+    german = {"not_required": 0, "nice_to_have": 1, "not_mentioned": 2, "required": 3}
+    rows = []
+    for j in jobs:
+        co = index.get(co_key(j["company"]), {})
+        ci = ref(companies, (co.get("n") or j["company"], co.get("u"), co.get("l")))
+        sk = [[ref(skills, s["n"]), round(100 * float(s.get("w") or 0))] for s in (j.get("skills") or [])[:10] if s.get("n")]
+        p = pos[j["id"]]
+        rows.append([j["id"], scale(p, 0), scale(p, 1), j["title"], ci,
+                     j.get("city") or "", german.get(j["german_level"], 2),
+                     int(j.get("remote_type") in ("remote_de", "remote_eu")), j.get("seniority") or "", sk,
+                     [ref(fields, t) for t in (j.get("tags") or []) if t not in META_TAGS][:4],
+                     [[order[n], s] for n, s in (p.get("nn") or []) if n in order][:5],  # nearest jobs, cosine
+                     int(bool(j.get("visa_sponsorship"))), j.get("salary_min"), j.get("salary_max"), scale(p, 2)])
+    data = {"updated": TODAY.isoformat(), "companies": [list(c) for c in companies], "skills": list(skills),
+            "fields": list(fields), "jobs": rows}
+    (WEB / "data" / "job-map.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"Job map: {len(rows)} jobs, {len(companies)} companies, {len(skills)} skills")
+
+
 def build_companies(jobs: list[dict]) -> list[str]:
     cos = load_companies(jobs)
     write_company_index(cos)
@@ -1511,6 +1572,7 @@ def main() -> None:
     build_blog_index(posts, report)
     build_resources(resources, posts)
     companies = build_companies(jobs)  # writes companies-index.json (logos), which the landing pages use
+    build_job_map(jobs)
     landing = build_landing_pages(jobs, stats)
     wiki = build_how_it_works(jobs)
     write_title_suggestions(jobs)
