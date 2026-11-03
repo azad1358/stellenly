@@ -35,7 +35,7 @@
   const lit = new Set();                 // highlighted nodes (hover, a chosen category or "you")
   let hovered = null, me = null, picked = null, fitted = false, charge = null;
   let pickOk = () => true;  // extra filter on a picked category's jobs (level / remote from the form)
-  let spread = 6, meaning = 0.15, hubLines = true;
+  let spread = 6, meaning = 0.15, hubLines = false;  // category lines: off at first (5,000 lines are heavy)
   let breathing = !matchMedia("(prefers-reduced-motion: reduce)").matches;  // the slow "alive" drift
 
   fetch("data/job-map.json").then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(start)
@@ -143,9 +143,9 @@
   const visible = (x) => { const n = node(x); return !n || nodeVisible(n); };
   const focused = (l) => lit.size > 0 && lit.has(id(l.source)) && lit.has(id(l.target));
   const touches = (l) => hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id);
-  // category lines always (faint) unless turned off; similar-job lines for the job under the cursor; "you" lines always
-  const linkVisible = (l) => visible(l.source) && visible(l.target)
-    && (lit.size ? focused(l) || touches(l) : l.kind === "you" || (l.kind === "f" && hubLines));
+  // category lines only while the button is on, in every state; "you" lines always; similar-job lines on hover
+  const linkVisible = (l) => visible(l.source) && visible(l.target) && (l.kind !== "f" || hubLines)
+    && (lit.size ? focused(l) || touches(l) : l.kind !== "s");
   function color(n) {
     const base = n.kind === "f" ? HUB : n.kind === "you" ? YOU : GERMAN[D.jobs[n.ji][6]][1];
     return lit.size && !lit.has(n.id) ? DIM : base;
