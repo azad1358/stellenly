@@ -326,6 +326,11 @@
    "board": "dentons-europe",
    "company": "Dentons Europe"
   },
+  "differentialbio": {
+   "ats": "ashby",
+   "board": "differential.bio",
+   "company": "Differential.bio"
+  },
   "distribusiontechnologies": {
    "ats": "recruitee",
    "board": "distribusion",
@@ -862,6 +867,11 @@
    "ats": "workable",
    "board": "pavago",
    "company": "Pavago"
+  },
+  "payrails": {
+   "ats": "ashby",
+   "board": "payrails",
+   "company": "Payrails"
   },
   "peecai": {
    "ats": "ashby",
