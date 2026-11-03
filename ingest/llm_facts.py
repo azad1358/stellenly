@@ -90,12 +90,18 @@ def merge_into_current(ours_path: str) -> int:
     return len(ours)
 
 
+def german_wins(fact: str, current: str) -> bool:
+    """Whether the checked LLM German level replaces ours. "Not mentioned" only means the TEXT says nothing about
+    German, so it never lowers a level our rules found (from the title: "Engineer - German Speaking")."""
+    return fact != current and not (fact == "not_mentioned" and current != "not_mentioned")
+
+
 def apply(row: dict, text: str) -> dict:
     """Overwrite rule-based fields with checked LLM facts for this job, if the posting hasn't changed."""
     f = load().get(row["id"])
     if not f or f.get("h") != text_hash(text):
         return row
-    if "german" in f:
+    if "german" in f and german_wins(f["german"], row["german_level"]):
         row["german_level"] = f["german"]
     if "salary" in f:
         row["salary_min"], row["salary_max"] = (f["salary"] or (None, None))

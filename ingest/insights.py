@@ -483,7 +483,7 @@ def apply_facts(jobs: list[dict]) -> list[dict]:
         if not f:
             continue
         fix = {"id": j["id"]}
-        if "german" in f and f["german"] != j["german_level"]:
+        if "german" in f and llm_facts.german_wins(f["german"], j["german_level"]):
             fix["german_level"] = j["german_level"] = f["german"]
         if "salary" in f:
             lo, hi = f["salary"] or (None, None)
