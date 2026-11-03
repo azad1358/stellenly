@@ -1,3 +1,4 @@
 requests>=2.31
 numpy>=1.26
 fastembed>=0.4
+umap-learn>=0.5    # the website's job map (insights.map_layout)

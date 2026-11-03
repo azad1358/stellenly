@@ -499,6 +499,23 @@ def apply_facts(jobs: list[dict]) -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------- job map
+def map_layout(jobs: list[dict], vecs: dict) -> list[dict]:
+    """A 2D position per job for the website's job map: UMAP of the embeddings, so similar jobs lie close
+    together. Fixed seed, so the map looks the same between runs as long as the jobs don't change much."""
+    try:
+        import umap  # heavy (numba): only this step needs it
+    except ImportError:
+        print("Job map: umap-learn not installed, skipped")
+        return []
+    ids = [j["id"] for j in jobs]
+    if len(ids) < 50:
+        return []
+    E = np.stack([vecs[i] for i in ids]).astype("float32")
+    xy = umap.UMAP(n_neighbors=15, min_dist=0.08, metric="cosine", random_state=42).fit_transform(E)
+    return [{"id": i, "x": round(float(x), 3), "y": round(float(y), 3)} for i, (x, y) in zip(ids, xy)]
+
+
 # ---------------------------------------------------------------- main
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -527,10 +544,12 @@ def main() -> None:
     print(f"{len(jobs)} jobs, {new} newly embedded, {with_salary_stats} with salary comparison")
     print("Hints:", dict(counts.most_common()))
 
+    layout = map_layout(jobs, vecs)
     if args.dry_run:
         out = CACHE / "insights_preview.json"
         out.write_text(json.dumps(insights, ensure_ascii=False, indent=1), encoding="utf-8")
-        print(f"Preview written to {out}")
+        (CACHE / "job_map.json").write_text(json.dumps(layout), encoding="utf-8")  # build_site.py reads it locally
+        print(f"Preview written to {out}, job map ({len(layout)} jobs) to {CACHE / 'job_map.json'}")
         return
     rows = [{"id": i, "insights": v} for i, v in insights.items()]
     written = sum(write_insights(rows[i:i + WRITE_BATCH]) for i in range(0, len(rows), WRITE_BATCH))
@@ -539,6 +558,8 @@ def main() -> None:
         fixed = sum(int(rpc("set_job_facts", {"payload": corrections[i:i + BATCH]}) or 0)
                     for i in range(0, len(corrections), BATCH))
         print(f"Corrected German level / salary / visa for {fixed} jobs (LLM, checked against quotes)")
+    if layout:
+        print(f"Job map: positions for {int(rpc('set_job_map', {'payload': layout}) or 0)} jobs")
     if os.environ.get("LLM_API_KEY"):
         llm_facts.save(llm_facts.load(), keep={j["id"] for j in jobs})
 
