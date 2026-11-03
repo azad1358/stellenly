@@ -71,6 +71,10 @@
   "file": "DEU Freiburg im Breisgau COA.svg",
   "img": "img/coa/city-freiburg.png"
  },
+ "city:Friedrichshafen": {
+  "file": "DEU Friedrichshafen COA.svg",
+  "img": "img/coa/city-friedrichshafen.png"
+ },
  "city:Garching": {
   "file": "DEU Garching bei München COA.svg",
   "img": "img/coa/city-garching.png"
@@ -94,6 +98,10 @@
  "city:Hamburg": {
   "file": "DEU Hamburg COA.svg",
   "img": "img/coa/city-hamburg.png"
+ },
+ "city:Hanover": {
+  "file": "Coat of arms of Hannover.svg",
+  "img": "img/coa/city-hanover.png"
  },
  "city:Heidelberg": {
   "file": "Wappen Heidelberg.svg",
@@ -122,6 +130,10 @@
  "city:Ludwigsburg": {
   "file": "DEU Ludwigsburg COA.svg",
   "img": "img/coa/city-ludwigsburg.png"
+ },
+ "city:Manching": {
+  "file": "DEU Manching COA.svg",
+  "img": "img/coa/city-manching.png"
  },
  "city:Munich": {
   "file": "DEU München COA.svg",
