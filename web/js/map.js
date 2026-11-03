@@ -125,7 +125,7 @@
   const touches = (l) => hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id);
   // category lines always (faint) unless turned off; similar-job lines for the job under the cursor; "you" lines always
   const linkVisible = (l) => visible(l.source) && visible(l.target)
-    && (l.kind === "you" || touches(l) || (l.kind === "f" && (hubLines || focused(l))));
+    && (lit.size ? focused(l) || touches(l) : l.kind === "you" || (l.kind === "f" && hubLines));
   function color(n) {
     const base = n.kind === "f" ? HUB : n.kind === "you" ? YOU : GERMAN[D.jobs[n.ji][6]][1];
     return lit.size && !lit.has(n.id) ? DIM : base;
@@ -136,7 +136,7 @@
   }
   function light() {
     lit.clear();
-    const focus = hovered || (picked != null && node(`f${picked}`)) || (me && node("you"));
+    const focus = hovered || (me && node("you")) || (picked != null && node(`f${picked}`));
     if (focus) {
       lit.add(focus.id);
       links.forEach((l) => {
@@ -151,6 +151,19 @@
   function resize() { const box = $("#map").getBoundingClientRect(); G.width(box.width).height(box.height); }
 
   // ------------------------------------------------------------------ category names, always on the map
+  let matchEls = [];  // [label element, job index] for your matches
+  function matchLabels() {
+    const box = $("#map-labels");
+    box.querySelectorAll(".match-label").forEach((el) => el.remove());
+    matchEls = (me || []).map(([s, i, pct]) => {
+      const el = document.createElement("a");
+      el.className = "match-label";
+      el.href = `job.html?id=${encodeURIComponent(D.jobs[i][0])}`;
+      el.innerHTML = `<b>${pct}%</b>${esc(D.jobs[i][3])}`;
+      box.appendChild(el);
+      return [el, i];
+    });
+  }
   function hubLabels() {
     const box = $("#map-labels");
     box.innerHTML = hubs.map((h, hi) => `<button type="button" class="hub-label" data-hub="${hi}">${esc(h.name)}<b>${h.jobs.length}</b></button>`).join("");
@@ -166,8 +179,13 @@
         const clash = !chosen && placed.some((b) => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1]);
         if (!clash) placed.push(box);
         el.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -150%)`;
-        el.classList.toggle("hide", clash);
         el.classList.toggle("dim", lit.size > 0 && !lit.has(`f${hi}`));
+        el.classList.toggle("hide", clash || (!!me && !hovered));
+      });
+      matchEls.forEach(([el, i]) => {
+        const n = nodes[i], p = G.graph2ScreenCoords(n.x, n.y, n.z || 0);
+        el.style.transform = `translate(${p.x}px, ${p.y}px) translate(12px, -50%)`;
+        el.hidden = !!hovered && hovered.id !== n.id && hovered.id !== "you";
       });
       requestAnimationFrame(tick);
     };
@@ -279,6 +297,7 @@
       me = null;
       G.graphData({ nodes, links });
       light();
+      matchLabels();
       $("#me-result").hidden = true;
       fit();
     });
@@ -291,7 +310,7 @@
   }
 
   // Score every job: skills it asks for (weighted by how important the posting makes them), the category, the level,
-  // remote. You join the map linked to your 12 best matches, and the physics pulls you in among them.
+  // remote. You join the map linked to your 5 best matches (everything else dims), each labelled with its score.
   function locate(skills, fly = true) {
     const field = $("#me-field").value, level = $("#me-level").value, remote = $("#me-remote").checked;
     store.set("mapProfile", { field, level, remote, skills });
@@ -310,7 +329,10 @@
       if (s > 0) scored.push([s, i]);
     });
     scored.sort((a, b) => b[0] - a[0]);
-    const best = scored.slice(0, 12);
+    const best = scored.slice(0, 5).map(([s, i]) => [s, i, Math.min(99, Math.round((100 * s) / Math.max(max, 1)))]);
+    picked = null;
+    $$(".cat").forEach((b) => b.setAttribute("aria-pressed", "false"));
+    $("#cat-result").hidden = true;
     nodes = nodes.filter((n) => n.kind !== "you");
     links = links.filter((l) => l.kind !== "you");
     me = null;
@@ -323,22 +345,27 @@
     }
     G.graphData({ nodes, links });
     light();
+    matchLabels();
     $("#me-result").hidden = false;
     if (!best.length) {
       $("#me-result").innerHTML = `<p class="muted small">No jobs match yet. Try another category, fewer filters or other skills.</p>`;
       return;
     }
-    $("#me-result").innerHTML = `<p class="kicker">Your closest jobs</p><ol class="me-list">${best.map(([s, i]) => {
+    $("#me-result").innerHTML = `<p class="kicker">Your 5 closest jobs</p><ol class="me-list">${best.map(([, i, pct]) => {
       const j = D.jobs[i];
       return `<li><a href="job.html?id=${encodeURIComponent(j[0])}"><b>${esc(j[3])}</b><span>${esc(D.companies[j[4]][0])}${j[5] ? ` · ${esc(j[5])}` : ""}</span></a>
-        <em style="--c:${GERMAN[j[6]][1]}">${Math.min(99, Math.round((100 * s) / Math.max(max, 1)))}%</em></li>`; }).join("")}</ol>
+        <em style="--c:${GERMAN[j[6]][1]}">${pct}%</em></li>`; }).join("")}</ol>
       <p class="tiny muted">% = how much of your profile the job matches (skills, category, level).</p>`;
     if (fly) {
       $("#map-side").classList.remove("open");
+      // once the physics pulled you in: look at you and your 5 jobs, from far enough to see them all
       setTimeout(() => {
-        const y = node("you"), d = 160;
-        if (y) G.cameraPosition({ x: y.x + d, y: y.y + d / 2, z: (y.z || 0) + d }, y, 1200);
-      }, 900);  // let the physics pull you in first
+        const pts = [node("you"), ...best.map(([, i]) => nodes[i])];
+        const c = { x: 0, y: 0, z: 0 };
+        pts.forEach((p) => { c.x += p.x / pts.length; c.y += p.y / pts.length; c.z += (p.z || 0) / pts.length; });
+        const r = Math.max(60, ...pts.map((p) => Math.hypot(p.x - c.x, p.y - c.y, (p.z || 0) - c.z)));
+        G.cameraPosition({ x: c.x, y: c.y, z: c.z + r * 3 }, c, 1200);
+      }, 900);
     }
   }
 })();
