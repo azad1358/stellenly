@@ -74,6 +74,21 @@
         { "name": "Bundesagentur für Arbeit — Jobsuche", "url": "https://www.arbeitsagentur.de/jobsuche/", "desc": "Germany's largest job database, run by the Federal Employment Agency.", "affiliate_url": "", "program": "official" },
         { "name": "EURES", "url": "https://eures.europa.eu/", "desc": "The EU's job mobility portal, with jobs across Europe.", "affiliate_url": "", "program": "official" }
       ]
+    },
+    {
+      "id": "more-sites",
+      "photo": "speicherstadt",
+      "title": "More job sites for English speakers",
+      "intro": "Other places to search, each with its own strengths. We have no partnership with any of them.",
+      "items": [
+        {"name": "English Jobs Germany", "url": "https://englishjobsgermany.com/", "desc": "Job board of English-speaking jobs in Germany, screened so German isn't required. Browse by city and field; weekly job alerts by email.", "affiliate_url": "", "program": "listing"},
+        {"name": "englishjobs.de", "url": "https://englishjobs.de/", "desc": "Long-running board of English-speaking jobs in Germany, with job pages for every state and city.", "affiliate_url": "", "program": "listing"},
+        {"name": "Arbeitnow", "url": "https://www.arbeitnow.com/", "desc": "Job board for Germany and Europe with many English-language listings. One of the sources Stellenly reads.", "affiliate_url": "", "program": "listing"},
+        {"name": "Jobicy", "url": "https://jobicy.com/", "desc": "Remote jobs from companies worldwide, filterable by region. Stellenly shows the ones open to people in Germany.", "affiliate_url": "", "program": "listing"},
+        {"name": "LolaNext", "url": "https://lolanext.com/", "desc": "AI job matching for Germany, Austria and Switzerland: a match score for each job, a tailored CV and a cover letter. Free plan; Pro €9.90 a month.", "affiliate_url": "", "program": "listing"},
+        {"name": "Stellenpilot", "url": "https://stellenpilot.dev/", "desc": "Free, open-source app that runs on your own computer: it scores new jobs against your CV and drafts a tailored CV and cover letter. Your CV can stay on your device.", "affiliate_url": "", "program": "listing"},
+        {"name": "OpenJobs", "url": "https://www.openjobs.ai/", "desc": "Remote jobs for AI specialists worldwide (LLMOps, RAG, AI security), with a candidate profile and a resume analyzer.", "affiliate_url": "", "program": "listing"}
+      ]
     }
   ]
 }
