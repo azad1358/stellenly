@@ -126,6 +126,11 @@ def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]
             take("company boards", raw)
     except Exception as e:
         print(f"! source 'company boards' failed: {e}")
+    try:
+        for raw in sources.jobicy():
+            take("jobicy", raw)
+    except Exception as e:
+        print(f"! source 'jobicy' failed: {e}")
     # Amazon: titles and links only, once a day (the first run after midnight UTC), see sources.amazon().
     if dt.datetime.now(dt.timezone.utc).hour < 6 or os.environ.get("AMAZON") == "1":
         try:
