@@ -53,9 +53,9 @@
 <main class="map-page">
   <aside class="map-side" id="map-side">
     <div class="map-side-head"><p class="kicker">Job map</p><h1>Where do you fit?</h1>
-      <p class="muted small">Every dot is an open job. The closer two jobs are, the more similar they are: measured by AI from what the postings ask for.</p></div>
+      <p class="muted small">Every dot is an open job, placed by AI from what its posting describes and asks for: the closer two jobs, the more similar. Each category sits in the middle of its jobs.</p></div>
     <form id="me-form" class="me-form" autocomplete="off">
-      <label>Field<select id="me-field"><option value="">Any field</option></select></label>
+      <label>Category<select id="me-field"><option value="">Any category</option></select></label>
       <label>Level<select id="me-level"><option value="">Any level</option><option value="intern">Intern / student</option>
         <option value="junior">Junior</option><option value="mid">Mid-level</option><option value="senior">Senior</option><option value="lead">Lead</option></select></label>
       <label>Your skills
@@ -67,17 +67,20 @@
       <p class="tiny muted">Everything stays in your browser.</p>
     </form>
     <section class="me-result" id="me-result" hidden></section>
+    <section class="map-filter"><p class="kicker">Categories</p><div id="map-cats" class="map-cats"></div></section>
+    <section class="me-result" id="cat-result" hidden></section>
     <section class="map-filter"><p class="kicker">City</p><select id="map-city" class="map-select"><option value="">All cities</option></select></section>
     <section class="map-filter"><p class="kicker">German</p><div id="map-legend" class="map-legend"></div></section>
     <p class="tiny muted map-note" id="map-note"></p>
   </aside>
   <div class="map-stage">
-    <div id="map" class="map-canvas" aria-label="Interactive map of jobs and companies"></div>
+    <div id="map" class="map-canvas" aria-label="Interactive map of jobs by category"></div>
+    <div id="map-labels" class="map-labels"></div>
     <div class="map-tools">
       <button type="button" class="btn" id="map-dim" title="Switch to 2D">2D</button>
       <label class="map-slider">Spread<input type="range" id="map-spread" min="0" max="60" value="6"></label>
       <label class="map-slider" title="How strongly jobs stay at their meaning-based position">Meaning<input type="range" id="map-meaning" min="1" max="40" value="15"></label>
-      <button type="button" class="btn" id="map-lines" aria-pressed="false" title="Show every company's lines to its jobs">Company lines</button>
+      <button type="button" class="btn" id="map-lines" aria-pressed="true" title="Lines from each category to its jobs">Category lines</button>
       <button type="button" class="btn" id="map-shake" title="Shake the network">Shake</button>
       <button type="button" class="btn" id="map-fit" title="Show everything">⤢ Fit</button>
       <button type="button" class="btn m-only" id="map-panel">☰ Your profile</button></div>

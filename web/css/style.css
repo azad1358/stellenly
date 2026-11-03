@@ -1578,3 +1578,18 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
 .tip-nn span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tip-nn b { flex: none; color: #c7d2fe; font-variant-numeric: tabular-nums; }
 .map-tools .btn[aria-pressed="true"] { background: #4f46e5; border-color: #818cf8; }
+/* job map: category names on the map, the category list */
+.map-labels { position: absolute; inset: 0; z-index: 3; overflow: hidden; pointer-events: none; }
+.hub-label { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid rgba(199, 210, 254, .35); background: rgba(16, 22, 48, .82); color: #fff; font: 600 .8rem/1.2 var(--font);
+  white-space: nowrap; cursor: pointer; pointer-events: auto; transition: opacity .2s; }
+.hub-label b { color: #a5b4fc; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hub-label.dim { opacity: .25; }
+.map-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.cat { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text); font: inherit; font-size: .82rem; cursor: pointer; }
+.cat b { color: var(--muted); font-weight: 600; }
+.cat:hover, .cat[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.tip-cat { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #a5b4fc; }
+.me-list em { white-space: nowrap; }
+.hub-label.hide { opacity: 0; pointer-events: none; }
