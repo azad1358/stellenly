@@ -178,11 +178,11 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost nav-link" href="{up}index.html">Jobs</a>
     <a class="btn ghost nav-link" href="{up}companies.html">Companies</a>
     <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
-    <a class="btn ghost nav-link" href="{up}map.html">Map</a>
+    <a class="btn ghost nav-link" href="{up}map.html">Match</a>
     <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
     <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
       <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
-      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Map</a><a class="m-only" href="{up}blog/index.html">Guides</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a>
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
