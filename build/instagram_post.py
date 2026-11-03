@@ -36,9 +36,24 @@ def call(method: str, path: str, token: str | None = None, **params) -> dict:
 
 
 def check() -> None:
-    me = call("GET", os.environ["IG_USER_ID"], fields="username,name,followers_count,media_count")
-    print(f"Instagram: token works for @{me.get('username')} ({me.get('name')}): "
-          f"{me.get('followers_count', 0)} followers, {me.get('media_count', 0)} posts")
+    """Tests Instagram and the Facebook Page separately, so a block shows where it is."""
+    failed = False
+    try:
+        me = call("GET", os.environ["IG_USER_ID"], fields="username,name,followers_count,media_count")
+        print(f"Instagram: token works for @{me.get('username')} ({me.get('name')}): "
+              f"{me.get('followers_count', 0)} followers, {me.get('media_count', 0)} posts")
+    except SystemExit as err:
+        failed = True
+        print(f"Instagram: {err}")
+    if os.environ.get("FB_PAGE_ID"):
+        try:
+            pg = call("GET", os.environ["FB_PAGE_ID"], fields="name,fan_count")
+            print(f"Facebook: token works for the Page {pg.get('name')} ({pg.get('fan_count', 0)} likes)")
+        except SystemExit as err:
+            failed = True
+            print(f"Facebook: {err}")
+    if failed:
+        sys.exit(1)
 
 
 def _ready(container: str) -> None:
