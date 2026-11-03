@@ -144,8 +144,10 @@
   const focused = (l) => lit.size > 0 && lit.has(id(l.source)) && lit.has(id(l.target));
   const touches = (l) => hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id);
   // category lines only while the button is on, in every state; "you" lines always; similar-job lines on hover
-  const linkVisible = (l) => visible(l.source) && visible(l.target) && (l.kind !== "f" || hubLines)
-    && (lit.size ? focused(l) || touches(l) : l.kind !== "s");
+  const linkVisible = (l) => visible(l.source) && visible(l.target)
+    && (l.kind === "s" ? touches(l)                                   // similar jobs: of the job under the cursor only
+      : l.kind === "f" ? hubLines && (!lit.size || touches(l) || lit.has(id(l.source)))  // a highlighted job's category
+      : !lit.size || focused(l) || touches(l));
   function color(n) {
     const base = n.kind === "f" ? HUB : n.kind === "you" ? YOU : GERMAN[D.jobs[n.ji][6]][1];
     return lit.size && !lit.has(n.id) ? DIM : base;
