@@ -251,3 +251,18 @@ def test_german_required_wordings():
 def test_german_office_is_not_a_language_requirement():
     assert german_level("Strong team culture in our German office in Berlin.") == "not_mentioned"
     assert german_level("Excellent benefits at a fast-growing German startup.") == "not_mentioned"
+
+
+def test_title_asks_for_german():
+    from enrich import title_german_level
+    # the title says it, the text doesn't: required
+    assert title_german_level("Forward Deployed Engineer - German Speaking", "We build AI products.") == "required"
+    assert title_german_level("Senior Solutions Engineer - German Speaker", "") == "required"
+    assert title_german_level("Senior ERP Solutions Consultant (German Fluency)", "") == "required"
+    assert title_german_level("Support Agent (German & English)", "") == "required"
+    # a place or a field, not the language
+    assert title_german_level("Sales Development Representative - Germany", "") == "not_mentioned"
+    assert title_german_level("Senior German Tax Operations Specialist (f/m/d)", "") == "not_mentioned"
+    assert title_german_level("Applied AI Engineer (Germany-based)", "") == "not_mentioned"
+    # what the text says wins when it says something
+    assert title_german_level("Account Manager (German Speaking)", "German is a plus.") == "nice_to_have"
