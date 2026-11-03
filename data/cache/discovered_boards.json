@@ -35,6 +35,11 @@
    "board": "agile-defense",
    "company": "Agile Defense"
   },
+  "aim": {
+   "ats": "ashby",
+   "board": "aim",
+   "company": "AIM"
+  },
   "aircall": {
    "ats": "lever",
    "board": "aircall",
@@ -150,6 +155,11 @@
    "board": "axon",
    "company": "Axon"
   },
+  "basecompute": {
+   "ats": "ashby",
+   "board": "basecompute",
+   "company": "Basecompute"
+  },
   "bettermile": {
    "ats": "ashby",
    "board": "bettermile",
@@ -259,6 +269,11 @@
    "ats": "ashby",
    "board": "comstruct",
    "company": "comstruct ICT"
+  },
+  "controlrisks6": {
+   "ats": "workable",
+   "board": "control-risks-6",
+   "company": "Control Risks 6"
   },
   "corteaai": {
    "ats": "ashby",
@@ -569,6 +584,11 @@
    "board": "ircagroup",
    "company": "Ircagroup"
   },
+  "isembard": {
+   "ats": "ashby",
+   "board": "isembard",
+   "company": "Isembard"
+  },
   "jellyfish": {
    "ats": "ashby",
    "board": "jellyfishcareers",
@@ -707,6 +727,11 @@
    "board": "mapbox",
    "company": "Mapbox"
   },
+  "matchmatch": {
+   "ats": "ashby",
+   "board": "matchmatch",
+   "company": "Matchmatch"
+  },
   "melotech": {
    "ats": "ashby",
    "board": "melotech",
@@ -731,6 +756,11 @@
    "ats": "workable",
    "board": "mlabs",
    "company": "Mlabs"
+  },
+  "motherduck": {
+   "ats": "ashby",
+   "board": "MotherDuck",
+   "company": "Motherduck"
   },
   "munichelectrification": {
    "ats": "ashby",
@@ -761,6 +791,11 @@
    "ats": "greenhouse",
    "board": "newrelic",
    "company": "newrelic"
+  },
+  "nubank": {
+   "ats": "ashby",
+   "board": "nubank",
+   "company": "Nubank"
   },
   "omaze": {
    "ats": "ashby",
@@ -924,6 +959,11 @@
    "ats": "ashby",
    "board": "robco",
    "company": "RobCo"
+  },
+  "rocketlabcorporation": {
+   "ats": "greenhouse",
+   "board": "rocketlab",
+   "company": "Rocket Lab Corporation"
   },
   "rohlik": {
    "ats": "ashby",
@@ -1104,6 +1144,11 @@
    "board": "thorit",
    "company": "Thorit"
   },
+  "tisgmbh": {
+   "ats": "recruitee",
+   "board": "tisgmbh",
+   "company": "TIS GmbH"
+  },
   "tmh": {
    "ats": "personio",
    "board": "tmh",
@@ -1281,11 +1326,13 @@
   "augleticsgmbh": "2026-10-30",
   "auterion": "2026-10-27",
   "auxiliusai": "2026-10-30",
+  "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
   "beyondservicegmbh": "2026-10-27",
   "bgprevent": "2026-11-03",
   "biahubshellocircle": "2026-10-28",
   "bifrostdefence": "2026-10-27",
+  "bitpanda": "2026-11-03",
   "bitwarden": "2026-10-28",
   "boardwisegmbh": "2026-10-29",
   "boominggames": "2026-10-29",
@@ -1312,11 +1359,13 @@
   "constructorlabs": "2026-11-03",
   "contentful": "2026-10-28",
   "conziagmbh": "2026-11-02",
+  "coreweaveu": "2026-11-03",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
   "databricks": "2026-10-27",
   "dataiku": "2026-10-30",
+  "deephealth": "2026-11-03",
   "dexterhealth": "2026-10-27",
   "doctolib": "2026-10-27",
   "doopicgmbh": "2026-10-27",
@@ -1343,6 +1392,7 @@
   "focalsystems": "2026-10-28",
   "foodlabs": "2026-10-27",
   "freenow": "2026-10-27",
+  "funded": "2026-11-03",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
   "gfic": "2026-10-27",
@@ -1382,6 +1432,7 @@
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
   "maomaotechnologies": "2026-10-28",
+  "mapleaviation": "2026-11-03",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
   "meet5gmbh": "2026-10-29",
@@ -1415,6 +1466,7 @@
   "paintgun": "2026-10-28",
   "pajughaftungsbeschrnkt": "2026-10-27",
   "palantir": "2026-10-28",
+  "pamonogmbh": "2026-11-03",
   "payflows": "2026-10-27",
   "pentadocgruppe": "2026-10-30",
   "pertempserp": "2026-10-27",
@@ -1422,6 +1474,7 @@
   "planetlabs": "2026-10-27",
   "plantacorpgmbh": "2026-10-27",
   "polara": "2026-10-29",
+  "pqshield": "2026-11-03",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
   "prolific": "2026-10-28",
@@ -1498,9 +1551,11 @@
   "vivalyxgmbh": "2026-10-27",
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
+  "welovexgmbh": "2026-11-03",
   "wepush": "2026-10-27",
   "werraenergiegmbh": "2026-10-28",
   "wettercomgmbh": "2026-10-27",
+  "wingmaitegmbh": "2026-11-03",
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",

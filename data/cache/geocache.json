@@ -98,6 +98,7 @@
 "lat": 51.3814,
 "lon": -2.3597
 },
+"*|bay area, san fransisco": null,
 "*|belfast": {
 "cc": "gb",
 "lat": 54.5964,
@@ -946,6 +947,12 @@
 "lat": 52.0446,
 "lon": 4.3188
 },
+"*|roosendaal": {
+"cc": "nl",
+"lat": 51.5331,
+"lon": 4.4561,
+"state": "NL-NB"
+},
 "*|rotterdam": {
 "cc": "nl",
 "lat": 51.9244,
@@ -996,6 +1003,12 @@
 "cc": "gb",
 "lat": 53.3807,
 "lon": -1.4702
+},
+"*|sidcup": {
+"cc": "gb",
+"lat": 51.4264,
+"lon": 0.101,
+"state": "GB-ENG"
 },
 "*|sion": {
 "cc": "ch",
@@ -1225,6 +1238,12 @@
 "lat": 47.4992,
 "lon": 8.7291
 },
+"*|wissous": {
+"cc": "fr",
+"lat": 48.7316,
+"lon": 2.3269,
+"state": "FR-IDF"
+},
 "*|woerden, utrecht, nederland": {
 "cc": "nl",
 "lat": 52.0859,
@@ -1235,6 +1254,7 @@
 "lat": 47.2783,
 "lon": -72.5512
 },
+"*|work from home - us": null,
 "*|york": {
 "cc": "gb",
 "lat": 53.9657,
@@ -1447,6 +1467,12 @@
 "lon": 9.0113,
 "state": "DE-BW"
 },
+"de|charlottenburg": {
+"cc": "de",
+"lat": 52.5157,
+"lon": 13.3097,
+"state": "DE-BE"
+},
 "de|chemnitz": {
 "cc": "de",
 "lat": 50.8324,
@@ -1529,6 +1555,12 @@
 "lat": 52.1449,
 "lon": 14.6294,
 "state": "DE-BB"
+},
+"de|emea": {
+"cc": "de",
+"lat": 53.4911,
+"lon": 10.1145,
+"state": "DE-HH"
 },
 "de|erfurt": {
 "cc": "de",
@@ -2063,6 +2095,12 @@
 "lat": 52.3886,
 "lon": 13.5048,
 "state": "DE-BB"
+},
+"de|shanghai": {
+"cc": "de",
+"lat": 52.5139,
+"lon": 13.4709,
+"state": "DE-BE"
 },
 "de|siegen": {
 "cc": "de",
