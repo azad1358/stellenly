@@ -53,7 +53,7 @@
 <main class="map-page">
   <aside class="map-side" id="map-side">
     <div class="map-side-head"><p class="kicker">Job map</p><h1>Where do you fit?</h1>
-      <p class="muted small">Every dot is an open job. Similar jobs lie close together, measured by AI from what the postings ask for.</p></div>
+      <p class="muted small">Every dot is an open job, linked to its company. Similar jobs pull together, measured by AI from what the postings ask for.</p></div>
     <form id="me-form" class="me-form" autocomplete="off">
       <label>Field<select id="me-field"><option value="">Any field</option></select></label>
       <label>Level<select id="me-level"><option value="">Any level</option><option value="intern">Intern / student</option>
@@ -71,15 +71,18 @@
   </aside>
   <div class="map-stage">
     <div id="map" class="map-canvas" aria-label="Interactive map of jobs and companies"></div>
-    <div id="map-tip" class="map-tip" hidden></div>
-    <div class="map-tools"><button type="button" class="btn" id="map-fit" title="Show everything">⤢ Reset view</button>
+    <div class="map-tools">
+      <button type="button" class="btn" id="map-dim" title="Switch to 2D">2D</button>
+      <label class="map-slider">Spread<input type="range" id="map-spread" min="5" max="120" value="30"></label>
+      <label class="map-slider">Link length<input type="range" id="map-len" min="4" max="80" value="18"></label>
+      <button type="button" class="btn" id="map-shake" title="Shake the network">Shake</button>
+      <button type="button" class="btn" id="map-fit" title="Show everything">⤢ Fit</button>
       <button type="button" class="btn m-only" id="map-panel">☰ Your profile</button></div>
     <p class="map-loading" id="map-loading">Loading the map…</p>
   </div>
 </main>
 <script src="js/config.js"></script>
-<script src="js/vendor/graphology-0.26.0.umd.min.js"></script>
-<script src="js/vendor/sigma-3.0.2.min.js"></script>
+<script src="js/vendor/3d-force-graph-1.79.1.min.js"></script>
 <script src="js/map.js"></script>
 <script src="js/counter.js"></script>
 </body>

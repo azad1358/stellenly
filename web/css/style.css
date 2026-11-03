@@ -1534,7 +1534,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .map-note { margin-top: 18px; }
 .map-stage { position: relative; min-width: 0; background: var(--night); }
 .map-canvas { position: absolute; inset: 0; }
-.map-tip { position: absolute; left: 0; top: 0; z-index: 5; width: 300px; padding: 12px 14px; border-radius: 14px; pointer-events: none;
+.map-tip { width: 300px; padding: 12px 14px; border-radius: 14px; pointer-events: none;
   display: flex; flex-direction: column; gap: 4px; color: #e6e9f5; font-size: .86rem; line-height: 1.4;
   background: rgba(16, 22, 48, .96); border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .8); }
 .map-tip .muted { color: #a5b4fc; }
@@ -1561,3 +1561,11 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
 .me-list a { overflow: hidden; }
 .me-list b, .me-list span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .me-list em { flex: none; }
+/* 3d-force-graph: its tooltip wraps our card; the controls bar */
+.map-canvas .scene-tooltip { padding: 0 !important; background: none !important; font: inherit !important; }
+.map-tools { flex-wrap: wrap; justify-content: flex-end; align-items: center; max-width: calc(100% - 28px); }
+.map-slider { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 10px; color: #dfe5f3; font-size: .82rem;
+  background: rgba(16, 22, 48, .9); border: 1px solid rgba(255, 255, 255, .2); }
+.map-slider input { width: 90px; accent-color: #7a82f2; }
+.map-canvas { cursor: grab; }
+@media (max-width: 760px) { .map-slider { display: none; } }
