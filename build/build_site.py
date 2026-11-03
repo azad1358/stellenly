@@ -1174,7 +1174,9 @@ def build_companies(jobs: list[dict]) -> list[str]:
     for old in out.glob("*.html"):
         old.unlink()
 
-    # --- one page per company (good for "<company> jobs in English" searches)
+    # --- one page per company (good for "<company> jobs in English" searches), laid out like the city pages
+    index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
+    co_logos = {k: v["l"] for k, v in index.items() if v.get("l")}
     for c in (c for c in cos if c["page"]):
         m = c["meta"] or {}
         where = ", ".join(f"{k} ({n})" for k, n in c["cities"].most_common(6))
@@ -1184,20 +1186,32 @@ def build_companies(jobs: list[dict]) -> list[str]:
               **({"description": m["description"]} if m.get("description") else {})}
         links = (f'<a class="btn" href="{e(m["website"])}" target="_blank" rel="noopener">Company website ↗</a>'
                  if m.get("website") else "")
-        body = f"""<p class="crumbs"><a href="../companies.html">Companies</a> › {e(c['name'])}</p>
-<h1>{e(c['name'])}</h1>
-<div class="badges">{co_badges(c)}</div>
-{f'<p class="lead">{e(m["description"])}</p>' if m.get("description") else ""}
-<dl class="facts">{co_facts(c)}<div><dt>Open jobs</dt><dd>{len(c['jobs'])}</dd></div></dl>
-{score_card_html(c.get('score'), c['name'], 'score-help')}
-<p class="co-links">{links}<a class="btn primary" href="../index.html?q={e(requests.utils.quote(c['name']))}">Filter these jobs by German level &amp; salary →</a></p>
-<h2>{jobs_word(len(c['jobs']))} in English{f" · {e(where)}" if where else ""}</h2>
-{job_list_html(c['jobs'][:60], '../')}
-<p class="muted small">Updated daily from the company's own job board and public job APIs. Company facts are approximate.</p>"""
+        logo = f"logos/{c['slug']}.png" if (WEB / "logos" / f"{c['slug']}.png").exists() else None
+        kpis = [(f"{len(c['jobs']):,}", "open jobs in English")] + [(str(v), k) for k, v in
+                (("founded", m.get("founded")), ("employees", m.get("size")), ("headquarters", m.get("hq"))) if v]
+        sc = c.get("score")
+        if sc:
+            kpis.append((f"★ {sc['t'] / 20:.1f}", "Hiring Score"))
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs"><a href="../companies.html">Companies</a> › {e(c['name'])}</nav>
+<header class="loc-head">
+  {logo_html(c['name'], logo, "../", "logo-lg")}
+  <div><h1>{e(c['name'])}</h1>
+  {f'<p class="muted">{e(m["description"])}</p>' if m.get("description") else ""}
+  <div class="badges">{co_badges(c)}</div></div>
+  <p class="co-links">{links}<a class="btn primary" href="../index.html?q={e(requests.utils.quote(c['name']))}">Filter by German level &amp; salary →</a></p>
+</header>
+<div class="kpis loc-kpis">{"".join(f"<div><b>{e(v)}</b><span>{e(k)}</span></div>" for v, k in kpis)}</div></section>
+<div class="loc-layout">
+  <div class="loc-list"><h2>{jobs_word(len(c['jobs']))} in English{f" · {e(where)}" if where else ""}</h2>
+    {job_cards_html(c['jobs'][:60], '../', co_logos)}</div>
+  <aside class="loc-side">{score_card_html(sc, c['name'], 'score-help')}</aside>
+</div>
+<p class="muted small">Updated daily from the company's own job board and public job APIs. Company facts are approximate.</p>
+{CARD_SCRIPTS}"""
         desc = (m.get("description") or f"English-speaking jobs at {c['name']} in Germany.")
         (out / f"{c['slug']}.html").write_text(page(
             f"{c['name']} jobs in Germany (English)", f"{jobs_word(len(c['jobs']))} at {c['name']}. {desc}"[:300],
-            body, f"companies/{c['slug']}.html", 1,
+            body, f"companies/{c['slug']}.html", 1, main_class="content-page loc-page",
             extra_head=f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>'),
             encoding="utf-8")
 

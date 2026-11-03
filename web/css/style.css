@@ -1498,3 +1498,9 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .hiw-hero .wiki-stats span { color: #b8c2da; }
 .via { color: var(--muted); font-size: .85rem; font-weight: 500; }
 .via a { color: inherit; }
+/* Company pages: the hero's buttons and the score card in the side column */
+.place-hero .co-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.place-hero .co-links .btn:not(.primary) { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .3); }
+.place-hero .loc-head .badges { margin-top: 8px; }
+.loc-side .score-card { margin: 0; background: var(--surface); border-color: var(--border); box-shadow: none; }
+.place-hero .loc-kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
