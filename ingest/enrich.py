@@ -127,6 +127,12 @@ _GERMAN_REQUIRED = [
     r"\b(fließend|verhandlungssicher|sehr gute?)\w*\s+deutsch",
     r"\bdeutschkenntnisse\b",
 ]
+# A title that asks for German ("Account Executive - German Speaking", "Support (German & English)").
+# Not "German market", "German tax" or "German office": those name a place or a field, not the language.
+_TITLE_GERMAN = re.compile(
+    r"\bgerman[- ]?speak(ing|er)\b|\b(fluent|native)\s+german\b|\bgerman\s+fluen(cy|t)\b|\bdeutschsprachig|\(\s*german\s*\)"
+    r"|\bgerman\s*(and|&|/|\+)\s*english\b|\benglish\s*(and|&|/|\+)\s*german\b|\bwith\s+german\b"
+    r"|[-–|,]\s*german\s*$|\bgerman\s*\(?(c1|c2|b2)\b", re.I)
 _C_NR = [re.compile(p, re.I) for p in _GERMAN_NOT_REQUIRED]
 _C_NICE = [re.compile(p, re.I) for p in _GERMAN_NICE]
 _C_REQ = [re.compile(p, re.I) for p in _GERMAN_REQUIRED]
@@ -154,6 +160,13 @@ def german_level(text: str) -> str:
         if level in found:
             return level
     return "not_mentioned"
+
+
+def title_german_level(title: str, text: str) -> str:
+    """german_level() of the posting, but a title that asks for German counts when the text says nothing about it
+    ("Forward Deployed Engineer - German Speaking" with a description that never mentions German)."""
+    level = german_level(text)
+    return "required" if level == "not_mentioned" and _TITLE_GERMAN.search(title or "") else level
 
 
 # ---------------------------------------------------------------------------
@@ -554,7 +567,7 @@ def enrich(raw: dict) -> dict | None:
         "city": city,
         "description": text,
         "job_types": [j for j in (raw.get("job_types") or []) if j][:10],
-        "german_level": german_level(text) if not title_only else
+        "german_level": title_german_level(title, text) if not title_only else
                         ("required" if re.search(r"\bgerman\b", title, re.I) else "not_mentioned"),
         "visa_sponsorship": visa_sponsorship(text),
         "relocation": relocation(text),
