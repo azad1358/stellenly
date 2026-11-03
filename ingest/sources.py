@@ -81,6 +81,42 @@ def arbeitnow(max_pages: int = 40, pause: float = 2.0) -> Iterator[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Jobicy — free remote-jobs API, no key: https://jobicy.com/jobs-rss-feed
+# Their terms: credit Jobicy with a link to the original listing (the url below is Jobicy's page; the site shows
+# "via Jobicy" on these jobs), never present the jobs as our own, at most one automated pass an hour.
+# Remote only: we keep the roles open to people living in Germany.
+# ---------------------------------------------------------------------------
+_JOBICY_OPEN = re.compile(r"germany|europe|emea|anywhere|worldwide", re.I)
+
+
+def jobicy(pause: float = 3.0) -> Iterator[dict]:
+    seen: set[str] = set()
+    for geo in ("germany", "europe"):  # "europe" also returns the EMEA and worldwide roles
+        payload = _get("https://jobicy.com/api/v2/remote-jobs", retries=1, params={"count": 100, "geo": geo}).json()
+        for j in payload.get("jobs") or []:
+            jid = str(j.get("id") or "")
+            if not jid or jid in seen or not _JOBICY_OPEN.search(j.get("jobGeo") or "anywhere"):
+                continue
+            seen.add(jid)
+            types = j.get("jobType") or []
+            yield {
+                "source": "jobicy",
+                "source_id": jid,
+                "url": j.get("url"),
+                "title": html.unescape(j.get("jobTitle") or ""),
+                "company": j.get("companyName"),
+                "location": "Remote",
+                "description_html": j.get("jobDescription") or j.get("jobExcerpt") or "",
+                "is_remote": True,
+                "tags": [t for t in (j.get("jobIndustry") or []) if isinstance(t, str)],
+                "job_types": [str(t).replace("-", " ").title() for t in (types if isinstance(types, list) else [types])],
+                "posted_at": j.get("pubDate"),
+            }
+        time.sleep(pause)
+    COMPLETE.add("jobicy")  # both feeds were read: Jobicy jobs we didn't see are gone
+
+
+# ---------------------------------------------------------------------------
 # Company career pages via public ATS APIs (Greenhouse / Lever / Ashby).
 # List the company board names in data/career_boards.json. Many Berlin startups post
 # in English here, so this is the highest-quality source you can add.

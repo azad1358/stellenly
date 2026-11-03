@@ -526,6 +526,9 @@
   const skillsOf = (j) => (j.insights && j.insights.skills) || [];
   // Amazon's jobs: only title, city and link (ingest/sources.py amazon()); the details live on amazon.jobs.
   const titleOnly = (j) => /^https:\/\/www\.amazon\.jobs\//.test(j.url || "");
+  // Jobicy's terms: credit Jobicy with a link to the original listing (ingest/sources.py jobicy()).
+  const viaJobicy = (j) => (/^https:\/\/jobicy\.com\//.test(j.url || "")
+    ? `<span class="via">via <a href="${esc(j.url)}" target="_blank" rel="noopener nofollow">Jobicy</a></span>` : "");
   const TITLE_ONLY_NOTE = "We can't show more information for this job right now. The full posting is on Amazon's site.";
 
   // A card shows what decides the click: German level, visa, work setup, and warnings (reported closed, agency).
@@ -551,7 +554,7 @@
       ${logoHtml(j.company, "job-logo")}
       <div class="job-main">
         <h3 class="job-title"><a href="${esc(jobUrl(j.id))}">${esc(j.title)}</a></h3>
-        <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
+        <div class="job-meta"><span class="company">${esc(j.company)}${scoreChip(j)}</span><span>${esc(j.city || j.location || "Germany")}</span>${j.posted_at ? `<span>${ago(j.posted_at)}</span>` : ""}${viaJobicy(j)}${j.match === "text" ? `<span class="match-note" title="Your search word appears only in the job description, not in the title">mentioned in description</span>` : ""}</div>
         <div class="badges">${cardBadges(j)}${skills}</div>
       </div>
       <div class="job-side">
@@ -771,7 +774,7 @@
       <header class="jp-hero">
         ${logoHtml(j.company, "logo-lg")}
         <div class="jp-titles">
-          <p class="jd-company">${esc(j.company)}${scoreChip(j)}</p>
+          <p class="jd-company">${esc(j.company)}${scoreChip(j)} ${viaJobicy(j)}</p>
           <h1 id="jd-title">${esc(j.title)}</h1>
           <p class="jp-meta">${meta}</p>
           <div class="badges">${badges(j)}</div>

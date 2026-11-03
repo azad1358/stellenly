@@ -18,7 +18,7 @@ DATA = ROOT / "data"
 
 SOURCE_NAMES = {"arbeitnow": "Arbeitnow", "greenhouse": "Greenhouse", "lever": "Lever", "ashby": "Ashby",
                 "personio": "Personio", "recruitee": "Recruitee", "workable": "Workable",
-                "smartrecruiters": "SmartRecruiters"}
+                "smartrecruiters": "SmartRecruiters", "jobicy": "Jobicy"}
 
 
 def _json(path: Path, default):
@@ -138,11 +138,15 @@ Jobs are stored in a Postgres database (Supabase). The website itself is plain s
 </tbody></table>
 
 <h2 id="sources">2. Where jobs come from</h2>
-<p>We only use <b>public</b> job feeds: no logins, no scraping behind bot protection. There are two kinds of source:</p>
+<p>We only use <b>public</b> job feeds: no logins, no scraping behind bot protection. There are three kinds of source:</p>
 <ul>
 <li><b>Arbeitnow</b>: a public job API covering Germany and Europe (up to 40 pages per run).</li>
+<li><b><a href="https://jobicy.com" rel="noopener">Jobicy</a></b>: a public API of remote jobs; we keep the ones open to people in
+Germany, and every such job shows "via Jobicy" with a link to its Jobicy page.</li>
 <li><b>Employers' own job boards</b>, through the public APIs of their applicant-tracking systems: Greenhouse, Lever, Ashby,
-Personio, Recruitee, Workable and SmartRecruiters. This is the same data the company shows on its own careers page.</li>
+Personio, Recruitee, Workable and SmartRecruiters. This is the same data the company shows on its own careers page.
+Part of our list of companies comes from the starter list of <a href="https://github.com/srvskr1/stellenpilot" rel="noopener">Stellenpilot</a>
+by Sourav Sarker (MIT licence), checked by us for English-speaking jobs in Germany.</li>
 </ul>
 <h3>Automatic board discovery</h3>
 <p>Every Arbeitnow job has an "apply" link that redirects to the employer's tracking system. Once per company we follow

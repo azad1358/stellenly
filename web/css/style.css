@@ -1496,3 +1496,5 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .hiw-hero .wiki-stats div { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); }
 .hiw-hero .wiki-stats b { color: #fff; }
 .hiw-hero .wiki-stats span { color: #b8c2da; }
+.via { color: var(--muted); font-size: .85rem; font-weight: 500; }
+.via a { color: inherit; }
