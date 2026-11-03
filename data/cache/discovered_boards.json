@@ -110,6 +110,11 @@
    "board": "artefactlinkedin",
    "company": "Artefactlinkedin"
   },
+  "asteralabs": {
+   "ats": "greenhouse",
+   "board": "asteralabs",
+   "company": "Asteralabs"
+  },
   "atira": {
    "ats": "ashby",
    "board": "atira",
@@ -264,6 +269,11 @@
    "ats": "ashby",
    "board": "cosuno",
    "company": "Cosuno"
+  },
+  "coupa": {
+   "ats": "lever",
+   "board": "coupa",
+   "company": "Coupa"
   },
   "crytek": {
    "ats": "lever",
@@ -524,6 +534,11 @@
    "board": "imtf",
    "company": "Imtf"
   },
+  "indiecamperslinkedin": {
+   "ats": "greenhouse",
+   "board": "indiecampers-linkedin",
+   "company": "Indie Campers | LinkedIn"
+  },
   "inmobi": {
    "ats": "greenhouse",
    "board": "inmobi",
@@ -548,6 +563,11 @@
    "ats": "recruitee",
    "board": "intersnackgroupgmbhcokg",
    "company": "Intersnack Group GmbH & Co. KG"
+  },
+  "ircagroup": {
+   "ats": "lever",
+   "board": "ircagroup",
+   "company": "Ircagroup"
   },
   "jellyfish": {
    "ats": "ashby",
@@ -1174,6 +1194,11 @@
    "board": "vaeridion",
    "company": "væridion"
   },
+  "walkme": {
+   "ats": "lever",
+   "board": "walkme",
+   "company": "Walkme"
+  },
   "watershed": {
    "ats": "ashby",
    "board": "Watershed",
@@ -1258,6 +1283,7 @@
   "auxiliusai": "2026-10-30",
   "baringa": "2026-10-29",
   "beyondservicegmbh": "2026-10-27",
+  "bgprevent": "2026-11-03",
   "biahubshellocircle": "2026-10-28",
   "bifrostdefence": "2026-10-27",
   "bitwarden": "2026-10-28",
@@ -1283,6 +1309,7 @@
   "commercetools": "2026-10-27",
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
+  "constructorlabs": "2026-11-03",
   "contentful": "2026-10-28",
   "conziagmbh": "2026-11-02",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
@@ -1332,6 +1359,7 @@
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
   "ilertgmbh": "2026-10-27",
+  "inca": "2026-11-03",
   "indiekidzgmbh": "2026-10-27",
   "instagrid": "2026-10-27",
   "isaraerospace": "2026-10-27",
@@ -1415,6 +1443,7 @@
   "rizm": "2026-10-27",
   "roboservicegmbh": "2026-10-27",
   "roger": "2026-10-28",
+  "routinelabs": "2026-11-03",
   "rubygmbh": "2026-10-27",
   "samsara": "2026-10-30",
   "scout24": "2026-10-27",
@@ -1438,11 +1467,13 @@
   "sumup": "2026-10-27",
   "superchat": "2026-10-27",
   "superhuman": "2026-10-27",
+  "surgeaerogmbh": "2026-11-03",
   "swisspeakpartnersgmbh": "2026-10-27",
   "talk360": "2026-10-27",
   "tanganygmbh": "2026-10-27",
   "tanium": "2026-10-30",
   "tarebase": "2026-10-30",
+  "teampicnic": "2026-11-03",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",
@@ -1460,6 +1491,7 @@
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
   "verwaltungssprunggmbh": "2026-10-28",
+  "vetaiongmbh": "2026-11-03",
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",

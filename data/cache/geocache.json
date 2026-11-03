@@ -87,6 +87,12 @@
 "lat": 47.5581,
 "lon": 7.5878
 },
+"*|basingstoke": {
+"cc": "gb",
+"lat": 51.2628,
+"lon": -1.0862,
+"state": "GB-ENG"
+},
 "*|bath": {
 "cc": "gb",
 "lat": 51.3814,
@@ -1696,6 +1702,12 @@
 "lat": 52.1527,
 "lon": 9.9518,
 "state": "DE-NI"
+},
+"de|hochheim am main": {
+"cc": "de",
+"lat": 50.0277,
+"lon": 8.3587,
+"state": "DE-HE"
 },
 "de|homebased": null,
 "de|hoppegarten": {
