@@ -10,11 +10,11 @@
  },
  "2026-W45": {
   "active": 4711,
-  "median_salary": 85000,
+  "median_salary": 84000,
   "new_7d": 2458,
   "no_german_pct": 15,
   "remote_pct": 26,
-  "salary_pct": 7,
-  "visa": 282
+  "salary_pct": 6,
+  "visa": 283
  }
 }
