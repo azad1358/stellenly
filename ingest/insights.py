@@ -500,9 +500,9 @@ def apply_facts(jobs: list[dict]) -> list[dict]:
 
 
 # ---------------------------------------------------------------- job map
-def map_layout(jobs: list[dict], vecs: dict) -> list[dict]:
-    """A 2D position per job for the website's job map: UMAP of the embeddings, so similar jobs lie close
-    together. Fixed seed, so the map looks the same between runs as long as the jobs don't change much."""
+def map_layout(jobs: list[dict], vecs: dict, k: int = 5) -> list[dict]:
+    """A 3D position per job for the website's job map (UMAP of the embeddings: similar jobs lie close together),
+    plus its k nearest jobs with their cosine similarity. Fixed seed, so the map stays similar between runs."""
     try:
         import umap  # heavy (numba): only this step needs it
     except ImportError:
@@ -512,8 +512,20 @@ def map_layout(jobs: list[dict], vecs: dict) -> list[dict]:
     if len(ids) < 50:
         return []
     E = np.stack([vecs[i] for i in ids]).astype("float32")
-    xy = umap.UMAP(n_neighbors=15, min_dist=0.08, metric="cosine", random_state=42).fit_transform(E)
-    return [{"id": i, "x": round(float(x), 3), "y": round(float(y), 3)} for i, (x, y) in zip(ids, xy)]
+    E /= np.linalg.norm(E, axis=1, keepdims=True) + 1e-9
+    xyz = umap.UMAP(n_components=3, n_neighbors=15, min_dist=0.08, metric="cosine", random_state=42).fit_transform(E)
+    out = []
+    for start in range(0, len(ids), 512):  # cosine similarity in blocks, to keep memory small
+        S = E[start:start + 512] @ E.T
+        for r, row in enumerate(S):
+            i = start + r
+            row[i] = -1  # not itself
+            top = np.argpartition(-row, k)[:k]
+            top = top[np.argsort(-row[top])]
+            x, y, z = xyz[i]
+            out.append({"id": ids[i], "x": round(float(x), 3), "y": round(float(y), 3), "z": round(float(z), 3),
+                        "nn": [[ids[t], round(float(row[t]), 3)] for t in top]})
+    return out
 
 
 # ---------------------------------------------------------------- main

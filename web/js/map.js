@@ -1,8 +1,8 @@
 // The job map (map.html): a live 3D network of companies and their jobs, with 3d-force-graph (three.js, MIT,
-// js/vendor/). Jobs start where their meaning puts them (UMAP of the embeddings, ingest/insights.py), then the
-// physics takes over: nodes repel, links (job -> company, job -> its most similar job) pull like springs. Rotate,
-// zoom, drag any node, switch 2D/3D, tune spread and link length. Hover shows a job's requirements; "Show me on
-// the map" adds you, linked to your best matches. Nothing leaves the browser: the profile is matched here.
+// js/vendor/). Every job sits where its meaning puts it (3D UMAP of the embeddings, ingest/insights.py): close
+// means similar. The physics keeps it there (a pull to its semantic position), so drag, shake or tune it and it
+// flows back; a weak line ties each job to its company. Hover shows a job's requirements and its nearest jobs with
+// their cosine similarity; "Show me on the map" adds you, linked to your best matches. The profile stays here.
 (() => {
   "use strict";
   const $ = (s) => document.querySelector(s);
@@ -27,9 +27,10 @@
 
   let D, G, nodes = [], links = [];
   const shown = new Set([0, 1, 2, 3]);   // German levels visible
+  let city = "";                         // city filter ("" = all)
   const lit = new Set();                 // highlighted nodes (hover or "you")
-  let hovered = null, me = null;
-  let spread = 30, linkLen = 18;
+  let hovered = null, me = null, fitted = false;
+  let spread = 6, meaning = 0.15, companyLines = false;
 
   fetch("data/job-map.json").then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(start)
     .catch((err) => { console.error(err); $("#map-loading").textContent = "The map isn't ready yet. It is built every day; please try again later."; });
@@ -38,26 +39,27 @@
     D = data;
     const counts = D.companies.map(() => 0);
     D.jobs.forEach((j) => counts[j[4]]++);
-    const sums = D.companies.map(() => [0, 0]);
-    D.jobs.forEach((j) => { sums[j[4]][0] += j[1]; sums[j[4]][1] += j[2]; });
-    // start from the meaning-based layout (0-1000 -> about -450..450), flat in z so 3D unfolds gently
-    const at = (v) => (v - 500) * 0.9, z = () => (Math.random() - 0.5) * 60;
+    // the semantic 3D position (0-1000 -> about -450..450) is each node's home
+    const at = (v) => (v - 500) * 1.4;
+    const sums = D.companies.map(() => [0, 0, 0]);
+    D.jobs.forEach((j) => { const s = sums[j[4]]; s[0] += at(j[1]); s[1] += -at(j[2]); s[2] += at(j[15]); });
+    const home = (x, y, z) => ({ x, y, z, hx: x, hy: y, hz: z });
     D.companies.forEach(([name], i) => counts[i] && nodes.push({ id: `c${i}`, kind: "c", ci: i, name, n: counts[i],
-      x: at(sums[i][0] / counts[i]), y: -at(sums[i][1] / counts[i]), z: z(), hx: at(sums[i][0] / counts[i]), hy: -at(sums[i][1] / counts[i]) }));
-    D.jobs.forEach((j, i) => nodes.push({ id: `j${i}`, kind: "j", ji: i, x: at(j[1]), y: -at(j[2]), z: z(), hx: at(j[1]), hy: -at(j[2]) }));
+      ...home(sums[i][0] / counts[i], sums[i][1] / counts[i], sums[i][2] / counts[i]) }));
+    D.jobs.forEach((j, i) => nodes.push({ id: `j${i}`, kind: "j", ji: i, ...home(at(j[1]), -at(j[2]), at(j[15])) }));
     D.jobs.forEach((j, i) => {
       links.push({ source: `j${i}`, target: `c${j[4]}`, kind: "c" });
-      j[11].forEach((s) => links.push({ source: `j${i}`, target: `j${s}`, kind: "s" }));  // its most similar jobs (hover only)
+      j[11].forEach(([s, sim]) => links.push({ source: `j${i}`, target: `j${s}`, kind: "s", sim }));  // nearest jobs (hover only)
     });
 
     G = window.ForceGraph3D()($("#map"))
       .backgroundColor("#0a1024")
       .showNavInfo(false)
-      .nodeRelSize(3.4)
+      .nodeRelSize(4.2)
       .nodeResolution(8)
       .nodeVal((n) => (n.kind === "c" ? 2 + Math.sqrt(n.n) * 1.4 : n.kind === "you" ? 14 : 1))
       .nodeColor(color)
-      .nodeVisibility((n) => n.kind !== "j" || shown.has(D.jobs[n.ji][6]))
+      .nodeVisibility(nodeVisible)
       .nodeLabel(label)
       .linkVisibility(linkVisible)
       .linkColor(linkColor)
@@ -70,14 +72,18 @@
       })
       .onNodeDragEnd((n) => { n.fx = n.fy = n.fz = undefined; })   // let it flow back into the network
       .cooldownTime(15000)
+      .onEngineStop(() => { if (!fitted) { fitted = true; fit(); } })
       .d3VelocityDecay(0.35)
       .graphData({ nodes, links });
-    G.d3Force("link").distance((l) => (l.kind === "c" ? linkLen : linkLen * 1.6)).strength((l) => (l.kind === "s" ? 0 : 0.7));
+    // meaning first: a strong pull to the semantic position; the company line only pulls a little
+    G.d3Force("link").distance(30).strength((l) => (l.kind === "c" ? 0.02 : l.kind === "you" ? 0.3 : 0));
     G.d3Force("charge").strength(-spread);
-    // a gentle pull back to the meaning-based position, so related companies stay neighbours
-    const home = (alpha) => nodes.forEach((n) => { if (n.hx != null) { n.vx += (n.hx - n.x) * 0.03 * alpha; n.vy += (n.hy - n.y) * 0.03 * alpha; } });
-    home.initialize = () => {};
-    G.d3Force("home", home);
+    const pull = (alpha) => nodes.forEach((n) => {
+      if (n.hx == null) return;
+      n.vx += (n.hx - n.x) * meaning * alpha; n.vy += (n.hy - n.y) * meaning * alpha; n.vz += (n.hz - (n.z || 0)) * meaning * alpha;
+    });
+    pull.initialize = () => {};
+    G.d3Force("home", pull);
     resize();
     addEventListener("resize", resize);
 
@@ -91,10 +97,15 @@
 
   const id = (x) => (typeof x === "object" ? x.id : x);
   const node = (x) => (typeof x === "object" ? x : nodes.find((n) => n.id === x));
-  const visible = (x) => { const n = node(x); return !n || n.kind !== "j" || shown.has(D.jobs[n.ji][6]); };
+  const jobShown = (j) => shown.has(j[6]) && (!city || j[5] === city);
+  const nodeVisible = (n) => n.kind !== "j" || jobShown(D.jobs[n.ji]);
+  const visible = (x) => { const n = node(x); return !n || nodeVisible(n); };
   const focused = (l) => lit.size > 0 && lit.has(id(l.source)) && lit.has(id(l.target));
-  // similar-job lines only for the job under the cursor; company and "you" lines always
-  const linkVisible = (l) => visible(l.source) && visible(l.target) && (l.kind !== "s" || (hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id)));
+  // a company's jobs are spread over the map (it hires in different fields), so its lines show on hover only,
+  // or all of them with the "Company lines" button; similar-job lines for the job under the cursor; "you" lines always
+  const touches = (l) => hovered && (id(l.source) === hovered.id || id(l.target) === hovered.id);
+  const linkVisible = (l) => visible(l.source) && visible(l.target)
+    && (l.kind === "you" || touches(l) || (l.kind === "c" && companyLines));
   function color(n) {
     const base = n.kind === "c" ? COMPANY : n.kind === "you" ? YOU : GERMAN[D.jobs[n.ji][6]][1];
     return lit.size && !lit.has(n.id) ? DIM : base;
@@ -112,6 +123,8 @@
     }
     G.nodeColor(color).linkColor(linkColor).linkWidth((l) => (focused(l) ? 1.2 : 0)).linkVisibility(linkVisible);
   }
+  // fit the view to the visible jobs (companies sit among them anyway)
+  const fit = () => G.zoomToFit(800, 30, (n) => n.kind === "j" && nodeVisible(n));
   function resize() { const box = $("#map").getBoundingClientRect(); G.width(box.width).height(box.height); }
 
   // ------------------------------------------------------------------ hover card (HTML tooltip of the library)
@@ -123,7 +136,9 @@
     const sal = j[13] ? `${k(j[13])}${j[14] && j[14] !== j[13] ? `–${k(j[14]).slice(1)}` : ""}` : "";
     return `<div class="map-tip"><b>${esc(j[3])}</b><span class="muted">${esc(D.companies[j[4]][0])}${j[5] ? ` · ${esc(j[5])}` : ""}${j[7] ? " · Remote" : ""}</span>
       <span class="tip-tags"><em style="--c:${gc}">${gl}</em>${j[12] ? "<em>Visa sponsorship</em>" : ""}${sal ? `<em>${sal}</em>` : ""}${LEVEL[j[8]] ? `<em>${LEVEL[j[8]]}</em>` : ""}</span>
-      ${skills ? `<p class="tip-h">What it asks for</p><ul class="tip-skills">${skills}</ul>` : ""}</div>`;
+      ${skills ? `<p class="tip-h">What it asks for</p><ul class="tip-skills">${skills}</ul>` : ""}
+      ${j[11].length ? `<p class="tip-h">Most similar jobs (cosine similarity)</p><ul class="tip-nn">${j[11].slice(0, 4).map(([s, sim]) =>
+        `<li><span>${esc(D.jobs[s][3])} · ${esc(D.companies[D.jobs[s][4]][0])}</span><b>${sim.toFixed(2)}</b></li>`).join("")}</ul>` : ""}</div>`;
   }
 
   // ------------------------------------------------------------------ legend = German filter; view controls
@@ -135,7 +150,7 @@
     $("#map-legend").addEventListener("change", (e) => {
       const g = Number(e.target.dataset.g);
       if (e.target.checked) shown.add(g); else shown.delete(g);
-      G.nodeVisibility((n) => n.kind !== "j" || shown.has(D.jobs[n.ji][6])).linkVisibility(linkVisible);
+      G.nodeVisibility(nodeVisible).linkVisibility(linkVisible);
     });
   }
   function controls() {
@@ -146,16 +161,22 @@
       e.target.title = three ? "Switch to 3D" : "Switch to 2D";
     });
     $("#map-spread").addEventListener("input", (e) => { spread = +e.target.value; G.d3Force("charge").strength(-spread); G.d3ReheatSimulation(); });
-    $("#map-len").addEventListener("input", (e) => {
-      linkLen = +e.target.value;
-      G.d3Force("link").distance((l) => (l.kind === "c" ? linkLen : linkLen * 1.6));
-      G.d3ReheatSimulation();
+    $("#map-meaning").addEventListener("input", (e) => { meaning = +e.target.value / 100; G.d3ReheatSimulation(); });
+    const cities = new Map();
+    D.jobs.forEach((j) => j[5] && cities.set(j[5], (cities.get(j[5]) || 0) + 1));
+    $("#map-city").insertAdjacentHTML("beforeend", [...cities].sort((a, b) => b[1] - a[1]).slice(0, 40)
+      .map(([c, n]) => `<option value="${esc(c)}">${esc(c)} (${n})</option>`).join(""));
+    $("#map-city").addEventListener("change", (e) => { city = e.target.value; G.nodeVisibility(nodeVisible).linkVisibility(linkVisible); });
+    $("#map-lines").addEventListener("click", (e) => {
+      companyLines = !companyLines;
+      e.currentTarget.setAttribute("aria-pressed", String(companyLines));
+      G.linkVisibility(linkVisible);
     });
     $("#map-shake").addEventListener("click", () => {
       nodes.forEach((n) => { n.vx = (Math.random() - 0.5) * 20; n.vy = (Math.random() - 0.5) * 20; n.vz = (Math.random() - 0.5) * 20; });
       G.d3ReheatSimulation();
     });
-    $("#map-fit").addEventListener("click", () => G.zoomToFit(800, 40));
+    $("#map-fit").addEventListener("click", fit);
     $("#map-panel").addEventListener("click", () => $("#map-side").classList.toggle("open"));
   }
 
@@ -188,7 +209,7 @@
       G.graphData({ nodes, links });
       light();
       $("#me-result").hidden = true;
-      G.zoomToFit(800, 40);
+      fit();
     });
     const saved = store.get("mapProfile", null);
     if (saved) {
@@ -207,7 +228,7 @@
     const max = want.length + (field ? 1 : 0) + (level ? 0.5 : 0);
     const scored = [];
     D.jobs.forEach((j, i) => {
-      if (!shown.has(j[6]) || (remote && !j[7])) return;
+      if (!jobShown(j) || (remote && !j[7])) return;
       let s = 0;
       for (const [sk, w] of j[9]) {
         const name = D.skills[sk].toLowerCase();

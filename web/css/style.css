@@ -1571,3 +1571,10 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
 @media (max-width: 760px) { .map-slider { display: none; } }
 .me-actions { display: flex; gap: 8px; }
 .me-actions .btn.primary { flex: 1; }
+.map-filter + .map-filter { margin-top: 14px; }
+.map-select { width: 100%; margin-top: 6px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; }
+.tip-nn { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.tip-nn li { display: flex; justify-content: space-between; gap: 10px; }
+.tip-nn span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tip-nn b { flex: none; color: #c7d2fe; font-variant-numeric: tabular-nums; }
+.map-tools .btn[aria-pressed="true"] { background: #4f46e5; border-color: #818cf8; }

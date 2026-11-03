@@ -65,7 +65,7 @@ def load_jobs(jobs_file: str | None) -> list[dict]:
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     cols = ("id,url,title,company,city,remote_type,german_level,visa_sponsorship,relocation,"
             "salary_min,salary_max,seniority,is_agency,tags,posted_at,first_seen_at,repost_count,source,"
-            "ai_summary:insights->ai->>summary,skills:insights->skills,similar:insights->similar")
+            "ai_summary:insights->ai->>summary,skills:insights->skills")
     out, start, step = [], 0, 1000
     while True:
         r = requests.get(url, params={"select": cols, "is_active": "eq.true", "order": "posted_at.desc"},
@@ -1167,18 +1167,18 @@ def outline_logos(slugs: list[str], limit: int = 40) -> list[str]:
     return out
 
 
-def load_job_map() -> dict[str, tuple[float, float]]:
-    """job id -> (x, y) from the job_map table (insights.py map_layout); locally the dry-run file of insights.py."""
+def load_job_map() -> dict[str, dict]:
+    """job id -> {x, y, z, nn} from the job_map table (insights.py map_layout); locally the dry-run file of insights.py."""
     try:
         url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/job_map"
         key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
         out, start = {}, 0
         while True:
-            r = requests.get(url, params={"select": "job_id,x,y"}, timeout=60,
+            r = requests.get(url, params={"select": "job_id,x,y,z,nn"}, timeout=60,
                              headers={"apikey": key, "Authorization": f"Bearer {key}", "Range": f"{start}-{start + 999}"})
             r.raise_for_status()
             batch = r.json()
-            out.update({b["job_id"]: (b["x"], b["y"]) for b in batch})
+            out.update({b["job_id"]: b for b in batch})
             if len(batch) < 1000:
                 break
             start += 1000
@@ -1187,19 +1187,23 @@ def load_job_map() -> dict[str, tuple[float, float]]:
     except (KeyError, requests.RequestException) as err:
         print(f"Job map: no positions from the database ({err})")
     local = ROOT / "ingest" / ".cache" / "job_map.json"
-    return {p["id"]: (p["x"], p["y"]) for p in json.loads(local.read_text(encoding="utf-8"))} if local.exists() else {}
+    return {p["id"]: p for p in json.loads(local.read_text(encoding="utf-8"))} if local.exists() else {}
 
 
 def build_job_map(jobs: list[dict]) -> None:
-    """web/data/job-map.json for map.html: every open job with a position, compact (lists, shared tables of companies,
-    skills and fields; positions scaled to 0-1000)."""
+    """web/data/job-map.json for map.html: every open job with a 3D position and its nearest jobs (cosine similarity),
+    compact (lists, shared tables of companies, skills and fields; positions scaled to about 0-1000)."""
     pos = load_job_map()
     jobs = [j for j in jobs if j["id"] in pos]
     if not jobs:
         print("Job map: no positions yet, skipped")
         return
-    xs, ys = [pos[j["id"]][0] for j in jobs], [pos[j["id"]][1] for j in jobs]
-    x0, y0, span = min(xs), min(ys), max(max(xs) - min(xs), max(ys) - min(ys)) or 1
+    # scale by the middle 96% of jobs, and keep the few far-away ones at the edge, so they don't squeeze the rest
+    axes = [sorted(pos[j["id"]].get(a) or 0 for j in jobs) for a in "xyz"]
+    q = lambda v, f: v[min(len(v) - 1, int(f * len(v)))]  # noqa: E731
+    lo = [q(v, 0.02) for v in axes]
+    span = max(q(v, 0.98) - q(v, 0.02) for v in axes) or 1
+    scale = lambda p, a: round(min(1060, max(-60, 1000 * ((p.get("xyz"[a]) or 0) - lo[a]) / span)), 1)  # noqa: E731
     index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
     companies, skills, fields = {}, {}, {}
     ref = lambda table, key: table.setdefault(key, len(table))  # noqa: E731
@@ -1210,13 +1214,13 @@ def build_job_map(jobs: list[dict]) -> None:
         co = index.get(co_key(j["company"]), {})
         ci = ref(companies, (co.get("n") or j["company"], co.get("u"), co.get("l")))
         sk = [[ref(skills, s["n"]), round(100 * float(s.get("w") or 0))] for s in (j.get("skills") or [])[:10] if s.get("n")]
-        x, y = pos[j["id"]]
-        rows.append([j["id"], round(1000 * (x - x0) / span, 1), round(1000 * (y - y0) / span, 1), j["title"], ci,
+        p = pos[j["id"]]
+        rows.append([j["id"], scale(p, 0), scale(p, 1), j["title"], ci,
                      j.get("city") or "", german.get(j["german_level"], 2),
                      int(j.get("remote_type") in ("remote_de", "remote_eu")), j.get("seniority") or "", sk,
                      [ref(fields, t) for t in (j.get("tags") or []) if t not in META_TAGS][:4],
-                     [order[s] for s in (j.get("similar") or []) if s in order][:5],
-                     int(bool(j.get("visa_sponsorship"))), j.get("salary_min"), j.get("salary_max")])
+                     [[order[n], s] for n, s in (p.get("nn") or []) if n in order][:5],  # nearest jobs, cosine
+                     int(bool(j.get("visa_sponsorship"))), j.get("salary_min"), j.get("salary_max"), scale(p, 2)])
     data = {"updated": TODAY.isoformat(), "companies": [list(c) for c in companies], "skills": list(skills),
             "fields": list(fields), "jobs": rows}
     (WEB / "data" / "job-map.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
