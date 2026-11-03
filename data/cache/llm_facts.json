@@ -557,8 +557,8 @@
 "h":"2e6bd8ce1d01",
 "german":"required",
 "salary":[
-66528,
-72072
+72000,
+78000
 ],
 "visa":false,
 "reloc":false
@@ -4387,7 +4387,9 @@
 },
 "1b545bec14459c5202de":{
 "h":"1efea8010364",
+"german":"not_mentioned",
 "salary":null,
+"visa":true,
 "reloc":true
 },
 "1b563182bb6cc33c5f4b":{
@@ -7047,7 +7049,6 @@
 },
 "2f659ff5d89e6dd02a6b":{
 "h":"571fd7c3cb2f",
-"salary":null,
 "visa":false,
 "reloc":false
 },
@@ -9267,7 +9268,6 @@
 },
 "3feb6a33114d1232314c":{
 "h":"ee628fc3368b",
-"german":"nice_to_have",
 "salary":null,
 "visa":false,
 "reloc":false
@@ -11072,6 +11072,13 @@
 "4c021811111fdfdf77ff":{
 "h":"7fadfa920407",
 "german":"required",
+"salary":null,
+"visa":false,
+"reloc":false
+},
+"4c21310a30d1df020ef5":{
+"h":"dd81fd30839e",
+"german":"nice_to_have",
 "salary":null,
 "visa":false,
 "reloc":false
@@ -13906,7 +13913,7 @@
 },
 "615abf5f46acafeeeb18":{
 "h":"cb8d08dbfb61",
-"german":"nice_to_have",
+"german":"not_mentioned",
 "salary":null,
 "visa":false,
 "reloc":false
@@ -19925,6 +19932,7 @@
 },
 "88eb59f524066e2b82c5":{
 "h":"cf5fb8385e3b",
+"german":"required",
 "salary":null,
 "visa":false,
 "reloc":false
@@ -20720,8 +20728,8 @@
 "h":"1bcfaef49490",
 "german":"not_mentioned",
 "salary":[
-71400,
-83300
+72000,
+84000
 ],
 "visa":false,
 "reloc":false
@@ -24743,6 +24751,7 @@
 85000,
 100000
 ],
+"visa":true,
 "reloc":true
 },
 "ab491f3bbb02e482138e":{
@@ -25094,6 +25103,13 @@
 "adec7d3755c277e66ebd":{
 "h":"bda1cfaf5d46",
 "german":"nice_to_have",
+"salary":null,
+"visa":false,
+"reloc":false
+},
+"ae13ad81791dfdda43e1":{
+"h":"21ce6ceb77d5",
+"german":"not_mentioned",
 "salary":null,
 "visa":false,
 "reloc":false
@@ -35452,6 +35468,7 @@
 },
 "fabe302723d23af323a6":{
 "h":"cc35575581c6",
+"german":"nice_to_have",
 "salary":null,
 "visa":false,
 "reloc":false
