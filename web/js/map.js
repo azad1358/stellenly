@@ -333,13 +333,17 @@
     $("#me-skill").addEventListener("change", add);
     $("#me-chips").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (b) { skills.splice(+b.dataset.i, 1); chips(); } });
     $("#me-form").addEventListener("submit", (e) => { e.preventDefault(); add(); locate(skills); });
-    $("#me-reset").addEventListener("click", () => {   // forget the profile: form, "you" node, list, saved copy
+    $("#me-reset").addEventListener("click", () => {   // back to the start: form, "you", picked category, lists, saved copy
       skills = []; chips();
       $("#me-field").value = ""; $("#me-level").value = ""; $("#me-remote").checked = false; $("#me-skill").value = "";
       try { localStorage.removeItem("ejg.mapProfile"); } catch { /* private mode */ }
       nodes = nodes.filter((n) => n.kind !== "you");
       links = links.filter((l) => l.kind !== "you");
       me = null;
+      picked = null;
+      pickOk = () => true;
+      $$(".cat").forEach((b) => b.setAttribute("aria-pressed", "false"));
+      $("#cat-result").hidden = true;
       G.graphData({ nodes, links });
       light();
       matchLabels();
