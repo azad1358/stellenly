@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.122.0   # pinned: CLI 3.0 (2 Nov 2026) targets a local database unless told otherwise
       - run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
       - name: Show pending migrations
         run: supabase migration list
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.122.0   # pinned: CLI 3.0 (2 Nov 2026) targets a local database unless told otherwise
       - name: Deploy RSS feed (public, no login)
         run: supabase functions deploy rss --no-verify-jwt --project-ref "$SUPABASE_PROJECT_ID"
       - name: Deploy Skill check AI report (public, no login)
