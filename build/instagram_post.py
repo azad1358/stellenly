@@ -28,14 +28,32 @@ def call(method: str, path: str, token: str | None = None, **params) -> dict:
     data = r.json()
     if not r.ok or "error" in data:
         err = data.get("error", {})
-        raise SystemExit(f"Meta API: {r.status_code} {err.get('type', '')} {err.get('message', r.text[:300])}")
+        # code / subcode / user title and trace id say which restriction it is (Meta's docs and support use them)
+        detail = " · ".join(f"{k}={err[k]}" for k in ("code", "error_subcode", "error_user_title", "error_user_msg", "fbtrace_id")
+                            if err.get(k))
+        raise SystemExit(f"Meta API: {r.status_code} {err.get('type', '')} {err.get('message', r.text[:300])} ({detail}) [{path}]")
     return data
 
 
 def check() -> None:
-    me = call("GET", os.environ["IG_USER_ID"], fields="username,name,followers_count,media_count")
-    print(f"Instagram: token works for @{me.get('username')} ({me.get('name')}): "
-          f"{me.get('followers_count', 0)} followers, {me.get('media_count', 0)} posts")
+    """Tests Instagram and the Facebook Page separately, so a block shows where it is."""
+    failed = False
+    try:
+        me = call("GET", os.environ["IG_USER_ID"], fields="username,name,followers_count,media_count")
+        print(f"Instagram: token works for @{me.get('username')} ({me.get('name')}): "
+              f"{me.get('followers_count', 0)} followers, {me.get('media_count', 0)} posts")
+    except SystemExit as err:
+        failed = True
+        print(f"Instagram: {err}")
+    if os.environ.get("FB_PAGE_ID"):
+        try:
+            pg = call("GET", os.environ["FB_PAGE_ID"], fields="name,fan_count")
+            print(f"Facebook: token works for the Page {pg.get('name')} ({pg.get('fan_count', 0)} likes)")
+        except SystemExit as err:
+            failed = True
+            print(f"Facebook: {err}")
+    if failed:
+        sys.exit(1)
 
 
 def _ready(container: str) -> None:

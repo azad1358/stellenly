@@ -6,12 +6,15 @@ name: Ingest jobs
 #   visitors reported closed (repository variable, default 3). Commits the geocoding cache.
 #
 # WHEN (no other workflow calls this one):
-#   - every 6 hours (GitHub's timer is best-effort: runs often start hours late)
+#   - every 6 hours (GitHub's timer is best-effort: runs often start hours late, or not at all)
+#   - a backup 3 hours after each slot: it runs only if no import succeeded in the last 4 hours, and otherwise
+#     cancels itself (a cancelled run doesn't start "Job insights" or "Deploy website")
 #   - the "Run workflow" button
 # AFTER IT: "Job insights" and "Deploy website" start by themselves.
 on:
   schedule:
-    - cron: "17 */6 * * *"   # every 6 hours (UTC)
+    - cron: "17 */6 * * *"     # every 6 hours (UTC)
+    - cron: "47 3-23/6 * * *"  # backup: 03:47, 09:47, 15:47, 21:47 (see the first step)
   workflow_dispatch:          # "Run workflow" button for manual runs
     inputs:
       deactivate_max_share:
@@ -24,6 +27,7 @@ on:
 
 permissions:
   contents: write            # commit the geocoding cache
+  actions: write             # the backup run looks at earlier runs and may cancel itself
 
 concurrency:
   group: ingest
@@ -34,6 +38,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
+      - name: Backup run - skip if a recent import succeeded
+        if: github.event.schedule == '47 3-23/6 * * *'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          last=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ingest.yml --status success --limit 1 --json updatedAt --jq '.[0].updatedAt')
+          age=$(( $(date +%s) - $(date -d "${last:-1970-01-01T00:00:00Z}" +%s) ))
+          echo "Last successful import: ${last:-none} ($((age / 3600)) h ago)"
+          if [ "$age" -lt 14400 ]; then
+            echo "Recent enough: cancelling this backup run."
+            gh run cancel "$GITHUB_RUN_ID" -R "$GITHUB_REPOSITORY"
+            sleep 60   # wait for the cancel to stop this job
+          fi
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:

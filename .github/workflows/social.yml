@@ -54,6 +54,7 @@ jobs:
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
         run: python build/instagram_post.py check
       - name: Make the post (images + caption)
         if: inputs.kind != 'check'
@@ -100,6 +101,7 @@ jobs:
         with:
           name: post
       - name: Post to Instagram and Facebook
+        id: post
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
@@ -109,4 +111,4 @@ jobs:
         if: always()
         env:
           DISCORD_SOCIAL_WEBHOOK_URL: ${{ secrets.DISCORD_SOCIAL_WEBHOOK_URL }}
-        run: python build/social_discord.py posted posted.txt
+        run: python build/social_discord.py posted posted.txt "${{ steps.post.outcome }}"
