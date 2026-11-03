@@ -266,3 +266,11 @@ def test_title_asks_for_german():
     assert title_german_level("Applied AI Engineer (Germany-based)", "") == "not_mentioned"
     # what the text says wins when it says something
     assert title_german_level("Account Manager (German Speaking)", "German is a plus.") == "nice_to_have"
+
+
+def test_llm_not_mentioned_never_lowers_a_found_level():
+    from llm_facts import german_wins
+    assert german_wins("required", "not_mentioned")          # the LLM found a German requirement in the text
+    assert german_wins("nice_to_have", "required")           # ... or a softer one, with a quote
+    assert not german_wins("not_mentioned", "required")      # our title rule found it: keep it
+    assert not german_wins("required", "required")           # nothing to change
