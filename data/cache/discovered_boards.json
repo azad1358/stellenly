@@ -30,6 +30,11 @@
    "board": "adjoe",
    "company": "adjoe"
   },
+  "affinidi": {
+   "ats": "greenhouse",
+   "board": "affinidi",
+   "company": "affinidi"
+  },
   "agiledefense": {
    "ats": "lever",
    "board": "agile-defense",
@@ -399,6 +404,11 @@
    "board": "eleqtron",
    "company": "eleQtron GmbH"
   },
+  "elevetalent": {
+   "ats": "ashby",
+   "board": "eleve-talent",
+   "company": "Eleve Talent"
+  },
   "elliptic": {
    "ats": "ashby",
    "board": "elliptic",
@@ -679,6 +689,11 @@
    "ats": "ashby",
    "board": "knowunity",
    "company": "Knowunity GmbH"
+  },
+  "kong": {
+   "ats": "ashby",
+   "board": "kong",
+   "company": "Kong"
   },
   "kraken": {
    "ats": "ashby",
@@ -991,6 +1006,11 @@
    "board": "recaresolutions",
    "region": "https://careers.recaresolutions.com",
    "company": "Recare Deutschland GmbH"
+  },
+  "redis": {
+   "ats": "ashby",
+   "board": "Redis",
+   "company": "Redis"
   },
   "remberg": {
    "ats": "ashby",
@@ -1406,6 +1426,7 @@
   "alpineeagle": "2026-10-27",
   "amperecloudgmbh": "2026-10-27",
   "anoritech": "2026-10-27",
+  "anthropic": "2026-11-04",
   "anywherenow": "2026-10-27",
   "appen2": "2026-10-31",
   "appinio": "2026-10-27",
@@ -1476,6 +1497,7 @@
   "figma": "2026-10-29",
   "finn": "2026-10-28",
   "firesprite": "2026-10-28",
+  "firstmomentumventures": "2026-11-04",
   "fivetran": "2026-10-27",
   "flipper": "2026-11-03",
   "flix": "2026-10-27",
@@ -1557,6 +1579,7 @@
   "ordiogmbh": "2026-10-27",
   "ostrom": "2026-10-27",
   "oviva": "2026-10-27",
+  "oysterbayventurecapital": "2026-11-04",
   "paicon": "2026-10-27",
   "paintgun": "2026-10-28",
   "pajughaftungsbeschrnkt": "2026-10-27",
@@ -1596,6 +1619,7 @@
   "rubygmbh": "2026-10-27",
   "samsara": "2026-10-30",
   "scout24": "2026-10-27",
+  "seragruppe": "2026-11-04",
   "shopfully": "2026-10-30",
   "sidessimplydeliverygmbh": "2026-10-27",
   "skailark": "2026-10-27",

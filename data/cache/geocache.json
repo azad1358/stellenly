@@ -507,6 +507,12 @@
 "lat": 60.2343,
 "lon": 22.9344
 },
+"*|immenhausen": {
+"cc": "de",
+"lat": 51.4195,
+"lon": 9.5093,
+"state": "DE-HE"
+},
 "*|ireland, switzerland": {
 "cc": "ie",
 "lat": 53.3206,
@@ -1468,6 +1474,12 @@
 "lon": 9.7101,
 "state": "DE-SH"
 },
+"de|bottrop": {
+"cc": "de",
+"lat": 51.5216,
+"lon": 6.9292,
+"state": "DE-NW"
+},
 "de|braunschweig": {
 "cc": "de",
 "lat": 52.2647,
@@ -1591,6 +1603,12 @@
 "lat": 52.1449,
 "lon": 14.6294,
 "state": "DE-BB"
+},
+"de|elchingen": {
+"cc": "de",
+"lat": 48.4445,
+"lon": 10.0667,
+"state": "DE-BY"
 },
 "de|emea": {
 "cc": "de",
@@ -1801,6 +1819,12 @@
 "lat": 51.8801,
 "lon": 8.9732,
 "state": "DE-NW"
+},
+"de|immenhausen": {
+"cc": "de",
+"lat": 51.4195,
+"lon": 9.5093,
+"state": "DE-HE"
 },
 "de|ingolstadt": {
 "cc": "de",
