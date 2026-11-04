@@ -151,6 +151,10 @@
   "file": null,
   "img": null
  },
+ "city:Potsdam": {
+  "file": "DEU Potsdam COA.svg",
+  "img": "img/coa/city-potsdam.png"
+ },
  "city:Regensburg": {
   "file": "Wappen Regensburg.svg",
   "img": "img/coa/city-regensburg.png"
