@@ -379,6 +379,12 @@
 "lat": 51.52,
 "lon": -0.1046
 },
+"*|forcalquier": {
+"cc": "fr",
+"lat": 43.9586,
+"lon": 5.7804,
+"state": "FR-PAC"
+},
 "*|fr - paris": {
 "cc": "fr",
 "lat": 48.8589,
@@ -1295,6 +1301,12 @@
 "lat": 52.0415,
 "lon": 4.3689
 },
+"*|yssingeaux": {
+"cc": "fr",
+"lat": 45.1436,
+"lon": 4.1244,
+"state": "FR-ARA"
+},
 "*|zaltbommel, gelderland, netherlands": {
 "cc": "nl",
 "lat": 51.7822,
@@ -1378,6 +1390,12 @@
 "cc": "de",
 "lat": 50.0859,
 "lon": 9.0814,
+"state": "DE-BY"
+},
+"de|aschheim": {
+"cc": "de",
+"lat": 48.1713,
+"lon": 11.716,
 "state": "DE-BY"
 },
 "de|augsburg": {
@@ -2315,7 +2333,8 @@
 "de|windeck": {
 "cc": "de",
 "lat": 50.7977,
-"lon": 7.5746
+"lon": 7.5746,
+"state": "DE-NW"
 },
 "de|winsen": {
 "cc": "de",

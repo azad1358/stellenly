@@ -206,6 +206,11 @@
    "board": "bowatt",
    "company": "Bowatt"
   },
+  "boxinc": {
+   "ats": "greenhouse",
+   "board": "boxinc",
+   "company": "boxinc"
+  },
   "brevo": {
    "ats": "lever",
    "board": "brevo",
@@ -260,6 +265,11 @@
    "ats": "ashby",
    "board": "clickhouse",
    "company": "Clickhouse"
+  },
+  "clickup": {
+   "ats": "ashby",
+   "board": "clickup",
+   "company": "Clickup"
   },
   "clovirtualfashion": {
    "ats": "lever",
@@ -705,6 +715,11 @@
    "board": "kuro",
    "company": "Kuro Technology"
   },
+  "kyra": {
+   "ats": "ashby",
+   "board": "kyra",
+   "company": "Kyra"
+  },
   "lemonmarkets": {
    "ats": "ashby",
    "board": "lemon-markets",
@@ -1047,6 +1062,11 @@
    "board": "robco",
    "company": "RobCo"
   },
+  "rocketlab": {
+   "ats": "greenhouse",
+   "board": "rocketlab",
+   "company": "rocketlab"
+  },
   "rocketlabcorporation": {
    "ats": "greenhouse",
    "board": "rocketlab",
@@ -1101,6 +1121,11 @@
    "ats": "ashby",
    "board": "hoxhunt",
    "company": "Senior Software Engineer, Gamified Security Awareness (Full-Stack)"
+  },
+  "sensmore": {
+   "ats": "ashby",
+   "board": "sensmore",
+   "company": "Sensmore"
   },
   "sereactgmbh": {
    "ats": "ashby",
@@ -1307,6 +1332,11 @@
    "board": "vendavo",
    "company": "Vendavo"
   },
+  "venncity": {
+   "ats": "greenhouse",
+   "board": "venncity",
+   "company": "Venncity"
+  },
   "vestiairecollective": {
    "ats": "lever",
    "board": "vestiairecollective",
@@ -1435,6 +1465,7 @@
   "augleticsgmbh": "2026-10-30",
   "auterion": "2026-10-27",
   "auxiliusai": "2026-10-30",
+  "ayunis": "2026-11-04",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
   "beneeringgmbh": "2026-11-03",
@@ -1446,6 +1477,7 @@
   "bitwarden": "2026-10-28",
   "boardwisegmbh": "2026-10-29",
   "boominggames": "2026-10-29",
+  "botsandpeopleproductgmbh": "2026-11-04",
   "brighteraitechnologiesgmbh": "2026-10-27",
   "bromcomcomputersplc": "2026-10-30",
   "bsimerchgmbh": "2026-10-27",
@@ -1585,6 +1617,7 @@
   "pajughaftungsbeschrnkt": "2026-10-27",
   "palantir": "2026-10-28",
   "pamonogmbh": "2026-11-03",
+  "particula": "2026-11-04",
   "payflows": "2026-10-27",
   "pennylanesas": "2026-11-03",
   "pentadocgruppe": "2026-10-30",
@@ -1658,6 +1691,7 @@
   "traciumgmbh": "2026-10-27",
   "trustedhousesitterscom": "2026-11-01",
   "tulipinterfaces": "2026-10-30",
+  "ubitiumgmbh": "2026-11-04",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
   "upvest": "2026-10-28",
@@ -1666,9 +1700,11 @@
   "verticalcompute": "2026-10-27",
   "verwaltungssprunggmbh": "2026-10-28",
   "vetaiongmbh": "2026-11-03",
+  "vexcashag": "2026-11-04",
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",
+  "visionspacegroup": "2026-11-04",
   "vivalyxgmbh": "2026-10-27",
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
