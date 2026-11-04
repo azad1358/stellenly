@@ -50,6 +50,12 @@
    "board": "alimentiv-2",
    "company": "Alimentiv"
   },
+  "almavivadebelgique": {
+   "ats": "recruitee",
+   "board": "almavivadebelgique",
+   "region": "https://almavivadebelgique.be",
+   "company": "AlmavivA de Belgique"
+  },
   "almedia": {
    "ats": "ashby",
    "board": "almedia",
@@ -235,6 +241,11 @@
    "board": "change",
    "company": "Change.org"
   },
+  "charlesriverassociates": {
+   "ats": "greenhouse",
+   "board": "charlesriverassociates",
+   "company": "charlesriverassociates"
+  },
   "cinder": {
    "ats": "ashby",
    "board": "cinder",
@@ -373,6 +384,11 @@
    "board": "eggai",
    "company": "Eggai"
   },
+  "ekumenlabs": {
+   "ats": "ashby",
+   "board": "ekumenlabs",
+   "company": "Ekumenlabs"
+  },
   "eleqtrongmbh": {
    "ats": "recruitee",
    "board": "eleqtron",
@@ -477,6 +493,11 @@
    "ats": "ashby",
    "board": "GotPhoto",
    "company": "Gotphoto"
+  },
+  "grubel": {
+   "ats": "ashby",
+   "board": "grubel",
+   "company": "Grubel"
   },
   "gurobioptimization": {
    "ats": "lever",
@@ -818,6 +839,11 @@
    "board": "newrelic",
    "company": "newrelic"
   },
+  "nomos": {
+   "ats": "ashby",
+   "board": "nomos",
+   "company": "Nomos"
+  },
   "nubank": {
    "ats": "ashby",
    "board": "nubank",
@@ -1082,6 +1108,12 @@
    "region": "eu",
    "company": "Siteimprove"
   },
+  "softgames": {
+   "ats": "recruitee",
+   "board": "softgames",
+   "region": "https://jobs.softgames.de",
+   "company": "SOFTGAMES"
+  },
   "sosafe": {
    "ats": "ashby",
    "board": "sosafe",
@@ -1122,6 +1154,11 @@
    "ats": "ashby",
    "board": "swarmaero",
    "company": "Swarmaero"
+  },
+  "tactiliarobotics": {
+   "ats": "ashby",
+   "board": "tactiliarobotics",
+   "company": "Tactiliarobotics"
   },
   "taktile": {
    "ats": "ashby",
@@ -1270,6 +1307,11 @@
    "board": "vivira",
    "company": "Vivira Health Lab"
   },
+  "vogel": {
+   "ats": "ashby",
+   "board": "Vogel",
+   "company": "Vogel"
+  },
   "voize": {
    "ats": "ashby",
    "board": "voize",
@@ -1399,6 +1441,7 @@
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
   "constructorlabs": "2026-11-03",
+  "constructortech": "2026-11-04",
   "contentful": "2026-10-28",
   "conziagmbh": "2026-11-02",
   "coreweaveu": "2026-11-03",
@@ -1485,6 +1528,7 @@
   "mirakl": "2026-10-27",
   "mobileye": "2026-10-27",
   "moniepoint": "2026-10-30",
+  "montuuk": "2026-11-04",
   "moonfare": "2026-10-27",
   "moss": "2026-10-27",
   "motorai": "2026-10-28",
