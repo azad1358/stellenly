@@ -545,7 +545,20 @@
     return out.slice(0, 4).join("");
   }
 
-  function jobHtml(j) {
+  // "23 views · 5 applied" — anonymous all-time counts from record_job_event (no visitor data).
+  // Only shown when sorting by Most popular, so the sort explains itself.
+  function clicksBadge(j) {
+    const views = j.views || 0, applies = j.apply_clicks || 0;
+    if (!views && !applies) return "";
+    const n = (x) => x.toLocaleString("en");
+    const parts = [`${n(views)} view${views === 1 ? "" : "s"}`];
+    if (applies) parts.push(`${n(applies)} applied`);
+    return `<span class="clicks-badge" title="How often people opened this job and clicked Apply on Stellenly">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        ${parts.join(" · ")}</span>`;
+  }
+
+  function jobHtml(j, withClicks = false) {
     const isSaved = !!saved[j.id], isApplied = !!applied[j.id];
     const sal = salaryText(j);
     const skills = skillsOf(j).slice(0, 2).map((s) => `<span class="skill${s.r ? "" : " nice"}">${esc(s.n)}</span>`).join("");
@@ -559,6 +572,7 @@
       </div>
       <div class="job-side">
         ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : ""}
+        ${withClicks ? clicksBadge(j) : ""}
         <div class="job-actions">
           <button type="button" class="btn ghost icon" data-act="save" aria-pressed="${isSaved}" title="Save for later" aria-label="Save for later">${isSaved ? "★" : "☆"}</button>
           <button type="button" class="btn ghost icon" data-act="applied" aria-pressed="${isApplied}" title="Mark as applied" aria-label="Mark as applied">✓</button>
@@ -946,7 +960,7 @@
       current.clear();
       const items = data.items.map(withDevInsights);
       items.forEach((j) => current.set(j.id, j));
-      $("#results").innerHTML = items.length ? items.map(jobHtml).join("")
+      $("#results").innerHTML = items.length ? items.map((j) => jobHtml(j, f.sort === "popular")).join("")
         : `<li class="empty">No jobs match these filters. Try another keyword, or remove a filter or a tag.</li>`;
       const from = total ? offset + 1 : 0, to = Math.min(offset + items.length, total);
       // A keyword matches titles, companies and skill tags; jobs that only mention it in the description
