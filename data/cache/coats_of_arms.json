@@ -23,6 +23,10 @@
   "file": "DEU Bonn COA.svg",
   "img": "img/coa/city-bonn.png"
  },
+ "city:Bremen": {
+  "file": "Bremen Wappen(Mittel).svg",
+  "img": "img/coa/city-bremen.png"
+ },
  "city:Böblingen": {
   "file": "DEU Boeblingen COA.svg",
   "img": "img/coa/city-boeblingen.png"
