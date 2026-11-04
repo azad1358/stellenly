@@ -337,6 +337,11 @@
    "board": "dentons-europe",
    "company": "Dentons Europe"
   },
+  "destinusgroup": {
+   "ats": "workable",
+   "board": "destinusgroup",
+   "company": "Destinusgroup"
+  },
   "differentialbio": {
    "ats": "ashby",
    "board": "differential.bio",
@@ -1509,6 +1514,7 @@
   "kolibrigames": "2026-10-27",
   "konfettigmbh": "2026-10-27",
   "l1vegmbh": "2026-10-30",
+  "lemvosgmbh": "2026-11-04",
   "limatica": "2026-10-29",
   "livestorm": "2026-10-27",
   "lleverage": "2026-10-30",

@@ -5,6 +5,12 @@
 "lon": 2.3252
 },
 "*|addlestone, richmond upon thames, united kingdom": null,
+"*|alkmaar": {
+"cc": "nl",
+"lat": 52.6009,
+"lon": 4.8171,
+"state": "NL-NH"
+},
 "*|allschwil": {
 "cc": "ch",
 "lat": 47.5511,
@@ -206,6 +212,12 @@
 "cc": "nl",
 "lat": 50.9438,
 "lon": 5.9748
+},
+"*|béthune, pas-de-calais": {
+"cc": "fr",
+"lat": 50.5309,
+"lon": 2.6389,
+"state": "FR-HDF"
 },
 "*|cadarache, provence-alpes-côte-d’azur, france": {
 "cc": "fr",
@@ -567,6 +579,12 @@
 "lat": 52.6362,
 "lon": -1.1332
 },
+"*|leiden": {
+"cc": "nl",
+"lat": 52.1595,
+"lon": 4.4909,
+"state": "NL-ZH"
+},
 "*|lille, upline, nord": null,
 "*|lille, upline, nord; paris, paris": null,
 "*|lincoln / lincolnshire": {
@@ -768,6 +786,12 @@
 "cc": "nz",
 "lat": -41.5001,
 "lon": 172.8344
+},
+"*|newport": {
+"cc": "us",
+"lat": 41.49,
+"lon": -71.3138,
+"state": "US-RI"
 },
 "*|nieuw-vennep": {
 "cc": "nl",
