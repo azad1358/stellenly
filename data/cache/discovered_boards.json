@@ -10,6 +10,11 @@
    "board": "1global",
    "company": "1Global"
   },
+  "3ive": {
+   "ats": "ashby",
+   "board": "3ive",
+   "company": "3Ive"
+  },
   "8returnsgmbh": {
    "ats": "ashby",
    "board": "8returns",
@@ -175,6 +180,11 @@
    "ats": "ashby",
    "board": "basecompute",
    "company": "Basecompute"
+  },
+  "belmontlavanltd": {
+   "ats": "workable",
+   "board": "belmont-lavan-ltd",
+   "company": "Belmont Lavan Ltd"
   },
   "bettermile": {
    "ats": "ashby",
@@ -1378,6 +1388,11 @@
    "board": "tytantechnologiesgmbh",
    "company": "TYTAN Technologies GmbH"
   },
+  "unitednationsuniversity": {
+   "ats": "recruitee",
+   "board": "unu",
+   "company": "United Nations University"
+  },
   "up42gmbh": {
    "ats": "recruitee",
    "board": "up42gmbh",
@@ -1551,6 +1566,7 @@
   "btthealthgmbh": "2026-10-27",
   "buildingradargmbh": "2026-10-27",
   "buyaramen": "2026-10-28",
+  "buyinglabs": "2026-11-05",
   "camunda": "2026-10-27",
   "caronsale": "2026-10-27",
   "catapultsports": "2026-11-04",
@@ -1576,6 +1592,7 @@
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
   "databricks": "2026-10-27",
+  "datacept": "2026-11-05",
   "datadog": "2026-11-05",
   "dataiku": "2026-10-30",
   "deephealth": "2026-11-03",
@@ -1594,6 +1611,7 @@
   "ennovationhub": "2026-10-27",
   "enpal": "2026-10-27",
   "eventincgmbh": "2026-10-28",
+  "everwareconsultinggmbh": "2026-11-05",
   "evidenteuropegmbh": "2026-11-05",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
@@ -1619,15 +1637,19 @@
   "glsnxt": "2026-10-27",
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
+  "haste": "2026-11-05",
   "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
+  "holidu": "2026-11-05",
   "hopnug": "2026-10-27",
+  "hornetsecurity": "2026-11-05",
   "hostaway": "2026-10-27",
   "hozah": "2026-11-03",
   "htechsupports": "2026-10-29",
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
   "ilertgmbh": "2026-10-27",
+  "imagostockpeoplegmbh": "2026-11-05",
   "inca": "2026-11-03",
   "indiekidzgmbh": "2026-10-27",
   "instagrid": "2026-10-27",
@@ -1723,6 +1745,7 @@
   "routinelabs": "2026-11-03",
   "rubygmbh": "2026-10-27",
   "samsara": "2026-10-30",
+  "sbrinternationalgmbh": "2026-11-05",
   "scout24": "2026-10-27",
   "seragruppe": "2026-11-04",
   "shopfully": "2026-10-30",
@@ -1774,6 +1797,7 @@
   "vestlane": "2026-11-05",
   "vetaiongmbh": "2026-11-03",
   "vexcashag": "2026-11-04",
+  "viahealthtech": "2026-11-05",
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",

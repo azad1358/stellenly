@@ -334,6 +334,18 @@
 "lat": 52.0749,
 "lon": 4.2697
 },
+"*|dundee": {
+"cc": "gb",
+"lat": 56.4606,
+"lon": -2.9702,
+"state": "GB-SCT"
+},
+"*|east grinstead": {
+"cc": "gb",
+"lat": 51.1286,
+"lon": -0.0143,
+"state": "GB-ENG"
+},
 "*|edinburgh": {
 "cc": "gb",
 "lat": 55.9533,
@@ -373,6 +385,12 @@
 "cc": null,
 "lat": 51.0,
 "lon": 10.0
+},
+"*|falkirk": {
+"cc": "gb",
+"lat": 55.9992,
+"lon": -3.7844,
+"state": "GB-SCT"
 },
 "*|farringdon, greater london, united kingdom": {
 "cc": "gb",
@@ -493,6 +511,12 @@
 "lat": 47.4137,
 "lon": 8.5605
 },
+"*|horneburg": {
+"cc": "de",
+"lat": 53.5088,
+"lon": 9.5772,
+"state": "DE-NI"
+},
 "*|hove office": {
 "cc": "au",
 "lat": -35.0084,
@@ -549,6 +573,12 @@
 "cc": "de",
 "lat": 48.2979,
 "lon": 10.9895
+},
+"*|korntal-münchingen": {
+"cc": "de",
+"lat": 48.8433,
+"lon": 9.1069,
+"state": "DE-BW"
 },
 "*|königs wusterhausen": {
 "cc": "de",
@@ -1277,6 +1307,12 @@
 "lat": 51.2356,
 "lon": 5.7051
 },
+"*|winchester": {
+"cc": "gb",
+"lat": 51.0613,
+"lon": -1.3132,
+"state": "GB-ENG"
+},
 "*|windeck": {
 "cc": "de",
 "lat": 50.7977,
@@ -1855,6 +1891,18 @@
 "lat": 51.8801,
 "lon": 8.9732,
 "state": "DE-NW"
+},
+"de|horneburg": {
+"cc": "de",
+"lat": 53.5088,
+"lon": 9.5772,
+"state": "DE-NI"
+},
+"de|hähnlein": {
+"cc": "de",
+"lat": 49.7369,
+"lon": 8.5713,
+"state": "DE-HE"
 },
 "de|immenhausen": {
 "cc": "de",
