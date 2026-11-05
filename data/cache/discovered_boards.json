@@ -76,6 +76,11 @@
    "board": "amboss",
    "company": "AMBOSS"
   },
+  "amplitude": {
+   "ats": "ashby",
+   "board": "amplitude",
+   "company": "Amplitude"
+  },
   "anandaventuresgmbh": {
    "ats": "recruitee",
    "board": "anandaventuresgmbh",
@@ -479,6 +484,12 @@
    "board": "fender",
    "company": "Fender"
   },
+  "finom": {
+   "ats": "lever",
+   "board": "pnlfin",
+   "region": "eu",
+   "company": "Finom"
+  },
   "fioneer": {
    "ats": "workable",
    "board": "fioneer",
@@ -649,6 +660,11 @@
    "ats": "ashby",
    "board": "jellyfishcareers",
    "company": "Jellyfish"
+  },
+  "jetsupport": {
+   "ats": "lever",
+   "board": "jetsupport",
+   "company": "Jetsupport"
   },
   "jobgether": {
    "ats": "lever",
@@ -874,10 +890,20 @@
    "board": "newrelic",
    "company": "newrelic"
   },
+  "nomagic": {
+   "ats": "lever",
+   "board": "Nomagic",
+   "company": "Nomagic"
+  },
   "nomos": {
    "ats": "ashby",
    "board": "nomos",
    "company": "Nomos"
+  },
+  "nordsecurity": {
+   "ats": "ashby",
+   "board": "nord-security",
+   "company": "Nord Security"
   },
   "nubank": {
    "ats": "ashby",
@@ -1112,6 +1138,11 @@
    "board": "searoutes",
    "company": "Searoutes"
   },
+  "secfix": {
+   "ats": "ashby",
+   "board": "secfix",
+   "company": "Secfix"
+  },
   "seeq": {
    "ats": "workable",
    "board": "seeq",
@@ -1272,6 +1303,11 @@
    "board": "thorit",
    "company": "Thorit"
   },
+  "tillatechnologies": {
+   "ats": "ashby",
+   "board": "tilla",
+   "company": "Tilla Technologies"
+  },
   "tisgmbh": {
    "ats": "recruitee",
    "board": "tisgmbh",
@@ -1281,6 +1317,11 @@
    "ats": "personio",
    "board": "tmh",
    "company": "Tmh"
+  },
+  "trading212": {
+   "ats": "ashby",
+   "board": "trading212",
+   "company": "Trading212"
   },
   "trafineo": {
    "ats": "recruitee",
@@ -1521,6 +1562,7 @@
   "dataiku": "2026-10-30",
   "deephealth": "2026-11-03",
   "dexterhealth": "2026-10-27",
+  "digicert": "2026-11-05",
   "doctolib": "2026-10-27",
   "doopicgmbh": "2026-10-27",
   "dreamlinesgmbh": "2026-10-27",
@@ -1710,6 +1752,7 @@
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
   "verwaltungssprunggmbh": "2026-10-28",
+  "vestlane": "2026-11-05",
   "vetaiongmbh": "2026-11-03",
   "vexcashag": "2026-11-04",
   "vicoland": "2026-10-27",

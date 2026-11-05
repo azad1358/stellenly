@@ -555,6 +555,12 @@
 "lat": 52.2995,
 "lon": 13.6244
 },
+"*|lakeside portsmouth": {
+"cc": "gb",
+"lat": 50.8407,
+"lon": -1.0826,
+"state": "GB-ENG"
+},
 "*|lausanne": {
 "cc": "ch",
 "lat": 46.5218,
@@ -942,6 +948,12 @@
 "cc": "us",
 "lat": 43.0059,
 "lon": -123.8926
+},
+"*|remote (gb)": {
+"cc": "gb",
+"lat": 55.8755,
+"lon": -2.9525,
+"state": "GB-SCT"
 },
 "*|remote (utc-3 to utc+3)": null,
 "*|remote - europe timezone": null,
