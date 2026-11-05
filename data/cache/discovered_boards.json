@@ -342,6 +342,11 @@
    "board": "dataguard",
    "company": "Dataguard"
   },
+  "dataleap": {
+   "ats": "ashby",
+   "board": "Dataleap",
+   "company": "Dataleap"
+  },
   "deepsetai": {
    "ats": "ashby",
    "board": "deepsetai",
@@ -514,6 +519,11 @@
    "ats": "ashby",
    "board": "founders-factory",
    "company": "Founders Factory"
+  },
+  "furo": {
+   "ats": "ashby",
+   "board": "furo",
+   "company": "Furo"
   },
   "geotab": {
    "ats": "greenhouse",
@@ -1016,6 +1026,11 @@
    "board": "purestorage",
    "company": "purestorage"
   },
+  "qorelo": {
+   "ats": "ashby",
+   "board": "qorelo",
+   "company": "Qorelo"
+  },
   "quantilopegmbh": {
    "ats": "personio",
    "board": "quantilope-gmbh",
@@ -1517,6 +1532,7 @@
   "auterion": "2026-10-27",
   "auxiliusai": "2026-10-30",
   "ayunis": "2026-11-04",
+  "b2venturegmbh": "2026-11-05",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
   "beneeringgmbh": "2026-11-03",
@@ -1545,6 +1561,7 @@
   "cision": "2026-11-01",
   "cityscience": "2026-10-27",
   "clarinessgmbh": "2026-10-27",
+  "cocrafterycw24": "2026-11-05",
   "codat": "2026-10-28",
   "cohere": "2026-10-27",
   "commercetools": "2026-10-27",
@@ -1559,6 +1576,7 @@
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
   "databricks": "2026-10-27",
+  "datadog": "2026-11-05",
   "dataiku": "2026-10-30",
   "deephealth": "2026-11-03",
   "dexterhealth": "2026-10-27",
@@ -1576,6 +1594,7 @@
   "ennovationhub": "2026-10-27",
   "enpal": "2026-10-27",
   "eventincgmbh": "2026-10-28",
+  "evidenteuropegmbh": "2026-11-05",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "fertohealthgmbh": "2026-10-27",
