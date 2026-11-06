@@ -25,6 +25,11 @@
    "board": "accelerationpartners",
    "company": "Accelerationpartners"
   },
+  "accessdestinationservices": {
+   "ats": "ashby",
+   "board": "access",
+   "company": "Access Destination Services"
+  },
   "acmaerospace": {
    "ats": "personio",
    "board": "acm-aerospace",
@@ -275,6 +280,11 @@
    "ats": "ashby",
    "board": "cinder",
    "company": "Cinder"
+  },
+  "circuithub": {
+   "ats": "ashby",
+   "board": "circuithub",
+   "company": "Circuithub"
   },
   "clickhouse": {
    "ats": "ashby",
@@ -1035,6 +1045,11 @@
    "board": "pplwise",
    "company": "pplwise"
   },
+  "praxipal": {
+   "ats": "ashby",
+   "board": "praxipal",
+   "company": "praxipal"
+  },
   "primiontechnologygmbh": {
    "ats": "recruitee",
    "board": "primion",
@@ -1552,6 +1567,7 @@
   "acadiajoblistings": "2026-10-31",
   "accuridsgmbh": "2026-10-27",
   "adstrong": "2026-10-27",
+  "agentfgmbh": "2026-11-06",
   "agentixlakegmbh": "2026-10-30",
   "agilerobotsse": "2026-10-27",
   "aikidosecurity": "2026-10-27",
@@ -1566,6 +1582,7 @@
   "anywherenow": "2026-10-27",
   "appen2": "2026-10-31",
   "appinio": "2026-10-27",
+  "arksoftwaregmbh": "2026-11-06",
   "aroundhome": "2026-11-02",
   "atolls": "2026-10-31",
   "augleticsgmbh": "2026-10-30",
@@ -1601,6 +1618,7 @@
   "cherryventures": "2026-10-27",
   "cision": "2026-11-01",
   "cityscience": "2026-10-27",
+  "clariness": "2026-11-06",
   "clarinessgmbh": "2026-10-27",
   "cocrafterycw24": "2026-11-05",
   "codat": "2026-10-28",
@@ -1616,11 +1634,13 @@
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
   "customssupportgroup": "2026-10-27",
+  "darkmatterggmbh": "2026-11-06",
   "databricks": "2026-10-27",
   "datacept": "2026-11-05",
   "datadog": "2026-11-05",
   "dataiku": "2026-10-30",
   "deephealth": "2026-11-03",
+  "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
   "digicert": "2026-11-05",
   "doctolib": "2026-10-27",
@@ -1790,6 +1810,7 @@
   "staffbase": "2026-10-27",
   "startstepsdigitaleducationgmbh": "2026-10-29",
   "statista": "2026-10-27",
+  "stelldirvorgmbh": "2026-11-06",
   "stenongmbh": "2026-10-29",
   "sumup": "2026-10-27",
   "supabase": "2026-11-03",
