@@ -234,6 +234,7 @@
 "lat": 52.1918,
 "lon": 0.138
 },
+"*|cambridge - coldhams rd (editions)": null,
 "*|cambridge, ma": {
 "cc": "us",
 "lat": 42.3656,
@@ -426,6 +427,12 @@
 "lat": 47.2044,
 "lon": 8.7599,
 "state": "CH-SZ"
+},
+"*|gb - dundee": {
+"cc": "gb",
+"lat": 56.4606,
+"lon": -2.9702,
+"state": "GB-SCT"
 },
 "*|gb - london": {
 "cc": "gb",
@@ -1434,6 +1441,12 @@
 "lat": 50.7764,
 "lon": 6.0839,
 "state": "DE-NW"
+},
+"de|aalen": {
+"cc": "de",
+"lat": 48.8376,
+"lon": 10.093,
+"state": "DE-BW"
 },
 "de|abstatt": {
 "cc": "de",

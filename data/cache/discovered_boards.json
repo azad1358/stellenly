@@ -1015,6 +1015,11 @@
    "board": "peec",
    "company": "Peec AI"
   },
+  "pennylanede": {
+   "ats": "ashby",
+   "board": "pennylane-de",
+   "company": "Pennylane De"
+  },
   "pergolux": {
    "ats": "ashby",
    "board": "pergolux",
@@ -1343,6 +1348,11 @@
    "board": "telli",
    "company": "Telli"
   },
+  "telnyx": {
+   "ats": "greenhouse",
+   "board": "telnyx54",
+   "company": "Telnyx"
+  },
   "temporaltechnologies": {
    "ats": "ashby",
    "board": "temporal",
@@ -1652,6 +1662,7 @@
   "elevenlabs": "2026-10-27",
   "emailmarketingagentur": "2026-11-01",
   "emnify": "2026-10-29",
+  "encoordgmbh": "2026-11-06",
   "engcmbluenergyag": "2026-10-27",
   "ennovationhub": "2026-10-27",
   "enpal": "2026-10-27",
@@ -1685,6 +1696,7 @@
   "haste": "2026-11-05",
   "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
+  "hemaelectronicgmbh": "2026-11-06",
   "holidu": "2026-11-05",
   "hopnug": "2026-10-27",
   "hornetsecurity": "2026-11-05",
@@ -1769,6 +1781,7 @@
   "pqshield": "2026-11-03",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
+  "progynyglobal": "2026-11-06",
   "prolific": "2026-10-28",
   "promethionindustries": "2026-10-28",
   "pt1": "2026-10-30",
@@ -1795,6 +1808,7 @@
   "scout24": "2026-10-27",
   "seragruppe": "2026-11-04",
   "shopfully": "2026-10-30",
+  "sidekicknetworkgmbhcokg": "2026-11-06",
   "sidessimplydeliverygmbh": "2026-10-27",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
@@ -1865,6 +1879,7 @@
   "wundermobility": "2026-10-30",
   "xtpgmbh": "2026-10-27",
   "zattoo": "2026-10-27",
-  "zekjugmbh": "2026-10-27"
+  "zekjugmbh": "2026-10-27",
+  "zeotap": "2026-11-06"
  }
 }
