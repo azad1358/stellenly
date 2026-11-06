@@ -123,6 +123,10 @@
   "file": "Wappen Ketzin-Havel.png",
   "img": "img/coa/city-ketzin.png"
  },
+ "city:Korntal-Münchingen": {
+  "file": "DEU Korntal-Münchingen COA.svg",
+  "img": "img/coa/city-korntal-muenchingen.png"
+ },
  "city:Leipzig": {
   "file": "Coat of arms of Leipzig.svg",
   "img": "img/coa/city-leipzig.png"
