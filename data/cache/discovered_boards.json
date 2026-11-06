@@ -686,6 +686,11 @@
    "board": "jetsupport",
    "company": "Jetsupport"
   },
+  "jimdo": {
+   "ats": "ashby",
+   "board": "jimdo.com",
+   "company": "Jimdo"
+  },
   "jobgether": {
    "ats": "lever",
    "board": "jobgether",
@@ -870,6 +875,11 @@
    "board": "mlabs",
    "company": "Mlabs"
   },
+  "moonpay": {
+   "ats": "lever",
+   "board": "moonpay",
+   "company": "Moonpay"
+  },
   "motherduck": {
    "ats": "ashby",
    "board": "MotherDuck",
@@ -949,6 +959,11 @@
    "ats": "recruitee",
    "board": "ontarget",
    "company": "OnTarget Communications"
+  },
+  "openx": {
+   "ats": "lever",
+   "board": "openx",
+   "company": "Openx"
   },
   "orbem": {
    "ats": "ashby",
@@ -1260,6 +1275,11 @@
    "ats": "ashby",
    "board": "swarmaero",
    "company": "Swarmaero"
+  },
+  "sysdig": {
+   "ats": "lever",
+   "board": "sysdig",
+   "company": "Sysdig"
   },
   "tactiliarobotics": {
    "ats": "ashby",
@@ -1662,6 +1682,7 @@
   "kolibrigames": "2026-10-27",
   "konfettigmbh": "2026-10-27",
   "l1vegmbh": "2026-10-30",
+  "langdock": "2026-11-06",
   "lemvosgmbh": "2026-11-04",
   "limatica": "2026-10-29",
   "livestorm": "2026-10-27",

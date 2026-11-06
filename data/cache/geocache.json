@@ -381,6 +381,12 @@
 "lat": 52.221,
 "lon": 6.8941
 },
+"*|essex - hybrid": {
+"cc": "us",
+"lat": 40.8393,
+"lon": -74.3113,
+"state": "US-NJ"
+},
 "*|europe": {
 "cc": null,
 "lat": 51.0,
@@ -1307,6 +1313,7 @@
 "lat": 51.2356,
 "lon": 5.7051
 },
+"*|willows factory, bridgwater": null,
 "*|winchester": {
 "cc": "gb",
 "lat": 51.0613,
@@ -1722,6 +1729,12 @@
 "lat": 51.6315,
 "lon": 13.7074,
 "state": "DE-BB"
+},
+"de|flexible": {
+"cc": "de",
+"lat": 51.6517,
+"lon": 7.7705,
+"state": "DE-NW"
 },
 "de|frankenthal": {
 "cc": "de",
@@ -2210,6 +2223,12 @@
 "lon": 11.3526,
 "state": "DE-BY"
 },
+"de|rain": {
+"cc": "de",
+"lat": 48.6961,
+"lon": 10.928,
+"state": "DE-BY"
+},
 "de|ramstein-miesenbach": {
 "cc": "de",
 "lat": 49.4519,
@@ -2323,6 +2342,12 @@
 "lat": 52.0154,
 "lon": 11.5433,
 "state": "DE-ST"
+},
+"de|trierweiler": {
+"cc": "de",
+"lat": 49.761,
+"lon": 6.5545,
+"state": "DE-RP"
 },
 "de|u.s.a": {
 "cc": "de",
