@@ -548,6 +548,12 @@
 "lat": -35.0084,
 "lon": 138.5219
 },
+"*|huntingdon": {
+"cc": "us",
+"lat": 40.3446,
+"lon": -78.0281,
+"state": "US-PA"
+},
 "*|hybrid": {
 "cc": "fr",
 "lat": 47.1188,
@@ -1143,6 +1149,12 @@
 "lon": 5.291
 },
 "*|soho farmhouse - chipping norton": null,
+"*|south east hampshire": {
+"cc": "au",
+"lat": -34.7741,
+"lon": 138.6769,
+"state": "AU-SA"
+},
 "*|spiez": {
 "cc": "ch",
 "lat": 46.6919,
