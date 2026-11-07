@@ -141,6 +141,11 @@
    "board": "artefactlinkedin",
    "company": "Artefactlinkedin"
   },
+  "ashby": {
+   "ats": "ashby",
+   "board": "Ashby",
+   "company": "Ashby"
+  },
   "asteralabs": {
    "ats": "greenhouse",
    "board": "asteralabs",
@@ -372,6 +377,11 @@
    "board": "Dataleap",
    "company": "Dataleap"
   },
+  "decentralizedmasters": {
+   "ats": "workable",
+   "board": "decentralized-masters",
+   "company": "Decentralized Masters"
+  },
   "deepsetai": {
    "ats": "ashby",
    "board": "deepsetai",
@@ -509,6 +519,11 @@
    "board": "everdrop",
    "company": "everdrop GmbH"
   },
+  "exa": {
+   "ats": "ashby",
+   "board": "exa",
+   "company": "Exa"
+  },
   "eyesecurity": {
    "ats": "ashby",
    "board": "eye-security",
@@ -559,6 +574,11 @@
    "ats": "ashby",
    "board": "furo",
    "company": "Furo"
+  },
+  "fyxer": {
+   "ats": "ashby",
+   "board": "fyxer",
+   "company": "Fyxer"
   },
   "geotab": {
    "ats": "greenhouse",
@@ -776,6 +796,11 @@
    "board": "kong",
    "company": "Kong"
   },
+  "kpler": {
+   "ats": "lever",
+   "board": "kpler",
+   "company": "Kpler"
+  },
   "kraken": {
    "ats": "ashby",
    "board": "krakentech",
@@ -795,6 +820,11 @@
    "ats": "ashby",
    "board": "lemon-markets",
    "company": "Lemon Markets"
+  },
+  "leverimplementationtrainingenvironment": {
+   "ats": "lever",
+   "board": "leverdemo-8",
+   "company": "Lever Implementation Training Environment"
   },
   "lightspeedhq": {
    "ats": "ashby",
@@ -1848,6 +1878,7 @@
   "shopfully": "2026-10-30",
   "sidekicknetworkgmbhcokg": "2026-11-06",
   "sidessimplydeliverygmbh": "2026-10-27",
+  "siena": "2026-11-07",
   "sineengineering": "2026-11-07",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
@@ -1856,6 +1887,7 @@
   "sous": "2026-10-27",
   "southwestx": "2026-10-27",
   "sphere": "2026-10-28",
+  "spotify": "2026-11-07",
   "spotmyenergygmbh": "2026-10-27",
   "spreadgmbh": "2026-10-27",
   "stablenergy": "2026-10-27",

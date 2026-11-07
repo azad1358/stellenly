@@ -242,6 +242,7 @@
 "lon": 0.138
 },
 "*|cambridge - coldhams rd (editions)": null,
+"*|cambridge / hybrid": null,
 "*|cambridge, ma": {
 "cc": "us",
 "lat": 42.3656,
@@ -771,6 +772,12 @@
 "cc": "gb",
 "lat": 51.5338,
 "lon": -0.2261
+},
+"*|londres, department store": {
+"cc": "gb",
+"lat": 51.5689,
+"lon": 0.0113,
+"state": "GB-ENG"
 },
 "*|longcross": {
 "cc": "gb",
