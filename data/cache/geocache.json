@@ -1714,6 +1714,12 @@
 "lon": 10.1145,
 "state": "DE-HH"
 },
+"de|erding": {
+"cc": "de",
+"lat": 48.3064,
+"lon": 11.9077,
+"state": "DE-BY"
+},
 "de|erfurt": {
 "cc": "de",
 "lat": 50.9778,
