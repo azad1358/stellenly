@@ -1,4 +1,5 @@
 {
+"*|+/-1 central european time/remote": null,
 "*|9th arrondissement of paris, 75009, paris": {
 "cc": "fr",
 "lat": 48.8765,
@@ -171,6 +172,12 @@
 "cc": "fr",
 "lat": 48.8357,
 "lon": 2.2402
+},
+"*|boulogne-billancourt, hauts-de-seine": {
+"cc": "fr",
+"lat": 48.8357,
+"lon": 2.2402,
+"state": "FR-IDF"
 },
 "*|breda": {
 "cc": "nl",
@@ -652,6 +659,7 @@
 "lon": 4.4909,
 "state": "NL-ZH"
 },
+"*|liederbach office": null,
 "*|lille, upline, nord": null,
 "*|lille, upline, nord; paris, paris": null,
 "*|lincoln / lincolnshire": {
@@ -859,6 +867,12 @@
 "cc": "nz",
 "lat": -41.5001,
 "lon": 172.8344
+},
+"*|newcastle upon tyne": {
+"cc": "gb",
+"lat": 54.9738,
+"lon": -1.6132,
+"state": "GB-ENG"
 },
 "*|newport": {
 "cc": "us",

@@ -346,6 +346,11 @@
    "board": "crytek",
    "company": "Crytek"
   },
+  "cuspai": {
+   "ats": "ashby",
+   "board": "cuspai",
+   "company": "Cuspai"
+  },
   "cyclomediatechnology": {
    "ats": "recruitee",
    "board": "cyclomediatechnology",
@@ -860,6 +865,12 @@
    "board": "mapbox",
    "company": "Mapbox"
   },
+  "marktpilot": {
+   "ats": "lever",
+   "board": "markt-pilot",
+   "region": "eu",
+   "company": "Markt Pilot"
+  },
   "matchmatch": {
    "ats": "ashby",
    "board": "matchmatch",
@@ -949,6 +960,11 @@
    "ats": "ashby",
    "board": "nord-security",
    "company": "Nord Security"
+  },
+  "npv": {
+   "ats": "ashby",
+   "board": "npv",
+   "company": "Npv"
   },
   "nubank": {
    "ats": "ashby",
@@ -1192,6 +1208,11 @@
    "ats": "ashby",
    "board": "Sardine",
    "company": "Sardine"
+  },
+  "saviynt": {
+   "ats": "lever",
+   "board": "saviynt",
+   "company": "Saviynt"
   },
   "se3": {
    "ats": "ashby",
@@ -1852,6 +1873,7 @@
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
   "upvest": "2026-10-28",
+  "valiantys": "2026-11-07",
   "vanillasteel": "2026-10-27",
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
