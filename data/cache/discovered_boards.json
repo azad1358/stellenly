@@ -565,6 +565,11 @@
    "board": "flip",
    "company": "Flip GmbH"
   },
+  "fnatic": {
+   "ats": "ashby",
+   "board": "fnatic",
+   "company": "Fnatic"
+  },
   "focused": {
    "ats": "ashby",
    "board": "focused",
@@ -825,6 +830,11 @@
    "ats": "ashby",
    "board": "kyra",
    "company": "Kyra"
+  },
+  "legora": {
+   "ats": "ashby",
+   "board": "legora",
+   "company": "Legora"
   },
   "lemonmarkets": {
    "ats": "ashby",
@@ -1903,6 +1913,7 @@
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
   "roboservicegmbh": "2026-10-27",
+  "roboyo": "2026-11-08",
   "roger": "2026-10-28",
   "routinelabs": "2026-11-03",
   "rubygmbh": "2026-10-27",
@@ -1918,6 +1929,7 @@
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
   "smartmicro": "2026-10-27",
+  "soficonv": "2026-11-08",
   "solactiveag": "2026-10-27",
   "sous": "2026-10-27",
   "southwestx": "2026-10-27",
