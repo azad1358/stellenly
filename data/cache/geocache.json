@@ -79,6 +79,7 @@
 "lat": 52.3731,
 "lon": 4.8925
 },
+"*|any location": null,
 "*|anywhere in france": null,
 "*|apeldoorn": {
 "cc": "nl",
@@ -406,6 +407,12 @@
 "cc": null,
 "lat": 51.0,
 "lon": 10.0
+},
+"*|evreux": {
+"cc": "fr",
+"lat": 49.0269,
+"lon": 1.151,
+"state": "FR-NOR"
 },
 "*|falkirk": {
 "cc": "gb",

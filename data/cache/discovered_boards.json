@@ -351,6 +351,11 @@
    "board": "coupa",
    "company": "Coupa"
   },
+  "cresta": {
+   "ats": "greenhouse",
+   "board": "cresta",
+   "company": "cresta"
+  },
   "crytek": {
    "ats": "lever",
    "board": "crytek",
@@ -1224,6 +1229,11 @@
    "board": "Resonance",
    "company": "Resonance"
   },
+  "rewire": {
+   "ats": "recruitee",
+   "board": "rewire",
+   "company": "Rewire"
+  },
   "rillet": {
    "ats": "ashby",
    "board": "rillet",
@@ -1686,6 +1696,7 @@
   "adstrong": "2026-10-27",
   "agentfgmbh": "2026-11-06",
   "agentixlakegmbh": "2026-10-30",
+  "agicap": "2026-11-08",
   "agilerobotsse": "2026-10-27",
   "aikidosecurity": "2026-10-27",
   "airwallex": "2026-10-29",
@@ -1787,6 +1798,7 @@
   "firesprite": "2026-10-28",
   "firstmomentumventures": "2026-11-04",
   "fivetran": "2026-10-27",
+  "flaconi": "2026-11-08",
   "flipper": "2026-11-03",
   "flix": "2026-10-27",
   "florafoodgroup": "2026-10-27",
@@ -1982,6 +1994,7 @@
   "vicoland": "2026-10-27",
   "vinteden": "2026-10-27",
   "vio": "2026-10-27",
+  "viralapp": "2026-11-08",
   "visionspacegroup": "2026-11-04",
   "vivalyxgmbh": "2026-10-27",
   "wavestonegermanyag": "2026-10-27",
