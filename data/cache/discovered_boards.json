@@ -35,6 +35,11 @@
    "board": "acm-aerospace",
    "company": "Acm Aerospace"
   },
+  "adaptyio": {
+   "ats": "ashby",
+   "board": "adapty-io",
+   "company": "Adapty.io"
+  },
   "adjoe": {
    "ats": "ashby",
    "board": "adjoe",
@@ -625,6 +630,11 @@
    "board": "hawk",
    "company": "Hawk"
   },
+  "heidi": {
+   "ats": "ashby",
+   "board": "heidihealth.com.au",
+   "company": "Heidi"
+  },
   "higgsfield": {
    "ats": "ashby",
    "board": "higgsfieldai",
@@ -1026,6 +1036,11 @@
    "board": "omegga",
    "company": "Omegga"
   },
+  "omnea": {
+   "ats": "ashby",
+   "board": "Omnea",
+   "company": "Omnea"
+  },
   "onapsis": {
    "ats": "greenhouse",
    "board": "onapsis",
@@ -1136,6 +1151,11 @@
    "ats": "greenhouse",
    "board": "purestorage",
    "company": "purestorage"
+  },
+  "qenergy": {
+   "ats": "workable",
+   "board": "q-energy",
+   "company": "Q Energy"
   },
   "qorelo": {
    "ats": "ashby",
@@ -1444,6 +1464,11 @@
    "board": "thorit",
    "company": "Thorit"
   },
+  "tide": {
+   "ats": "greenhouse",
+   "board": "tide",
+   "company": "tide"
+  },
   "tillatechnologies": {
    "ats": "ashby",
    "board": "tilla",
@@ -1635,6 +1660,12 @@
    "ats": "ashby",
    "board": "zip",
    "company": "Zip"
+  },
+  "zoi": {
+   "ats": "recruitee",
+   "board": "zoi",
+   "region": "https://meet.zoi.tech",
+   "company": "Zoi"
   }
  },
  "none": {
@@ -1702,6 +1733,7 @@
   "commercetools": "2026-10-27",
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
+  "constructorknowledg": "2026-11-08",
   "constructorlabs": "2026-11-03",
   "constructortech": "2026-11-04",
   "contentful": "2026-10-28",
@@ -1737,6 +1769,7 @@
   "evidenteuropegmbh": "2026-11-05",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
+  "fastleappartners": "2026-11-08",
   "fertohealthgmbh": "2026-10-27",
   "figma": "2026-10-29",
   "finn": "2026-10-28",
@@ -1798,6 +1831,7 @@
   "maia": "2026-11-01",
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
+  "malt": "2026-11-08",
   "maomaotechnologies": "2026-10-28",
   "mapleaviation": "2026-11-03",
   "marketcloud": "2026-10-27",
@@ -1822,6 +1856,7 @@
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
   "nomios": "2026-10-27",
+  "notion": "2026-11-08",
   "nscglobal": "2026-10-30",
   "nviso": "2026-10-27",
   "okta": "2026-10-28",
@@ -1903,6 +1938,7 @@
   "superhuman": "2026-10-27",
   "surgeaerogmbh": "2026-11-03",
   "swisspeakpartnersgmbh": "2026-10-27",
+  "synthesia": "2026-11-08",
   "talk360": "2026-10-27",
   "tanganygmbh": "2026-10-27",
   "tanium": "2026-10-30",

@@ -5,6 +5,12 @@
 "lat": 48.8765,
 "lon": 2.3252
 },
+"*|abingdon": {
+"cc": "gb",
+"lat": 51.6715,
+"lon": -1.278,
+"state": "GB-ENG"
+},
 "*|addlestone, richmond upon thames, united kingdom": null,
 "*|alkmaar": {
 "cc": "nl",
