@@ -314,6 +314,12 @@
 "lat": 38.1689,
 "lon": -86.99
 },
+"*|damascus": {
+"cc": "sy",
+"lat": 33.5131,
+"lon": 36.3096,
+"state": "SY-DI"
+},
 "*|danehill": {
 "cc": "gb",
 "lat": 51.0382,
@@ -1096,6 +1102,12 @@
 "cc": "nl",
 "lat": 52.0374,
 "lon": 4.3225
+},
+"*|rijswijk office": {
+"cc": "nl",
+"lat": 52.0398,
+"lon": 4.3386,
+"state": "NL-ZH"
 },
 "*|rijswijk, zuid-holland, netherlands": {
 "cc": "nl",

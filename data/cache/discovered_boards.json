@@ -291,6 +291,12 @@
    "board": "change",
    "company": "Change.org"
   },
+  "chaos": {
+   "ats": "recruitee",
+   "board": "chaos",
+   "region": "https://careers.chaos.com",
+   "company": "Chaos"
+  },
   "charlesriverassociates": {
    "ats": "greenhouse",
    "board": "charlesriverassociates",
@@ -407,10 +413,20 @@
    "board": "deepsetai",
    "company": "Deepsetai"
   },
+  "deepslate": {
+   "ats": "ashby",
+   "board": "deepslate",
+   "company": "Deepslate"
+  },
   "deltavision": {
    "ats": "personio",
    "board": "deltavision",
    "company": "Deltavision"
+  },
+  "demoupcliplister": {
+   "ats": "recruitee",
+   "board": "demoupcliplister",
+   "company": "DemoUp Cliplister"
   },
   "dentonseurope": {
    "ats": "workable",
@@ -1742,6 +1758,7 @@
   "auterion": "2026-10-27",
   "autogyrogmbh": "2026-11-09",
   "auxiliusai": "2026-10-30",
+  "awtomated": "2026-11-09",
   "ayunis": "2026-11-04",
   "b2venturegmbh": "2026-11-05",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
@@ -1892,6 +1909,7 @@
   "milesmobility": "2026-10-27",
   "mirakl": "2026-10-27",
   "mobileye": "2026-10-27",
+  "momox": "2026-11-09",
   "moniepoint": "2026-10-30",
   "montuuk": "2026-11-04",
   "moonfare": "2026-10-27",
@@ -1931,6 +1949,7 @@
   "pkconsult": "2026-11-07",
   "planeta": "2026-10-27",
   "planetlabs": "2026-10-27",
+  "planqorai": "2026-11-09",
   "plantacorpgmbh": "2026-10-27",
   "polara": "2026-10-29",
   "pqshield": "2026-11-03",
@@ -2013,12 +2032,14 @@
   "unzer": "2026-10-27",
   "upvest": "2026-10-28",
   "valiantys": "2026-11-07",
+  "valova": "2026-11-09",
   "vanillasteel": "2026-10-27",
   "veeamsoftware": "2026-10-28",
   "verticalcompute": "2026-10-27",
   "verwaltungssprunggmbh": "2026-10-28",
   "vestlane": "2026-11-05",
   "vetaiongmbh": "2026-11-03",
+  "vetpalgmbh": "2026-11-09",
   "vexcashag": "2026-11-04",
   "viahealthtech": "2026-11-05",
   "vicoland": "2026-10-27",
