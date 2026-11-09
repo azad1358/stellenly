@@ -139,6 +139,12 @@
 "lat": 46.9485,
 "lon": 7.4522
 },
+"*|besigheim": {
+"cc": "de",
+"lat": 48.9996,
+"lon": 9.1418,
+"state": "DE-BW"
+},
 "*|bessé-sur-braye, pays de la loire": {
 "cc": "fr",
 "lat": 47.8347,
@@ -1594,6 +1600,12 @@
 "lon": 13.3951,
 "state": "DE-BE"
 },
+"de|besigheim": {
+"cc": "de",
+"lat": 48.9996,
+"lon": 9.1418,
+"state": "DE-BW"
+},
 "de|biblis": {
 "cc": "de",
 "lat": 49.6927,
@@ -1842,6 +1854,12 @@
 "lat": 50.5515,
 "lon": 9.6762,
 "state": "DE-HE"
+},
+"de|fürth": {
+"cc": "de",
+"lat": 49.4886,
+"lon": 10.9587,
+"state": "DE-BY"
 },
 "de|garching": {
 "cc": "de",
