@@ -10,6 +10,11 @@
    "board": "1global",
    "company": "1Global"
   },
+  "360learning": {
+   "ats": "lever",
+   "board": "360learning",
+   "company": "360Learning"
+  },
   "3ive": {
    "ats": "ashby",
    "board": "3ive",
@@ -261,6 +266,11 @@
    "board": "cagents",
    "company": "Cagents"
   },
+  "canarytechnologies": {
+   "ats": "lever",
+   "board": "canarytechnologies",
+   "company": "Canarytechnologies"
+  },
   "caracare": {
    "ats": "workable",
    "board": "cara-care",
@@ -464,6 +474,11 @@
    "board": "eggai",
    "company": "Eggai"
   },
+  "eightadvisorysas": {
+   "ats": "recruitee",
+   "board": "8advisory",
+   "company": "EIGHT ADVISORY SAS"
+  },
   "ekumenlabs": {
    "ats": "ashby",
    "board": "ekumenlabs",
@@ -523,6 +538,11 @@
    "ats": "ashby",
    "board": "everai",
    "company": "EverAI"
+  },
+  "everbridge": {
+   "ats": "lever",
+   "board": "everbridge",
+   "company": "Everbridge"
   },
   "everdropgmbh": {
    "ats": "recruitee",
@@ -1618,6 +1638,11 @@
    "ats": "lever",
    "board": "walkme",
    "company": "Walkme"
+  },
+  "watchguard": {
+   "ats": "lever",
+   "board": "watchguard",
+   "company": "Watchguard"
   },
   "watershed": {
    "ats": "ashby",

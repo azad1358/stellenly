@@ -906,6 +906,12 @@
 "lon": -71.3138,
 "state": "US-RI"
 },
+"*|nice": {
+"cc": "fr",
+"lat": 43.7009,
+"lon": 7.2684,
+"state": "FR-PAC"
+},
 "*|nieuw-vennep": {
 "cc": "nl",
 "lat": 52.2646,
