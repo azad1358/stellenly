@@ -967,6 +967,11 @@
    "board": "machinelearningreply",
    "company": "Machine Learning Reply"
   },
+  "manexaigmbh": {
+   "ats": "ashby",
+   "board": "manex",
+   "company": "Manex AI GmbH"
+  },
   "mapbox": {
    "ats": "ashby",
    "board": "mapbox",
@@ -987,6 +992,11 @@
    "ats": "ashby",
    "board": "melotech",
    "company": "Melotech"
+  },
+  "merge": {
+   "ats": "ashby",
+   "board": "merge",
+   "company": "Merge"
   },
   "miaplaza": {
    "ats": "recruitee",
@@ -1052,6 +1062,11 @@
    "ats": "ashby",
    "board": "neuphonic",
    "company": "Neuphonic"
+  },
+  "neuralframesgmbh": {
+   "ats": "ashby",
+   "board": "neuralframes",
+   "company": "Neural Frames GmbH"
   },
   "neuvergetron": {
    "ats": "ashby",
@@ -1423,6 +1438,11 @@
    "region": "https://jobs.softgames.de",
    "company": "SOFTGAMES"
   },
+  "sophos": {
+   "ats": "ashby",
+   "board": "sophos",
+   "company": "Sophos"
+  },
   "sosafe": {
    "ats": "ashby",
    "board": "sosafe",
@@ -1561,6 +1581,11 @@
    "board": "tmh",
    "company": "Tmh"
   },
+  "tonies": {
+   "ats": "ashby",
+   "board": "tonies",
+   "company": "Tonies"
+  },
   "trading212": {
    "ats": "ashby",
    "board": "trading212",
@@ -1666,6 +1691,11 @@
    "board": "voize",
    "company": "Voize"
   },
+  "voyfai": {
+   "ats": "ashby",
+   "board": "voyfai",
+   "company": "Voyfai"
+  },
   "vridion": {
    "ats": "ashby",
    "board": "vaeridion",
@@ -1723,6 +1753,11 @@
    "board": "yepoda",
    "company": "Yepoda"
   },
+  "yoummday": {
+   "ats": "ashby",
+   "board": "yoummday",
+   "company": "Yoummday"
+  },
   "zealnetwork": {
    "ats": "ashby",
    "board": "zeal-network",
@@ -1752,6 +1787,7 @@
  },
  "none": {
   "1komma5": "2026-10-27",
+  "6pmgmbh": "2026-11-10",
   "7nxtgmbh": "2026-10-27",
   "acadiajoblistings": "2026-10-31",
   "accuridsgmbh": "2026-10-27",
@@ -1792,6 +1828,7 @@
   "bifrostdefence": "2026-10-27",
   "bitpanda": "2026-11-03",
   "bitwarden": "2026-10-28",
+  "bmzbatterysolutionsgmbh": "2026-11-10",
   "boardwisegmbh": "2026-10-29",
   "boominggames": "2026-10-29",
   "botsandpeopleproductgmbh": "2026-11-04",
@@ -1810,6 +1847,7 @@
   "cepastudyabroadterraeducationeuropegmbh": "2026-11-09",
   "cesiumastro": "2026-10-27",
   "cherryventures": "2026-10-27",
+  "choco": "2026-11-10",
   "cision": "2026-11-01",
   "cityscience": "2026-10-27",
   "clariness": "2026-11-06",
@@ -1838,6 +1876,7 @@
   "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
   "digicert": "2026-11-05",
+  "dnl": "2026-11-10",
   "doctolib": "2026-10-27",
   "doopicgmbh": "2026-10-27",
   "dreamlinesgmbh": "2026-10-27",
@@ -1847,6 +1886,7 @@
   "elevenlabs": "2026-10-27",
   "emailmarketingagentur": "2026-11-01",
   "emnify": "2026-10-29",
+  "emplyfy": "2026-11-10",
   "encoordgmbh": "2026-11-06",
   "engcmbluenergyag": "2026-10-27",
   "ennovationhub": "2026-10-27",
@@ -1940,6 +1980,7 @@
   "muchgmbh": "2026-10-27",
   "myprojectbox": "2026-10-27",
   "n8n": "2026-10-27",
+  "ndineuedeutscheinfrastrukturgmbh": "2026-11-10",
   "nebius": "2026-10-27",
   "nejo": "2026-10-27",
   "nellysolutions": "2026-10-27",
@@ -1964,6 +2005,7 @@
   "pajughaftungsbeschrnkt": "2026-10-27",
   "palantir": "2026-10-28",
   "pamonogmbh": "2026-11-03",
+  "parloa": "2026-11-10",
   "particula": "2026-11-04",
   "payflows": "2026-10-27",
   "pennylanesas": "2026-11-03",
@@ -1986,6 +2028,7 @@
   "pultgmbh": "2026-10-27",
   "pvcase": "2026-10-29",
   "qadogmbh": "2026-10-27",
+  "qonto": "2026-11-10",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
   "relex": "2026-10-30",
@@ -2051,6 +2094,7 @@
   "tiens": "2026-10-30",
   "traciumgmbh": "2026-10-27",
   "trustedhousesitterscom": "2026-11-01",
+  "tulip": "2026-11-10",
   "tulipinterfaces": "2026-10-30",
   "ubitiumgmbh": "2026-11-04",
   "unframe": "2026-10-27",

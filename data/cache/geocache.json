@@ -192,6 +192,12 @@
 "lon": 2.2402,
 "state": "FR-IDF"
 },
+"*|bournemouth": {
+"cc": "gb",
+"lat": 50.7447,
+"lon": -1.858,
+"state": "GB-ENG"
+},
 "*|breda": {
 "cc": "nl",
 "lat": 51.5888,
@@ -232,6 +238,12 @@
 "cc": "nl",
 "lat": 50.9438,
 "lon": 5.9748
+},
+"*|burnham": {
+"cc": "us",
+"lat": 41.6389,
+"lon": -87.5567,
+"state": "US-IL"
 },
 "*|béthune, pas-de-calais": {
 "cc": "fr",
@@ -559,6 +571,12 @@
 "lat": 51.7352,
 "lon": 5.5266
 },
+"*|hem": {
+"cc": "fr",
+"lat": 50.6541,
+"lon": 3.1839,
+"state": "FR-HDF"
+},
 "*|home office (united kingdom)": {
 "cc": "gb",
 "lat": 51.496,
@@ -628,6 +646,12 @@
 "lat": 47.54,
 "lon": 7.723
 },
+"*|karlstein am main": {
+"cc": "de",
+"lat": 50.0443,
+"lon": 9.0338,
+"state": "DE-BY"
+},
 "*|keynsham, bristol, england": {
 "cc": "gb",
 "lat": 51.4138,
@@ -685,6 +709,12 @@
 "cc": "gb",
 "lat": 53.7974,
 "lon": -1.5438
+},
+"*|leerdam, nl": {
+"cc": "nl",
+"lat": 51.8937,
+"lon": 5.0924,
+"state": "NL-UT"
 },
 "*|leicester": {
 "cc": "gb",
@@ -831,6 +861,12 @@
 "lat": 45.7578,
 "lon": 4.832
 },
+"*|maidenhead": {
+"cc": "gb",
+"lat": 51.5227,
+"lon": -0.7197,
+"state": "GB-ENG"
+},
 "*|maidstone": {
 "cc": "gb",
 "lat": 51.2748,
@@ -934,6 +970,12 @@
 "cc": "nl",
 "lat": 52.2646,
 "lon": 4.634
+},
+"*|niort": {
+"cc": "fr",
+"lat": 46.3239,
+"lon": -0.4646,
+"state": "FR-NAQ"
 },
 "*|nl - amsterdam": {
 "cc": "nl",
@@ -1046,12 +1088,19 @@
 "lat": 48.1705,
 "lon": 11.3526
 },
+"*|rainham depot": {
+"cc": "gb",
+"lat": 51.3856,
+"lon": 0.5633,
+"state": "GB-ENG"
+},
 "*|reading": {
 "cc": "gb",
 "lat": 51.4564,
 "lon": -0.9701,
 "state": "GB-ENG"
 },
+"*|redditch transportation hub": null,
 "*|regensdorf": {
 "cc": "ch",
 "lat": 47.4318,
@@ -1142,6 +1191,12 @@
 "lon": 4.4778
 },
 "*|runa london": null,
+"*|rümlang": {
+"cc": "ch",
+"lat": 47.4507,
+"lon": 8.5299,
+"state": "CH-ZH"
+},
 "*|saclay, france": {
 "cc": "fr",
 "lat": 48.7305,
@@ -1204,6 +1259,12 @@
 "lat": -34.7741,
 "lon": 138.6769,
 "state": "AU-SA"
+},
+"*|southampton depot": {
+"cc": "gb",
+"lat": 50.9149,
+"lon": -1.4607,
+"state": "GB-ENG"
 },
 "*|spiez": {
 "cc": "ch",
@@ -2071,6 +2132,12 @@
 "lat": 49.0069,
 "lon": 8.4034,
 "state": "DE-BW"
+},
+"de|karlstein am main": {
+"cc": "de",
+"lat": 50.0443,
+"lon": 9.0338,
+"state": "DE-BY"
 },
 "de|kassel": {
 "cc": "de",
