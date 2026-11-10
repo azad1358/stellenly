@@ -767,6 +767,12 @@
    "board": "intersnackgroupgmbhcokg",
    "company": "Intersnack Group GmbH & Co. KG"
   },
+  "intersnackitkg": {
+   "ats": "recruitee",
+   "board": "intersnack-it",
+   "region": "https://joinus.intersnack-it.com",
+   "company": "Intersnack IT KG"
+  },
   "ircagroup": {
    "ats": "lever",
    "board": "ircagroup",
@@ -1107,6 +1113,11 @@
    "board": "ontarget",
    "company": "OnTarget Communications"
   },
+  "opentable": {
+   "ats": "greenhouse",
+   "board": "opentable",
+   "company": "opentable"
+  },
   "openx": {
    "ats": "lever",
    "board": "openx",
@@ -1207,6 +1218,11 @@
    "ats": "greenhouse",
    "board": "purestorage",
    "company": "purestorage"
+  },
+  "pvminc": {
+   "ats": "greenhouse",
+   "board": "pvminc",
+   "company": "Pvminc"
   },
   "qenergy": {
    "ats": "workable",
@@ -1750,6 +1766,7 @@
   "alephalpha": "2026-10-27",
   "allyourbi": "2026-10-27",
   "alpineeagle": "2026-10-27",
+  "ambio": "2026-11-10",
   "amperecloudgmbh": "2026-10-27",
   "anoritech": "2026-10-27",
   "anthropic": "2026-11-04",
@@ -1935,6 +1952,7 @@
   "nscglobal": "2026-10-30",
   "nviso": "2026-10-27",
   "okta": "2026-10-28",
+  "oktagonmma": "2026-11-10",
   "omicsempowergmbh": "2026-10-27",
   "openai": "2026-10-27",
   "ordiogmbh": "2026-10-27",
@@ -1986,6 +2004,7 @@
   "samsara": "2026-10-30",
   "sbrinternationalgmbh": "2026-11-05",
   "scout24": "2026-10-27",
+  "secondfoundation": "2026-11-10",
   "seragruppe": "2026-11-04",
   "shopfully": "2026-10-30",
   "sidekicknetworkgmbhcokg": "2026-11-06",
@@ -1994,6 +2013,7 @@
   "sineengineering": "2026-11-07",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",
+  "smartlyio": "2026-11-10",
   "smartmicro": "2026-10-27",
   "soficonv": "2026-11-08",
   "solactiveag": "2026-10-27",

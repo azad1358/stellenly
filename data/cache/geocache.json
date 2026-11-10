@@ -497,6 +497,12 @@
 "lat": 55.8612,
 "lon": -4.2502
 },
+"*|grafenwohr": {
+"cc": "de",
+"lat": 49.6865,
+"lon": 11.8163,
+"state": "DE-BY"
+},
 "*|grenoble, auvergne-rhône-alpes, france": {
 "cc": "fr",
 "lat": 45.1876,
@@ -1925,6 +1931,12 @@
 "cc": "de",
 "lat": 48.1891,
 "lon": 10.822,
+"state": "DE-BY"
+},
+"de|grafenwohr": {
+"cc": "de",
+"lat": 49.6865,
+"lon": 11.8163,
 "state": "DE-BY"
 },
 "de|großenkneten": {
