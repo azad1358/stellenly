@@ -132,6 +132,7 @@ TG_FLOAT = """<details class="fab">
         <rect x="22" y="52" width="20" height="6" rx="3" fill="url(#stelli-g)" opacity=".7"/></svg></span></summary>
   <div class="fab-panel"><div class="fab-head"><b>Stelli</b><small>Stellenly's AI assistant</small></div><p class="fab-label">Get new jobs</p><a class="fab-link" href="{tg}" target="_blank" rel="noopener" data-goatcounter-click="telegram-fab"><svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M5.4 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1.1.5l-3-2.2-1.4 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1l-6.9 4.4-3-.9c-.6-.2-.6-.6.2-.9z"/></svg><span><b>Telegram</b><small>New English-speaking jobs every day</small></span></a><a class="fab-link" href="{dc}" target="_blank" rel="noopener" data-goatcounter-click="discord-fab"><svg class="tg-logo" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#5865F2"/><path fill="#fff" transform="translate(5.5 5.5) scale(.54)" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg><span><b>Discord</b><small>Report bugs, share ideas, get news</small></span></a></div>
 </details>
+<a class="ph-badge" href="https://www.producthunt.com/products/stellenly?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-stellenly" target="_blank" rel="noopener noreferrer"><img alt="Stellenly - Search English-speaking jobs in Germany | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1312521&amp;theme=light&amp;t=1794387968784"></a>
 """.format(tg=html.escape(SITE["telegram_url"]), dc=html.escape(SITE["discord_url"]))
 
 
@@ -180,9 +181,10 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
     <a class="btn ghost nav-link" href="{up}map.html">Match</a>
     <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
+    <details class="nav-more nav-link"><summary class="btn ghost">Tools</summary><div class="nav-menu"><a href="{up}tools.html#salary">💶 Salary calculator</a></div></details>
     <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
       <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
-      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a><a class="m-only" href="{up}tools.html#salary">Salary calculator</a>
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
@@ -1547,6 +1549,59 @@ def build_skill_check(rows: list[dict]) -> str:
     return "skill-check.html"
 
 
+TAX_CLASSES = [(1, "I — single"), (2, "II — single parent"), (3, "III — married, higher earner"),
+               (4, "IV — married, similar incomes"), (5, "V — married, lower earner"), (6, "VI — second job")]
+
+
+def build_tools(jobs: list[dict]) -> str:
+    """tools.html: the gross-to-net salary calculator (js/tools.js) with the median listed salary of each city."""
+    paid: dict[str, list[float]] = {}
+    for j in jobs:
+        if (j.get("salary_min") and j["salary_min"] <= 300000 and j.get("city") and j["city"] != "Remote"
+                and normalize_city(j["city"]) == j["city"]):
+            paid.setdefault(j["city"], []).append((j["salary_min"] + (j.get("salary_max") or j["salary_min"])) / 2)
+    cities = sorted(({"city": c, "state": geo.city_state(c), "median": int(round(statistics.median(v), -2)), "n": len(v)}
+                     for c, v in paid.items() if len(v) >= MIN_JOBS), key=lambda c: -c["n"])
+    data = json.dumps({"updated": TODAY.isoformat(), "cities": cities}, ensure_ascii=False).replace("</", "<\\/")
+    city_opts = "".join(f'<option value="{e(c["city"])}" data-state="{c["state"] or ""}">{e(c["city"])}</option>' for c in cities)
+    state_opts = "".join(f'<option value="{k}">{e(v)}</option>' for k, v in sorted(STATES.items(), key=lambda s: s[1]))
+    class_opts = "".join(f'<option value="{n}">{e(t)}</option>' for n, t in TAX_CLASSES)
+    body = f"""<nav class="crumbs"><a href="index.html">Stellenly</a> › Tools</nav>
+<h1>Tools</h1>
+<p class="lead">Free calculators for moving to and working in Germany.</p>
+<section class="skc-card sal-tool" id="salary" aria-labelledby="sal-h">
+  <h2 id="sal-h">Salary calculator: gross to net</h2>
+  <p class="skc-hint">Pick the state and city you would live in, enter the gross salary from the job ad and your tax class.
+  We show what lands in your account each month and compare it with the typical salary in that city.</p>
+  <form id="salary-form" class="sal-form" autocomplete="off">
+    <label>State<select id="sal-state"><option value="">All states</option>{state_opts}</select></label>
+    <label>City<select id="sal-city"><option value="">Other city</option>{city_opts}</select></label>
+    <label>Gross salary per year (€)<input id="sal-gross" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g. 60000"></label>
+    <label>Tax class<select id="sal-class">{class_opts}</select></label>
+    <label class="sal-check"><input id="sal-church" type="checkbox"> Church member (church tax)</label>
+    <label class="sal-check"><input id="sal-children" type="checkbox"> I have children</label>
+  </form>
+  <div id="sal-result" class="sal-result" aria-live="polite" hidden></div>
+  <details class="sal-notes"><summary>Which tax class am I? How exact is this?</summary>
+    <p><b>Class I</b>: single, also divorced or widowed. <b>II</b>: single parent living with your child.
+    <b>III / V</b>: married, one partner earns clearly more (III) and the other takes V. <b>IV</b>: married, both earn
+    about the same. <b>VI</b>: a second job next to your main one. New arrivals start in class I unless they are married.</p>
+    <p>An estimate with the 2026 rates: income tax, solidarity surcharge, church tax (8% in Bavaria and Baden-Württemberg,
+    9% elsewhere) and your half of pension, unemployment, health (average extra contribution of 2.9%) and care
+    insurance. It assumes public health insurance and that you are 23 or older; tax allowances for children and
+    discounts for two or more children are left out. Your payslip can differ by a few euros.</p>
+    <p>City figures: the median of the salaries listed in English-speaking jobs on Stellenly (cities with at least
+    {MIN_JOBS} jobs that show a salary), updated {TODAY.isoformat()}. Nothing you enter leaves your browser.</p>
+  </details>
+</section>
+<script type="application/json" id="tool-cities">{data}</script>"""
+    (WEB / "tools.html").write_text(page(
+        "Tools", "Salary calculator for Germany: gross to net by tax class and city, with the typical salary in "
+        "English-speaking jobs in Munich, Berlin and other cities.", body, "tools.html", 0,
+        extra_head='<script src="js/tools.js" defer></script>', main_class="post-page tools-page"), encoding="utf-8")
+    return "tools.html"
+
+
 def build_sitemap(paths: list[str]) -> None:
     urls = "".join(f"<url><loc>{SITE_URL}/{p.replace('index.html', '')}</loc><lastmod>{TODAY.isoformat()}</lastmod></url>"
                    for p in sorted(set(paths)))
@@ -1577,9 +1632,10 @@ def main() -> None:
     wiki = build_how_it_works(jobs)
     write_title_suggestions(jobs)
     skills_page = [build_skill_check(load_role_rows(args.role_rows_file))] if SKILL_CHECK else []
+    tools = build_tools(jobs)
     reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
-                  + sections + landing + companies + [wiki] + skills_page)
+                  + sections + landing + companies + [wiki] + skills_page + [tools])
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
           f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")
