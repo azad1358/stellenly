@@ -1428,6 +1428,12 @@
 "lat": 51.5022,
 "lon": -0.1779
 },
+"*|us remote": {
+"cc": "us",
+"lat": 43.0059,
+"lon": -123.8926,
+"state": "US-OR"
+},
 "*|utrecht": {
 "cc": "nl",
 "lat": 52.0907,
@@ -1802,6 +1808,12 @@
 "cc": "de",
 "lat": 50.0172,
 "lon": 8.7843
+},
+"de|dinslaken": {
+"cc": "de",
+"lat": 51.5624,
+"lon": 6.7345,
+"state": "DE-NW"
 },
 "de|donauworth": {
 "cc": "de",

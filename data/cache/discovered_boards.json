@@ -327,6 +327,11 @@
    "board": "clickup",
    "company": "Clickup"
   },
+  "cloudfactory": {
+   "ats": "workable",
+   "board": "cloudfactory",
+   "company": "Cloudfactory"
+  },
   "clovirtualfashion": {
    "ats": "lever",
    "board": "clovirtualfashion",
@@ -1446,6 +1451,11 @@
    "board": "shieldai",
    "company": "Shieldai"
   },
+  "signode": {
+   "ats": "recruitee",
+   "board": "signode",
+   "company": "Signode"
+  },
   "singu": {
    "ats": "ashby",
    "board": "singu",
@@ -1945,6 +1955,7 @@
   "funded": "2026-11-03",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
+  "getologmbh": "2026-11-11",
   "gfic": "2026-10-27",
   "gitlab": "2026-10-27",
   "globalreportinginitiative": "2026-10-29",
@@ -1955,6 +1966,7 @@
   "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
   "hemaelectronicgmbh": "2026-11-06",
+  "hillsideassetslimited": "2026-11-11",
   "holidu": "2026-11-05",
   "hopnug": "2026-10-27",
   "hornetsecurity": "2026-11-05",
