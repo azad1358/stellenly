@@ -535,6 +535,11 @@
    "board": "empira",
    "company": "Empira Group"
   },
+  "emw": {
+   "ats": "workable",
+   "board": "emw",
+   "company": "Emw"
+  },
   "engagedmd": {
    "ats": "ashby",
    "board": "engagedmd",
@@ -2003,6 +2008,7 @@
   "moss": "2026-10-27",
   "motorai": "2026-10-28",
   "muchgmbh": "2026-10-27",
+  "muckrack": "2026-11-11",
   "myprojectbox": "2026-10-27",
   "n8n": "2026-10-27",
   "ndineuedeutscheinfrastrukturgmbh": "2026-11-10",
@@ -2056,6 +2062,7 @@
   "qonto": "2026-11-10",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
+  "reactivemarkets": "2026-11-11",
   "relex": "2026-10-30",
   "remotewoman": "2026-10-28",
   "remove": "2026-11-02",
