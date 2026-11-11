@@ -390,7 +390,7 @@ _DE_COUNTRY = re.compile(r"\b(?:germany|deutschland|allemagne|alemania|germania)
 _DE_CODE = re.compile(r"(?<![A-Za-z])DEU?(?![A-Za-z])")  # "Berlin, DE" (case-sensitive)
 # Same-named towns abroad: Hanover NH, Berlin CT, Hamburg NY, Potsdam NY, Dresden ON ...
 _ABROAD = re.compile(
-    r"\b(?:USA|U\.S\.A?\.?|United States|Canada|Ontario)\b|,\s*(?:A[KLRZ]|C[AOT]|FL|GA|HI|I[ADLN]|K[SY]|LA|"
+    r"\b(?:USA|US|U\.S\.A?\.?|United States|Canada|Ontario)\b|,\s*(?:A[KLRZ]|C[AOT]|FL|GA|HI|I[ADLN]|K[SY]|LA|"
     r"M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY]|ON|QC|BC)\b"
 )
 
@@ -556,6 +556,9 @@ def enrich(raw: dict) -> dict | None:
 
     city = normalize_city(raw.get("location"))
     years = years_experience(text)
+    remote = remote_type(raw.get("is_remote"), title, text)
+    if raw.get("remote_scope") and remote != "hybrid":  # the source says where the job is open (Jobicy: "de"/"eu")
+        remote = f"remote_{raw['remote_scope']}"
     row = {
         "id": job_id(title, company, city),
         "source": raw.get("source"),
@@ -574,7 +577,7 @@ def enrich(raw: dict) -> dict | None:
         "years_experience": years,
         "seniority": seniority(title, years),
         "is_agency": is_agency(company, text),
-        "remote_type": remote_type(raw.get("is_remote"), title, text),
+        "remote_type": remote,
         "posted_at": raw.get("posted_at"),
     }
     row["salary_min"], row["salary_max"] = parse_salary(text)

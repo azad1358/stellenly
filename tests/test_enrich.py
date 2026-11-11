@@ -118,6 +118,17 @@ def test_enrich_end_to_end():
     assert {"python", "cloud", "visa-sponsorship", "senior", "software-development"} <= set(row["tags"])
 
 
+def test_enrich_remote_scope():
+    """Jobicy says where a remote job is open: only "Germany" makes it Remote (DE)."""
+    raw = {"source": "jobicy", "url": "https://jobicy.com/jobs/1", "title": "Backend Engineer", "company": "Acme",
+           "location": "Remote", "is_remote": True,
+           "description_html": "<p>We are a remote-first team. You build our APIs in Python with the rest of the "
+                               "engineering team and talk to customers in English every day.</p>"}
+    assert enrich({**raw, "remote_scope": "eu"})["remote_type"] == "remote_eu"
+    assert enrich({**raw, "remote_scope": "de"})["remote_type"] == "remote_de"
+    assert enrich(raw)["remote_type"] == "remote_de"  # other sources: unchanged
+
+
 def test_enrich_skips_german_posting():
     raw = {
         "source": "arbeitnow", "url": "https://example.com/2", "title": "Sachbearbeiter (m/w/d)",
@@ -132,10 +143,12 @@ def test_enrich_skips_german_posting():
 def test_in_germany():
     for loc in ["Berlin", "München, Bayern", "Muenchen", "Walldorf, Baden-Württemberg",
                 "Remote (Germany)", "Hamburg, DE", "London or Berlin", "Frankfurt am Main",
-                "Herzogenaurach", "Düsseldorf; Paris", "Nordrhein-Westfalen"]:
+                "Herzogenaurach", "Düsseldorf; Paris", "Nordrhein-Westfalen",
+                "DE-Germany-Remote", "DE-Berlin-Trion Building"]:
         assert in_germany(loc), loc
     for loc in ["London", "Hanover, NH", "Berlin, CT, USA", "Remote", "Paris, France",
-                "San Francisco, CA", "Essential Services", None, ""]:
+                "San Francisco, CA", "Essential Services", None, "",
+                "US-DE-Remote", "US-DE-Wilmington"]:  # Ashby codes: DE = Delaware here
         assert not in_germany(loc), loc
 
 
