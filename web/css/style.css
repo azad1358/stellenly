@@ -444,6 +444,8 @@ body { -webkit-font-smoothing: antialiased; }
 .job-salary { font-weight: 700; font-size: 1.02rem; color: var(--ok); white-space: nowrap; }
 .job-salary small { color: var(--muted); font-weight: 500; font-size: 0.78rem; margin-left: 3px; }
 .job-salary.none { color: var(--muted); font-weight: 500; font-size: 0.82rem; }
+.net-link { font-size: .78rem; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.net-link:hover { text-decoration: underline; }
 .job-actions { opacity: .75; }
 .job:hover .job-actions { opacity: 1; }
 .job.seen .job-logo { opacity: var(--seen); }
@@ -1300,7 +1302,14 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
   .fab-avatar { width: 52px; height: 52px; }
   .fab-panel { width: min(330px, calc(100vw - 28px)); }
 }
-@media print { .fab { display: none; } }
+/* Product Hunt badge, centred 8px above Stelli's bubble (.fab-teaser: 290px wide, right of it the 10px gap + 56px avatar);
+   hidden while Stelli's panel is open */
+.ph-badge { position: fixed; right: calc(20px + 56px + 10px + 145px - 125px); bottom: calc(20px + 3 * 1.35 * .84rem + 18px + 8px);
+  z-index: 30; line-height: 0; }
+.ph-badge img { width: 250px; height: auto; }
+.fab[open] + .ph-badge { display: none; }
+@media (max-width: 640px) { .ph-badge { right: 14px; bottom: 76px; } .ph-badge img { width: 180px; } }
+@media print { .fab, .ph-badge { display: none; } }
 
 /* Header: mechanical counter of all jobs collected (app.js renderCounter) */
 .odo { display: inline-flex; margin-right: 6px; padding: 2px; border-radius: 5px; background: #1d2024;
@@ -1551,7 +1560,7 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .map-tools { position: absolute; right: 14px; top: 14px; z-index: 4; display: flex; gap: 8px; }
 .map-tools .btn { background: rgba(16, 22, 48, .9); color: #fff; border-color: rgba(255, 255, 255, .2); }
 .map-loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #a5b4fc; }
-body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
+body:has(.map-page) .site-footer, body:has(.map-page) .fab, body:has(.map-page) .ph-badge { display: none; }
 @media (max-width: 760px) {
   .map-page { grid-template-columns: minmax(0, 1fr); }
   .map-side { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; max-height: 75%; border-right: 0; border-top: 1px solid var(--border);
@@ -1600,3 +1609,26 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab { display: none; }
   border-radius: 999px; background: rgba(255, 255, 255, .95); color: #0a1024; font: 600 .78rem/1.3 var(--font); text-decoration: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: auto; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .7); }
 .match-label b { padding: 1px 6px; border-radius: 999px; background: #4f46e5; color: #fff; }
+
+/* Tools: salary calculator (js/tools.js) */
+.tools-page { max-width: 860px; }
+.sal-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; margin-top: 14px; }
+.sal-form label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: .9rem; }
+.sal-form select, .sal-form input[type="number"] { font: inherit; font-weight: 400; font-size: 1rem; color: var(--text);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; min-width: 0; }
+.sal-form .sal-check { flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
+.sal-result { margin-top: 20px; }
+.sal-net { display: flex; flex-direction: column; padding: 16px 18px; border-radius: var(--radius); background: var(--accent-soft); }
+.sal-net span { font-size: .85rem; color: var(--muted); }
+.sal-net b { font-size: 2rem; line-height: 1.2; color: var(--accent); }
+.sal-net small { color: var(--muted); }
+.sal-table { width: 100%; margin-top: 14px; }
+.sal-table td { text-align: right; font-variant-numeric: tabular-nums; }
+.sal-table th[scope="row"] { text-align: left; font-weight: 400; }
+.sal-table .sal-gross th, .sal-table .sal-total th, .sal-table .sal-total td { font-weight: 700; }
+.sal-city { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); }
+.sal-city h3 { margin: 0 0 6px; font-size: 1.02rem; }
+.sal-city p { margin: 0; }
+.sal-notes { margin-top: 18px; font-size: .9rem; color: var(--muted); }
+.sal-notes summary { cursor: pointer; font-weight: 600; color: var(--text); }
+@media (max-width: 640px) { .sal-form { grid-template-columns: minmax(0, 1fr); } }

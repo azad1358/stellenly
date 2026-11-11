@@ -571,7 +571,9 @@
         <div class="badges">${cardBadges(j)}${skills}</div>
       </div>
       <div class="job-side">
-        ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>` : ""}
+        ${sal ? `<div class="job-salary">${sal}<small>/ year</small></div>
+        <a class="net-link" href="${BASE}tools.html?gross=${Math.round(midSalary(j))}${j.city ? `&amp;city=${encodeURIComponent(j.city)}` : ""}#salary"
+          title="Gross to net with your tax class">≈ Net pay →</a>` : ""}
         ${withClicks ? clicksBadge(j) : ""}
         <div class="job-actions">
           <button type="button" class="btn ghost icon" data-act="save" aria-pressed="${isSaved}" title="Save for later" aria-label="Save for later">${isSaved ? "★" : "☆"}</button>
