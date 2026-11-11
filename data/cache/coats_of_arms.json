@@ -111,6 +111,10 @@
   "file": "Wappen Heidelberg.svg",
   "img": "img/coa/city-heidelberg.png"
  },
+ "city:Helmstedt": {
+  "file": "Stadtwappen Helmstedt.png",
+  "img": "img/coa/city-helmstedt.png"
+ },
  "city:Karlsruhe": {
   "file": "DEU Karlsruhe COA.svg",
   "img": "img/coa/city-karlsruhe.png"
