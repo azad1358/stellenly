@@ -108,6 +108,8 @@ def jobicy(pause: float = 3.0) -> Iterator[dict]:
                 "location": "Remote",
                 "description_html": j.get("jobDescription") or j.get("jobExcerpt") or "",
                 "is_remote": True,
+                # Remote (DE) only when Jobicy names Germany; "Europe", "EMEA", "Anywhere" are Remote (EU)
+                "remote_scope": "de" if re.search(r"germany", j.get("jobGeo") or "", re.I) else "eu",
                 "tags": [t for t in (j.get("jobIndustry") or []) if isinstance(t, str)],
                 "job_types": [str(t).replace("-", " ").title() for t in (types if isinstance(types, list) else [types])],
                 "posted_at": j.get("pubDate"),

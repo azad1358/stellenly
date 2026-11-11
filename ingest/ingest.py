@@ -22,7 +22,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from enrich import abroad, enrich, generic_location, in_germany  # noqa: E402
+from enrich import _norm, abroad, enrich, generic_location, in_germany  # noqa: E402
 import discover  # noqa: E402
 import geo  # noqa: E402
 import sources  # noqa: E402
@@ -75,6 +75,7 @@ def located_in_germany(raw: dict) -> bool | None:
 def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]:
     """Returns (German jobs, ids of jobs found to be outside Germany, jobs found per source)."""
     rows: dict[str, dict] = {}
+    direct: set[tuple[str, str]] = set()  # (company, title) from employers' own boards
     foreign: list[str] = []
     stats = collections.Counter()
     per_source = collections.Counter()
@@ -97,6 +98,12 @@ def collect(max_pages: int) -> tuple[list[dict], list[str], collections.Counter]
                 foreign.append(row["id"])
                 return
             arbeitnow_raws.append(raw)
+        same = (_norm(row["company"]), _norm(row["title"]))
+        if raw["source"] == "jobicy" and same in direct:  # Jobicy's copy has city "Remote", so its id differs
+            stats["duplicates merged"] += 1
+            return
+        if raw["source"] not in ("arbeitnow", "jobicy"):
+            direct.add(same)
         old = rows.get(row["id"])
         if old:
             stats["duplicates merged"] += 1
