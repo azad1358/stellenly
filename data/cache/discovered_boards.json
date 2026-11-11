@@ -276,6 +276,11 @@
    "board": "cara-care",
    "company": "Cara Care"
   },
+  "causaprima": {
+   "ats": "ashby",
+   "board": "causaprima",
+   "company": "Causa Prima"
+  },
   "ceezer": {
    "ats": "ashby",
    "board": "ceezer",
@@ -706,6 +711,11 @@
    "board": "hopae",
    "company": "Hopae"
   },
+  "horizon3ai": {
+   "ats": "ashby",
+   "board": "horizon3ai",
+   "company": "Horizon3Ai"
+  },
   "huzzle": {
    "ats": "workable",
    "board": "huzzle",
@@ -773,6 +783,11 @@
    "region": "https://joinus.intersnack-it.com",
    "company": "Intersnack IT KG"
   },
+  "intetics2": {
+   "ats": "workable",
+   "board": "intetics-2",
+   "company": "Intetics 2"
+  },
   "ircagroup": {
    "ats": "lever",
    "board": "ircagroup",
@@ -827,6 +842,11 @@
    "ats": "workable",
    "board": "kahoot",
    "company": "Kahoot"
+  },
+  "kairosproject": {
+   "ats": "ashby",
+   "board": "kairos-project",
+   "company": "Kairos Project"
   },
   "kayak": {
    "ats": "ashby",
@@ -1431,6 +1451,11 @@
    "board": "siteimprove",
    "region": "eu",
    "company": "Siteimprove"
+  },
+  "skycellag": {
+   "ats": "recruitee",
+   "board": "skycellag",
+   "company": "SkyCell AG"
   },
   "softgames": {
    "ats": "recruitee",

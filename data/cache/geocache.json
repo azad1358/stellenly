@@ -509,6 +509,12 @@
 "lat": 55.8612,
 "lon": -4.2502
 },
+"*|gloucestershire": {
+"cc": "gb",
+"lat": 51.7644,
+"lon": -2.1881,
+"state": "GB-ENG"
+},
 "*|grafenwohr": {
 "cc": "de",
 "lat": 49.6865,
@@ -2276,6 +2282,12 @@
 "lat": 52.2642,
 "lon": 13.5361,
 "state": "DE-BB"
+},
+"de|moosburg an der isar": {
+"cc": "de",
+"lat": 48.4667,
+"lon": 11.9333,
+"state": "DE-BY"
 },
 "de|munich": {
 "cc": "de",
