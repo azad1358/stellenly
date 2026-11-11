@@ -28,23 +28,51 @@ OUT = WEB / "job"
 VALID_DAYS = 30  # validThrough = last seen at its source + 30 days (expire_jobs() hides it after 7 days unseen)
 INDEXNOW_KEY = "b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31"  # public by design; served at /<key>.txt
 COLS = ("id,url,title,company,city,location,remote_type,german_level,visa_sponsorship,relocation,salary_min,salary_max,"
-        "seniority,is_agency,job_types,tags,description,posted_at,first_seen_at,last_seen_at,source,insights")
+        "seniority,is_agency,job_types,tags,posted_at,first_seen_at,last_seen_at,source,content_updated_at")
+HEAVY = "id,content_updated_at,description,insights"  # ~40 MB for all jobs: kept between builds, see load_jobs()
+CACHE = Path(__file__).parent / ".job_pages_cache.json"  # restored/saved by deploy-website.yml (Actions cache)
 REMOTE = {"remote_de": "Remote (Germany)", "remote_eu": "Remote (EU)", "hybrid": "Hybrid", "onsite": "On-site"}
 
 
-def load_jobs() -> list[dict]:
+def _get(params: dict, headers: dict | None = None) -> list[dict]:
     url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/jobs"
     key = os.environ.get("SUPABASE_ANON_KEY") or os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-    out, start, step = [], 0, 200  # descriptions + insights: 500 rows hit the 3 s anon timeout
+    r = requests.get(url, params=params, headers={"apikey": key, "Authorization": f"Bearer {key}", **(headers or {})},
+                     timeout=120)
+    r.raise_for_status()
+    return r.json()
+
+
+def load_light(cols: str = COLS) -> list[dict]:
+    out, start, step = [], 0, 1000
     while True:
-        r = requests.get(url, params={"select": COLS, "is_active": "eq.true", "order": "posted_at.desc"},
-                         headers={"apikey": key, "Authorization": f"Bearer {key}", "Range": f"{start}-{start + step - 1}"},
-                         timeout=120)
-        r.raise_for_status()
-        out += r.json()
-        if len(r.json()) < step:
+        batch = _get({"select": cols, "is_active": "eq.true", "order": "posted_at.desc"},
+                     {"Range": f"{start}-{start + step - 1}"})
+        out += batch
+        if len(batch) < step:
             return out
         start += step
+
+
+def load_jobs() -> list[dict]:
+    """All open jobs. Description + insights come from the previous build's cache; only new jobs and jobs whose
+    content_updated_at changed are downloaded (Supabase free tier egress)."""
+    jobs = load_light()
+    try:
+        cache = json.loads(CACHE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
+    todo = [j["id"] for j in jobs if cache.get(j["id"], {}).get("content_updated_at") != j["content_updated_at"]]
+    for i in range(0, len(todo), 150):  # 150 ids keep the URL short; 200 heavy rows stay under the 3 s anon timeout
+        for row in _get({"select": HEAVY, "id": f"in.({','.join(todo[i:i + 150])})"}):
+            cache[row["id"]] = row
+    print(f"Job texts: {len(jobs) - len(todo)} from cache, {len(todo)} downloaded")
+    for j in jobs:
+        c = cache.get(j["id"], {})  # missing only if the job closed between the two requests
+        j["description"], j["insights"] = c.get("description"), c.get("insights")
+    CACHE.write_text(json.dumps({j["id"]: cache[j["id"]] for j in jobs if j["id"] in cache}, ensure_ascii=False),
+                     encoding="utf-8")
+    return jobs
 
 
 def employment_type(j: dict) -> list[str]:
@@ -198,10 +226,9 @@ def main() -> None:
                     help="only ping IndexNow with job pages first seen in the last 2 days (run after the deploy)")
     args = ap.parse_args()
 
-    jobs = load_jobs()
     if args.indexnow:
         recent = NOW - dt.timedelta(days=2)
-        new = [f"{SITE_URL}/job/{j['id']}.html" for j in jobs
+        new = [f"{SITE_URL}/job/{j['id']}.html" for j in load_light("id,first_seen_at,source")
                if parse_ts(j.get("first_seen_at")) >= recent and j.get("source") != "amazon"]  # title-only pages are noindex
         try:
             indexnow([f"{SITE_URL}/", f"{SITE_URL}/job-sitemap.xml"] + new)
@@ -209,6 +236,7 @@ def main() -> None:
             print(f"! IndexNow failed: {err}")
         return
 
+    jobs = load_jobs()
     index = json.loads((WEB / "data" / "companies-index.json").read_text(encoding="utf-8"))
     by_id = {j["id"]: j for j in jobs}
     OUT.mkdir(exist_ok=True)

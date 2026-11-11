@@ -12,8 +12,8 @@ name: Deploy website
 # (web/blog/job-market-*.html) and downloaded company logos (web/logos/).
 #
 # WHEN (no other workflow calls this one; it starts itself on any of these):
-#   - "Ingest jobs" finished    -> new jobs online right away
-#   - "Job insights" finished   -> the same jobs again, now with skills, hints and similar jobs
+#   - "Job insights" finished   -> new jobs online with skills, hints and similar jobs ("Job insights" runs
+#     after every "Ingest jobs"; deploying after both doubled the Supabase egress, so only this one deploys)
 #   - "Deploy backend" finished -> pages that need a new database function (a push that changes both
 #     build/ and supabase/ starts both workflows at once; this run is the one that sees the new database)
 #   - a push to main that changes web/, content/ (guides) or build/ (page code)
@@ -23,7 +23,7 @@ on:
     branches: [main]
     paths: ["web/**", "content/**", "build/**"]
   workflow_run:
-    workflows: ["Ingest jobs", "Job insights", "Deploy backend"]
+    workflows: ["Job insights", "Deploy backend"]
     types: [completed]
   workflow_dispatch: {}
 
@@ -83,8 +83,17 @@ jobs:
             git pull --rebase -X theirs origin main
           done
           exit 1
+      - uses: actions/cache/restore@v4   # job texts of the last build: only changed ones are downloaded
+        with:
+          path: build/.job_pages_cache.json
+          key: job-pages-${{ github.run_id }}
+          restore-keys: job-pages-
       - name: Job pages (schema.org JobPosting for Google's job search)
         run: python build/job_pages.py
+      - uses: actions/cache/save@v4
+        with:
+          path: build/.job_pages_cache.json
+          key: job-pages-${{ github.run_id }}
       - name: Version the CSS/JS links, so browsers load the new files right after a deploy
         run: |
           v="${GITHUB_SHA::8}"

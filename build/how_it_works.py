@@ -132,7 +132,7 @@ Jobs are stored in a Postgres database (Supabase). The website itself is plain s
 <tr><td>Ingest jobs</td><td>every 6 hours</td><td>Runs the tests, then collects, filters, cleans and stores jobs and hides jobs that are gone</td></tr>
 <tr><td>Job insights</td><td>after every ingest + daily</td><td>Embeddings, similar jobs, skills, hints, AI analysis and fact checks</td></tr>
 <tr><td>Check dead links</td><td>daily</td><td>Re-opens up to 800 of the least recently checked postings and hides closed ones</td></tr>
-<tr><td>Deploy website</td><td>after every ingest and insights run</td><td>Builds company pages, Hiring Scores, guides, city/field pages, job pages, sitemap and RSS, then publishes the static site on GitHub Pages (HTTPS, www.stellenly.com)</td></tr>
+<tr><td>Deploy website</td><td>after every insights run (which follows every ingest)</td><td>Builds company pages, Hiring Scores, guides, city/field pages, job pages, sitemap and RSS, then publishes the static site on GitHub Pages (HTTPS, www.stellenly.com)</td></tr>
 <tr><td>Deploy backend</td><td>on change</td><td>Applies versioned SQL migrations to the database, then deploys the server functions</td></tr>
 <tr><td>Guide review reminder</td><td>monthly</td><td>Flags guides whose fact-check date is due</td></tr>
 </tbody></table>
