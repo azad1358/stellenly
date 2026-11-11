@@ -8,9 +8,9 @@ name: Ingest jobs
 # WHEN (no other workflow calls this one):
 #   - every 6 hours (GitHub's timer is best-effort: runs often start hours late, or not at all)
 #   - a backup 3 hours after each slot: it runs only if no import succeeded in the last 4 hours, and otherwise
-#     cancels itself (a cancelled run doesn't start "Job insights" or "Deploy website")
+#     cancels itself (a cancelled run doesn't start "Job insights")
 #   - the "Run workflow" button
-# AFTER IT: "Job insights" and "Deploy website" start by themselves.
+# AFTER IT: "Job insights" starts by itself, and "Deploy website" after it.
 on:
   schedule:
     - cron: "17 */6 * * *"     # every 6 hours (UTC)
