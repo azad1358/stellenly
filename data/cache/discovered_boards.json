@@ -606,6 +606,11 @@
    "region": "eu",
    "company": "Finom"
   },
+  "finto": {
+   "ats": "ashby",
+   "board": "finto",
+   "company": "Finto"
+  },
   "fioneer": {
    "ats": "workable",
    "board": "fioneer",
@@ -1777,6 +1782,11 @@
    "board": "wongdoody",
    "company": "wongdoody"
   },
+  "workerbase": {
+   "ats": "ashby",
+   "board": "workerbase",
+   "company": "Workerbase"
+  },
   "workmotion": {
    "ats": "workable",
    "board": "workmotion",
@@ -1958,6 +1968,7 @@
   "getologmbh": "2026-11-11",
   "gfic": "2026-10-27",
   "gitlab": "2026-10-27",
+  "glassflow": "2026-11-11",
   "globalreportinginitiative": "2026-10-29",
   "glsnxt": "2026-10-27",
   "grip": "2026-10-27",
@@ -1998,11 +2009,13 @@
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
   "luscii": "2026-10-29",
+  "luxexperience": "2026-11-11",
   "magazinogmbh": "2026-10-27",
   "maia": "2026-11-01",
   "makersitegmbh": "2026-10-27",
   "makingscience": "2026-10-27",
   "malt": "2026-11-08",
+  "mammutpharma": "2026-11-11",
   "maomaotechnologies": "2026-10-28",
   "mapleaviation": "2026-11-03",
   "marentis": "2026-11-09",
@@ -2054,6 +2067,7 @@
   "pennylanesas": "2026-11-03",
   "pentadocgruppe": "2026-10-30",
   "pertempserp": "2026-10-27",
+  "pflegia": "2026-11-11",
   "pkconsult": "2026-11-07",
   "planeta": "2026-10-27",
   "planetlabs": "2026-10-27",
@@ -2063,6 +2077,7 @@
   "pqshield": "2026-11-03",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
+  "productsup": "2026-11-11",
   "progynyglobal": "2026-11-06",
   "prolific": "2026-10-28",
   "promethionindustries": "2026-10-28",
@@ -2129,6 +2144,7 @@
   "tanium": "2026-10-30",
   "tarebase": "2026-10-30",
   "teampicnic": "2026-11-03",
+  "techtivegamesgmbh": "2026-11-11",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",

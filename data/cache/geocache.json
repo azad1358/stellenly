@@ -620,6 +620,7 @@
 "lat": 51.5274,
 "lon": -0.4815
 },
+"*|hybrid or fully remote": null,
 "*|hybrid paris": {
 "cc": "fi",
 "lat": 60.2343,
