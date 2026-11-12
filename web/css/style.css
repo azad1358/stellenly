@@ -1632,6 +1632,3 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab, body:has(.map-page) 
 .sal-notes { margin-top: 18px; font-size: .9rem; color: var(--muted); }
 .sal-notes summary { cursor: pointer; font-weight: 600; color: var(--text); }
 @media (max-width: 640px) { .sal-form { grid-template-columns: minmax(0, 1fr); } }
-.footer-badge { align-self: center; line-height: 0; }
-.footer-badge img { width: 96px; height: auto; opacity: .75; }
-.footer-badge:hover img { opacity: 1; }
