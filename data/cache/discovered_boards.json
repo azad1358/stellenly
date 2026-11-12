@@ -252,6 +252,11 @@
    "board": "blacksemiconductor",
    "company": "Black Semiconductor GmbH"
   },
+  "bluerocksecurity": {
+   "ats": "ashby",
+   "board": "bluerocksecurity",
+   "company": "Bluerocksecurity"
+  },
   "bowatt": {
    "ats": "ashby",
    "board": "bowatt",
@@ -1924,6 +1929,7 @@
   "acadiajoblistings": "2026-10-31",
   "accuridsgmbh": "2026-10-27",
   "adstrong": "2026-10-27",
+  "affiliatelandscape": "2026-11-12",
   "agentfgmbh": "2026-11-06",
   "agentixlakegmbh": "2026-10-30",
   "agicap": "2026-11-08",
@@ -2006,6 +2012,7 @@
   "datacept": "2026-11-05",
   "datadog": "2026-11-05",
   "dataiku": "2026-10-30",
+  "deepbluerecruitment": "2026-11-12",
   "deephealth": "2026-11-03",
   "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
@@ -2059,6 +2066,7 @@
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
   "haste": "2026-11-05",
+  "healthsafetyexpertsgmbh": "2026-11-12",
   "heidisystems": "2026-10-28",
   "hellofresh": "2026-10-27",
   "hemaelectronicgmbh": "2026-11-06",
@@ -2105,6 +2113,7 @@
   "mammutpharma": "2026-11-11",
   "maomaotechnologies": "2026-10-28",
   "mapleaviation": "2026-11-03",
+  "maramio": "2026-11-12",
   "marentis": "2026-11-09",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
