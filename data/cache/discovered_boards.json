@@ -1239,6 +1239,11 @@
    "board": "openx",
    "company": "Openx"
   },
+  "optro": {
+   "ats": "ashby",
+   "board": "optro",
+   "company": "Optro"
+  },
   "orbem": {
    "ats": "ashby",
    "board": "orbem",
@@ -1630,6 +1635,11 @@
    "board": "taxfix.com",
    "company": "Taxfix"
   },
+  "taxforce": {
+   "ats": "ashby",
+   "board": "taxforce",
+   "company": "Taxforce"
+  },
   "tebi": {
    "ats": "ashby",
    "board": "tebi",
@@ -1878,6 +1888,11 @@
    "board": "yalwa",
    "region": "https://careers.yalwa.info",
    "company": "Yalwa GmbH"
+  },
+  "yazio": {
+   "ats": "ashby",
+   "board": "yazio",
+   "company": "YAZIO"
   },
   "yepoda": {
    "ats": "ashby",
@@ -2293,6 +2308,7 @@
   "xtpgmbh": "2026-10-27",
   "zattoo": "2026-10-27",
   "zekjugmbh": "2026-10-27",
+  "zenjob": "2026-11-12",
   "zeotap": "2026-11-06"
  }
 }
