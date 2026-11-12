@@ -15,6 +15,11 @@
    "board": "360learning",
    "company": "360Learning"
   },
+  "3e": {
+   "ats": "ashby",
+   "board": "3E",
+   "company": "3E"
+  },
   "3ive": {
    "ats": "ashby",
    "board": "3ive",
@@ -414,6 +419,11 @@
    "region": "https://careers.cygrid.io",
    "company": "Cygrid GmbH"
   },
+  "dandy": {
+   "ats": "ashby",
+   "board": "dandy",
+   "company": "Dandy"
+  },
   "dataguard": {
    "ats": "ashby",
    "board": "dataguard",
@@ -438,6 +448,11 @@
    "ats": "ashby",
    "board": "deepslate",
    "company": "Deepslate"
+  },
+  "deeptechrecruitment": {
+   "ats": "ashby",
+   "board": "deeptech-recruitment",
+   "company": "Deeptech Recruitment"
   },
   "deltavision": {
    "ats": "personio",
@@ -484,6 +499,11 @@
    "ats": "ashby",
    "board": "docebo",
    "company": "Docebo"
+  },
+  "doctrine": {
+   "ats": "lever",
+   "board": "doctrine",
+   "company": "Doctrine"
   },
   "duckduckgo": {
    "ats": "ashby",
@@ -992,6 +1012,11 @@
    "board": "livekit",
    "company": "Livekit"
   },
+  "loftorbital": {
+   "ats": "lever",
+   "board": "loftorbital",
+   "company": "Loftorbital"
+  },
   "lovehoneygroup": {
    "ats": "lever",
    "board": "lovehoneygroup",
@@ -1073,6 +1098,11 @@
    "ats": "ashby",
    "board": "monday.com",
    "company": "Monday.com"
+  },
+  "mondoo": {
+   "ats": "ashby",
+   "board": "mondoo",
+   "company": "Mondoo"
   },
   "moonpay": {
    "ats": "lever",
@@ -2022,6 +2052,7 @@
   "htechsupports": "2026-10-29",
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
+  "idnow": "2026-11-12",
   "ilertgmbh": "2026-10-27",
   "imagostockpeoplegmbh": "2026-11-05",
   "inca": "2026-11-03",
@@ -2042,6 +2073,7 @@
   "limatica": "2026-10-29",
   "livestorm": "2026-10-27",
   "lleverage": "2026-10-30",
+  "logex": "2026-11-12",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
   "luscii": "2026-10-29",
