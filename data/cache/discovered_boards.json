@@ -505,6 +505,11 @@
    "board": "doctrine",
    "company": "Doctrine"
   },
+  "dryft": {
+   "ats": "ashby",
+   "board": "dryft",
+   "company": "Dryft"
+  },
   "duckduckgo": {
    "ats": "ashby",
    "board": "duck-duck-go",
@@ -1023,6 +1028,11 @@
    "region": "eu",
    "company": "Lovehoney Group"
   },
+  "lumaai": {
+   "ats": "ashby",
+   "board": "lumaai",
+   "company": "Lumaai"
+  },
   "luminovogmbh": {
    "ats": "ashby",
    "board": "luminovo",
@@ -1118,6 +1128,11 @@
    "ats": "ashby",
    "board": "munich-electrification",
    "company": "Munich Electrification"
+  },
+  "nebuly": {
+   "ats": "ashby",
+   "board": "nebuly",
+   "company": "Nebuly"
   },
   "nekohealth": {
    "ats": "ashby",
@@ -1903,6 +1918,7 @@
  },
  "none": {
   "1komma5": "2026-10-27",
+  "42wolfsburgberlin": "2026-11-12",
   "6pmgmbh": "2026-11-10",
   "7nxtgmbh": "2026-10-27",
   "acadiajoblistings": "2026-10-31",
@@ -1937,6 +1953,7 @@
   "b2venturegmbh": "2026-11-05",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
+  "beforeeightgroupgmbh": "2026-11-12",
   "beneeringgmbh": "2026-11-03",
   "beyondservicegmbh": "2026-10-27",
   "bgprevent": "2026-11-03",
@@ -1962,6 +1979,7 @@
   "celonis": "2026-10-27",
   "cepastudyabroadterraeducationeuropegmbh": "2026-11-09",
   "cesiumastro": "2026-10-27",
+  "chameleonpharmaconsulting": "2026-11-12",
   "cherryventures": "2026-10-27",
   "choco": "2026-11-10",
   "cision": "2026-11-01",
@@ -2016,6 +2034,7 @@
   "fertohealthgmbh": "2026-10-27",
   "figma": "2026-10-29",
   "finn": "2026-10-28",
+  "finperksgmbh": "2026-11-12",
   "fireblocks": "2026-11-07",
   "firesprite": "2026-10-28",
   "firstmomentumventures": "2026-11-04",
@@ -2180,6 +2199,7 @@
   "sidekicknetworkgmbhcokg": "2026-11-06",
   "sidessimplydeliverygmbh": "2026-10-27",
   "siena": "2026-11-07",
+  "simpsonstrongtiegmbh": "2026-11-12",
   "sineengineering": "2026-11-07",
   "skailark": "2026-10-27",
   "skdse": "2026-10-27",

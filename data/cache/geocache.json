@@ -2315,6 +2315,12 @@
 "lat": 52.2871,
 "lon": 13.0658
 },
+"de|mittenwald": {
+"cc": "de",
+"lat": 47.4418,
+"lon": 11.2614,
+"state": "DE-BY"
+},
 "de|mittenwalde": {
 "cc": "de",
 "lat": 52.2642,
