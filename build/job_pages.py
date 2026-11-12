@@ -28,8 +28,9 @@ OUT = WEB / "job"
 VALID_DAYS = 30  # validThrough = last seen at its source + 30 days (expire_jobs() hides it after 7 days unseen)
 INDEXNOW_KEY = "b6f1c2e94d7a4f3e8c5a0d2b9e7f6a31"  # public by design; served at /<key>.txt
 COLS = ("id,url,title,company,city,location,remote_type,german_level,visa_sponsorship,relocation,salary_min,salary_max,"
-        "seniority,is_agency,job_types,tags,posted_at,first_seen_at,last_seen_at,source,content_updated_at")
-HEAVY = "id,content_updated_at,description,insights"  # ~40 MB for all jobs: kept between builds, see load_jobs()
+        "seniority,is_agency,job_types,tags,posted_at,first_seen_at,last_seen_at,source,content_updated_at,"
+        "hints:insights->hints,similar:insights->similar")  # the only parts of insights a job page shows (~1 MB)
+HEAVY = "id,content_updated_at,description"  # ~26 MB for all jobs: kept between builds, see load_jobs()
 CACHE = Path(__file__).parent / ".job_pages_cache.json"  # restored/saved by deploy-website.yml (Actions cache)
 REMOTE = {"remote_de": "Remote (Germany)", "remote_eu": "Remote (EU)", "hybrid": "Hybrid", "onsite": "On-site"}
 
@@ -55,8 +56,8 @@ def load_light(cols: str = COLS) -> list[dict]:
 
 
 def load_jobs() -> list[dict]:
-    """All open jobs. Description + insights come from the previous build's cache; only new jobs and jobs whose
-    content_updated_at changed are downloaded (Supabase free tier egress)."""
+    """All open jobs. Descriptions come from the previous build's cache; only new jobs and jobs whose
+    content_updated_at (= description changed) moved are downloaded (Supabase free tier egress)."""
     jobs = load_light()
     try:
         cache = json.loads(CACHE.read_text(encoding="utf-8"))
@@ -69,7 +70,8 @@ def load_jobs() -> list[dict]:
     print(f"Job texts: {len(jobs) - len(todo)} from cache, {len(todo)} downloaded")
     for j in jobs:
         c = cache.get(j["id"], {})  # missing only if the job closed between the two requests
-        j["description"], j["insights"] = c.get("description"), c.get("insights")
+        j["description"] = c.get("description")
+        j["insights"] = {"hints": j.pop("hints"), "similar": j.pop("similar")}
     CACHE.write_text(json.dumps({j["id"]: cache[j["id"]] for j in jobs if j["id"] in cache}, ensure_ascii=False),
                      encoding="utf-8")
     return jobs
