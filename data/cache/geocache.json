@@ -1004,6 +1004,12 @@
 "lat": 46.3821,
 "lon": 6.2403
 },
+"*|olten, solothurn": {
+"cc": "ch",
+"lat": 47.3497,
+"lon": 7.9038,
+"state": "CH-SO"
+},
 "*|oosterhout": {
 "cc": "nl",
 "lat": 51.6322,
@@ -1910,6 +1916,12 @@
 "lat": 52.5906,
 "lon": 9.1599,
 "state": "DE-NI"
+},
+"de|ettenheim": {
+"cc": "de",
+"lat": 48.2487,
+"lon": 7.8539,
+"state": "DE-BW"
 },
 "de|finsterwalde": {
 "cc": "de",

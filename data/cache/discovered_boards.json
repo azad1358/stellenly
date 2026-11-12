@@ -35,6 +35,12 @@
    "board": "access",
    "company": "Access Destination Services"
   },
+  "acciliumgroupgmbh": {
+   "ats": "recruitee",
+   "board": "accilium",
+   "region": "https://career.accilium.com",
+   "company": "accilium Group GmbH"
+  },
   "acmaerospace": {
    "ats": "personio",
    "board": "acm-aerospace",
@@ -150,6 +156,11 @@
    "ats": "greenhouse",
    "board": "artefactlinkedin",
    "company": "Artefactlinkedin"
+  },
+  "artificial": {
+   "ats": "ashby",
+   "board": "artificial",
+   "company": "Artificial"
   },
   "ashby": {
    "ats": "ashby",
@@ -1088,6 +1099,11 @@
    "board": "netbird",
    "company": "NetBird"
   },
+  "netboxlabs": {
+   "ats": "ashby",
+   "board": "netboxlabs",
+   "company": "Netboxlabs"
+  },
   "netgear": {
    "ats": "ashby",
    "board": "netgear",
@@ -1213,6 +1229,11 @@
    "board": "pennylane-de",
    "company": "Pennylane De"
   },
+  "peoplecert": {
+   "ats": "workable",
+   "board": "peoplecert",
+   "company": "Peoplecert"
+  },
   "pergolux": {
    "ats": "ashby",
    "board": "pergolux",
@@ -1330,6 +1351,11 @@
    "ats": "ashby",
    "board": "reonic",
    "company": "Reonic"
+  },
+  "residentadvisor": {
+   "ats": "workable",
+   "board": "resident-advisor",
+   "company": "Resident Advisor"
   },
   "resonance": {
    "ats": "ashby",
@@ -1706,6 +1732,11 @@
    "board": "vestiairecollective",
    "company": "Vestiairecollective"
   },
+  "vinci": {
+   "ats": "ashby",
+   "board": "vinci",
+   "company": "Vinci"
+  },
   "virtualidentity": {
    "ats": "ashby",
    "board": "virtual-identity",
@@ -1812,6 +1843,11 @@
    "ats": "ashby",
    "board": "zeal-network",
    "company": "Zeal Network"
+  },
+  "zeitai": {
+   "ats": "ashby",
+   "board": "zeit-ai",
+   "company": "Zeit Ai"
   },
   "zetaglobal": {
    "ats": "greenhouse",
@@ -2143,6 +2179,7 @@
   "tanganygmbh": "2026-10-27",
   "tanium": "2026-10-30",
   "tarebase": "2026-10-30",
+  "taxforceservices": "2026-11-12",
   "teampicnic": "2026-11-03",
   "techtivegamesgmbh": "2026-11-11",
   "teneo": "2026-10-27",
@@ -2179,6 +2216,7 @@
   "vivalyxgmbh": "2026-10-27",
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
+  "wayve": "2026-11-12",
   "welovexgmbh": "2026-11-03",
   "wepush": "2026-10-27",
   "werraenergiegmbh": "2026-10-28",
