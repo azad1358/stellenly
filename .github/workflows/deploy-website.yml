@@ -66,9 +66,9 @@ jobs:
         run: python build/coats_of_arms.py
       - name: Site pages (guides, report, state/city/field and company pages, sitemap)
         run: python build/build_site.py
-      - name: Skill check off -> drop its link from the hand-written main page too
+      - name: Skill check off -> drop its links from the hand-written pages too
         if: env.SKILL_CHECK != '1'
-        run: sed -i '/href="skill-check.html"/d' web/index.html
+        run: sed -i 's#<a href="skill-check.html">Skill check</a>##g' web/*.html
       - name: Commit what the next build needs (report history, past reports, logos, coats of arms)
         run: |
           git config user.name "site-bot"
@@ -94,6 +94,11 @@ jobs:
         with:
           path: build/.job_pages_cache.json
           key: job-pages-${{ github.run_id }}
+      - name: Impressum off (repository variable IMPRESSUM = "1" turns it on) -> drop the page and every link to it
+        if: vars.IMPRESSUM != '1'
+        run: |
+          rm -f web/impressum.html
+          find web -name '*.html' -print0 | xargs -0 sed -i -E 's#<a href="(\.\./)*impressum\.html">Impressum</a>##g'
       - name: Version the CSS/JS links, so browsers load the new files right after a deploy
         run: |
           v="${GITHUB_SHA::8}"
