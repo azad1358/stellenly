@@ -151,6 +151,10 @@
   "file": "DEU München COA.svg",
   "img": "img/coa/city-munich.png"
  },
+ "city:Nuremberg": {
+  "file": "DEU Nürnberg COA (klein).svg",
+  "img": "img/coa/city-nuremberg.png"
+ },
  "city:Ottobrunn": {
   "file": "DEU Ottobrunn COA.svg",
   "img": "img/coa/city-ottobrunn.png"
