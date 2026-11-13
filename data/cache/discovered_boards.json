@@ -1169,6 +1169,11 @@
    "board": "neuphonic",
    "company": "Neuphonic"
   },
+  "neuralconcept": {
+   "ats": "ashby",
+   "board": "neuralconcept",
+   "company": "Neuralconcept"
+  },
   "neuralframesgmbh": {
    "ats": "ashby",
    "board": "neuralframes",
@@ -1527,6 +1532,11 @@
    "board": "sereact",
    "company": "Sereact GmbH"
   },
+  "sezzle": {
+   "ats": "greenhouse",
+   "board": "sezzle",
+   "company": "Sezzle"
+  },
   "sgbsmitgroup": {
    "ats": "recruitee",
    "board": "sgbsmitgroup",
@@ -1691,6 +1701,11 @@
    "ats": "ashby",
    "board": "the-global-talent-co",
    "company": "The Global Talent Co."
+  },
+  "thomannio": {
+   "ats": "recruitee",
+   "board": "thomannio",
+   "company": "Thomann.io"
   },
   "thorit": {
    "ats": "ashby",
@@ -2035,6 +2050,7 @@
   "dataiku": "2026-10-30",
   "deepbluerecruitment": "2026-11-12",
   "deephealth": "2026-11-03",
+  "deliveroo": "2026-11-13",
   "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
   "digicert": "2026-11-05",
@@ -2100,6 +2116,7 @@
   "htechsupports": "2026-10-29",
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
+  "hyroxworldgmbh": "2026-11-13",
   "idnow": "2026-11-12",
   "ilertgmbh": "2026-10-27",
   "imagostockpeoplegmbh": "2026-11-05",
@@ -2170,6 +2187,7 @@
   "omicsempowergmbh": "2026-10-27",
   "openai": "2026-10-27",
   "ordiogmbh": "2026-10-27",
+  "organifarms": "2026-11-13",
   "ostrom": "2026-10-27",
   "oviva": "2026-10-27",
   "oysterbayventurecapital": "2026-11-04",
@@ -2204,6 +2222,7 @@
   "pvcase": "2026-10-29",
   "qadogmbh": "2026-10-27",
   "qonto": "2026-11-10",
+  "rainforrentinternational": "2026-11-13",
   "raisin": "2026-10-27",
   "rapidpioneers": "2026-10-27",
   "reactivemarkets": "2026-11-11",
@@ -2219,6 +2238,7 @@
   "roboyo": "2026-11-08",
   "roger": "2026-10-28",
   "routinelabs": "2026-11-03",
+  "rubrik": "2026-11-13",
   "rubygmbh": "2026-10-27",
   "samsara": "2026-10-30",
   "sbrinternationalgmbh": "2026-11-05",
@@ -2261,6 +2281,7 @@
   "tanganygmbh": "2026-10-27",
   "tanium": "2026-10-30",
   "tarebase": "2026-10-30",
+  "tavily": "2026-11-13",
   "taxforceservices": "2026-11-12",
   "teampicnic": "2026-11-03",
   "techtivegamesgmbh": "2026-11-11",

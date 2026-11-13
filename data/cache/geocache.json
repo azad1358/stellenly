@@ -1008,6 +1008,12 @@
 "lat": 52.3731,
 "lon": 4.8925
 },
+"*|noranside": {
+"cc": "gb",
+"lat": 56.7353,
+"lon": -2.8684,
+"state": "GB-SCT"
+},
 "*|norwich, united kingdom": {
 "cc": "gb",
 "lat": 52.6286,
