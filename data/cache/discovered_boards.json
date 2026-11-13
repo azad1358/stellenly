@@ -328,6 +328,11 @@
    "board": "charlesriverassociates",
    "company": "charlesriverassociates"
   },
+  "checkoutcom": {
+   "ats": "ashby",
+   "board": "checkout.com",
+   "company": "Checkout.com"
+  },
   "cinder": {
    "ats": "ashby",
    "board": "cinder",
@@ -706,6 +711,12 @@
    "ats": "ashby",
    "board": "GotPhoto",
    "company": "Gotphoto"
+  },
+  "gridscalegmbh": {
+   "ats": "recruitee",
+   "board": "gridscale",
+   "region": "https://join.gridscale.io",
+   "company": "gridscale GmbH"
   },
   "grubel": {
    "ats": "ashby",
@@ -1138,6 +1149,11 @@
    "ats": "ashby",
    "board": "munich-electrification",
    "company": "Munich Electrification"
+  },
+  "natuviongmbh": {
+   "ats": "recruitee",
+   "board": "natuvion",
+   "company": "Natuvion GmbH"
   },
   "nebuly": {
    "ats": "ashby",
@@ -1970,6 +1986,7 @@
   "agicap": "2026-11-08",
   "agilerobotsse": "2026-10-27",
   "aikidosecurity": "2026-10-27",
+  "airbnb": "2026-11-13",
   "airwallex": "2026-10-29",
   "alaika": "2026-10-30",
   "alephalpha": "2026-10-27",
@@ -2042,6 +2059,7 @@
   "coreweaveu": "2026-11-03",
   "cornelsenumwelttechnologiegmbh": "2026-10-27",
   "crowdsec": "2026-10-27",
+  "cuculusgmbh": "2026-11-13",
   "customssupportgroup": "2026-10-27",
   "darkmatterggmbh": "2026-11-06",
   "databricks": "2026-10-27",
@@ -2141,6 +2159,7 @@
   "logex": "2026-11-12",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
+  "loopforgelab": "2026-11-13",
   "luscii": "2026-10-29",
   "luxexperience": "2026-11-11",
   "magazinogmbh": "2026-10-27",
@@ -2170,6 +2189,7 @@
   "muckrack": "2026-11-11",
   "myprojectbox": "2026-10-27",
   "n8n": "2026-10-27",
+  "naroiq": "2026-11-13",
   "ndineuedeutscheinfrastrukturgmbh": "2026-11-10",
   "nebius": "2026-10-27",
   "nejo": "2026-10-27",
@@ -2199,6 +2219,7 @@
   "parloa": "2026-11-10",
   "particula": "2026-11-04",
   "payflows": "2026-10-27",
+  "pennylane": "2026-11-13",
   "pennylanesas": "2026-11-03",
   "pentadocgruppe": "2026-10-30",
   "pertempserp": "2026-10-27",
@@ -2284,6 +2305,7 @@
   "tavily": "2026-11-13",
   "taxforceservices": "2026-11-12",
   "teampicnic": "2026-11-03",
+  "techbizglobal": "2026-11-13",
   "techtivegamesgmbh": "2026-11-11",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
@@ -2328,6 +2350,7 @@
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",
+  "workistgmbh": "2026-11-13",
   "worldwideplacementlimited": "2026-10-29",
   "wundermanthompson": "2026-10-30",
   "wundermobility": "2026-10-30",
