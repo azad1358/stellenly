@@ -262,6 +262,12 @@
 "lat": 43.7089,
 "lon": 5.7399
 },
+"*|calmsden, cirencester": {
+"cc": "gb",
+"lat": 51.7771,
+"lon": -1.9332,
+"state": "GB-ENG"
+},
 "*|cambridge": {
 "cc": "gb",
 "lat": 52.1976,
@@ -916,6 +922,12 @@
 "cc": "nl",
 "lat": 51.7576,
 "lon": 4.1656
+},
+"*|milton keynes": {
+"cc": "gb",
+"lat": 52.0407,
+"lon": -0.7594,
+"state": "GB-ENG"
 },
 "*|milton keynes office": {
 "cc": "gb",

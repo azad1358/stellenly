@@ -954,6 +954,11 @@
    "board": "kyra",
    "company": "Kyra"
   },
+  "langchain": {
+   "ats": "ashby",
+   "board": "langchain",
+   "company": "LangChain"
+  },
   "legora": {
    "ats": "ashby",
    "board": "legora",
@@ -1972,6 +1977,7 @@
   "awtomated": "2026-11-09",
   "ayunis": "2026-11-04",
   "b2venturegmbh": "2026-11-05",
+  "baeshsocialug": "2026-11-13",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
   "baringa": "2026-10-29",
   "beforeeightgroupgmbh": "2026-11-12",
