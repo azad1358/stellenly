@@ -2430,6 +2430,12 @@
 "lon": 8.1455,
 "state": "DE-NW"
 },
+"de|offenbach": {
+"cc": "de",
+"lat": 50.1055,
+"lon": 8.7611,
+"state": "DE-HE"
+},
 "de|ohrdruf": {
 "cc": "de",
 "lat": 50.827,
