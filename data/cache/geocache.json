@@ -1029,6 +1029,12 @@
 "lat": 46.3821,
 "lon": 6.2403
 },
+"*|olten": {
+"cc": "ch",
+"lat": 47.3497,
+"lon": 7.9038,
+"state": "CH-SO"
+},
 "*|olten, solothurn": {
 "cc": "ch",
 "lat": 47.3497,
@@ -2038,6 +2044,12 @@
 "lon": 10.8779,
 "state": "DE-BY"
 },
+"de|giengen an der brenz": {
+"cc": "de",
+"lat": 48.6209,
+"lon": 10.2442,
+"state": "DE-BW"
+},
 "de|gießen": {
 "cc": "de",
 "lat": 50.5862,
@@ -2536,6 +2548,12 @@
 "lat": 52.4147,
 "lon": 13.4986,
 "state": "DE-BE"
+},
+"de|salzgitter": {
+"cc": "de",
+"lat": 52.1504,
+"lon": 10.3593,
+"state": "DE-NI"
 },
 "de|schortens": {
 "cc": "de",

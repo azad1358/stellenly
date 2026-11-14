@@ -102,6 +102,11 @@
    "board": "almetra",
    "company": "Almetra"
   },
+  "altaares": {
+   "ats": "ashby",
+   "board": "alta-ares",
+   "company": "Alta Ares"
+  },
   "amboss": {
    "ats": "ashby",
    "board": "amboss",
@@ -1589,6 +1594,11 @@
    "board": "skycellag",
    "company": "SkyCell AG"
   },
+  "sodadatanv": {
+   "ats": "workable",
+   "board": "soda-data-nv",
+   "company": "Soda Data Nv"
+  },
   "softgames": {
    "ats": "recruitee",
    "board": "softgames",
@@ -1872,6 +1882,11 @@
    "ats": "ashby",
    "board": "vaeridion",
    "company": "væridion"
+  },
+  "walaris": {
+   "ats": "workable",
+   "board": "walaris",
+   "company": "Walaris"
   },
   "walkme": {
    "ats": "lever",
@@ -2179,6 +2194,7 @@
   "milesmobility": "2026-10-27",
   "mirakl": "2026-10-27",
   "mobileye": "2026-10-27",
+  "mollie": "2026-11-14",
   "momox": "2026-11-09",
   "moniepoint": "2026-10-30",
   "montuuk": "2026-11-04",
