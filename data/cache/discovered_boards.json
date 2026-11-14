@@ -162,6 +162,11 @@
    "board": "archimed",
    "company": "Archimed"
   },
+  "artefact": {
+   "ats": "greenhouse",
+   "board": "artefact",
+   "company": "Artefact"
+  },
   "artefactlinkedin": {
    "ats": "greenhouse",
    "board": "artefactlinkedin",
@@ -1594,6 +1599,11 @@
    "region": "eu",
    "company": "Siteimprove"
   },
+  "siteminder": {
+   "ats": "ashby",
+   "board": "SiteMinder",
+   "company": "Siteminder"
+  },
   "skycellag": {
    "ats": "recruitee",
    "board": "skycellag",
@@ -1609,6 +1619,11 @@
    "board": "softgames",
    "region": "https://jobs.softgames.de",
    "company": "SOFTGAMES"
+  },
+  "sonyinteractiveentertainmentglobal": {
+   "ats": "greenhouse",
+   "board": "sonyinteractiveentertainmentglobal",
+   "company": "sonyinteractiveentertainmentglobal"
   },
   "sophos": {
    "ats": "ashby",
@@ -1630,6 +1645,11 @@
    "board": "sportalliance",
    "region": "eu",
    "company": "Sport Alliance GmbH"
+  },
+  "spreadgroup": {
+   "ats": "recruitee",
+   "board": "spreadgroup",
+   "company": "Spread Group"
   },
   "springhealth": {
    "ats": "ashby",
@@ -2069,6 +2089,7 @@
   "codat": "2026-10-28",
   "cohere": "2026-10-27",
   "commercetools": "2026-10-27",
+  "conipartnerag": "2026-11-14",
   "conroogmbh": "2026-10-27",
   "constructor": "2026-10-27",
   "constructorknowledg": "2026-11-08",
