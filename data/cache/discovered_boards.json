@@ -413,6 +413,12 @@
    "board": "coupa",
    "company": "Coupa"
   },
+  "creatio": {
+   "ats": "lever",
+   "board": "creatio",
+   "region": "eu",
+   "company": "Creatio"
+  },
   "cresta": {
    "ats": "greenhouse",
    "board": "cresta",
@@ -935,6 +941,11 @@
    "board": "kertos",
    "company": "Kertos"
   },
+  "keyloop": {
+   "ats": "lever",
+   "board": "keyloop",
+   "company": "Keyloop"
+  },
   "klim": {
    "ats": "ashby",
    "board": "klim",
@@ -1345,6 +1356,11 @@
    "board": "Perplexity",
    "company": "Perplexity"
   },
+  "pigment": {
+   "ats": "lever",
+   "board": "pigment",
+   "company": "Pigment"
+  },
   "plane": {
    "ats": "ashby",
    "board": "plane",
@@ -1619,6 +1635,11 @@
    "board": "softgames",
    "region": "https://jobs.softgames.de",
    "company": "SOFTGAMES"
+  },
+  "sonarsource": {
+   "ats": "lever",
+   "board": "sonarsource",
+   "company": "Sonarsource"
   },
   "sonyinteractiveentertainmentglobal": {
    "ats": "greenhouse",
@@ -2187,6 +2208,7 @@
   "jawbuddy": "2026-11-02",
   "jetbrains": "2026-10-27",
   "jumbo": "2026-11-09",
+  "karbon": "2026-11-15",
   "kickdowngmbh": "2026-10-29",
   "kittl": "2026-10-27",
   "koboldmetals": "2026-11-14",

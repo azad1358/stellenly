@@ -1393,6 +1393,12 @@
 "lat": 43.6045,
 "lon": 1.4442
 },
+"*|tunbridge wells": {
+"cc": "gb",
+"lat": 51.1371,
+"lon": 0.2673,
+"state": "GB-ENG"
+},
 "*|uddingston": {
 "cc": "gb",
 "lat": 55.819,
@@ -2674,6 +2680,12 @@
 "lat": 49.3033,
 "lon": 8.6432,
 "state": "DE-BW"
+},
+"de|weimar": {
+"cc": "de",
+"lat": 50.9793,
+"lon": 11.3298,
+"state": "DE-TH"
 },
 "de|wenden": {
 "cc": "de",
