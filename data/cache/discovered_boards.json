@@ -662,6 +662,11 @@
    "board": "fender",
    "company": "Fender"
   },
+  "finmidcom": {
+   "ats": "ashby",
+   "board": "finmid.com",
+   "company": "Finmid.com"
+  },
   "finom": {
    "ats": "lever",
    "board": "pnlfin",

@@ -136,6 +136,12 @@
 "lon": -5.9302
 },
 "*|belfast, northern ireland, remote": null,
+"*|bellinzona": {
+"cc": "ch",
+"lat": 46.1921,
+"lon": 9.0206,
+"state": "CH-TI"
+},
 "*|berliini, berliini, saksa": {
 "cc": "de",
 "lat": 52.5146,
@@ -876,6 +882,12 @@
 "cc": "ch",
 "lat": 47.0521,
 "lon": 8.3058
+},
+"*|lugano": {
+"cc": "ch",
+"lat": 46.0038,
+"lon": 8.9512,
+"state": "CH-TI"
 },
 "*|lyon": {
 "cc": "fr",
