@@ -855,6 +855,11 @@
    "board": "insiderone",
    "company": "Insider One"
   },
+  "integralde": {
+   "ats": "ashby",
+   "board": "integral-de",
+   "company": "Integral De"
+  },
   "intercom": {
    "ats": "greenhouse",
    "board": "intercom",
@@ -1231,6 +1236,11 @@
    "board": "newrelic",
    "company": "newrelic"
   },
+  "ninjaone": {
+   "ats": "greenhouse",
+   "board": "ninjaone",
+   "company": "Ninjaone"
+  },
   "nomagic": {
    "ats": "lever",
    "board": "Nomagic",
@@ -1350,6 +1360,11 @@
    "ats": "ashby",
    "board": "pergolux",
    "company": "Pergolux"
+  },
+  "peripass": {
+   "ats": "recruitee",
+   "board": "peripass",
+   "company": "Peripass"
   },
   "perk": {
    "ats": "ashby",
@@ -2185,6 +2200,7 @@
   "glassflow": "2026-11-11",
   "globalreportinginitiative": "2026-10-29",
   "glsnxt": "2026-10-27",
+  "goegmbh": "2026-11-15",
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
   "haste": "2026-11-05",
@@ -2220,6 +2236,7 @@
   "kolibrigames": "2026-10-27",
   "konfettigmbh": "2026-10-27",
   "l1vegmbh": "2026-10-30",
+  "lanesplanes": "2026-11-15",
   "langdock": "2026-11-06",
   "lemvosgmbh": "2026-11-04",
   "limatica": "2026-10-29",

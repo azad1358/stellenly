@@ -952,6 +952,12 @@
 "lat": 52.0422,
 "lon": -0.7575
 },
+"*|montpellier": {
+"cc": "fr",
+"lat": 43.6112,
+"lon": 3.8767,
+"state": "FR-OCC"
+},
 "*|moorgate london": {
 "cc": "gb",
 "lat": 51.5183,
