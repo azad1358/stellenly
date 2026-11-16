@@ -2176,6 +2176,12 @@
 "lon": 8.3587,
 "state": "DE-HE"
 },
+"de|home": {
+"cc": "de",
+"lat": 51.8223,
+"lon": 9.0123,
+"state": "DE-NW"
+},
 "de|homebased": null,
 "de|hoppegarten": {
 "cc": "de",

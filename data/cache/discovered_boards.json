@@ -232,6 +232,11 @@
    "board": "belmont-lavan-ltd",
    "company": "Belmont Lavan Ltd"
   },
+  "berlitz": {
+   "ats": "ashby",
+   "board": "berlitz",
+   "company": "Berlitz"
+  },
   "bettermile": {
    "ats": "ashby",
    "board": "bettermile",
@@ -479,6 +484,11 @@
    "ats": "ashby",
    "board": "deeptech-recruitment",
    "company": "Deeptech Recruitment"
+  },
+  "delinea": {
+   "ats": "ashby",
+   "board": "delinea",
+   "company": "Delinea"
   },
   "deltavision": {
    "ats": "personio",
@@ -1381,6 +1391,11 @@
    "board": "pigment",
    "company": "Pigment"
   },
+  "plancraft": {
+   "ats": "ashby",
+   "board": "plancraft",
+   "company": "plancraft"
+  },
   "plane": {
    "ats": "ashby",
    "board": "plane",
@@ -1696,6 +1711,11 @@
    "ats": "ashby",
    "board": "deaa6ad2-d184-436b-b69e-17f761da1d94",
    "company": "Spring Health"
+  },
+  "stackfuel": {
+   "ats": "ashby",
+   "board": "stackfuel",
+   "company": "Stackfuel"
   },
   "stealthrocketrystartup": {
    "ats": "ashby",
@@ -2340,6 +2360,7 @@
   "replug": "2026-10-27",
   "researchgate": "2026-11-01",
   "retoriogmbh": "2026-10-27",
+  "rhymeqtechnologiesgmbh": "2026-11-16",
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
   "roboservicegmbh": "2026-10-27",
