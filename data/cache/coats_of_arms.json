@@ -31,6 +31,10 @@
   "file": "DEU Boeblingen COA.svg",
   "img": "img/coa/city-boeblingen.png"
  },
+ "city:Charlottenburg": {
+  "file": "DEU Charlottenburg COA.svg",
+  "img": "img/coa/city-charlottenburg.png"
+ },
  "city:Chemnitz": {
   "file": "Coat of arms of Chemnitz.svg",
   "img": "img/coa/city-chemnitz.png"
