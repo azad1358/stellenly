@@ -1919,6 +1919,11 @@
    "board": "venncity",
    "company": "Venncity"
   },
+  "verifone": {
+   "ats": "greenhouse",
+   "board": "verifone",
+   "company": "Verifone"
+  },
   "vestiairecollective": {
    "ats": "lever",
    "board": "vestiairecollective",
@@ -2004,6 +2009,11 @@
    "board": "westernacher",
    "region": "eu",
    "company": "Westernacher"
+  },
+  "whatag": {
+   "ats": "recruitee",
+   "board": "what",
+   "company": "what. AG"
   },
   "wongdoody": {
    "ats": "greenhouse",
@@ -2102,6 +2112,7 @@
   "appinio": "2026-10-27",
   "arksoftwaregmbh": "2026-11-06",
   "aroundhome": "2026-11-02",
+  "artsciencenodeberlinasn": "2026-11-16",
   "atolls": "2026-10-31",
   "augleticsgmbh": "2026-10-30",
   "auterion": "2026-10-27",
@@ -2135,6 +2146,7 @@
   "camunda": "2026-10-27",
   "caronsale": "2026-10-27",
   "catapultsports": "2026-11-04",
+  "catonetworks": "2026-11-16",
   "cddsag": "2026-10-28",
   "celonis": "2026-10-27",
   "cepastudyabroadterraeducationeuropegmbh": "2026-11-09",
@@ -2194,6 +2206,7 @@
   "evidenteuropegmbh": "2026-11-05",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
+  "famedlygmbh": "2026-11-16",
   "fastleappartners": "2026-11-08",
   "fertohealthgmbh": "2026-10-27",
   "figma": "2026-10-29",
@@ -2207,6 +2220,7 @@
   "flipper": "2026-11-03",
   "flix": "2026-10-27",
   "florafoodgroup": "2026-10-27",
+  "fluiddesigngmbh": "2026-11-16",
   "focalsystems": "2026-10-28",
   "foodlabs": "2026-10-27",
   "freenow": "2026-10-27",
@@ -2223,6 +2237,7 @@
   "goegmbh": "2026-11-15",
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
+  "harnessopenpositionsjobopportunities": "2026-11-16",
   "haste": "2026-11-05",
   "healthsafetyexpertsgmbh": "2026-11-12",
   "heidisystems": "2026-10-28",
@@ -2281,6 +2296,7 @@
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
   "meet5gmbh": "2026-10-29",
+  "meridionag": "2026-11-16",
   "milengogmbh": "2026-11-09",
   "milesmobility": "2026-10-27",
   "mirakl": "2026-10-27",
@@ -2339,6 +2355,7 @@
   "plantacorpgmbh": "2026-10-27",
   "playtomic": "2026-11-16",
   "polara": "2026-10-29",
+  "polarsternexperts": "2026-11-16",
   "pqshield": "2026-11-03",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
@@ -2417,6 +2434,7 @@
   "teampicnic": "2026-11-03",
   "techbizglobal": "2026-11-13",
   "techtivegamesgmbh": "2026-11-11",
+  "tempotrainingconsulting": "2026-11-16",
   "teneo": "2026-10-27",
   "termios": "2026-10-27",
   "testerwork": "2026-10-27",

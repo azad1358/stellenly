@@ -108,6 +108,12 @@
 "lat": 47.1952,
 "lon": 8.5254
 },
+"*|baden": {
+"cc": "at",
+"lat": 48.0077,
+"lon": 16.2344,
+"state": "AT-3"
+},
 "*|basel, basel-stadt, switzerland": {
 "cc": "ch",
 "lat": 47.5581,
@@ -141,6 +147,12 @@
 "lat": 46.1921,
 "lon": 9.0206,
 "state": "CH-TI"
+},
+"*|berkshire": {
+"cc": "gb",
+"lat": 51.4535,
+"lon": -1.0319,
+"state": "GB-ENG"
 },
 "*|berliini, berliini, saksa": {
 "cc": "de",
@@ -1236,6 +1248,12 @@
 "cc": "nl",
 "lat": 52.0446,
 "lon": 4.3188
+},
+"*|rolle": {
+"cc": "ch",
+"lat": 46.4602,
+"lon": 6.338,
+"state": "CH-VD"
 },
 "*|roosendaal": {
 "cc": "nl",
