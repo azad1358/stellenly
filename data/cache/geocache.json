@@ -180,6 +180,12 @@
 "lat": 47.8347,
 "lon": 0.7526
 },
+"*|bicester": {
+"cc": "gb",
+"lat": 51.8988,
+"lon": -1.1519,
+"state": "GB-ENG"
+},
 "*|bicester village": {
 "cc": "gb",
 "lat": 51.8924,
@@ -942,6 +948,12 @@
 "cc": "fr",
 "lat": 49.6902,
 "lon": 1.3995
+},
+"*|mendrisio": {
+"cc": "ch",
+"lat": 45.871,
+"lon": 8.9875,
+"state": "CH-TI"
 },
 "*|michendorf": {
 "cc": "de",
@@ -2374,6 +2386,12 @@
 "lat": 52.3016,
 "lon": 13.261,
 "state": "DE-BB"
+},
+"de|magdeburg": {
+"cc": "de",
+"lat": 52.1315,
+"lon": 11.6401,
+"state": "DE-ST"
 },
 "de|manching": {
 "cc": "de",
