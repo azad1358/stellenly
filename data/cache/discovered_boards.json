@@ -322,6 +322,11 @@
    "board": "ceezer",
    "company": "Ceezer"
   },
+  "cello": {
+   "ats": "ashby",
+   "board": "Cello",
+   "company": "Cello"
+  },
   "certa": {
    "ats": "ashby",
    "board": "Certa",
@@ -2010,6 +2015,11 @@
    "region": "eu",
    "company": "Westernacher"
   },
+  "whalargroup": {
+   "ats": "greenhouse",
+   "board": "whalarinc",
+   "company": "Whalar Group"
+  },
   "whatag": {
    "ats": "recruitee",
    "board": "what",
@@ -2233,8 +2243,10 @@
   "gitlab": "2026-10-27",
   "glassflow": "2026-11-11",
   "globalreportinginitiative": "2026-10-29",
+  "glow25byprimalstateperformancegmbh": "2026-11-17",
   "glsnxt": "2026-10-27",
   "goegmbh": "2026-11-15",
+  "greenventorygmbh": "2026-11-17",
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
   "harnessopenpositionsjobopportunities": "2026-11-16",
@@ -2246,6 +2258,7 @@
   "hillsideassetslimited": "2026-11-11",
   "holidu": "2026-11-05",
   "hopnug": "2026-10-27",
+  "horbachcenterfrankfurt": "2026-11-17",
   "hornetsecurity": "2026-11-05",
   "hostaway": "2026-10-27",
   "hozah": "2026-11-03",
@@ -2318,6 +2331,7 @@
   "nejo": "2026-10-27",
   "nellysolutions": "2026-10-27",
   "netlight": "2026-10-31",
+  "networkcorporatefinance": "2026-11-17",
   "neuralframes": "2026-10-27",
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
@@ -2383,6 +2397,7 @@
   "riiico": "2026-10-27",
   "rizm": "2026-10-27",
   "roboservicegmbh": "2026-10-27",
+  "robovis": "2026-11-17",
   "roboyo": "2026-11-08",
   "roger": "2026-10-28",
   "routinelabs": "2026-11-03",
