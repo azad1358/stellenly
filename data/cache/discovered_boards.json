@@ -51,6 +51,11 @@
    "board": "acm-aerospace",
    "company": "Acm Aerospace"
   },
+  "actcareers": {
+   "ats": "ashby",
+   "board": "actcareers",
+   "company": "Actcareers"
+  },
   "adaptyio": {
    "ats": "ashby",
    "board": "adapty-io",
@@ -546,6 +551,16 @@
    "board": "doctrine",
    "company": "Doctrine"
   },
+  "doit": {
+   "ats": "ashby",
+   "board": "doit",
+   "company": "Doit"
+  },
+  "dploy": {
+   "ats": "workable",
+   "board": "d-ploy",
+   "company": "D Ploy"
+  },
   "dryft": {
    "ats": "ashby",
    "board": "dryft",
@@ -742,6 +757,11 @@
    "ats": "workable",
    "board": "getolo",
    "company": "Getolo"
+  },
+  "getyourguide": {
+   "ats": "ashby",
+   "board": "GetYourGuide",
+   "company": "Getyourguide"
   },
   "gotphoto": {
    "ats": "ashby",
@@ -1634,6 +1654,11 @@
    "board": "sharkninjaoperatingllc",
    "company": "Sharkninjaoperatingllc"
   },
+  "shield": {
+   "ats": "ashby",
+   "board": "shield",
+   "company": "Shield"
+  },
   "shieldai": {
    "ats": "lever",
    "board": "shieldai",
@@ -1929,6 +1954,11 @@
    "board": "verifone",
    "company": "Verifone"
   },
+  "vesoma": {
+   "ats": "ashby",
+   "board": "vesoma",
+   "company": "Vesoma"
+  },
   "vestiairecollective": {
    "ats": "lever",
    "board": "vestiairecollective",
@@ -2099,6 +2129,7 @@
   "6pmgmbh": "2026-11-10",
   "7nxtgmbh": "2026-10-27",
   "acadiajoblistings": "2026-10-31",
+  "accelerated": "2026-11-17",
   "accuridsgmbh": "2026-10-27",
   "adlicious": "2026-11-17",
   "adstrong": "2026-10-27",
@@ -2137,6 +2168,7 @@
   "baringa": "2026-10-29",
   "beforeeightgroupgmbh": "2026-11-12",
   "beneeringgmbh": "2026-11-03",
+  "berlinmetropolitanschool": "2026-11-17",
   "beyondservicegmbh": "2026-10-27",
   "bgprevent": "2026-11-03",
   "biahubshellocircle": "2026-10-28",
@@ -2169,6 +2201,7 @@
   "cityscience": "2026-10-27",
   "clariness": "2026-11-06",
   "clarinessgmbh": "2026-10-27",
+  "cloudstudios": "2026-11-17",
   "cocrafterycw24": "2026-11-05",
   "codat": "2026-10-28",
   "coffeecircle": "2026-11-17",
@@ -2213,6 +2246,8 @@
   "engcmbluenergyag": "2026-10-27",
   "ennovationhub": "2026-10-27",
   "enpal": "2026-10-27",
+  "enzo": "2026-11-17",
+  "europeandynamics": "2026-11-17",
   "eventincgmbh": "2026-10-28",
   "everwareconsultinggmbh": "2026-11-05",
   "evidenteuropegmbh": "2026-11-05",
@@ -2228,6 +2263,7 @@
   "firesprite": "2026-10-28",
   "firstmomentumventures": "2026-11-04",
   "fivetran": "2026-10-27",
+  "fixfirst": "2026-11-17",
   "flaconi": "2026-11-08",
   "flipper": "2026-11-03",
   "flix": "2026-10-27",
@@ -2238,6 +2274,7 @@
   "freenow": "2026-10-27",
   "freshcellssystemsengineeringgmbh": "2026-11-03",
   "funded": "2026-11-03",
+  "gameduell": "2026-11-17",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
   "getologmbh": "2026-11-11",
@@ -2296,6 +2333,7 @@
   "logex": "2026-11-12",
   "logicc": "2026-10-27",
   "logicmonitor": "2026-10-27",
+  "logisticaos": "2026-11-17",
   "loopforgelab": "2026-11-13",
   "lufthansainnovationhubgmbh": "2026-11-17",
   "luscii": "2026-10-29",
@@ -2312,6 +2350,7 @@
   "marentis": "2026-11-09",
   "marketcloud": "2026-10-27",
   "mediachargegmbh": "2026-10-27",
+  "medirion": "2026-11-17",
   "meet5gmbh": "2026-10-29",
   "meridionag": "2026-11-16",
   "milengogmbh": "2026-11-09",
@@ -2377,6 +2416,7 @@
   "pqshield": "2026-11-03",
   "precisionmedicinegroup": "2026-10-28",
   "prefirogmbh": "2026-10-27",
+  "primeforcegroup": "2026-11-17",
   "productsup": "2026-11-11",
   "progynyglobal": "2026-11-06",
   "prolific": "2026-10-28",
@@ -2409,6 +2449,7 @@
   "rubygmbh": "2026-10-27",
   "samsara": "2026-10-30",
   "sbrinternationalgmbh": "2026-11-05",
+  "schulzcieconsultinggmbh": "2026-11-17",
   "scout24": "2026-10-27",
   "secondfoundation": "2026-11-10",
   "seragruppe": "2026-11-04",
@@ -2469,6 +2510,7 @@
   "ubitiumgmbh": "2026-11-04",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
+  "upcollectivegrowthmarketing": "2026-11-17",
   "upvest": "2026-10-28",
   "valiantys": "2026-11-07",
   "valova": "2026-11-09",
@@ -2487,6 +2529,7 @@
   "viralapp": "2026-11-08",
   "visionspacegroup": "2026-11-04",
   "vivalyxgmbh": "2026-10-27",
+  "w9rlimitedo": "2026-11-17",
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
   "wayve": "2026-11-12",
@@ -2504,6 +2547,7 @@
   "wundermobility": "2026-10-30",
   "xaltbusinessconsultinggmbh": "2026-11-09",
   "xtpgmbh": "2026-10-27",
+  "yzrcapital": "2026-11-17",
   "zattoo": "2026-10-27",
   "zekjugmbh": "2026-10-27",
   "zenjob": "2026-11-12",

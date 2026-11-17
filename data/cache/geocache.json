@@ -85,6 +85,12 @@
 "lat": 52.3731,
 "lon": 4.8925
 },
+"*|any": {
+"cc": "in",
+"lat": 8.5794,
+"lon": 78.092,
+"state": "IN-TN"
+},
 "*|any location": null,
 "*|anywhere in france": null,
 "*|apeldoorn": {
@@ -1245,6 +1251,12 @@
 "lat": 48.1113,
 "lon": -1.68
 },
+"*|rheinhausen": {
+"cc": "de",
+"lat": 48.2338,
+"lon": 7.7145,
+"state": "DE-BW"
+},
 "*|rijswijk": {
 "cc": "nl",
 "lat": 52.0374,
@@ -1272,6 +1284,12 @@
 "lat": 51.5331,
 "lon": 4.4561,
 "state": "NL-NB"
+},
+"*|root": {
+"cc": "ch",
+"lat": 47.1153,
+"lon": 8.3911,
+"state": "CH-LU"
 },
 "*|rotterdam": {
 "cc": "nl",
@@ -1854,6 +1872,18 @@
 "lon": 8.5852,
 "state": "DE-HB"
 },
+"de|bruckmühl": {
+"cc": "de",
+"lat": 47.8828,
+"lon": 11.9146,
+"state": "DE-BY"
+},
+"de|burgkirchen an der alz": {
+"cc": "de",
+"lat": 48.1508,
+"lon": 12.7107,
+"state": "DE-BY"
+},
 "de|böblingen": {
 "cc": "de",
 "lat": 48.685,
@@ -2206,6 +2236,12 @@
 "lon": 8.3587,
 "state": "DE-HE"
 },
+"de|holzkirchen": {
+"cc": "de",
+"lat": 49.7817,
+"lon": 9.6797,
+"state": "DE-BY"
+},
 "de|home": {
 "cc": "de",
 "lat": 51.8223,
@@ -2236,6 +2272,12 @@
 "lat": 49.7369,
 "lon": 8.5713,
 "state": "DE-HE"
+},
+"de|hürth": {
+"cc": "de",
+"lat": 50.8807,
+"lon": 6.8766,
+"state": "DE-NW"
 },
 "de|immenhausen": {
 "cc": "de",
@@ -2429,6 +2471,12 @@
 "lon": 13.5361,
 "state": "DE-BB"
 },
+"de|moosburg": {
+"cc": "de",
+"lat": 48.4667,
+"lon": 11.9333,
+"state": "DE-BY"
+},
 "de|moosburg an der isar": {
 "cc": "de",
 "lat": 48.4667,
@@ -2614,6 +2662,12 @@
 "lat": 51.5459,
 "lon": 6.6014,
 "state": "DE-NW"
+},
+"de|rheinhausen": {
+"cc": "de",
+"lat": 48.2338,
+"lon": 7.7145,
+"state": "DE-BW"
 },
 "de|rostock": {
 "cc": "de",
