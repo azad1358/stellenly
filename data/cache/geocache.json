@@ -719,6 +719,12 @@
 "lat": 48.2979,
 "lon": 10.9895
 },
+"*|korbach": {
+"cc": "de",
+"lat": 51.2559,
+"lon": 8.8427,
+"state": "DE-HE"
+},
 "*|korntal-münchingen": {
 "cc": "de",
 "lat": 48.8433,
@@ -1171,6 +1177,12 @@
 "lat": 47.7519,
 "lon": 11.3763
 },
+"*|peterborough": {
+"cc": "gb",
+"lat": 52.5726,
+"lon": -0.2427,
+"state": "GB-ENG"
+},
 "*|plymouth": {
 "cc": "gb",
 "lat": 50.3714,
@@ -1217,6 +1229,7 @@
 "state": "GB-SCT"
 },
 "*|remote (utc-3 to utc+3)": null,
+"*|remote - europe only": null,
 "*|remote - europe timezone": null,
 "*|remote - france": null,
 "*|remote - uk": {
@@ -1444,6 +1457,12 @@
 "cc": "gb",
 "lat": 52.241,
 "lon": 1.0466
+},
+"*|swindon": {
+"cc": "gb",
+"lat": 51.5615,
+"lon": -1.7854,
+"state": "GB-ENG"
 },
 "*|switzerland": {
 "cc": "ch",
@@ -2375,6 +2394,12 @@
 "lat": 47.6592,
 "lon": 9.1751,
 "state": "DE-BW"
+},
+"de|korbach": {
+"cc": "de",
+"lat": 51.2559,
+"lon": 8.8427,
+"state": "DE-HE"
 },
 "de|korntal-münchingen": {
 "cc": "de",
