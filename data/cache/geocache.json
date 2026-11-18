@@ -250,6 +250,7 @@
 "lat": 50.8215,
 "lon": -0.1401
 },
+"*|brighton - st josephs business park (hop)": null,
 "*|bristol": {
 "cc": "gb",
 "lat": 51.443,
@@ -1327,6 +1328,12 @@
 "cc": "fr",
 "lat": 49.3505,
 "lon": 2.1222
+},
+"*|sankt georgen im schwarzwald": {
+"cc": "de",
+"lat": 47.9809,
+"lon": 7.8208,
+"state": "DE-BW"
 },
 "*|satigny, switzerland": {
 "cc": "ch",
@@ -2704,6 +2711,12 @@
 "lat": 52.1504,
 "lon": 10.3593,
 "state": "DE-NI"
+},
+"de|sankt georgen im schwarzwald": {
+"cc": "de",
+"lat": 47.9809,
+"lon": 7.8208,
+"state": "DE-BW"
 },
 "de|schortens": {
 "cc": "de",
