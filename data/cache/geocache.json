@@ -2212,6 +2212,12 @@
 "lon": 10.1529,
 "state": "DE-BW"
 },
+"de|heilbronn": {
+"cc": "de",
+"lat": 49.1423,
+"lon": 9.2187,
+"state": "DE-BW"
+},
 "de|helmstedt": {
 "cc": "de",
 "lat": 52.2087,
@@ -2398,6 +2404,12 @@
 "lat": 51.3309,
 "lon": 13.6696,
 "state": "DE-SN"
+},
+"de|langen": {
+"cc": "de",
+"lat": 49.9915,
+"lon": 8.6667,
+"state": "DE-HE"
 },
 "de|leipzig": {
 "cc": "de",
@@ -2655,6 +2667,12 @@
 "cc": "de",
 "lat": 48.492,
 "lon": 9.2114,
+"state": "DE-BW"
+},
+"de|rhein-neckar-kreis": {
+"cc": "de",
+"lat": 49.3685,
+"lon": 8.7352,
 "state": "DE-BW"
 },
 "de|rheinberg": {
