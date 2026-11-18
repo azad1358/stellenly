@@ -27,12 +27,12 @@
   "visa": 335
  },
  "2026-W47": {
-  "active": 5942,
+  "active": 5924,
   "median_salary": 85000,
-  "new_7d": 1224,
-  "no_german_pct": 15,
+  "new_7d": 1251,
+  "no_german_pct": 14,
   "remote_pct": 25,
   "salary_pct": 6,
-  "visa": 330
+  "visa": 323
  }
 }
