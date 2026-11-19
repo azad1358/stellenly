@@ -697,6 +697,11 @@
    "board": "fender",
    "company": "Fender"
   },
+  "finary": {
+   "ats": "ashby",
+   "board": "finary",
+   "company": "Finary"
+  },
   "finmidcom": {
    "ats": "ashby",
    "board": "finmid.com",
@@ -874,6 +879,12 @@
    "ats": "workable",
    "board": "imtf",
    "company": "Imtf"
+  },
+  "incogroup": {
+   "ats": "recruitee",
+   "board": "inco-group",
+   "region": "https://careers.inco-group.co",
+   "company": "INCO GROUP"
   },
   "indiecamperslinkedin": {
    "ats": "greenhouse",
@@ -2370,6 +2381,7 @@
   "htechsupports": "2026-10-29",
   "humifygmbh": "2026-11-02",
   "hurracom": "2026-10-28",
+  "hypofriendgmbh": "2026-11-19",
   "hyroxworldgmbh": "2026-11-13",
   "idnow": "2026-11-12",
   "ilertgmbh": "2026-10-27",
@@ -2385,6 +2397,7 @@
   "jumbo": "2026-11-09",
   "karbon": "2026-11-15",
   "kdpharma": "2026-11-18",
+  "kdpharmagroup": "2026-11-19",
   "keepersecurity": "2026-11-18",
   "kickdowngmbh": "2026-10-29",
   "kittl": "2026-10-27",
@@ -2412,6 +2425,7 @@
   "makingscience": "2026-10-27",
   "malt": "2026-11-08",
   "mammutpharma": "2026-11-11",
+  "manugygmbh": "2026-11-19",
   "maomaotechnologies": "2026-10-28",
   "mapleaviation": "2026-11-03",
   "maramio": "2026-11-12",
@@ -2450,6 +2464,7 @@
   "notion": "2026-11-08",
   "novantaeuropegmbh": "2026-11-16",
   "nscglobal": "2026-10-30",
+  "nulegalgmbh": "2026-11-19",
   "nviso": "2026-10-27",
   "okta": "2026-10-28",
   "oktagonmma": "2026-11-10",

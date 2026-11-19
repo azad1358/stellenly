@@ -338,6 +338,12 @@
 "lat": 51.5175,
 "lon": -3.2451
 },
+"*|cergy, val-d'oise": {
+"cc": "fr",
+"lat": 49.0528,
+"lon": 2.0389,
+"state": "FR-IDF"
+},
 "*|chatham": {
 "cc": "us",
 "lat": 31.9669,
@@ -1623,6 +1629,12 @@
 "lat": 51.2356,
 "lon": 5.7051
 },
+"*|weesp": {
+"cc": "nl",
+"lat": 52.3073,
+"lon": 5.0421,
+"state": "NL-NH"
+},
 "*|willows factory, bridgwater": null,
 "*|winchester": {
 "cc": "gb",
@@ -2076,6 +2088,12 @@
 "lon": 7.8539,
 "state": "DE-BW"
 },
+"de|falkensee": {
+"cc": "de",
+"lat": 52.5606,
+"lon": 13.0882,
+"state": "DE-BB"
+},
 "de|finsterwalde": {
 "cc": "de",
 "lat": 51.6315,
@@ -2484,6 +2502,12 @@
 "lat": 52.1315,
 "lon": 11.6401,
 "state": "DE-ST"
+},
+"de|mainz": {
+"cc": "de",
+"lat": 49.9995,
+"lon": 8.2736,
+"state": "DE-RP"
 },
 "de|manching": {
 "cc": "de",
