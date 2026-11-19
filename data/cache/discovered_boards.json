@@ -127,6 +127,11 @@
    "board": "anandaventuresgmbh",
    "company": "Ananda Ventures GmbH"
   },
+  "anaplan": {
+   "ats": "greenhouse",
+   "board": "anaplan",
+   "company": "Anaplan"
+  },
   "andercore": {
    "ats": "ashby",
    "board": "andercore",
@@ -1331,6 +1336,11 @@
    "board": "onapsis",
    "company": "Onapsis"
   },
+  "onebrief": {
+   "ats": "ashby",
+   "board": "onebrief",
+   "company": "Onebrief"
+  },
   "ontargetcommunications": {
    "ats": "recruitee",
    "board": "ontarget",
@@ -1436,6 +1446,11 @@
    "board": "plane",
    "company": "Plane"
   },
+  "platformengineeringmasters": {
+   "ats": "ashby",
+   "board": "platform-engineering",
+   "company": "Platform Engineering Masters"
+  },
   "pleo": {
    "ats": "ashby",
    "board": "pleo",
@@ -1530,6 +1545,11 @@
    "board": "Redis",
    "company": "Redis"
   },
+  "rematiqgmbh": {
+   "ats": "ashby",
+   "board": "rematiq-gmbh",
+   "company": "Rematiq Gmbh"
+  },
   "remberg": {
    "ats": "ashby",
    "board": "remberg",
@@ -1599,6 +1619,11 @@
    "ats": "ashby",
    "board": "rootglobal",
    "company": "Rootglobal"
+  },
+  "sagelabsai": {
+   "ats": "ashby",
+   "board": "sagelabs.ai",
+   "company": "Sagelabs.ai"
   },
   "sanity": {
    "ats": "ashby",
@@ -2165,6 +2190,7 @@
   "adlicious": "2026-11-17",
   "adstrong": "2026-10-27",
   "affiliatelandscape": "2026-11-12",
+  "agas": "2026-11-19",
   "agentfgmbh": "2026-11-06",
   "agentixlakegmbh": "2026-10-30",
   "agicap": "2026-11-08",

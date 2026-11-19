@@ -2443,6 +2443,12 @@
 "lon": 8.6667,
 "state": "DE-HE"
 },
+"de|leinfelden-echterdingen": {
+"cc": "de",
+"lat": 48.6902,
+"lon": 9.1526,
+"state": "DE-BW"
+},
 "de|leipzig": {
 "cc": "de",
 "lat": 51.3406,
@@ -2670,6 +2676,12 @@
 "lat": 48.6961,
 "lon": 10.928,
 "state": "DE-BY"
+},
+"de|ramstein air base": {
+"cc": "de",
+"lat": 49.4414,
+"lon": 7.6012,
+"state": "DE-RP"
 },
 "de|ramstein-miesenbach": {
 "cc": "de",
