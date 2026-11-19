@@ -1241,6 +1241,11 @@
    "board": "netboxlabs",
    "company": "Netboxlabs"
   },
+  "netcetera": {
+   "ats": "workable",
+   "board": "netcetera",
+   "company": "Netcetera"
+  },
   "netgear": {
    "ats": "ashby",
    "board": "netgear",
@@ -1351,6 +1356,11 @@
    "board": "orbem",
    "company": "Orbem"
   },
+  "pandektes": {
+   "ats": "ashby",
+   "board": "pandektes",
+   "company": "Pandektes"
+  },
   "parallel": {
    "ats": "ashby",
    "board": "beparallel",
@@ -1456,6 +1466,12 @@
    "ats": "ashby",
    "board": "proxima-fusion",
    "company": "Proxima Fusion GmbH"
+  },
+  "publitascombv": {
+   "ats": "recruitee",
+   "board": "publitas",
+   "region": "https://jobs.publitas.com",
+   "company": "Publitas.com B.V."
   },
   "purestorage": {
    "ats": "greenhouse",
@@ -1689,6 +1705,11 @@
    "ats": "recruitee",
    "board": "skycellag",
    "company": "SkyCell AG"
+  },
+  "socialsweethearts": {
+   "ats": "workable",
+   "board": "socialsweethearts",
+   "company": "Socialsweethearts"
   },
   "sodadatanv": {
    "ats": "workable",
@@ -1938,6 +1959,11 @@
    "ats": "recruitee",
    "board": "up42gmbh",
    "company": "UP42 GmbH"
+  },
+  "uplane": {
+   "ats": "ashby",
+   "board": "uplane",
+   "company": "Uplane"
   },
   "urbansportsclub": {
    "ats": "greenhouse",
@@ -2194,6 +2220,7 @@
   "buildingradargmbh": "2026-10-27",
   "buyaramen": "2026-10-28",
   "buyinglabs": "2026-11-05",
+  "c3iot": "2026-11-19",
   "callmai": "2026-11-18",
   "camunda": "2026-10-27",
   "caronsale": "2026-10-27",
