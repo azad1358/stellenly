@@ -1602,39 +1602,69 @@ def build_tools(jobs: list[dict]) -> str:
     return "tools.html"
 
 
+def news_card(it: dict, topics: dict, featured: bool = False) -> str:
+    """One story: photo (or the topic's illustration when there is none or it fails to load), topic, headline,
+    summary, source and date. Links to the original article."""
+    t = topics.get(it.get("topic")) or topics["jobs"]
+    img = (f'<img src="{e(it["image"])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">'
+           if it.get("image") else "")
+    ba = it.get("translated")
+    de = (f'<span class="news-de" lang="de">🇩🇪 Original: „{e(it["title_de"])}“</span>' if ba else "")
+    meta = f'{e(it["source"])} · {fmt_date(it["date"])}' + (" · Translated from German ↗" if ba else " ↗")
+    return f"""<a class="post-card news-card{' featured' if featured else ''}" href="{e(it['link'])}" target="_blank" rel="noopener">
+  <span class="news-media post-card-img" style="--h:{t['hue']}"><span class="news-ico" aria-hidden="true">{t['icon']}</span>{img}</span>
+  <span class="post-card-body">
+    <span class="post-sec" style="--h:{t['hue']}">{e(t['title'])}</span>
+    <span class="post-card-title">{e(it['title'])}</span>
+    {f'<span class="post-card-desc">{e(it["summary"])}</span>' if it.get("summary") else ""}{de}
+    <span class="post-card-meta">{meta}</span>
+  </span>
+</a>"""
+
+
 def build_news() -> str:
-    """news.html from content/news.json (build/news_collect.py), and data/news-latest.json for the news line on
-    the main page (web/js/app.js)."""
+    """news.html from content/news.json (build/news_collect.py): the newest story big, the latest ones, then one section
+    per topic (data/news_page.json). Also data/news-latest.json for the news line on the main page (web/js/app.js)."""
     try:
         items = json.loads((CONTENT / "news.json").read_text(encoding="utf-8"))["items"]
     except (OSError, ValueError, KeyError):
         items = []
-    cards = []
-    for it in items:
-        day = parse_ts(it["date"]).date()
-        ba = it.get("translated")
-        tr = ' · <span class="news-tr">Translated from German</span>' if ba else ""
-        cards.append(
-            f'<article class="news-item{" ba" if ba else ""}"><p class="news-meta"><span class="news-src">{e(it["source"])}</span>'
-            f' · <time datetime="{day.isoformat()}">{day:%d %b %Y}</time>{tr}</p>'
-            f'<h2><a href="{e(it["link"])}" target="_blank" rel="noopener">{e(it["title"])}</a></h2>'
-            + (f'<p>{e(it["summary"])}</p>' if it.get("summary") else "")
-            + (f'<p class="news-orig"><span lang="de">„{e(it["title_de"])}“</span> · <a href="{e(it["link"])}" '
-               f'target="_blank" rel="noopener">Read the original (German) ↗</a></p>' if ba else "")
-            + "</article>")
-    body = ('<h1>News for internationals in Germany</h1>'
-            '<p class="lead">Jobs, visas, the labour market and new rules, in English. Including the news of the '
-            'Bundesagentur für Arbeit (Federal Employment Agency), translated from German with a link to the original. '
-            'Updated every 6 hours.</p>'
-            + ('<div class="news-list">' + "".join(cards) + "</div>" if cards else "<p>No news yet. Check back soon.</p>")
-            + '<p class="muted small">Translations are made by AI and can contain mistakes: for anything that matters to '
-              'you, check the German original or ask your Agentur für Arbeit.</p>')
+    topics = {t["id"]: t for t in json.loads((ROOT / "data" / "news_page.json").read_text(encoding="utf-8"))["topics"]}
+    # The lead story: the newest one with a photo among the latest five (a big card looks empty without one).
+    lead = next((it for it in items[:5] if it.get("image")), items[0]) if items else None
+    rest = [it for it in items if it is not lead]
+    latest, shown = rest[:6], {id(it) for it in rest[:6]}
+    blocks = []
+    for tid, t in topics.items():
+        mine = [it for it in rest if it.get("topic") == tid]
+        if not mine:
+            continue
+        cards = [it for it in mine if id(it) not in shown][:6] or mine[:3]
+        blocks.append(f"""<section class="sec-block" id="{tid}">
+  <div class="sec-head"><div><h2>{t['icon']} {e(t['title'])}</h2><p>{len(mine)} {'story' if len(mine) == 1 else 'stories'} in the last 60 days</p></div></div>
+  <div class="post-grid">{"".join(news_card(it, topics) for it in cards)}</div>
+</section>""")
+    chips = "".join(f'<a class="tag" href="#{tid}">{t["icon"]} {e(t["title"])}</a>' for tid, t in topics.items()
+                    if any(it.get("topic") == tid for it in items))
+    body = f"""<section class="page-hero"><div>
+  <p class="eyebrow">News · updated {fmt_date(TODAY.isoformat())}</p>
+  <h1>News for internationals in Germany</h1>
+  <p class="lead">Visas and the Chancenkarte, housing, moving and daily life, jobs and salaries: what matters if you work
+  in Germany or want to. In English, including the Bundesagentur für Arbeit, translated from German. Updated every 6 hours.</p>
+  <nav class="tag-cloud" aria-label="Topics">{chips}</nav></div>
+</section>
+{f'<div class="featured-wrap"><p class="kicker accent">Top story</p>{news_card(lead, topics, featured=True)}</div>' if lead else '<p>No news yet. Check back soon.</p>'}
+{f'<section class="sec-block"><div class="sec-head"><div><h2>Latest</h2></div></div><div class="post-grid">{"".join(news_card(it, topics) for it in latest)}</div></section>' if latest else ""}
+{"".join(blocks)}
+<p class="muted small news-note">Headlines and photos belong to their publishers; every story links to the original.
+Stories from the Bundesagentur für Arbeit are translated and summarised by AI and can contain mistakes: for anything
+that matters to you, read the German original or ask your Agentur für Arbeit.</p>"""
     (WEB / "news.html").write_text(page("News for internationals in Germany",
-                                        "News about jobs, visas, the labour market and new rules in Germany, in English, "
-                                        "including the Bundesagentur für Arbeit translated from German.",
-                                        body, "news.html", 0, main_class="post-page news-page"), encoding="utf-8")
-    latest = {k: items[0][k] for k in ("title", "link", "source", "date")} if items else None
-    (WEB / "data" / "news-latest.json").write_text(json.dumps(latest, ensure_ascii=False), encoding="utf-8")
+                                        "News for internationals in Germany: visas and the Chancenkarte, housing, moving, "
+                                        "jobs and salaries, and the Bundesagentur für Arbeit translated to English.",
+                                        body, "news.html", 0, main_class="guides-page news-page"), encoding="utf-8")
+    latest_one = {k: items[0][k] for k in ("title", "link", "source", "date")} if items else None
+    (WEB / "data" / "news-latest.json").write_text(json.dumps(latest_one, ensure_ascii=False), encoding="utf-8")
     return "news.html"
 
 
