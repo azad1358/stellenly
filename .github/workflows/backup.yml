@@ -38,7 +38,7 @@ jobs:
           supabase db dump --linked -f schema.sql
           supabase db dump --linked --data-only --use-copy --schema public -f data.sql
           echo "Rows per table:"
-          awk '/^COPY /{t=$2; n=0; next} /^\\\.$/{print "  " t ": " n; next} t{n++}' data.sql
+          awk '/^COPY /{t=$2; n=0; next} /^\\\.$/{print "  " t ": " n; t=""; next} t!=""{n++}' data.sql
           ls -la
       - name: Encrypt
         run: |
