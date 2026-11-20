@@ -292,6 +292,11 @@
    "board": "bluerocksecurity",
    "company": "Bluerocksecurity"
   },
+  "bonialinternationalgmbh": {
+   "ats": "recruitee",
+   "board": "bonial",
+   "company": "Bonial International GmbH"
+  },
   "bowatt": {
    "ats": "ashby",
    "board": "bowatt",
@@ -1503,6 +1508,11 @@
    "board": "prior-labs",
    "company": "Prior Labs"
   },
+  "prosci": {
+   "ats": "workable",
+   "board": "prosci",
+   "company": "Prosci"
+  },
   "proximafusiongmbh": {
    "ats": "ashby",
    "board": "proxima-fusion",
@@ -2233,6 +2243,7 @@
   "adstrong": "2026-10-27",
   "affiliatelandscape": "2026-11-12",
   "agas": "2026-11-19",
+  "agencro": "2026-11-20",
   "agentfgmbh": "2026-11-06",
   "agentixlakegmbh": "2026-10-30",
   "agicap": "2026-11-08",
@@ -2337,6 +2348,7 @@
   "deliveroo": "2026-11-13",
   "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
+  "diamontechag": "2026-11-20",
   "digicert": "2026-11-05",
   "dnl": "2026-11-10",
   "doctolib": "2026-10-27",
@@ -2383,6 +2395,7 @@
   "freshcellssystemsengineeringgmbh": "2026-11-03",
   "funded": "2026-11-03",
   "gameduell": "2026-11-17",
+  "gasfin": "2026-11-20",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
   "getbeautyai": "2026-11-18",
@@ -2426,6 +2439,7 @@
   "itq": "2026-10-27",
   "jawbuddy": "2026-11-02",
   "jetbrains": "2026-10-27",
+  "joy": "2026-11-20",
   "jumbo": "2026-11-09",
   "karbon": "2026-11-15",
   "kdpharma": "2026-11-18",
@@ -2580,6 +2594,7 @@
   "simpsonstrongtiegmbh": "2026-11-12",
   "sineengineering": "2026-11-07",
   "skailark": "2026-10-27",
+  "skalar": "2026-11-20",
   "skdse": "2026-10-27",
   "smartlyio": "2026-11-10",
   "smartmicro": "2026-10-27",

@@ -18,6 +18,12 @@
 "lon": 4.8171,
 "state": "NL-NH"
 },
+"*|allaman": {
+"cc": "ch",
+"lat": 46.4708,
+"lon": 6.3962,
+"state": "CH-VD"
+},
 "*|allschwil": {
 "cc": "ch",
 "lat": 47.5511,
@@ -579,6 +585,12 @@
 "lat": 46.2018,
 "lon": 6.1466
 },
+"*|gières": {
+"cc": "fr",
+"lat": 45.1798,
+"lon": 5.7904,
+"state": "FR-ARA"
+},
 "*|glasgow": {
 "cc": "gb",
 "lat": 55.8612,
@@ -777,6 +789,12 @@
 "lat": 50.8407,
 "lon": -1.0826,
 "state": "GB-ENG"
+},
+"*|landau": {
+"cc": "de",
+"lat": 49.1983,
+"lon": 8.1123,
+"state": "DE-RP"
 },
 "*|lausanne": {
 "cc": "ch",
@@ -1672,6 +1690,12 @@
 "lat": 51.8313,
 "lon": 5.2575
 },
+"*|ware": {
+"cc": "us",
+"lat": 31.1727,
+"lon": -82.4829,
+"state": "US-GA"
+},
 "*|weert": {
 "cc": "nl",
 "lat": 51.2356,
@@ -2515,6 +2539,12 @@
 "lon": 13.6696,
 "state": "DE-SN"
 },
+"de|landau": {
+"cc": "de",
+"lat": 49.1983,
+"lon": 8.1123,
+"state": "DE-RP"
+},
 "de|langen": {
 "cc": "de",
 "lat": 49.9915,
@@ -2988,6 +3018,12 @@
 "lat": 50.082,
 "lon": 8.2417,
 "state": "DE-HE"
+},
+"de|wilhelmshaven": {
+"cc": "de",
+"lat": 53.5279,
+"lon": 8.1063,
+"state": "DE-NI"
 },
 "de|windeck": {
 "cc": "de",
