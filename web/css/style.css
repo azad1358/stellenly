@@ -1632,3 +1632,30 @@ body:has(.map-page) .site-footer, body:has(.map-page) .fab, body:has(.map-page) 
 .sal-notes { margin-top: 18px; font-size: .9rem; color: var(--muted); }
 .sal-notes summary { cursor: pointer; font-weight: 600; color: var(--text); }
 @media (max-width: 640px) { .sal-form { grid-template-columns: minmax(0, 1fr); } }
+
+/* News line under the header (index.html, web/js/app.js loadNewsLine) and the News page (news.html) */
+.news-line { display: flex; align-items: center; gap: 12px; padding: 7px 24px; background: var(--accent-soft, #eef0ff);
+  border-bottom: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.9rem; }
+.news-line[hidden] { display: none; }
+.news-line:hover .news-text { text-decoration: underline; }
+.news-pill { flex: none; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: #fff;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.news-track { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; }
+.news-text { display: inline-block; }
+.news-line:not(.scrolls) .news-text { max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.news-line.scrolls .news-text { animation: news-scroll var(--dur, 12s) ease-in-out 2s infinite alternate; }
+.news-line.scrolls:hover .news-text { animation-play-state: paused; }
+@keyframes news-scroll { to { transform: translateX(var(--dist, 0)); } }
+@media (prefers-reduced-motion: reduce) { .news-line.scrolls .news-text { animation: none; } }
+.news-more { flex: none; color: var(--accent); font-weight: 600; white-space: nowrap; }
+@media (max-width: 760px) { .news-line { padding: 6px 12px; } .news-more { display: none; } }
+.news-list { display: grid; gap: 14px; margin: 24px 0; }
+.news-item { padding: 16px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.news-item h2 { margin: 4px 0 6px; font-size: 1.12rem; line-height: 1.35; }
+.news-item h2 a { color: var(--text); text-decoration: none; }
+.news-item h2 a:hover { color: var(--accent); }
+.news-item p { margin: 0; }
+.news-meta { color: var(--muted); font-size: 0.82rem; }
+.news-src { font-weight: 600; color: var(--text); }
+.news-tr { color: var(--accent); }
+.news-orig { margin-top: 8px !important; color: var(--muted); font-size: 0.85rem; }

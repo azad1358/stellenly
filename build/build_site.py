@@ -180,11 +180,11 @@ def page(title: str, description: str, body: str, path: str, depth: int, extra_h
     <a class="btn ghost nav-link" href="{up}companies.html">Companies</a>
     <a class="btn ghost nav-link" href="{up}jobs/index.html">Cities</a>
     <a class="btn ghost nav-link" href="{up}map.html">Match</a>
-    <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a>
+    <a class="btn ghost nav-link" href="{up}blog/index.html">Guides</a><a class="btn ghost nav-link" href="{up}news.html">News</a>
     <details class="nav-more nav-link"><summary class="btn ghost">Tools</summary><div class="nav-menu"><a href="{up}tools.html#salary">💶 Salary calculator</a></div></details>
     <details class="nav-more"><summary class="btn ghost">More</summary><div class="nav-menu">
       <a class="m-only" href="{up}index.html">Jobs</a><a class="m-only" href="{up}companies.html">Companies</a>
-      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a><a class="m-only" href="{up}tools.html#salary">Salary calculator</a>
+      <a class="m-only" href="{up}jobs/index.html">Cities</a><a class="m-only" href="{up}map.html">Match</a><a class="m-only" href="{up}blog/index.html">Guides</a><a class="m-only" href="{up}news.html">News</a><a class="m-only" href="{up}tools.html#salary">Salary calculator</a>
       <a href="{up}how-it-works.html">How it works</a>{skill_link}<a href="{up}resources.html">Resources</a>
       <a class="m-only" href="{e(SITE['instagram_url'])}" target="_blank" rel="noopener">Instagram</a><a class="m-only" href="{e(SITE['facebook_url'])}" target="_blank" rel="noopener">Facebook</a></div></details>
   </nav>
@@ -1602,6 +1602,42 @@ def build_tools(jobs: list[dict]) -> str:
     return "tools.html"
 
 
+def build_news() -> str:
+    """news.html from content/news.json (build/news_collect.py), and data/news-latest.json for the news line on
+    the main page (web/js/app.js)."""
+    try:
+        items = json.loads((CONTENT / "news.json").read_text(encoding="utf-8"))["items"]
+    except (OSError, ValueError, KeyError):
+        items = []
+    cards = []
+    for it in items:
+        day = parse_ts(it["date"]).date()
+        ba = it.get("translated")
+        tr = ' · <span class="news-tr">Translated from German</span>' if ba else ""
+        cards.append(
+            f'<article class="news-item{" ba" if ba else ""}"><p class="news-meta"><span class="news-src">{e(it["source"])}</span>'
+            f' · <time datetime="{day.isoformat()}">{day:%d %b %Y}</time>{tr}</p>'
+            f'<h2><a href="{e(it["link"])}" target="_blank" rel="noopener">{e(it["title"])}</a></h2>'
+            + (f'<p>{e(it["summary"])}</p>' if it.get("summary") else "")
+            + (f'<p class="news-orig"><span lang="de">„{e(it["title_de"])}“</span> · <a href="{e(it["link"])}" '
+               f'target="_blank" rel="noopener">Read the original (German) ↗</a></p>' if ba else "")
+            + "</article>")
+    body = ('<h1>News for internationals in Germany</h1>'
+            '<p class="lead">Jobs, visas, the labour market and new rules, in English. Including the news of the '
+            'Bundesagentur für Arbeit (Federal Employment Agency), translated from German with a link to the original. '
+            'Updated every 6 hours.</p>'
+            + ('<div class="news-list">' + "".join(cards) + "</div>" if cards else "<p>No news yet. Check back soon.</p>")
+            + '<p class="muted small">Translations are made by AI and can contain mistakes: for anything that matters to '
+              'you, check the German original or ask your Agentur für Arbeit.</p>')
+    (WEB / "news.html").write_text(page("News for internationals in Germany",
+                                        "News about jobs, visas, the labour market and new rules in Germany, in English, "
+                                        "including the Bundesagentur für Arbeit translated from German.",
+                                        body, "news.html", 0, main_class="post-page news-page"), encoding="utf-8")
+    latest = {k: items[0][k] for k in ("title", "link", "source", "date")} if items else None
+    (WEB / "data" / "news-latest.json").write_text(json.dumps(latest, ensure_ascii=False), encoding="utf-8")
+    return "news.html"
+
+
 def build_sitemap(paths: list[str]) -> None:
     urls = "".join(f"<url><loc>{SITE_URL}/{p.replace('index.html', '')}</loc><lastmod>{TODAY.isoformat()}</lastmod></url>"
                    for p in sorted(set(paths)))
@@ -1633,9 +1669,10 @@ def main() -> None:
     write_title_suggestions(jobs)
     skills_page = [build_skill_check(load_role_rows(args.role_rows_file))] if SKILL_CHECK else []
     tools = build_tools(jobs)
-    reports = [f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
+    news = build_news()
+    reports =[f"blog/{p.name}" for p in (WEB / "blog").glob("job-market-*.html")]
     build_sitemap(["index.html", "resources.html", "blog/index.html"] + [p["path"] for p in posts] + reports
-                  + sections + landing + companies + [wiki] + skills_page + [tools])
+                  + sections + landing + companies + [wiki] + skills_page + [tools, news])
     print(f"Built: {len(posts)} guides, report {report['slug']}, {len(landing)} landing pages, "
           f"{len(companies) - 1} company pages, "
           f"{stats['active']} jobs ({stats['no_german_pct']}% no German)")
