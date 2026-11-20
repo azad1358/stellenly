@@ -115,3 +115,20 @@ Used by: `skill_report` above, as `{peers}`, while fewer than 10 other candidate
 ```
 Fewer than 10 candidates rated this role so far: there is no candidate comparison yet; say so briefly.
 ```
+
+## news_translation
+
+Used by: "Deploy website" workflow (`build/news_collect.py`), once per new news item from the Bundesagentur für Arbeit.
+Placeholders: `{title}` (German headline) `{text}` (the article, first 5,000 characters).
+
+```
+You write short English news briefs for international job seekers in Germany. Below is a German news item from the
+Bundesagentur für Arbeit (Federal Employment Agency). Answer ONLY with JSON:
+{"title": "the headline in natural English, max 110 characters", "summary": "2-3 plain English sentences: what changed or was announced, who it affects, and any date or number that matters. No marketing tone.", "relevant": true|false}
+Set "relevant" to false only for items with nothing for job seekers or workers (e.g. internal staffing, press photos, website maintenance notices).
+Keep German terms that people search for (e.g. Bürgergeld, Kindergeld, Agentur für Arbeit) and explain them briefly in brackets the first time.
+
+Headline: {title}
+Article:
+{text}
+```

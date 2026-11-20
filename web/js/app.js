@@ -1161,6 +1161,25 @@
     renderStats();
   }
 
+  // The latest story under the header (data/news-latest.json, built with news.html by build/build_site.py).
+  // A static file: no database request. Long headlines scroll slowly unless the visitor prefers less motion.
+  async function loadNewsLine() {
+    const line = $("#news-line");
+    if (!line) return;
+    try {
+      const n = await (await fetch(`${BASE}data/news-latest.json`)).json();
+      if (!n || !n.title) return;
+      $(".news-text", line).textContent = `${n.title} · ${n.source}`;
+      line.hidden = false;
+      const track = $(".news-track", line), text = $(".news-text", line);
+      if (text.scrollWidth > track.clientWidth + 4) {
+        text.style.setProperty("--dist", `${track.clientWidth - text.scrollWidth}px`);
+        text.style.setProperty("--dur", `${Math.max(8, (text.scrollWidth - track.clientWidth) / 25)}s`);
+        line.classList.add("scrolls");
+      }
+    } catch { /* no news line, the page works without it */ }
+  }
+
   // ---------------------------------------------------------------- live numbers, AI agents and Stelli (home page)
   const num = (x) => Number(x).toLocaleString("en");
   function renderStats() {
@@ -1428,6 +1447,7 @@
     });
 
     loadStats();
+    loadNewsLine();
     loadLocations();
     loadFacets();
     loadFreshness();

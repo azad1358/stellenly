@@ -1,14 +1,16 @@
 name: Deploy website
 
 # WHAT: builds every page of www.stellenly.com from the live database and publishes web/ to GitHub Pages.
-#   1. build/build_site.py: blog, weekly job-market report, city/field pages, company pages, Skill check data,
-#      sitemap, RSS
-#   2. build/job_pages.py: one page per job (schema.org JobPosting for Google's job search)
-#   3. publish to GitHub Pages, ping search engines (IndexNow), post new jobs to the Telegram channel
-#   4. post the code changes since the last post to the Discord #changelog channel (build/discord_post.py;
+#   1. build/news_collect.py: news for the News page (English feeds + Bundesagentur für Arbeit, translated by the
+#      LLM) into content/news.json
+#   2. build/build_site.py: blog, weekly job-market report, city/field pages, company pages, News page, Skill check
+#      data, sitemap, RSS
+#   3. build/job_pages.py: one page per job (schema.org JobPosting for Google's job search)
+#   4. publish to GitHub Pages, ping search engines (IndexNow), post new jobs to the Telegram channel
+#   5. post the code changes since the last post to the Discord #changelog channel (build/discord_post.py;
 #      only real changes, not the bot's data updates)
 # Generated pages are NOT committed; they are rebuilt on every deploy. Only the files a build cannot recreate are
-# committed: content/reports/history.json (week-over-week numbers), the frozen pages of past weekly reports
+# committed: content/reports/history.json (week-over-week numbers), content/news.json (translated news), the frozen pages of past weekly reports
 # (web/blog/job-market-*.html) and downloaded company logos (web/logos/).
 #
 # WHEN (no other workflow calls this one; it starts itself on any of these):
@@ -64,6 +66,14 @@ jobs:
       - name: Coats of arms for new states and cities (Wikidata / Wikimedia Commons, cached in data/cache)
         continue-on-error: true    # a missing one only shows a neutral icon
         run: python build/coats_of_arms.py
+      - name: News page data (English feeds + Bundesagentur für Arbeit, translated to English)
+        continue-on-error: true    # news never stops a deploy; a failed source or translation is retried next time
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}       # the same model as "Job insights"
+          LLM_API_URL: ${{ vars.LLM_API_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL }}
+        run: python build/news_collect.py
       - name: Site pages (guides, report, state/city/field and company pages, sitemap)
         run: python build/build_site.py
       - name: Skill check off -> drop its links from the hand-written pages too
@@ -74,8 +84,9 @@ jobs:
           git config user.name "site-bot"
           git config user.email "site-bot@users.noreply.github.com"
           git add content/reports web/logos web/blog/job-market-*.html data/cache/coats_of_arms.json web/img/coa
+          [ -f content/news.json ] && git add content/news.json
           git diff --cached --quiet && exit 0
-          git commit -m "Report history and logos $(date -u +%F)"
+          git commit -m "Report history, news and logos $(date -u +%F)"
           # "Ingest jobs" and "Job insights" also push to main: rebase on top of them and retry.
           for i in 1 2 3 4 5; do
             git push && exit 0
