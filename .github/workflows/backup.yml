@@ -1,0 +1,56 @@
+name: Database backup
+
+# WHAT: weekly off-site backup of the Supabase database (the free plan has no downloadable backups).
+#   Dumps the schema and the data of the public tables, encrypts them with the BACKUP_PASSPHRASE secret
+#   (the repository is public: anyone signed in to GitHub can download artifacts) and keeps them as a
+#   workflow artifact for 90 days. Each run reads ~70 MB from Supabase (egress), hence weekly.
+#
+# RESTORE: download the artifact from the run page, then
+#   gpg -d stellenly-db-<date>.tar.gz.gpg | tar xz       # asks for the passphrase
+#   psql "<connection string>" -f schema.sql && psql "<connection string>" -f data.sql
+#
+# WHEN: Sundays 02:30 UTC, and the "Run workflow" button.
+on:
+  schedule:
+    - cron: "30 2 * * 0"
+  workflow_dispatch: {}
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.122.0   # same pinned CLI as "Deploy backend"
+      - run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Dump schema and data
+        run: |
+          mkdir dump && cd dump
+          supabase db dump --linked -f schema.sql
+          supabase db dump --linked --data-only --use-copy --schema public -f data.sql
+          echo "Rows per table:"
+          awk '/^COPY /{t=$2; n=0; next} /^\\\.$/{print "  " t ": " n; next} t{n++}' data.sql
+          ls -la
+      - name: Encrypt
+        run: |
+          [ -n "$BACKUP_PASSPHRASE" ] || { echo "::error::BACKUP_PASSPHRASE secret is missing"; exit 1; }
+          f="stellenly-db-$(date -u +%F).tar.gz.gpg"
+          tar czf - -C dump . | gpg --batch --symmetric --cipher-algo AES256 --passphrase-fd 3 -o "$f" 3<<<"$BACKUP_PASSPHRASE"
+          rm -rf dump
+          ls -la "$f"
+          echo "FILE=$f" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILE }}
+          path: ${{ env.FILE }}
+          retention-days: 90
+          compression-level: 0   # already compressed and encrypted
