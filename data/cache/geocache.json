@@ -966,6 +966,12 @@
 "lat": 45.7578,
 "lon": 4.832
 },
+"*|maastricht, limburg": {
+"cc": "nl",
+"lat": 50.8512,
+"lon": 5.691,
+"state": "NL-LI"
+},
 "*|maidenhead": {
 "cc": "gb",
 "lat": 51.5227,
@@ -1301,6 +1307,12 @@
 "lat": 48.1113,
 "lon": -1.68
 },
+"*|rheinfelden": {
+"cc": "ch",
+"lat": 47.5544,
+"lon": 7.7923,
+"state": "CH-AG"
+},
 "*|rheinhausen": {
 "cc": "de",
 "lat": 48.2338,
@@ -1336,6 +1348,12 @@
 "state": "NL-NB"
 },
 "*|root": {
+"cc": "ch",
+"lat": 47.1153,
+"lon": 8.3911,
+"state": "CH-LU"
+},
+"*|root, lucerne": {
 "cc": "ch",
 "lat": 47.1153,
 "lon": 8.3911,
