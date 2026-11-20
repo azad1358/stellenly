@@ -30,6 +30,11 @@
    "board": "8returns",
    "company": "8returns GmbH"
   },
+  "abacum": {
+   "ats": "ashby",
+   "board": "abacum",
+   "company": "Abacum"
+  },
   "accelerationpartners": {
    "ats": "greenhouse",
    "board": "accelerationpartners",
@@ -55,6 +60,11 @@
    "ats": "ashby",
    "board": "actcareers",
    "company": "Actcareers"
+  },
+  "actian": {
+   "ats": "lever",
+   "board": "actian",
+   "company": "Actian"
   },
   "adaptyio": {
    "ats": "ashby",
@@ -529,6 +539,11 @@
    "ats": "ashby",
    "board": "differential.bio",
    "company": "Differential.bio"
+  },
+  "dilitrust": {
+   "ats": "lever",
+   "board": "dilitrust",
+   "company": "DiliTrust"
   },
   "distribusiontechnologies": {
    "ats": "recruitee",
@@ -2136,6 +2151,22 @@
    "ats": "workable",
    "board": "workmotion",
    "company": "Workmotion"
+  },
+  "xentral": {
+   "ats": "lever",
+   "board": "xentral",
+   "region": "eu",
+   "company": "Xentral"
+  },
+  "xometryeurope": {
+   "ats": "greenhouse",
+   "board": "xometryeurope",
+   "company": "Xometryeurope"
+  },
+  "xsolla": {
+   "ats": "lever",
+   "board": "xsolla",
+   "company": "Xsolla"
   },
   "yalwagmbh": {
    "ats": "recruitee",

@@ -114,6 +114,12 @@
 "lat": 47.1952,
 "lon": 8.5254
 },
+"*|baar zg": {
+"cc": "ch",
+"lat": 47.1952,
+"lon": 8.5254,
+"state": "CH-ZG"
+},
 "*|baden": {
 "cc": "at",
 "lat": 48.0077,
@@ -344,6 +350,12 @@
 "lon": 2.0389,
 "state": "FR-IDF"
 },
+"*|charmes, grand est": {
+"cc": "fr",
+"lat": 48.3725,
+"lon": 6.2934,
+"state": "FR-GES"
+},
 "*|chatham": {
 "cc": "us",
 "lat": 31.9669,
@@ -477,11 +489,23 @@
 "lat": 52.221,
 "lon": 6.8941
 },
+"*|espelkamp": {
+"cc": "de",
+"lat": 52.3778,
+"lon": 8.6157,
+"state": "DE-NW"
+},
 "*|essex - hybrid": {
 "cc": "us",
 "lat": 40.8393,
 "lon": -74.3113,
 "state": "US-NJ"
+},
+"*|ettlingen": {
+"cc": "de",
+"lat": 48.9262,
+"lon": 8.4056,
+"state": "DE-BW"
 },
 "*|europe": {
 "cc": null,
@@ -638,6 +662,12 @@
 "lat": 50.6541,
 "lon": 3.1839,
 "state": "FR-HDF"
+},
+"*|hilversum": {
+"cc": "nl",
+"lat": 52.2316,
+"lon": 5.1735,
+"state": "NL-NH"
 },
 "*|home office (united kingdom)": {
 "cc": "gb",
@@ -2070,6 +2100,12 @@
 "lon": 8.5608,
 "state": "DE-HE"
 },
+"de|espelkamp": {
+"cc": "de",
+"lat": 52.3778,
+"lon": 8.6157,
+"state": "DE-NW"
+},
 "de|essen": {
 "cc": "de",
 "lat": 51.4582,
@@ -2086,6 +2122,12 @@
 "cc": "de",
 "lat": 48.2487,
 "lon": 7.8539,
+"state": "DE-BW"
+},
+"de|ettlingen": {
+"cc": "de",
+"lat": 48.9262,
+"lon": 8.4056,
 "state": "DE-BW"
 },
 "de|falkensee": {
