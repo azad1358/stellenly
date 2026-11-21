@@ -1,6 +1,15 @@
 {
  "items": [
   {
+   "title": "Inside Germany: Berlin can be a lonely city but there is warmth to be found",
+   "summary": "Coming from Scotland, journalist Rachel Loxton struggles with the lack of social connection between strangers in Berlin. In this week's Inside Germany column, she shares her strategy for finding more friendly encounters in the capital.",
+   "source": "The Local Germany",
+   "link": "https://www.thelocal.de/20261121/inside-germany-berlin-can-be-a-lonely-city-but-there-is-warmth-to-be-found",
+   "date": "2026-11-21T11:52:47+01:00",
+   "topic": "living",
+   "image": "https://assets.thelocal.com/cdn-cgi/plain/https://apiwp.thelocal.com/wp-content/uploads/2026/11/578028101.jpg@webp"
+  },
+  {
    "title": "What we know about Lufthansa's plan to cut 1,000 jobs in Frankfurt and Munich",
    "summary": "Lufthansa is set to slash 1,000 full-time jobs at its Frankfurt and Munich airport hubs, it emerged on Friday.",
    "source": "The Local Germany",
@@ -269,17 +278,6 @@
    "topic": "ba",
    "image": null,
    "title_de": "IT-Störung der Online-Services: Informationen zu nachträglichen Meldungen",
-   "translated": true
-  },
-  {
-   "title": "New AI voice assistant \"Klara\" launched by Bundesagentur für Arbeit",
-   "summary": "The Federal Employment Agency has introduced \"Klara,\" a new AI voice assistant for its SGB III service hotline, starting September 22, 2026. The assistant handles initial calls and answers standard questions in pilot regions to reduce wait times for the roughly 18 million annual callers. Klara does not make official employment decisions, which remain handled exclusively by human staff.",
-   "source": "Bundesagentur für Arbeit",
-   "link": "https://www.arbeitsagentur.de/news/ki-sprachassistenz-klara-startet",
-   "date": "2026-09-22T12:00:00+00:00",
-   "topic": "ba",
-   "image": null,
-   "title_de": "KI-Sprachassistenz „Klara“ startet",
    "translated": true
   }
  ],
