@@ -148,6 +148,12 @@
 "lat": 51.3814,
 "lon": -2.3597
 },
+"*|battersea power station": {
+"cc": "gb",
+"lat": 51.4818,
+"lon": -0.1446,
+"state": "GB-ENG"
+},
 "*|bay area, san fransisco": null,
 "*|belfast": {
 "cc": "gb",
@@ -558,6 +564,12 @@
 "lat": 47.2044,
 "lon": 8.7599,
 "state": "CH-SZ"
+},
+"*|gatwick airport": {
+"cc": "gb",
+"lat": 51.1541,
+"lon": -0.1823,
+"state": "GB-ENG"
 },
 "*|gb - dundee": {
 "cc": "gb",
@@ -1167,6 +1179,12 @@
 "lat": 51.6322,
 "lon": 4.863
 },
+"*|open": {
+"cc": "pl",
+"lat": 54.1059,
+"lon": 20.2205,
+"state": "PL-28"
+},
 "*|orly": {
 "cc": "fr",
 "lat": 48.7432,
@@ -1439,6 +1457,12 @@
 "cc": "gb",
 "lat": 53.3807,
 "lon": -1.4702
+},
+"*|sheffield (gb)": {
+"cc": "gb",
+"lat": 53.3807,
+"lon": -1.4702,
+"state": "GB-ENG"
 },
 "*|sidcup": {
 "cc": "gb",

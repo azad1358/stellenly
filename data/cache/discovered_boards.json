@@ -697,6 +697,11 @@
    "board": "everdrop",
    "company": "everdrop GmbH"
   },
+  "everfield": {
+   "ats": "ashby",
+   "board": "everfield",
+   "company": "Everfield"
+  },
   "exa": {
    "ats": "ashby",
    "board": "exa",
@@ -706,6 +711,11 @@
    "ats": "ashby",
    "board": "eye-security",
    "company": "Eye Security"
+  },
+  "falai": {
+   "ats": "ashby",
+   "board": "fal-ai",
+   "company": "Fal Ai"
   },
   "fastned": {
    "ats": "recruitee",
@@ -894,6 +904,11 @@
    "ats": "recruitee",
    "board": "imnoo",
    "company": "Imnoo AG"
+  },
+  "impossiblecloud": {
+   "ats": "lever",
+   "board": "impossiblecloud",
+   "company": "Impossiblecloud"
   },
   "imtf": {
    "ats": "workable",
@@ -1196,6 +1211,11 @@
    "ats": "ashby",
    "board": "melotech",
    "company": "Melotech"
+  },
+  "mendix": {
+   "ats": "lever",
+   "board": "mendix",
+   "company": "Mendix"
   },
   "merge": {
    "ats": "ashby",
@@ -1544,6 +1564,11 @@
    "board": "qorelo",
    "company": "Qorelo"
   },
+  "quantco": {
+   "ats": "lever",
+   "board": "quantco-",
+   "company": "Quantco "
+  },
   "quantilopegmbh": {
    "ats": "personio",
    "board": "quantilope-gmbh",
@@ -1610,6 +1635,11 @@
    "ats": "recruitee",
    "board": "rewire",
    "company": "Rewire"
+  },
+  "rhodaai": {
+   "ats": "ashby",
+   "board": "rhoda-ai",
+   "company": "Rhoda Ai"
   },
   "rillet": {
    "ats": "ashby",
@@ -2407,6 +2437,7 @@
   "glow25byprimalstateperformancegmbh": "2026-11-17",
   "glsnxt": "2026-10-27",
   "goegmbh": "2026-11-15",
+  "gravity9": "2026-11-21",
   "greenventorygmbh": "2026-11-17",
   "grip": "2026-10-27",
   "hacoy": "2026-11-01",
