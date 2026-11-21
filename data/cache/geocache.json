@@ -870,6 +870,12 @@
 "lon": -2.9166,
 "state": "GB-ENG"
 },
+"*|llanbedr": {
+"cc": "gb",
+"lat": 52.1131,
+"lon": -4.0788,
+"state": "GB-WLS"
+},
 "*|london": {
 "cc": "gb",
 "lat": 51.5074,
@@ -1415,6 +1421,12 @@
 "cc": "ch",
 "lat": 47.4507,
 "lon": 8.5299,
+"state": "CH-ZH"
+},
+"*|rüti": {
+"cc": "ch",
+"lat": 47.2579,
+"lon": 8.8527,
 "state": "CH-ZH"
 },
 "*|saclay, france": {
