@@ -520,6 +520,11 @@
    "board": "delinea",
    "company": "Delinea"
   },
+  "deliverect": {
+   "ats": "lever",
+   "board": "deliverect",
+   "company": "Deliverect"
+  },
   "deltavision": {
    "ats": "personio",
    "board": "deltavision",
@@ -1082,6 +1087,11 @@
    "board": "kyra",
    "company": "Kyra"
   },
+  "laminarprojects": {
+   "ats": "lever",
+   "board": "laminarprojects",
+   "company": "Laminarprojects"
+  },
   "langchain": {
    "ats": "ashby",
    "board": "langchain",
@@ -1416,6 +1426,11 @@
    "ats": "ashby",
    "board": "orbem",
    "company": "Orbem"
+  },
+  "packmatic": {
+   "ats": "lever",
+   "board": "Packmatic",
+   "company": "Packmatic"
   },
   "pandektes": {
    "ats": "ashby",

@@ -1782,6 +1782,12 @@
 "lat": 52.0859,
 "lon": 4.8833
 },
+"*|woking": {
+"cc": "gb",
+"lat": 51.3202,
+"lon": -0.5565,
+"state": "GB-ENG"
+},
 "*|worchester": {
 "cc": "ca",
 "lat": 47.2783,
