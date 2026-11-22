@@ -356,6 +356,12 @@
 "lat": 51.5175,
 "lon": -3.2451
 },
+"*|carouge": {
+"cc": "ch",
+"lat": 46.1847,
+"lon": 6.1397,
+"state": "CH-GE"
+},
 "*|cergy, val-d'oise": {
 "cc": "fr",
 "lat": 49.0528,
@@ -3078,6 +3084,12 @@
 "lat": 51.437,
 "lon": 7.3351,
 "state": "DE-NW"
+},
+"de|wolfhagen": {
+"cc": "de",
+"lat": 51.3333,
+"lon": 9.1969,
+"state": "DE-HE"
 },
 "de|würzburg": {
 "cc": "de",

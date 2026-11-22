@@ -1554,6 +1554,11 @@
    "board": "pvminc",
    "company": "Pvminc"
   },
+  "qdranttech": {
+   "ats": "ashby",
+   "board": "qdrant.tech",
+   "company": "Qdrant.tech"
+  },
   "qenergy": {
    "ats": "workable",
    "board": "q-energy",
@@ -1710,6 +1715,11 @@
    "ats": "lever",
    "board": "saviynt",
    "company": "Saviynt"
+  },
+  "scape": {
+   "ats": "ashby",
+   "board": "scape",
+   "company": "Scape"
   },
   "se3": {
    "ats": "ashby",
