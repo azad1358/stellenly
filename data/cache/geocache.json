@@ -507,6 +507,12 @@
 "lat": 52.221,
 "lon": 6.8941
 },
+"*|erkrath": {
+"cc": "de",
+"lat": 51.221,
+"lon": 6.9056,
+"state": "DE-NW"
+},
 "*|espelkamp": {
 "cc": "de",
 "lat": 52.3778,
@@ -2179,6 +2185,12 @@
 "lon": 11.0287,
 "state": "DE-TH"
 },
+"de|erkrath": {
+"cc": "de",
+"lat": 51.221,
+"lon": 6.9056,
+"state": "DE-NW"
+},
 "de|erlangen": {
 "cc": "de",
 "lat": 49.5892,
@@ -2357,6 +2369,12 @@
 "lat": 48.7031,
 "lon": 9.6541,
 "state": "DE-BW"
+},
+"de|hallbergmoos": {
+"cc": "de",
+"lat": 48.3182,
+"lon": 11.7445,
+"state": "DE-BY"
 },
 "de|halle": {
 "cc": "de",
