@@ -1611,6 +1611,12 @@
 "lon": 0.2673,
 "state": "GB-ENG"
 },
+"*|turgi": {
+"cc": "ch",
+"lat": 47.4932,
+"lon": 8.2519,
+"state": "CH-AG"
+},
 "*|uddingston": {
 "cc": "gb",
 "lat": 55.819,
@@ -2532,6 +2538,12 @@
 "lat": 51.3158,
 "lon": 9.4978,
 "state": "DE-HE"
+},
+"de|kempten": {
+"cc": "de",
+"lat": 47.7267,
+"lon": 10.3169,
+"state": "DE-BY"
 },
 "de|ketzin": {
 "cc": "de",
