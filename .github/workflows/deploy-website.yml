@@ -116,11 +116,11 @@ jobs:
           find web -name '*.html' -print0 | xargs -0 sed -i -E \
             "s#((href|src)=\"(\.\./)*(css|js)/[a-z-]+\.(css|js))\"#\1?v=$v\"#g"
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5   # v3 + deploy-pages v4: "No artifacts named github-pages" now and then
         with:
           path: web
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Tell search engines about new job pages (IndexNow)
         continue-on-error: true
         run: python build/job_pages.py --indexnow
