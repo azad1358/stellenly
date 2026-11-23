@@ -1920,6 +1920,11 @@
    "board": "sunday-natural",
    "company": "Sunday Natural"
   },
+  "supermodularai": {
+   "ats": "ashby",
+   "board": "supermodular.ai",
+   "company": "Supermodular.ai"
+  },
   "swarmaero": {
    "ats": "ashby",
    "board": "swarmaero",
