@@ -1794,6 +1794,12 @@
 "lon": -0.5565,
 "state": "GB-ENG"
 },
+"*|wollerau": {
+"cc": "ch",
+"lat": 47.1957,
+"lon": 8.7195,
+"state": "CH-SZ"
+},
 "*|worchester": {
 "cc": "ca",
 "lat": 47.2783,
@@ -2785,6 +2791,12 @@
 "lat": 50.1055,
 "lon": 8.7611,
 "state": "DE-HE"
+},
+"de|offenburg": {
+"cc": "de",
+"lat": 48.4696,
+"lon": 7.9429,
+"state": "DE-BW"
 },
 "de|ohrdruf": {
 "cc": "de",

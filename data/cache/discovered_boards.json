@@ -2197,6 +2197,11 @@
    "board": "Watershed",
    "company": "Watershed"
   },
+  "wayflyer": {
+   "ats": "ashby",
+   "board": "wayflyer",
+   "company": "Wayflyer"
+  },
   "wellhub": {
    "ats": "greenhouse",
    "board": "gympass",
@@ -2310,6 +2315,7 @@
  "none": {
   "1komma5": "2026-10-27",
   "1password": "2026-11-23",
+  "21bitcoin": "2026-11-23",
   "42wolfsburgberlin": "2026-11-12",
   "6pmgmbh": "2026-11-10",
   "7nxtgmbh": "2026-10-27",
@@ -2614,6 +2620,7 @@
   "neuralframes": "2026-10-27",
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
+  "nickel": "2026-11-23",
   "nomios": "2026-10-27",
   "notion": "2026-11-08",
   "novantaeuropegmbh": "2026-11-16",
@@ -2723,6 +2730,7 @@
   "speakerconnectiongmbhcokg": "2026-11-18",
   "sphere": "2026-10-28",
   "spotify": "2026-11-07",
+  "spotixxgmbh": "2026-11-23",
   "spotmyenergygmbh": "2026-10-27",
   "spreadgmbh": "2026-10-27",
   "stablenergy": "2026-10-27",
@@ -2800,12 +2808,14 @@
   "wepush": "2026-10-27",
   "werraenergiegmbh": "2026-10-28",
   "wettercomgmbh": "2026-10-27",
+  "whowgamesgmbh": "2026-11-23",
   "wingmaitegmbh": "2026-11-03",
   "wolt": "2026-10-27",
   "woltenglish": "2026-10-27",
   "workato": "2026-10-27",
   "workistgmbh": "2026-11-13",
   "worldwideplacementlimited": "2026-10-29",
+  "wrthcloudservicesgmbh": "2026-11-23",
   "wundermanthompson": "2026-10-30",
   "wundermobility": "2026-10-30",
   "xaltbusinessconsultinggmbh": "2026-11-09",
