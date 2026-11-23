@@ -53,7 +53,7 @@ jobs:
       SKILL_CHECK: ${{ vars.SKILL_CHECK }}   # repository variable; "1" = Skill check page on (off while it's redesigned)
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -116,11 +116,24 @@ jobs:
           find web -name '*.html' -print0 | xargs -0 sed -i -E \
             "s#((href|src)=\"(\.\./)*(css|js)/[a-z-]+\.(css|js))\"#\1?v=$v\"#g"
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v5   # v3 + deploy-pages v4: "No artifacts named github-pages" now and then
+      # Right after the upload, GitHub sometimes doesn't list the artifact yet ("No artifacts named ..."): wait and
+      # try once more. One name per attempt, so a re-run doesn't find the first attempt's artifact too ("Multiple ...").
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: web
+          name: github-pages-${{ github.run_attempt }}
       - id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
+      - if: steps.deployment.outcome == 'failure'
+        run: sleep 60
+      - id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
       - name: Tell search engines about new job pages (IndexNow)
         continue-on-error: true
         run: python build/job_pages.py --indexnow
