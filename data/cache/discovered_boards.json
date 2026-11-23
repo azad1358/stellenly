@@ -931,6 +931,11 @@
    "board": "indiecampers-linkedin",
    "company": "Indie Campers | LinkedIn"
   },
+  "ingestro": {
+   "ats": "recruitee",
+   "board": "ingestro",
+   "company": "Ingestro"
+  },
   "inmobi": {
    "ats": "greenhouse",
    "board": "inmobi",
@@ -1935,6 +1940,11 @@
    "board": "taktile",
    "company": "Taktile"
   },
+  "tandemhealth": {
+   "ats": "ashby",
+   "board": "tandem-health",
+   "company": "Tandem Health"
+  },
   "taxfix": {
    "ats": "ashby",
    "board": "taxfix.com",
@@ -2294,6 +2304,7 @@
  },
  "none": {
   "1komma5": "2026-10-27",
+  "1password": "2026-11-23",
   "42wolfsburgberlin": "2026-11-12",
   "6pmgmbh": "2026-11-10",
   "7nxtgmbh": "2026-10-27",
@@ -2477,6 +2488,7 @@
   "funded": "2026-11-03",
   "gameduell": "2026-11-17",
   "gasfin": "2026-11-20",
+  "gasolina": "2026-11-23",
   "gaudergmbh": "2026-11-22",
   "generalmind": "2026-10-27",
   "genuinebeautygmbh": "2026-10-28",
