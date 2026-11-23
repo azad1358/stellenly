@@ -1717,6 +1717,11 @@
    "board": "rootglobal",
    "company": "Rootglobal"
   },
+  "rwstrainai": {
+   "ats": "lever",
+   "board": "rws",
+   "company": "RWS TrainAI"
+  },
   "sagelabsai": {
    "ats": "ashby",
    "board": "sagelabs.ai",
