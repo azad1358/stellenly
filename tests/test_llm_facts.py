@@ -49,3 +49,17 @@ def test_apply_only_when_posting_unchanged(monkeypatch):
     assert llm_facts.apply(dict(row), POSTING)["german_level"] == "required"
     assert llm_facts.apply(dict(row), POSTING)["salary_min"] is None
     assert llm_facts.apply(dict(row), POSTING + " edited")["german_level"] == "not_mentioned"
+
+
+def test_no_from_llm_ignored_when_it_did_not_read_the_end(monkeypatch):
+    # Black Forest Labs: 6,521 characters, "Base Annual Salary: EU €140,000 - €190,000" at the very end.
+    long_posting = "x" * llm_facts.TEXT_LIMIT + "\nBase Annual Salary:\nEU €140,000 - €190,000 + Equity"
+    facts = {"job1": {"h": llm_facts.text_hash(long_posting), "salary": None, "visa": False, "reloc": False},
+             "job2": {"h": llm_facts.text_hash(long_posting), "salary": [140000, 190000]}}
+    monkeypatch.setattr(llm_facts, "_facts", facts)
+    row = {"id": "job1", "german_level": "not_mentioned", "salary_min": 140000, "salary_max": 190000,
+           "visa_sponsorship": True, "relocation": True}
+    out = llm_facts.apply(dict(row), long_posting)
+    assert (out["salary_min"], out["salary_max"], out["visa_sponsorship"], out["relocation"]) == (140000, 190000, True, True)
+    out = llm_facts.apply(dict(row, id="job2", salary_min=None, salary_max=None), long_posting)
+    assert out["salary_min"] == 140000   # a quoted salary still counts

@@ -244,7 +244,7 @@ def llm_analyze(jobs: list[dict], meta: dict) -> int:
     done, fails = 0, 0
     for j in todo:
         text = texts.get(j["id"], "")
-        ans = _ask(prompts.get("job_analysis", title=j["title"], company=j["company"], text=text[:6000]), j["id"], fails)
+        ans = _ask(prompts.get("job_analysis", title=j["title"], company=j["company"], text=text[:llm_facts.TEXT_LIMIT]), j["id"], fails)
         if ans == "stop":
             break
         if ans is None:

@@ -14,6 +14,7 @@ import re
 from pathlib import Path
 
 FACTS_PATH = Path(__file__).parent.parent / "data" / "cache" / "llm_facts.json"
+TEXT_LIMIT = 6000  # characters of a posting the LLM reads (insights.py); a "no" says nothing about the rest
 GERMAN_LEVELS = {"required", "nice_to_have", "not_required", "not_mentioned"}
 _facts: dict | None = None
 
@@ -103,11 +104,14 @@ def apply(row: dict, text: str) -> dict:
         return row
     if "german" in f and german_wins(f["german"], row["german_level"]):
         row["german_level"] = f["german"]
-    if "salary" in f:
+    # "Not stated" / "not offered" only counts if the LLM read the whole posting: salaries and visa notes are
+    # often at the very end of long ones. Otherwise the rules decide.
+    read_all = len(text or "") <= TEXT_LIMIT
+    if "salary" in f and (f["salary"] or read_all):
         row["salary_min"], row["salary_max"] = (f["salary"] or (None, None))
-    if "visa" in f:
+    if "visa" in f and (f["visa"] or read_all):
         row["visa_sponsorship"] = f["visa"]
-    if "reloc" in f:
+    if "reloc" in f and (f["reloc"] or read_all):
         row["relocation"] = f["reloc"]
     return row
 
