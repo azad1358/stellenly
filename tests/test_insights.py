@@ -61,3 +61,20 @@ def test_restore_ai_from_database_when_cache_is_lost():
     assert "ai" not in meta["b"]                    # no analysis saved: the LLM still has to read it
     assert meta["c"]["ai"]["summary"] == "cached"   # the cache wins when it has one
     assert all("db_ai" not in j and "db_skills" not in j for j in jobs)
+
+
+def test_apply_facts_leaves_no_answers_to_the_ingest(monkeypatch):
+    # Black Forest Labs: the LLM read 6,000 of 6,521 characters and missed the salary at the end. The ingest keeps
+    # the rules' salary (llm_facts.apply); insights used to write the LLM's "no salary" back after every ingest.
+    import insights
+    monkeypatch.setattr(insights.llm_facts, "_facts", {
+        "a": {"h": "x", "salary": None, "visa": False, "reloc": False},
+        "b": {"h": "y", "salary": [70000, 85000], "visa": True, "reloc": True}})
+    a = {"id": "a", "german_level": "not_mentioned", "salary_min": 140000, "salary_max": 190000,
+         "visa_sponsorship": True, "relocation": True}
+    b = {"id": "b", "german_level": "not_mentioned", "salary_min": None, "salary_max": None,
+         "visa_sponsorship": False, "relocation": False}
+    fixes = insights.apply_facts([a, b])
+    assert fixes == [{"id": "b", "salary_known": True, "salary_min": 70000, "salary_max": 85000,
+                      "visa_sponsorship": True, "relocation": True}]
+    assert (a["salary_min"], a["visa_sponsorship"], a["relocation"]) == (140000, True, True)

@@ -476,7 +476,9 @@ def llm_check(jobs: list[dict], insights: dict, meta: dict, limit: int = 40) -> 
 
 
 def apply_facts(jobs: list[dict]) -> list[dict]:
-    """Use checked LLM facts for the comparisons, and return the corrections to write to the database."""
+    """Use checked LLM facts for the comparisons, and return the corrections to write to the database.
+    Only the "yes" answers (a quoted salary, visa or relocation offered): a "no" only counts if the LLM read the
+    whole posting, and only the ingest has the text to tell (llm_facts.apply). Writing it here undid that every run."""
     store, out = llm_facts.load(), []
     for j in jobs:
         f = store.get(j["id"])
@@ -485,15 +487,15 @@ def apply_facts(jobs: list[dict]) -> list[dict]:
         fix = {"id": j["id"]}
         if "german" in f and llm_facts.german_wins(f["german"], j["german_level"]):
             fix["german_level"] = j["german_level"] = f["german"]
-        if "salary" in f:
-            lo, hi = f["salary"] or (None, None)
+        if f.get("salary"):
+            lo, hi = f["salary"]
             if (lo, hi) != (j.get("salary_min"), j.get("salary_max")):
                 fix.update(salary_known=True, salary_min=lo, salary_max=hi)
                 j["salary_min"], j["salary_max"] = lo, hi
-        if "visa" in f and f["visa"] != bool(j.get("visa_sponsorship")):
-            fix["visa_sponsorship"] = j["visa_sponsorship"] = f["visa"]
-        if "reloc" in f and f["reloc"] != bool(j.get("relocation")):
-            fix["relocation"] = j["relocation"] = f["reloc"]
+        if f.get("visa") and not j.get("visa_sponsorship"):
+            fix["visa_sponsorship"] = j["visa_sponsorship"] = True
+        if f.get("reloc") and not j.get("relocation"):
+            fix["relocation"] = j["relocation"] = True
         if len(fix) > 1:
             out.append(fix)
     return out

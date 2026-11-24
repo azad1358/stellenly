@@ -581,6 +581,9 @@ STATES = {"DE-BW": "Baden-Württemberg", "DE-BY": "Bavaria", "DE-BE": "Berlin", 
           "DE-NW": "North Rhine-Westphalia", "DE-RP": "Rhineland-Palatinate", "DE-SL": "Saarland", "DE-SN": "Saxony",
           "DE-ST": "Saxony-Anhalt", "DE-SH": "Schleswig-Holstein", "DE-TH": "Thuringia"}
 MIN_JOBS = 5  # a state, city or field gets its own page from this many open jobs
+ENTRY_TITLE = re.compile(r"intern|praktik|werkstudent|working student|student|junior|\bjr\b|graduate|trainee|entry|"
+                         r"einsteiger|berufseinstieg|apprentice|azubi|ausbildung|associate|thesis|abschlussarbeit|"
+                         r"development representative|\bsdr\b|\bbdr\b", re.I)
 
 
 def logo_html(name: str, src: str | None, up: str, cls: str = "") -> str:
@@ -885,6 +888,53 @@ def build_landing_pages(jobs: list[dict], stats: dict) -> list[str]:
                                                           main_class="content-page loc-page"), encoding="utf-8")
         paths.append(f"jobs/tag-{slugify(t)}.html")
         tag_chips.append(f'<a class="tag" href="tag-{slugify(t)}.html">#{e(t)}<span class="n">{n:,}</span></a>')
+
+    # Entry level without German (linked from the home page): intern, working-student and junior jobs whose posting
+    # doesn't require German. The title must say it's an entry job too: "junior" from the rules alone also catches
+    # e.g. "Engineering Manager" asking for "1-2 years" of something. Amazon jobs are title only (German level unread).
+    entry = [j for j in jobs if j.get("seniority") in ("intern", "junior") and j.get("source") != "amazon"
+             and ENTRY_TITLE.search(j["title"])]
+    sel = sorted((j for j in entry if j["german_level"] != "required" and not j.get("is_agency")),
+                 key=lambda j: j.get("posted_at") or "", reverse=True)
+    if sel:
+        s = compute_stats(sel)
+        leveled = sum(j.get("seniority") in ("intern", "junior", "mid", "senior", "lead") for j in jobs)
+        top = Counter(index.get(co_key(j["company"]), {}).get("n") or j["company"] for j in sel if not j.get("is_agency"))
+        search = "../index.html?seniority=intern,junior&amp;german=not_required,nice_to_have,not_mentioned"
+        title = f"{len(sel):,} entry-level jobs in Germany without German"
+        body = f"""<section class="co-hero place-hero"><nav class="crumbs"><a href="index.html">Jobs by location and field</a></nav>
+<header class="loc-head"><div><h1>Start your career in Germany without German</h1>
+  <p class="muted">Internships, working-student and junior jobs that don't require German · updated every 6 hours</p></div>
+  <a class="btn primary" href="{search}">Filter by city, salary &amp; visa →</a></header>
+<div class="kpis loc-kpis"><div><b>{len(sel):,}</b><span>open jobs</span></div>
+  <div><b>{sum(j['seniority'] == 'intern' for j in sel):,}</b><span>internships &amp; working-student jobs</span></div>
+  <div><b>{sum(j['seniority'] == 'junior' for j in sel):,}</b><span>junior jobs</span></div>
+  <div><b>{s['visa']:,}</b><span>offer visa sponsorship</span></div></div></section>
+<p>Only {round(100 * len(entry) / max(leveled, 1))} in 100 English-speaking jobs in Germany are for people starting out, and
+{required_pct(entry)}% of those require German. These {len(sel):,} don't: German isn't needed, is just a plus, or isn't
+mentioned at all, which usually means the team works in English. Recruiting agencies are left out.</p>
+<div class="loc-list"><h2>Latest jobs</h2>{job_cards_html(sel[:30], '../', logos)}</div>
+{faq_html([
+    ("Can I get an internship in Germany without speaking German?",
+     f"Yes. Right now {sum(j['seniority'] == 'intern' for j in sel):,} internships and working-student jobs on Stellenly "
+     "don't require German. Many are at startups and tech companies whose teams work in English."),
+    ("What is a working student (Werkstudent) job?",
+     "A part-time job for students enrolled at a university in Germany, usually up to 20 hours a week during the "
+     "semester. Many international students use it to gain German work experience while they study."),
+    ("Which companies hire juniors and interns in English?",
+     f"Right now the most open entry-level jobs without German are at {e(', '.join(c for c, _ in top.most_common(5)))}."),
+    ("Which entry-level jobs offer visa sponsorship?",
+     f"{s['visa']:,} of these jobs mention visa sponsorship. Tick <b>Visa sponsorship</b> in the search to see them."),
+], "Entry-level jobs without German: questions")}
+<p class="muted small">Always apply on the original posting.</p>
+{CARD_SCRIPTS}"""
+        (out / "entry-level-no-german.html").write_text(page(
+            title, f"{title}: internships, working-student and junior jobs in English, with salary and visa sponsorship "
+                   f"shown for every job.", body, "jobs/entry-level-no-german.html", 1, main_class="content-page loc-page"),
+            encoding="utf-8")
+        paths.append("jobs/entry-level-no-german.html")
+        tag_chips.insert(0, f'<a class="tag" href="entry-level-no-german.html">🎓 Entry level, no German'
+                            f'<span class="n">{len(sel):,}</span></a>')
 
     states_sorted = sorted(state_pages, key=lambda x: -len(state_jobs[x]))
     # Hero background: the states' coats of arms as line drawings, repeated across the band (like companies.html)
