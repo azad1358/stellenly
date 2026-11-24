@@ -803,6 +803,14 @@
             <button type="button" class="btn ghost" data-jd="copy" title="Copy a link to this job">🔗 Copy link</button>
             <button type="button" class="btn ghost" data-jd="report" title="The job is gone from the company's site"${REPORT_LABEL[reports[j.id]] ? ` disabled>${REPORT_LABEL[reports[j.id]]}` : ">🚩 Closed?"}</button>
           </div>
+          <div class="jp-share"><span>Share</span>
+            <a class="btn ghost" data-jd="share-whatsapp" target="_blank" rel="noopener"
+               href="https://wa.me/?text=${encodeURIComponent(`${shareText(j)}
+${jobLink(j)}`)}">WhatsApp</a>
+            <a class="btn ghost" data-jd="share-telegram" target="_blank" rel="noopener"
+               href="https://t.me/share/url?url=${encodeURIComponent(jobLink(j))}&amp;text=${encodeURIComponent(shareText(j))}">Telegram</a>
+            ${navigator.share ? `<button type="button" class="btn ghost" data-jd="share">More…</button>` : ""}
+          </div>
         </div>
       </header>
       <div class="jd-ask"${flagged(j) && !reports[j.id] ? "" : " hidden"}>
@@ -844,6 +852,10 @@
       <div class="jp-bar" hidden><span class="jp-bar-title">${esc(j.title)} <small>${esc(j.company)}</small></span>
         <a class="btn primary" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer nofollow" data-jd="apply">Apply ↗</a></div>`;
   }
+
+  // The job's own page (built at deploy time) shares better than the search: it has a proper title and preview.
+  const jobLink = (j) => (DEMO ? location.href : `${BASE}job/${j.id}.html`);
+  const shareText = (j) => `${j.title} at ${j.company}: English-speaking job in Germany, found on ${C.SITE_NAME}`;
 
   let openId = null;
   async function loadJobPage(box, id) {
@@ -893,9 +905,10 @@
       if (confirm("Report this job as no longer open on the company's site?\n\nOnly a counter goes up. When enough people report it, we hide the job.")) answerJob(j.id, "gone");
     } else if (j && (act === "gone" || act === "still-open")) answerJob(j.id, act === "gone" ? "gone" : "open");
     else if (act === "copy") {
-      // The job's own page (built at deploy time) shares better: it has a proper title and preview.
-      const link = j && !DEMO ? `${BASE}job/${j.id}.html` : location.href;
+      const link = j ? jobLink(j) : location.href;
       navigator.clipboard?.writeText(link).then(() => { btn.textContent = "✓ Link copied"; }, () => {});
+    } else if (j && act === "share") {
+      navigator.share({ title: `${j.title} at ${j.company}`, text: shareText(j), url: jobLink(j) }).catch(() => {});
     } else if (j && (act === "save" || act === "stage")) {
       const n = act === "save" ? (saved[j.id] ? 0 : 1) : Number(btn.dataset.stage);
       setStage(j, act === "stage" && stageOf(j) === n ? n - 1 : n);

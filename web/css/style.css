@@ -1126,6 +1126,9 @@ a.place-tile:hover { border-color: var(--accent); box-shadow: 0 6px 22px -14px r
 .jp-apply .btn.primary { justify-content: center; }
 .jp-tools { display: flex; gap: 4px; }
 .jp-tools .btn { flex: 1 1 auto; justify-content: center; padding: 7px 8px; font-size: .86rem; white-space: nowrap; }
+.jp-share { display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+.jp-share > span { margin-right: 4px; font-size: .82rem; color: var(--muted); }
+.jp-share .btn { flex: 1 1 auto; justify-content: center; padding: 7px 8px; font-size: .86rem; white-space: nowrap; }
 .jp .jd-ask { margin: 12px 0 0; }
 
 .jp-verdict { margin-top: 18px; padding: 26px; border-radius: 24px; color: #e6e9f5; background:
