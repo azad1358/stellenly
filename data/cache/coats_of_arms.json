@@ -83,6 +83,10 @@
   "file": "DEU Friedrichshafen COA.svg",
   "img": "img/coa/city-friedrichshafen.png"
  },
+ "city:Fulda": {
+  "file": "Wappen Fulda.svg",
+  "img": "img/coa/city-fulda.png"
+ },
  "city:Garching": {
   "file": "DEU Garching bei München COA.svg",
   "img": "img/coa/city-garching.png"
