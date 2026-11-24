@@ -25,6 +25,11 @@
    "board": "3ive",
    "company": "3Ive"
   },
+  "7learnings": {
+   "ats": "personio",
+   "board": "7learnings",
+   "company": "7Learnings"
+  },
   "8returnsgmbh": {
    "ats": "ashby",
    "board": "8returns",
@@ -65,6 +70,11 @@
    "ats": "lever",
    "board": "actian",
    "company": "Actian"
+  },
+  "acturegermany": {
+   "ats": "personio",
+   "board": "acture-germany",
+   "company": "Acture Germany"
   },
   "adaptyio": {
    "ats": "ashby",
@@ -560,6 +570,11 @@
    "board": "differential.bio",
    "company": "Differential.bio"
   },
+  "digitalloop": {
+   "ats": "personio",
+   "board": "digital-loop",
+   "company": "Digital Loop"
+  },
   "dilitrust": {
    "ats": "lever",
    "board": "dilitrust",
@@ -737,6 +752,11 @@
    "board": "exa",
    "company": "Exa"
   },
+  "exccon": {
+   "ats": "personio",
+   "board": "exccon",
+   "company": "Exccon"
+  },
   "eyesecurity": {
    "ats": "ashby",
    "board": "eye-security",
@@ -787,6 +807,11 @@
    "ats": "greenhouse",
    "board": "flexport",
    "company": "Flexport"
+  },
+  "flinn": {
+   "ats": "ashby",
+   "board": "flinn",
+   "company": "Flinn"
   },
   "flipgmbh": {
    "ats": "ashby",
@@ -1682,6 +1707,11 @@
    "board": "Redis",
    "company": "Redis"
   },
+  "reflexaerospacegmbh": {
+   "ats": "personio",
+   "board": "reflex-aerospace-gmbh",
+   "company": "Reflex Aerospace GmbH"
+  },
   "rematiqgmbh": {
    "ats": "ashby",
    "board": "rematiq-gmbh",
@@ -1817,6 +1847,11 @@
    "board": "seeq",
    "company": "Seeq"
   },
+  "semperis": {
+   "ats": "ashby",
+   "board": "semperis",
+   "company": "Semperis"
+  },
   "seniorsoftwareengineergamifiedsecurityawarenessfullstack": {
    "ats": "ashby",
    "board": "hoxhunt",
@@ -1950,6 +1985,11 @@
    "board": "deaa6ad2-d184-436b-b69e-17f761da1d94",
    "company": "Spring Health"
   },
+  "srsecurityresearchlabspersonio": {
+   "ats": "personio",
+   "board": "security-research-labs",
+   "company": "SR Security Research Labs - Personio"
+  },
   "stackfuel": {
    "ats": "ashby",
    "board": "stackfuel",
@@ -1959,6 +1999,11 @@
    "ats": "ashby",
    "board": "StealthRocketryStartup",
    "company": "Stealthrocketrystartup"
+  },
+  "suenaenergy": {
+   "ats": "personio",
+   "board": "suena-energy",
+   "company": "Suena Energy"
   },
   "sugarai": {
    "ats": "ashby",
@@ -2177,6 +2222,11 @@
    "board": "urbansportsclub",
    "company": "Urban Sports Club"
   },
+  "userlane": {
+   "ats": "personio",
+   "board": "userlane",
+   "company": "Userlane"
+  },
   "vendavo": {
    "ats": "lever",
    "board": "vendavo",
@@ -2276,6 +2326,11 @@
    "ats": "ashby",
    "board": "wayflyer",
    "company": "Wayflyer"
+  },
+  "weekday1": {
+   "ats": "workable",
+   "board": "weekday-1",
+   "company": "Weekday 1"
   },
   "wellhub": {
    "ats": "greenhouse",
@@ -2385,6 +2440,11 @@
    "board": "zoi",
    "region": "https://meet.zoi.tech",
    "company": "Zoi"
+  },
+  "zoologisch": {
+   "ats": "personio",
+   "board": "zoologisch",
+   "company": "Zoologisch"
   },
   "zwarttechniekbv": {
    "ats": "recruitee",
@@ -2838,6 +2898,7 @@
   "tanganygmbh": "2026-10-27",
   "tangible": "2026-11-22",
   "tanium": "2026-10-30",
+  "tanso": "2026-11-24",
   "tarebase": "2026-10-30",
   "tavily": "2026-11-13",
   "taxforceservices": "2026-11-12",

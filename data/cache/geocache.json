@@ -323,6 +323,12 @@
 "lon": -1.9332,
 "state": "GB-ENG"
 },
+"*|cambrai": {
+"cc": "fr",
+"lat": 50.1758,
+"lon": 3.2346,
+"state": "FR-HDF"
+},
 "*|cambridge": {
 "cc": "gb",
 "lat": 52.1976,
