@@ -1834,6 +1834,12 @@
 "lon": 4.1244,
 "state": "FR-ARA"
 },
+"*|zaandam": {
+"cc": "nl",
+"lat": 52.4425,
+"lon": 4.8299,
+"state": "NL-NH"
+},
 "*|zaltbommel, gelderland, netherlands": {
 "cc": "nl",
 "lat": 51.7822,

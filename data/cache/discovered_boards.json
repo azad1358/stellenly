@@ -257,6 +257,11 @@
    "board": "belmont-lavan-ltd",
    "company": "Belmont Lavan Ltd"
   },
+  "beoenergy": {
+   "ats": "ashby",
+   "board": "beo-energy",
+   "company": "Beo Energy"
+  },
   "berlitz": {
    "ats": "ashby",
    "board": "berlitz",
@@ -909,6 +914,11 @@
    "board": "horizon3ai",
    "company": "Horizon3Ai"
   },
+  "humanrightswatch": {
+   "ats": "greenhouse",
+   "board": "humanrightswatch",
+   "company": "humanrightswatch"
+  },
   "huzzle": {
    "ats": "workable",
    "board": "huzzle",
@@ -1407,6 +1417,11 @@
    "ats": "ashby",
    "board": "nubank",
    "company": "Nubank"
+  },
+  "odysaviation": {
+   "ats": "ashby",
+   "board": "odys-aviation",
+   "company": "Odys Aviation"
   },
   "odysseyhotelgroup": {
    "ats": "recruitee",
@@ -2370,6 +2385,11 @@
    "board": "zoi",
    "region": "https://meet.zoi.tech",
    "company": "Zoi"
+  },
+  "zwarttechniekbv": {
+   "ats": "recruitee",
+   "board": "zwarttechniek",
+   "company": "Zwart Techniek B.V."
   }
  },
  "none": {
@@ -2382,6 +2402,7 @@
   "acadiajoblistings": "2026-10-31",
   "accelerated": "2026-11-17",
   "accuridsgmbh": "2026-10-27",
+  "actanaconsultingservicesgmbh": "2026-11-24",
   "adlicious": "2026-11-17",
   "adstrong": "2026-10-27",
   "advancedengineeringgmbh": "2026-11-21",
@@ -2532,6 +2553,7 @@
   "enzo": "2026-11-17",
   "esri": "2026-11-22",
   "europeandynamics": "2026-11-17",
+  "europeaninstituteofinnovationentrepreneurshipandtechnology": "2026-11-24",
   "eventincgmbh": "2026-10-28",
   "everwareconsultinggmbh": "2026-11-05",
   "evidenteuropegmbh": "2026-11-05",
