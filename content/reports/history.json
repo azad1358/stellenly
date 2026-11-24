@@ -36,12 +36,12 @@
   "visa": 321
  },
  "2026-W48": {
-  "active": 6120,
-  "median_salary": 86825,
-  "new_7d": 1214,
+  "active": 6221,
+  "median_salary": 89200,
+  "new_7d": 1275,
   "no_german_pct": 15,
-  "remote_pct": 25,
-  "salary_pct": 6,
-  "visa": 316
+  "remote_pct": 26,
+  "salary_pct": 7,
+  "visa": 345
  }
 }
