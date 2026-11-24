@@ -1477,6 +1477,12 @@
 "lat": 47.3965,
 "lon": 8.4445
 },
+"*|schwerzenbach": {
+"cc": "ch",
+"lat": 47.3815,
+"lon": 8.6523,
+"state": "CH-ZH"
+},
 "*|sheffield": {
 "cc": "gb",
 "lat": 53.3807,

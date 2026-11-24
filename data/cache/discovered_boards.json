@@ -222,6 +222,11 @@
    "board": "augustus",
    "company": "Augustus"
   },
+  "avantgarde": {
+   "ats": "personio",
+   "board": "avantgarde",
+   "company": "Avantgarde"
+  },
   "avomind": {
    "ats": "workable",
    "board": "avomind",
@@ -586,6 +591,11 @@
    "board": "doit",
    "company": "Doit"
   },
+  "dorniermedtechgmbh": {
+   "ats": "personio",
+   "board": "dornier-medtech",
+   "company": "Dornier MedTech GmbH"
+  },
   "dploy": {
    "ats": "workable",
    "board": "d-ploy",
@@ -662,6 +672,11 @@
    "board": "empira",
    "company": "Empira Group"
   },
+  "empro": {
+   "ats": "personio",
+   "board": "empro",
+   "company": "Empro"
+  },
   "emw": {
    "ats": "workable",
    "board": "emw",
@@ -681,6 +696,11 @@
    "ats": "recruitee",
    "board": "epilot",
    "company": "epilot GmbH"
+  },
+  "esmc": {
+   "ats": "personio",
+   "board": "esmc",
+   "company": "Esmc"
   },
   "eunetworks": {
    "ats": "greenhouse",
@@ -828,6 +848,11 @@
    "ats": "lever",
    "board": "GurobiOptimization",
    "company": "Gurobioptimization"
+  },
+  "h2flygmbh": {
+   "ats": "personio",
+   "board": "h2fly-gmbh",
+   "company": "H2FLY GmbH"
   },
   "happyrobotai": {
    "ats": "ashby",
@@ -1508,6 +1533,11 @@
    "board": "Perplexity",
    "company": "Perplexity"
   },
+  "peterpark": {
+   "ats": "personio",
+   "board": "peter-park",
+   "company": "Peter Park"
+  },
   "pigment": {
    "ats": "lever",
    "board": "pigment",
@@ -1812,6 +1842,11 @@
    "board": "shieldai",
    "company": "Shieldai"
   },
+  "shipzero": {
+   "ats": "personio",
+   "board": "shipzero",
+   "company": "Shipzero"
+  },
   "signode": {
    "ats": "recruitee",
    "board": "signode",
@@ -1837,6 +1872,11 @@
    "ats": "recruitee",
    "board": "skycellag",
    "company": "SkyCell AG"
+  },
+  "snke": {
+   "ats": "personio",
+   "board": "snke",
+   "company": "Snke"
   },
   "socialsweethearts": {
    "ats": "workable",
@@ -2087,6 +2127,16 @@
    "board": "trustedshops",
    "company": "Trusted Shops SE (DE)"
   },
+  "turbalabs": {
+   "ats": "personio",
+   "board": "turbalabs",
+   "company": "Turbalabs"
+  },
+  "twentyfourindustries": {
+   "ats": "personio",
+   "board": "twentyfour-industries",
+   "company": "Twentyfour Industries"
+  },
   "tytantechnologiesgmbh": {
    "ats": "recruitee",
    "board": "tytantechnologiesgmbh",
@@ -2121,6 +2171,11 @@
    "ats": "greenhouse",
    "board": "venncity",
    "company": "Venncity"
+  },
+  "vercore": {
+   "ats": "personio",
+   "board": "vercore",
+   "company": "Vercore"
   },
   "verifone": {
    "ats": "greenhouse",
@@ -2480,6 +2535,7 @@
   "eventincgmbh": "2026-10-28",
   "everwareconsultinggmbh": "2026-11-05",
   "evidenteuropegmbh": "2026-11-05",
+  "evidiogmbh": "2026-11-24",
   "exeonanalytics": "2026-10-27",
   "exmoxgmbh": "2026-10-27",
   "famedlygmbh": "2026-11-16",
@@ -2782,6 +2838,7 @@
   "trustedhousesitterscom": "2026-11-01",
   "tulip": "2026-11-10",
   "tulipinterfaces": "2026-10-30",
+  "twlvgmbh": "2026-11-24",
   "ubitiumgmbh": "2026-11-04",
   "unframe": "2026-10-27",
   "unzer": "2026-10-27",
