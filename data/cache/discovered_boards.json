@@ -448,6 +448,11 @@
    "board": "comstruct",
    "company": "comstruct ICT"
   },
+  "condukt": {
+   "ats": "ashby",
+   "board": "condukt",
+   "company": "Condukt"
+  },
   "controlrisks6": {
    "ats": "workable",
    "board": "control-risks-6",
@@ -924,6 +929,11 @@
    "board": "hirehire",
    "company": "Hirehire"
   },
+  "hivemqgmbh": {
+   "ats": "ashby",
+   "board": "hivemq",
+   "company": "HiveMQ GmbH"
+  },
   "hop": {
    "ats": "lever",
    "board": "hophr",
@@ -1036,6 +1046,11 @@
    "ats": "workable",
    "board": "intetics-2",
    "company": "Intetics 2"
+  },
+  "intrinsicrobotics": {
+   "ats": "greenhouse",
+   "board": "intrinsicrobotics",
+   "company": "intrinsicrobotics"
   },
   "ircagroup": {
    "ats": "lever",
@@ -1182,6 +1197,11 @@
    "ats": "lever",
    "board": "leverdemo-8",
    "company": "Lever Implementation Training Environment"
+  },
+  "lexroom": {
+   "ats": "ashby",
+   "board": "lexroom",
+   "company": "Lexroom"
   },
   "lightspeedhq": {
    "ats": "ashby",
@@ -2420,6 +2440,11 @@
    "board": "zeit-ai",
    "company": "Zeit Ai"
   },
+  "zelaraai": {
+   "ats": "ashby",
+   "board": "zelara.ai",
+   "company": "Zelara.ai"
+  },
   "zetaglobal": {
    "ats": "greenhouse",
    "board": "zetaglobal",
@@ -2763,6 +2788,7 @@
   "netlight": "2026-10-31",
   "networkcorporatefinance": "2026-11-17",
   "neuralframes": "2026-10-27",
+  "newsweek": "2026-11-25",
   "nexoya": "2026-10-28",
   "nextcloud": "2026-10-27",
   "nickel": "2026-11-23",
