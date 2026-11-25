@@ -2225,7 +2225,8 @@
 "de|erlangen": {
 "cc": "de",
 "lat": 49.5892,
-"lon": 10.9812
+"lon": 10.9812,
+"state": "DE-BY"
 },
 "de|eschborn": {
 "cc": "de",
@@ -2557,6 +2558,12 @@
 "lat": 51.3158,
 "lon": 9.4978,
 "state": "DE-HE"
+},
+"de|kaufbeuren": {
+"cc": "de",
+"lat": 47.8804,
+"lon": 10.6222,
+"state": "DE-BY"
 },
 "de|kempten": {
 "cc": "de",

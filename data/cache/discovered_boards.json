@@ -81,6 +81,12 @@
    "board": "adapty-io",
    "company": "Adapty.io"
   },
+  "adikteev": {
+   "ats": "recruitee",
+   "board": "adikteev",
+   "region": "https://jobs.adikteev.com",
+   "company": "Adikteev"
+  },
   "adjoe": {
    "ats": "ashby",
    "board": "adjoe",
@@ -307,6 +313,11 @@
    "board": "blacksemiconductor",
    "company": "Black Semiconductor GmbH"
   },
+  "bliro": {
+   "ats": "ashby",
+   "board": "bliro",
+   "company": "Bliro"
+  },
   "bluerocksecurity": {
    "ats": "ashby",
    "board": "bluerocksecurity",
@@ -417,6 +428,11 @@
    "ats": "ashby",
    "board": "clickup",
    "company": "Clickup"
+  },
+  "clipboard": {
+   "ats": "ashby",
+   "board": "clipboard",
+   "company": "Clipboard"
   },
   "cloudfactory": {
    "ats": "workable",
@@ -862,6 +878,11 @@
    "ats": "ashby",
    "board": "GetYourGuide",
    "company": "Getyourguide"
+  },
+  "gigastorage": {
+   "ats": "recruitee",
+   "board": "gigastorage",
+   "company": "GIGA STORAGE"
   },
   "gotphoto": {
    "ats": "ashby",
@@ -1463,6 +1484,11 @@
    "board": "nubank",
    "company": "Nubank"
   },
+  "nucsai": {
+   "ats": "recruitee",
+   "board": "nucsai",
+   "company": "Nucs AI"
+  },
   "odysaviation": {
    "ats": "ashby",
    "board": "odys-aviation",
@@ -1632,6 +1658,11 @@
    "ats": "ashby",
    "board": "praxipal",
    "company": "praxipal"
+  },
+  "primerio": {
+   "ats": "ashby",
+   "board": "primer.io",
+   "company": "Primer.io"
   },
   "primiontechnologygmbh": {
    "ats": "recruitee",
@@ -2122,6 +2153,11 @@
    "board": "tensordyne",
    "company": "tensordyne"
   },
+  "tenstorrent": {
+   "ats": "greenhouse",
+   "board": "tenstorrent",
+   "company": "tenstorrent"
+  },
   "theexplorationcompany": {
    "ats": "ashby",
    "board": "the-exploration-company",
@@ -2377,6 +2413,11 @@
    "ats": "recruitee",
    "board": "what",
    "company": "what. AG"
+  },
+  "whoop": {
+   "ats": "ashby",
+   "board": "whoop",
+   "company": "Whoop"
   },
   "wongdoody": {
    "ats": "greenhouse",
@@ -2709,6 +2750,7 @@
   "hyroxworldgmbh": "2026-11-13",
   "idnow": "2026-11-12",
   "ilertgmbh": "2026-10-27",
+  "ilosprojectsgmbhcokg": "2026-11-25",
   "imagostockpeoplegmbh": "2026-11-05",
   "inca": "2026-11-03",
   "indiekidzgmbh": "2026-10-27",
@@ -2979,6 +3021,7 @@
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
   "wayve": "2026-11-12",
+  "wellsterhealthtechgroup": "2026-11-25",
   "welovexgmbh": "2026-11-03",
   "wepush": "2026-10-27",
   "werraenergiegmbh": "2026-10-28",
