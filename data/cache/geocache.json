@@ -1773,6 +1773,12 @@
 "lon": 5.0421,
 "state": "NL-NH"
 },
+"*|westminster": {
+"cc": "gb",
+"lat": 51.5004,
+"lon": -0.1265,
+"state": "GB-ENG"
+},
 "*|willows factory, bridgwater": null,
 "*|winchester": {
 "cc": "gb",
@@ -2018,6 +2024,12 @@
 "lat": 49.6927,
 "lon": 8.4217,
 "state": "DE-HE"
+},
+"de|biederbach baden-wurttemberg": {
+"cc": "de",
+"lat": 48.1976,
+"lon": 8.0382,
+"state": "DE-BW"
 },
 "de|bielefeld": {
 "cc": "de",
@@ -2960,6 +2972,12 @@
 "lat": 48.2338,
 "lon": 7.7145,
 "state": "DE-BW"
+},
+"de|root": {
+"cc": "de",
+"lat": 52.4557,
+"lon": 13.5797,
+"state": "DE-BE"
 },
 "de|rostock": {
 "cc": "de",
