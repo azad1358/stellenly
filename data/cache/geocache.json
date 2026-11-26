@@ -1419,6 +1419,12 @@
 "lon": 8.3911,
 "state": "CH-LU"
 },
+"*|rotkreuz": {
+"cc": "ch",
+"lat": 47.1417,
+"lon": 8.4306,
+"state": "CH-ZG"
+},
 "*|rotterdam": {
 "cc": "nl",
 "lat": 51.9244,
@@ -2228,6 +2234,12 @@
 "lon": 11.0287,
 "state": "DE-TH"
 },
+"de|ergolding": {
+"cc": "de",
+"lat": 48.5763,
+"lon": 12.1715,
+"state": "DE-BY"
+},
 "de|erkrath": {
 "cc": "de",
 "lat": 51.221,
@@ -2863,7 +2875,8 @@
 "de|osnabrück": {
 "cc": "de",
 "lat": 52.272,
-"lon": 8.0476
+"lon": 8.0476,
+"state": "DE-NI"
 },
 "de|ottobrunn": {
 "cc": "de",
