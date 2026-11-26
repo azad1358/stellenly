@@ -92,6 +92,11 @@
    "board": "adjoe",
    "company": "adjoe"
   },
+  "aevainc": {
+   "ats": "lever",
+   "board": "aeva",
+   "company": "Aeva, Inc."
+  },
   "affinidi": {
    "ats": "greenhouse",
    "board": "affinidi",
@@ -840,6 +845,11 @@
    "board": "fioneer",
    "company": "Fioneer"
   },
+  "firemon": {
+   "ats": "lever",
+   "board": "firemon",
+   "company": "Firemon"
+  },
   "flexport": {
    "ats": "greenhouse",
    "board": "flexport",
@@ -899,6 +909,11 @@
    "ats": "recruitee",
    "board": "gigastorage",
    "company": "GIGA STORAGE"
+  },
+  "gismart": {
+   "ats": "ashby",
+   "board": "gismart",
+   "company": "Gismart"
   },
   "globaldimensionsllc": {
    "ats": "greenhouse",
@@ -1128,6 +1143,11 @@
    "ats": "lever",
    "board": "jobgether",
    "company": "Jobgether"
+  },
+  "jobtome": {
+   "ats": "recruitee",
+   "board": "jobtome",
+   "company": "Jobtome"
   },
   "jupus": {
    "ats": "ashby",
@@ -1499,6 +1519,12 @@
    "ats": "ashby",
    "board": "nord-security",
    "company": "Nord Security"
+  },
+  "northwavecybersecurity": {
+   "ats": "recruitee",
+   "board": "northwave-cybersecurity",
+   "region": "https://careers.northwave-cybersecurity.com",
+   "company": "Northwave Cyber Security"
   },
   "npv": {
    "ats": "ashby",
@@ -2072,6 +2098,11 @@
    "board": "deaa6ad2-d184-436b-b69e-17f761da1d94",
    "company": "Spring Health"
   },
+  "spro": {
+   "ats": "recruitee",
+   "board": "spro",
+   "company": "S-PRO"
+  },
   "srsecurityresearchlabspersonio": {
    "ats": "personio",
    "board": "security-research-labs",
@@ -2517,6 +2548,11 @@
    "board": "yoummday",
    "company": "Yoummday"
   },
+  "zaubertechnologygmbh": {
+   "ats": "ashby",
+   "board": "zauber",
+   "company": "Zauber Technology GmbH"
+  },
   "zealnetwork": {
    "ats": "ashby",
    "board": "zeal-network",
@@ -2658,6 +2694,7 @@
   "celonis": "2026-11-26",
   "cepastudyabroadterraeducationeuropegmbh": "2026-11-09",
   "chameleonpharmaconsulting": "2026-11-12",
+  "chaptersgroupag": "2026-11-26",
   "cherryventures": "2026-10-27",
   "choco": "2026-11-10",
   "cision": "2026-11-01",
@@ -3001,7 +3038,7 @@
   "spreadgmbh": "2026-11-26",
   "stablenergy": "2026-10-27",
   "stackginigmbh": "2026-10-30",
-  "staffbase": "2026-10-27",
+  "staffbase": "2026-11-26",
   "startstepsdigitaleducationgmbh": "2026-10-29",
   "statista": "2026-11-26",
   "stealthstartupmobilityberlin": "2026-11-22",
@@ -3044,7 +3081,7 @@
   "twlvgmbh": "2026-11-24",
   "ubitiumgmbh": "2026-11-04",
   "unframe": "2026-11-26",
-  "unzer": "2026-10-27",
+  "unzer": "2026-11-26",
   "upcollectivegrowthmarketing": "2026-11-17",
   "upvest": "2026-10-28",
   "valiantys": "2026-11-07",
@@ -3072,6 +3109,7 @@
   "wavestonegermanyag": "2026-10-27",
   "waymo": "2026-10-27",
   "wayve": "2026-11-12",
+  "weflow": "2026-11-26",
   "wellsterhealthtechgroup": "2026-11-25",
   "welovexgmbh": "2026-11-03",
   "wepush": "2026-10-27",

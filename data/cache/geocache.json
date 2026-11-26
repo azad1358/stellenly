@@ -471,6 +471,12 @@
 "lon": -2.9702,
 "state": "GB-SCT"
 },
+"*|dübendorf": {
+"cc": "ch",
+"lat": 47.397,
+"lon": 8.6186,
+"state": "CH-ZH"
+},
 "*|east grinstead": {
 "cc": "gb",
 "lat": 51.1286,
@@ -877,6 +883,12 @@
 "*|liederbach office": null,
 "*|lille, upline, nord": null,
 "*|lille, upline, nord; paris, paris": null,
+"*|lincoln": {
+"cc": "us",
+"lat": 40.8089,
+"lon": -96.7078,
+"state": "US-NE"
+},
 "*|lincoln / lincolnshire": {
 "cc": "gb",
 "lat": 53.2294,
@@ -2101,6 +2113,12 @@
 "cc": "de",
 "lat": 48.685,
 "lon": 9.0113,
+"state": "DE-BW"
+},
+"de|bühl": {
+"cc": "de",
+"lat": 48.6928,
+"lon": 8.124,
 "state": "DE-BW"
 },
 "de|charlottenburg": {
