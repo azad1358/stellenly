@@ -597,6 +597,11 @@
    "board": "dentons-europe",
    "company": "Dentons Europe"
   },
+  "descope": {
+   "ats": "greenhouse",
+   "board": "descope",
+   "company": "descope"
+  },
   "destinusgroup": {
    "ats": "workable",
    "board": "destinusgroup",
@@ -919,6 +924,11 @@
    "ats": "greenhouse",
    "board": "globaldimensionsllc",
    "company": "Globaldimensionsllc"
+  },
+  "globalsurvivorsfund": {
+   "ats": "recruitee",
+   "board": "globalsurvivorsfund1",
+   "company": "Global Survivors Fund"
   },
   "gotphoto": {
    "ats": "ashby",
@@ -2710,7 +2720,7 @@
   "cocrafterycw24": "2026-11-05",
   "codat": "2026-10-28",
   "coffeecircle": "2026-11-17",
-  "cohere": "2026-10-27",
+  "cohere": "2026-11-27",
   "comitiscapital": "2026-11-23",
   "commercetools": "2026-11-26",
   "congrifypaymentsintelligenceanixopaycompany": "2026-11-22",
@@ -3068,7 +3078,7 @@
   "techbizglobal": "2026-11-13",
   "techtivegamesgmbh": "2026-11-11",
   "tempotrainingconsulting": "2026-11-16",
-  "teneo": "2026-10-27",
+  "teneo": "2026-11-27",
   "termios": "2026-10-27",
   "tetheroperationslimited": "2026-11-26",
   "thebettercat": "2026-11-14",

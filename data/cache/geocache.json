@@ -1226,6 +1226,12 @@
 "lat": 48.7432,
 "lon": 2.4024
 },
+"*|orpington": {
+"cc": "gb",
+"lat": 51.3796,
+"lon": 0.1054,
+"state": "GB-ENG"
+},
 "*|oxford": {
 "cc": "gb",
 "lat": 51.752,
@@ -1545,6 +1551,12 @@
 "lat": 52.413,
 "lon": -1.7769,
 "state": "GB-ENG"
+},
+"*|sophia antipolis": {
+"cc": "fr",
+"lat": 43.6195,
+"lon": 7.0518,
+"state": "FR-PAC"
 },
 "*|south east hampshire": {
 "cc": "au",
