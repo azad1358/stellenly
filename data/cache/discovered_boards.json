@@ -1591,6 +1591,11 @@
    "board": "onebrief",
    "company": "Onebrief"
   },
+  "onemobility": {
+   "ats": "recruitee",
+   "board": "onemobility",
+   "company": "One Mobility"
+  },
   "ontargetcommunications": {
    "ats": "recruitee",
    "board": "ontarget",
@@ -2558,6 +2563,12 @@
    "board": "yepoda",
    "company": "Yepoda"
   },
+  "yopesoromaniasrl": {
+   "ats": "recruitee",
+   "board": "yopeso",
+   "region": "https://careers.yopeso.com",
+   "company": "Yopeso Romania SRL"
+  },
   "yoummday": {
    "ats": "ashby",
    "board": "yoummday",
@@ -2680,6 +2691,7 @@
   "beforeeightgroupgmbh": "2026-11-12",
   "beneeringgmbh": "2026-11-03",
   "berlinmetropolitanschool": "2026-11-17",
+  "betterdocgmbh": "2026-11-27",
   "beyondservicegmbh": "2026-10-27",
   "bgprevent": "2026-11-03",
   "biahubshellocircle": "2026-10-28",
@@ -2751,6 +2763,7 @@
   "deepl": "2026-11-18",
   "deepsense": "2026-11-22",
   "deliveroo": "2026-11-13",
+  "dellnerbubenzergermanywindgmbh": "2026-11-27",
   "deltacapita": "2026-11-06",
   "dexterhealth": "2026-10-27",
   "diamontechag": "2026-11-20",
@@ -2968,6 +2981,7 @@
   "pentadocgruppe": "2026-10-30",
   "pertempserp": "2026-11-26",
   "pflegia": "2026-11-11",
+  "picuscapitalgmbh": "2026-11-27",
   "pkconsult": "2026-11-07",
   "placedtechnologiesgmbh": "2026-11-18",
   "planeta": "2026-10-27",
@@ -3032,6 +3046,7 @@
   "sidestream": "2026-11-20",
   "siena": "2026-11-07",
   "simpsonstrongtiegmbh": "2026-11-12",
+  "simscalegmbh": "2026-11-27",
   "sineengineering": "2026-11-07",
   "skailark": "2026-11-26",
   "skalar": "2026-11-20",
@@ -3083,7 +3098,7 @@
   "termios": "2026-10-27",
   "tetheroperationslimited": "2026-11-26",
   "thebettercat": "2026-11-14",
-  "theconfigteam": "2026-10-28",
+  "theconfigteam": "2026-11-27",
   "thoughtworks": "2026-10-27",
   "ticketbro": "2026-11-18",
   "tiens": "2026-10-30",
@@ -3148,6 +3163,7 @@
   "youcould": "2026-11-18",
   "yzrcapital": "2026-11-17",
   "zattoo": "2026-11-26",
+  "zeitgeistlabs": "2026-11-27",
   "zekjugmbh": "2026-10-27",
   "zenjob": "2026-11-12",
   "zentio": "2026-11-18",

@@ -2204,6 +2204,12 @@
 "lon": 10.7807,
 "state": "DE-BY"
 },
+"de|dorsten": {
+"cc": "de",
+"lat": 51.6604,
+"lon": 6.9647,
+"state": "DE-NW"
+},
 "de|dortmund": {
 "cc": "de",
 "lat": 51.5142,
