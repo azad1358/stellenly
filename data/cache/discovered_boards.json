@@ -475,6 +475,11 @@
    "board": "comena",
    "company": "Comena"
   },
+  "companial": {
+   "ats": "lever",
+   "board": "companial",
+   "company": "Companial"
+  },
   "comstructict": {
    "ats": "ashby",
    "board": "comstruct",
@@ -606,6 +611,11 @@
    "ats": "workable",
    "board": "destinusgroup",
    "company": "Destinusgroup"
+  },
+  "develocity": {
+   "ats": "greenhouse",
+   "board": "gradle",
+   "company": "Develocity"
   },
   "differentialbio": {
    "ats": "ashby",
@@ -1067,6 +1077,11 @@
    "ats": "greenhouse",
    "board": "indiecampers-linkedin",
    "company": "Indie Campers | LinkedIn"
+  },
+  "infinit": {
+   "ats": "lever",
+   "board": "infinit",
+   "company": "Infinit"
   },
   "infosysconsultingeurope": {
    "ats": "workable",
@@ -1541,6 +1556,11 @@
    "region": "https://careers.northwave-cybersecurity.com",
    "company": "Northwave Cyber Security"
   },
+  "novaspace": {
+   "ats": "lever",
+   "board": "novaspace",
+   "company": "Novaspace"
+  },
   "npv": {
    "ats": "ashby",
    "board": "npv",
@@ -1844,6 +1864,11 @@
    "ats": "personio",
    "board": "reflex-aerospace-gmbh",
    "company": "Reflex Aerospace GmbH"
+  },
+  "reindeerai": {
+   "ats": "ashby",
+   "board": "reindeer-ai",
+   "company": "Reindeer Ai"
   },
   "rematiqgmbh": {
    "ats": "ashby",
@@ -2684,7 +2709,7 @@
   "baeshsocialug": "2026-11-13",
   "bankingconsultexecutivesearch": "2026-11-18",
   "bankofcommunicationsfrankfurtbranch": "2026-11-03",
-  "baringa": "2026-10-29",
+  "baringa": "2026-11-28",
   "batchroboticsgmbh": "2026-11-22",
   "bedfordconsulting": "2026-11-22",
   "beducatedgmbh": "2026-11-22",
@@ -2699,8 +2724,8 @@
   "bitpanda": "2026-11-03",
   "bitwarden": "2026-10-28",
   "bmzbatterysolutionsgmbh": "2026-11-10",
-  "boardwisegmbh": "2026-10-29",
-  "boominggames": "2026-10-29",
+  "boardwisegmbh": "2026-11-28",
+  "boominggames": "2026-11-28",
   "botsandpeopleproductgmbh": "2026-11-04",
   "brainproductsgmbh": "2026-11-18",
   "bridger": "2026-11-22",
@@ -2771,7 +2796,7 @@
   "dnl": "2026-11-10",
   "doopicgmbh": "2026-10-27",
   "dreamlinesgmbh": "2026-10-27",
-  "ease": "2026-10-29",
+  "ease": "2026-11-28",
   "ecopals": "2026-10-27",
   "ecosio": "2026-10-31",
   "edl": "2026-11-22",
@@ -3004,7 +3029,7 @@
   "promethionindustries": "2026-10-28",
   "prospeumgmbh": "2026-11-22",
   "pt1": "2026-10-30",
-  "pulseadvertisinggmbh": "2026-10-29",
+  "pulseadvertisinggmbh": "2026-11-28",
   "pultgmbh": "2026-10-27",
   "pvcase": "2026-10-29",
   "qadogmbh": "2026-10-27",
